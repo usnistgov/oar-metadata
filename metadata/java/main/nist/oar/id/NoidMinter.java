@@ -1,6 +1,7 @@
 package nist.oar.id;
 
 import java.util.HashMap;
+import java.util.Arrays;
 
 /**
  * An IDMinter that creates NOID-compliant identifiers
@@ -191,10 +192,12 @@ public class NoidMinter implements IDMinter {
      */
     public class NoidFactory {
 
-        private boolean include_check_digit = False;
-        private boolean expand = False;
+        public static String XDIGIT = "0123456789bcdfghjkmnpqrstvwxz";
+
+        private boolean include_check_digit = false;
+        private boolean expand = false;
         private String prefix = "";
-        private String digtype = "eee";
+        private char[] digtype = ['e', 'e', 'e'];
 
         public NoidFactory(String mask) {
             parseMask(mask);
@@ -202,9 +205,108 @@ public class NoidMinter implements IDMinter {
 
         protected void parseMask(String mask) {
 
+            // look for a prefix
+            int p = -1;
+            if ((p = mask.lastIndexOf('.')) >= 0) {
+                prefix = mask.substring(0,p);
+                mask = mask.substring(p+1);
+            }
+
+            if (mask.charAt(mask.length()-1) == 'k') {
+                include_check_digit = true;
+                mask = mask.substring(0, len(mask.length()-1));
+            }
+
+            if ("rsz".contains(mask.charAt(0))) {
+                // we ignore 's' or 'z'; unimplemented
+                if (mask.charAt(0) == 'z') 
+                    expand = true;
+                mask = mask.substring(1);
+            }
+
+            // check the core mask for illegal characters
+            digtype = mask.toCharArray()
+            for(int i=0; i < len(mask); i++)
+                if (digtype[i] != 'd' and digtype[i] != 'e')
+                    throw new IllegalArgumentException(
+                        "illegal mask character provided (not 'd' or 'e'): " +
+                        digtype[i] + " in " + mask);
+
         }
 
         public String idFor(int seq) {
+            String id = prefix + _buildIdCore(seq);
+            if (include_check_digit) 
+                id += Character.toString(_checkDigit(id));
+            return id
+        }
+
+        private String _buildIdCore(int seq) {
+            char m;
+            int div = 1, val = 0;
+            StringBuilder sb = new StringBuilder();
+
+            for(int i=len(digtype)-1; i >= 0; i--) {
+                div = _base(digtype[i]);
+                try {
+                    val = seq % div;
+                    seq /= div;
+                } catch (ArithmeticException ex) {
+                    continue;
+                }
+                sb.append(XDIGIT.charAt(val));
+            }
+            
+            // that's i
+            if (expand) {
+                char c = digtype[0];
+                div = _base(digtype[0])
+                while (seq > 0) {
+                    try {
+                        val = seq % div;
+                        seq /= div;
+                    } catch (ArithmeticException ex) {
+                    throw new IllegalArgumentException(
+                       "illegal mask character (not 'd' or 'e'): " + digtype[i]);
+                    }
+                    sb.append(XDIGIT.charAt(value));
+                }
+            }
+
+            if (seq > 0)
+                throw new IndexOutOfBoundsException("Requested sequence number is out of range of identifier set");
+
+            return sb.reverse().toString();
+        }
+
+        private char _checkDigit(String id) {
+            int p = -1;
+            if ((p = id.indexOf(':')) >= 0)
+                id = id.substring(p+1);
+
+            int tot = 0;
+            for (int i=0; i < len(id); i++) {
+                p = _ordinal(id.charAt(i));
+                tot += p * (i+1);
+            }
+            return XDIGIT.charAt( tot % XDIGIT.length() );
+        }
+
+        private int _ordinal(char c) {
+            int out = XDIGIT.indexOf(c);
+            if (out < 0) out = 0;
+            return out;
+        }
+        
+        private int _base(char type) {
+            if (type == 'e') return XDIGIT.length();
+            if (type == 'd') return 10;
+            return 0;
+        }
+
+        public boolean validate(String id) {
+            return _checkDigit(id.substring(0, id.length()-1)) ==
+                                                     id.charAt(id.length()-1);
         }
 
         public int seqFor(String id) {
