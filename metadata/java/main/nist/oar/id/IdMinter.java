@@ -13,7 +13,7 @@ public interface IDMinter {
      * identifier this string will represent, e.g. whether it includes a 
      * namespace.  
      */
-    public String getNewID(HashMap<String, Object> data = null);
+    public String mint(HashMap<String, Object> data = null);
 
     /**
      * return true if the given identifier string is a recognized one that 
@@ -22,7 +22,7 @@ public interface IDMinter {
     public boolean issued(String id);
 
     /**
-     * return the data associated with the given ID.  None is returned if 
+     * return the data associated with the given ID.  Null is returned if 
      * no data was associated with the ID when it was minted (or data 
      * association is not supported).  
      */
