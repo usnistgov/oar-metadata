@@ -304,6 +304,12 @@ public class NoidMinter implements IDMinter {
             return 0;
         }
 
+        /**
+         * validate given identifier by confirming that it has the correct
+         * trailing check character.  A false return can indicate a (human) 
+         * transcription error in the identifier.  
+         * @returns boolean   true if the check character is correct.
+         */
         public boolean validate(String id) {
             return _checkDigit(id.substring(0, id.length()-1)) ==
                                                      id.charAt(id.length()-1);
