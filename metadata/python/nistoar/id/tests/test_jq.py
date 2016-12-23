@@ -127,11 +127,11 @@ class TestJq(unittest.TestCase):
     def test_transform_file_w_mod(self):
         jqt = jq.Jq('nerdm::podds2resource | .["@id"]',
                     jqlibdir, ["pod2nerdm:nerdm"],
-                    {"id": "ID", "goob": "gurn"})
+                    {"id": "ID", "goob": "gurn", "mode": "std"})
         out = jqt.transform_file(janaffile)
         self.assertEquals(out, 'ID')
         
-        out = jqt.transform_file(janaffile, {"id": "ark:ID"})
+        out = jqt.transform_file(janaffile, {"id": "ark:ID", "mode": "std"})
         self.assertEquals(out, 'ark:ID')
         
         

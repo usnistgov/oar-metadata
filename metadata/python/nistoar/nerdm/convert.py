@@ -10,7 +10,7 @@ class PODds2Res(object):
     resource records.
     """
 
-    def __init__(self, jqlibdir):
+    def __init__(self, jqlibdir, mode="std"):
         """
         create the converter
 
@@ -18,6 +18,7 @@ class PODds2Res(object):
                                modules
         """
         self.jqt = jq.Jq('nerdm::podds2resource', jqlibdir, ["pod2nerdm:nerdm"])
+        self.mode = mode
 
     def convert(self, podds, id):
         """
@@ -27,7 +28,7 @@ class PODds2Res(object):
                             Dataset record
         :param id str:      The identifier to assign to the output NERDm resource
         """
-        return self.jqt.transform(podds, {"id": id})
+        return self.jqt.transform(podds, {"id": id, "mode": self.mode})
 
     def convert_data(self, podds, id):
         """
@@ -37,7 +38,7 @@ class PODds2Res(object):
                             Dataset record
         :param id str:      The identifier to assign to the output NERDm resource
         """
-        return self.jqt.transform(json.dumps(podds), {"id": id})
+        return self.jqt.transform(json.dumps(podds), {"id": id, "mode": self.mode})
 
     def convert_file(self, poddsfile, id):
         """
@@ -47,5 +48,5 @@ class PODds2Res(object):
                             Dataset record
         :param id str:      The identifier to assign to the output NERDm resource
         """
-        return self.jqt.transform_file(poddsfile, {"id": id})
+        return self.jqt.transform_file(poddsfile, {"id": id, "mode": self.mode})
 
