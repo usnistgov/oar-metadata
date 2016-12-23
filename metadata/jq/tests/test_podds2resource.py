@@ -16,7 +16,7 @@ class TestJanaf(unittest.TestCase):  #
     def setUp(self):
         # pdb.set_trace() # nerdm::podds2resourc
         self.out = send_file_thru_jq('nerdm::podds2resource', janaffile,
-                                     {"id": "ark:ID"})
+                                     {"id": "ark:ID", "mode": "std"})
 
     def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
     def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
@@ -106,7 +106,7 @@ class TestValidateNerdm(unittest.TestCase):
 
     def test_janaf(self):
         out = send_file_thru_jq('nerdm::podds2resource', janaffile,
-                                {"id": "ark:ID"})
+                                {"id": "ark:ID", "mode": "std"})
         self.val.validate(out, False, True)
 
     def test_with_doi(self):
@@ -115,7 +115,7 @@ class TestValidateNerdm(unittest.TestCase):
 
         ds = cat['dataset'][-1]
         ds = json.dumps(ds)
-        out = send_jsonstr_thru_jq('nerdm::podds2resource', ds, {"id": "ark:ID"})
+        out = send_jsonstr_thru_jq('nerdm::podds2resource', ds, {"id": "ark:ID", "mode": "std"})
 
         self.val.validate(out, False, True)
         
@@ -233,7 +233,7 @@ class TestSelf(unittest.TestCase):
         
     def test_send_file_w_args(self):
         out = send_file_thru_jq(".accessLevel", janaffile,
-                                {"id": "ID", "goob": "gurn"})
+                                {"id": "ID", "mode": "std", "goob": "gurn"})
         self.assertEquals(out, 'public')
         
 

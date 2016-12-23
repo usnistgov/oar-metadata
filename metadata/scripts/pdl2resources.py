@@ -38,6 +38,7 @@ if not prog or prog == 'python':
     prog = "pdl2resources"
 
 IDSEQ = 2000
+DEFAULT_MODE = "r1wa"
 
 description = \
 """convert PDL Datasets to NERDm Resource records"""
@@ -56,6 +57,9 @@ def define_opts(progname=None):
                         default=0)
     parser.add_argument('-c', '--count', metavar='COUNT', type=int, dest='count',
                         help="export no more than COUNT records", default=-1)
+    parser.add_argument('-m', '--mode', metavar='NAME', type=str, dest='mode',
+                        help="apply the conversion variations associated with the given NAME",
+                        default=DEFAULT_MODE)
 
     return parser
 
@@ -65,7 +69,7 @@ def main(args):
 
     seq = IDSEQ + opts.start
     minter = PDRMinter(seq, 'pdr0')
-    cvtr = PODds2Res(jqlib)
+    cvtr = PODds2Res(jqlib, mode=opts.mode)
 
     try:
         with open(opts.pdlfile) as fd:

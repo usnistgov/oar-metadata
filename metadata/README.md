@@ -33,7 +33,7 @@ To convert a single POD format Dataset document into a NERDm Resource
 document, run the `jq` command with the following pattern:
 
 ```
-jq -L jq --arg id ID -f jq/podds2nerdres.jq POD-FILE > NERDM-FIlE
+jq -L jq --arg mode std --arg id ID -f jq/podds2nerdres.jq POD-FILE > NERDM-FIlE
 ```
 
 where POD-FILE is the input POD Dataset filename, NERDM-FILE is the
@@ -43,7 +43,7 @@ POD Dataset document, `janaf_pod.json`; to convert it, then, to NERDm,
 type:
 
 ```
-jq -L jq --arg id ark:ID -f jq/podds2nerdres.jq jq/tests/data/janaf_pod.json > janaf_nerdm.json
+jq -L jq --arg mode std --arg id ark:ID -f jq/podds2nerdres.jq jq/tests/data/javaf_pod.json > janaf_nerdm.json
 ```
 
 The test data directory also contains a copy of the NIST PDL Catalog;
