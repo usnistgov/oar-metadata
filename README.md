@@ -1,8 +1,12 @@
-# PDR Metadata Support (via NERDm)
+# Metadata Support for the OAR Open Data Platform (via NERDm)
 
-This directory provides support for the PDR's metadata model
-(NERDm). In includes the JSON Schema definitions for NERDm types,
-validators, translators, and scripts for loading.
+This package provides support for metadata across the different
+components of the OAR Open Data Platform.  At the core of this support
+is the NERD model; this package includes its JSON Schema and Linked
+Data definitions, validators, translators, and scripts for loading.
+The package also provides support for ancillary metadata used by the
+RMM and the SDP, including the NIST theme taxonomy and NERDm field
+documentation.  
 
 ## Contents
 
