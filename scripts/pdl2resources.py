@@ -114,7 +114,7 @@ def main(args):
     for i in range(opts.start, lim):
         id = minter.mint()
         basename = id[id.index("pdr0"):]
-        res = cvtr.convert_data(dss[i], minter.mint())
+        res = cvtr.convert_data(dss[i], id)
         if opts.fixtheme:
             set_theme_as_topic(res, tax)
         with open(os.path.join(opts.odir,basename+".json"), 'w') as fd:
