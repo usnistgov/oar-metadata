@@ -85,6 +85,8 @@ def main(args):
     minter = PDRMinter(seq, 'pdr0')
     cvtr = PODds2Res(jqlib)
 
+    ensure_out_dir(opts.odir)
+
     try:
         with open(opts.pdlfile) as fd:
             pdldata = json.load(fd)
@@ -123,6 +125,13 @@ def main(args):
         print("Warning: No output files written.", file=sys.stderr)
 
     return extracted
+
+def ensure_out_dir(odir):
+    if not os.path.exists(odir):
+        pdir = os.path.dirname(odir)
+        if pdir and not os.path.exists(pdir):
+            raise IOError(2, "Directory does not exist: " + pdir)
+        os.mkdir(odir)
 
 def load_theme_vocab():
     vocabfile = os.path.join(schemadir, "theme-taxonomy.json")
