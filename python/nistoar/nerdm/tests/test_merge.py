@@ -38,6 +38,152 @@ class TestKeepBase(unittest.TestCase):
         mrgd = merger.merge([3], [2, 1])
         self.assertEqual(mrgd, [3])
 
+class TestUniqueArray(unittest.TestCase):
+
+    def test_ctor(self):
+        strat = mrg.UniqueArray()
+        self.assertIsNotNone(strat)
+        self.assertIsInstance(strat, Strategy)
+
+    def test_merge(self):
+        strat = mrg.UniqueArray()
+        schema = {'mergeStrategy': 'uniqueArray'}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'uniqueArray': strat},
+                                  def_objclass='OrderedDict')
+
+        base = [ "a", "e", "i" ]
+        head = [ "b", "i", "z", "a" ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [ "a", "e", "i", "b", "z" ])
+
+    def test_incompat(self):
+        strat = mrg.UniqueArray()
+        schema = {'mergeStrategy': 'uniqueArray',
+                  'mergeOptions': {
+                      'incompatible': [[ "a", "e", "i", "o", "u" ],
+                                       [ 1, 3, 5, 7, 11 ]]
+                  }}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'uniqueArray': strat},
+                                  def_objclass='OrderedDict')
+
+        base = [ "a", "e", "c", 3 ]
+        head = [ "b", "i", 4, 5, "z" ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [ "c", "b", "i", 4, 5, "z" ])
+
+class TestArrayMergeByMultiId(unittest.TestCase):
+
+    def test_ctor(self):
+        strat = mrg.ArrayMergeByMultiId()
+        self.assertIsNotNone(strat)
+        self.assertIsInstance(strat, Strategy)
+
+    def test_merge_def(self):
+        strat = mrg.ArrayMergeByMultiId()
+        schema = {'mergeStrategy': 'arrayMergeByMultiId'}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'arrayMergeByMultiId': strat},
+                                  def_objclass='OrderedDict')
+
+        base = [ { "@id": "goob", "foo": "bar" },
+                 { "@id": "hank", "foo": "bin" } ]
+        head = [ { "@id": "goob", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+            { "@id": "hank", "foo": "bin" },
+            { "@id": "bob", "tells": "alice" }
+        ])
+        
+    def test_merge(self):
+        strat = mrg.ArrayMergeByMultiId()
+        schema = {'mergeStrategy': 'arrayMergeByMultiId',
+                  'mergeOptions': {
+                      'idRef': [ "@id", "foo" ]
+                  }}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'arrayMergeByMultiId': strat},
+                                  def_objclass='OrderedDict')
+
+        base = [ { "@id": "goob", "foo": "bar" },
+                 { "@id": "goob", "foo": "bin" } ]
+        head = [ { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+                 { "@id": "goob", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+            { "@id": "goob", "foo": "bin" },
+            { "@id": "goob", "gurn": "cranston" },
+            { "@id": "bob", "tells": "alice" }
+        ])
+        
+    def test_merge_ignore(self):
+        strat = mrg.ArrayMergeByMultiId()
+        schema = {'mergeStrategy': 'arrayMergeByMultiId',
+                  'mergeOptions': {
+                      'idRef': [ "@id", "foo" ],
+                      'ignoreId': { "@id": "goob" }
+                  }}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'arrayMergeByMultiId': strat},
+                                  def_objclass='OrderedDict')
+
+        base = [ { "@id": "goob", "foo": "bar" },
+                 { "@id": "goob", "foo": "bin" } ]
+        head = [ { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+                 { "@id": "goob", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+            { "@id": "goob", "foo": "bin" },
+            { "@id": "bob", "tells": "alice" }
+        ])
+        
+class TestTopicArray(unittest.TestCase):
+
+    def test_ctor(self):
+        strat = mrg.TopicArray()
+        self.assertIsNotNone(strat)
+        self.assertIsInstance(strat, Strategy)
+
+    def test_merge_def(self):
+        strat = mrg.TopicArray()
+        schema = {'mergeStrategy': 'topicArray'}
+        merger = jsonmerge.Merger(schema=schema,
+                                  strategies={'topicArray': strat},
+                                  def_objclass='OrderedDict')
+
+
+        base = [
+            { "@id": "goob", "tag": "physics" },
+            { "@id": "gurn", "scheme": "hsr", "tag": "physics" }, 
+            { "scheme": "hsr", "tag": "biology" }
+        ]
+        head = [
+            { "@id": "goob", "tag": "Physics" },
+            { "scheme": "hsr", "tag": "physics", "lab": "MML" }, 
+            { "scheme": "hsr", "tag": "biology" }
+        ]
+
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "tag": "Physics" },
+            { "@id": "gurn", "scheme": "hsr", "tag": "physics", "lab": "MML" }, 
+            { "scheme": "hsr", "tag": "biology" }
+        ])
+
+
 class TestDirBaseMergerFactory(unittest.TestCase):
 
     def test_ctor(self):

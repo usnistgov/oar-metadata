@@ -18,11 +18,7 @@
                         "Acronyms should be avoided"
                     ],
                     "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Title",
-                        "referenceProperty": "dc:title"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "description": {
@@ -45,22 +41,15 @@
                     ],
                     "type": "array",
                     "items": { "type": "string", "minLength": 1 },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Tags",
-                        "referenceProperty": "dcat:keyword"
-                    }
+                    "mergeStrategy": "arrayMergeById",
+                    "mergeOptions": { "idRef": "/@id" }
                 },
 
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this resource addresses or speaks to",
                     "type": "array",
                     "items": { "$ref": "#/definitions/Topic" },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Topic",
-                        "referenceProperty": "foaf:topic"
-                    }
+                    "mergeStrategy": "topicArray"
                 },
 
                 "modified": {
@@ -69,11 +58,7 @@
                         "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
                     ],
                     "$ref": "#/definitions/ISO8601DateRange",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Last Update",
-                        "referenceProperty": "dc:modified"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "issued": {
@@ -88,12 +73,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "referenceProperty": "dc:issued",
-                        "range": "xsd:date"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "publisher": {
@@ -102,11 +82,7 @@
                         "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
                     "$ref": "#/definitions/Organization",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Publisher",
-                        "referenceProperty": "dc:publisher"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
 
                 "contactPoint": {
@@ -116,11 +92,7 @@
                         "The information can reflect either a person or a group (such as a help desk)"
                     ],
                     "$ref": "#/definitions/ContactInfo",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Information",
-                        "referenceProperty": "dcat:contactPoint"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
                 
                 "accessLevel": {
@@ -141,11 +113,7 @@
                             "description": "Data asset is not available to members of the public"
                         }
                     },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Public Access Level",
-                        "referenceProperty": "pod:accessLevel"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "license": {
@@ -165,11 +133,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "License",
-                        "referenceProperty": "dc:license"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "rights": { 
@@ -189,11 +153,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Rights",
-                        "referenceProperty": "dc:rights"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "components": {
@@ -207,7 +167,9 @@
                     "type": "array",
                     "items": { "$ref": "#/definitions/Component" },
                     "minLength": 1,
-                    "uniqueItems": true
+                    "uniqueItems": true,
+                    "mergeStrategy": "arrayMergeById",
+                    "mergeOptions": { "idRef": "/@id" }
                 },
 
                 "conformsTo": {
@@ -222,23 +184,14 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Data Standard",
-                        "referenceProperty": "dc:conformsTo",
-                        "owl:range": "xsd:anyURI"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "isPartOf": {
                     "title": "Collection",
                     "description": "The collection of which the dataset is a subset",
                     "$ref": "#/definitions/ResourceReference",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Collection",
-                        "referenceProperty": "dc:isPartOf"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
                 
                 "language": {
@@ -256,11 +209,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Language",
-                        "referenceProperty": "dc:language"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "landingPage": {
@@ -275,11 +224,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Homepage URL",
-                        "referenceProperty": "dcat:landingPage"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "references": {
@@ -310,7 +255,8 @@
                         {
                             "type": "null"
                         }
-                    ]
+                    ],
+                    "mergeStrategy": "keepBase"
                 },
 
                 "@id": {
@@ -321,11 +267,7 @@
                     ],
                     "type": "string",
                     "minLength": 5,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Unique Identifier",
-                        "referenceProperty": "dc:identifier"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "doi": {
@@ -337,11 +279,7 @@
                     "type": "string",
                     "pattern": "^doi:[0-9]+\\.[0-9]+/.*$",
                     "minLength": 5,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Unique Identifier",
-                        "referenceProperty": "dc:identifier"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "ediid": {
@@ -359,7 +297,9 @@
                     "items": {
                         "type": "string",
                         "maxLength": 24
-                    }
+                    },
+                    "mergeStrategy": "arrayMergeById",
+                    "mergeOptions": { "idRef": "/" }
                 },
 
                 "@type": {
@@ -371,7 +311,13 @@
                         
                     ],
                     "type": "array",
-                    "items": { "type": "string" } 
+                    "items": { "type": "string" } ,
+                    "mergeStrategy": "uniqueArray",
+                    "mergeOptions": {
+                        "incompatible": [
+                            [ "nrdp:PublicDataResource", "nrdp:DataFile" ]
+                        ]
+                    }
                 }
 
             },
@@ -410,12 +356,7 @@
 
                 "citation": {
                     "description": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
-                    "type": "string",
-                    "asOntology": {
-                        "@conxtext": "profile-schema-onto.json",
-                        "prefLabel": "Cite as",
-                        "referenceProperty": "dc:bibliographicCitation"
-                    }
+                    "type": "string"
                 },
 
                 "refid": {
@@ -538,12 +479,7 @@
                         "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
                     ],
                     "type": "string",
-                    "format": "uri",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
-                    }
+                    "format": "uri"
                 },
                 "resourceType": {
                     "description":  "the linked-data class types for the referenced resource",
@@ -592,12 +528,7 @@
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
                     "type": "array",
-                    "items": { "$ref": "#/definitions/Topic" },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Topic",
-                        "referenceProperty": "foaf:topic"
-                    }
+                    "items": { "$ref": "#/definitions/Topic" }
                 },
                 "conformsTo": {
                     "title": "Standard",
@@ -610,12 +541,7 @@
                         {
                             "type": "null"
                         }
-                    ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Data Standard",
-                        "referenceProperty": "dc:conformsTo"
-                    }
+                    ]
                 }
                 
             }
@@ -716,11 +642,7 @@
                     "title": "Publisher Name",
                     "description": "The plain-text name of the organization",
                     "type": "string",
-                    "minLength": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "referenceProperty": "skos:prefLabel"
-                    }
+                    "minLength": 1
                 }
             },
             "required": [ "name" ]
@@ -739,58 +661,33 @@
                     "title": "Contact Name",
                     "description": "full name of the contact person, role, or organization",
                     "type": "string",
-                    "minLength": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Name",
-                        "referenceProperty": "vcard:fn"
-                    }
+                    "minLength": 1
                 },
             
                 "hasEmail": {
                     "title": "Email",
                     "description": "The email address of the resource contact",
                     "type": "string",
-                    "pattern": "^[\\w\\_\\~\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\:.-]+@[\\w.-]+\\.[\\w.-]+?$",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Email",
-                        "referenceProperty": "vcard:hasEmail"
-                    }
+                    "pattern": "^[\\w\\_\\~\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\:.-]+@[\\w.-]+\\.[\\w.-]+?$"
                 },
 
                 "postalAddress": {
                     "description": "the contact mailing address",
                     "notes": [
                     ],
-                    "$ref": "#/definitions/PostalAddress",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Address",
-                        "referenceProperty": "vcard:hasAddress"
-                    }
+                    "$ref": "#/definitions/PostalAddress"
                 },
                 
                 "phoneNumber": {
                     "description": "the contact telephone number",
                     "notes": [ "Complete international dialing codes should be given, e.g. '+1-410-338-1234'" ],
-                    "type" : "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Phone Number",
-                        "referenceProperty": "vcard:hasTelephone"
-                    }
+                    "type" : "string"
                 },
                 
                 "timezone": {
                     "description": "the time zone where the contact typically operates",
                     "type" : "string",
-                    "pattern": "^[-+][0-9]{4}$",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Address",
-                        "referenceProperty": "transit:timezone"
-                    }
+                    "pattern": "^[-+][0-9]{4}$"
                 },
                 
                 "proxyFor": {
@@ -799,21 +696,9 @@
                         "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
                     ],
                     "type": "string",
-                    "format": "uri",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
-                    }
+                    "format": "uri"
                 }
                 
-            },
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "@id": "pod:ContactPerson",
-                "@type": "owl:Class",
-                "prefLabel": "Contact Information",
-                "referenceClass": "vcard:Contact"
             }
 
         },
@@ -821,11 +706,7 @@
         "PostalAddress": {
             "description": "a line-delimited listing of a postal address",
             "type": "array",
-            "item": { "type": "string", "minLength": 1 },
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "referenceProperty": "vcard:hasAddress"
-            }
+            "item": { "type": "string", "minLength": 1 }
         },
 
         "Identifier": {
@@ -837,12 +718,7 @@
                     "notes": [
                         "this label may imply a particular resolver to use"
                     ],
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Identifier System",
-                        "referenceProperty": "mads:idScheme"
-                    }
+                    "type": "string"
                 },
 
                 "value": {
@@ -850,23 +726,11 @@
                     "notes": [
                         "if no scheme is provided, a URI form of the identifier should be given"
                     ],
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Identifier System",
-                        "referenceProperty": "mads:idValue"
-                    }
+                    "type": "string"
                 }
 
             },
-            "required": [ "value" ],
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "@id": "mads:Identifier",
-                "@type": "owl:Class",
-                "prefLabel": "Identifier information",
-                "referenceClass": "mads:Identifier"
-            }
+            "required": [ "value" ]
         }
     },
 
