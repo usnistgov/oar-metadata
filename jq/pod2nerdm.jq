@@ -50,15 +50,41 @@ def cvtref:  {
     "_extensionSchemas": [ dciteRefType ]
 };
 
+# extract the path component from a URI
+#
+# Input: string
+# Output: string
+def urlpath:
+    sub("^\\w+:(//\\w+\\.\\w+(\\.\\w+)*(:\\d+)?)?"; "")
+;
+
+# create a relative identifier for a component based on its metadata
+#
+# Input: the component node
+# Output: str, the relative identifier
+# prefix: a prefix to insert
+#
+def componentID(prefix):
+    prefix + 
+    (if .filepath then .filepath else
+        if .accessURL then (.accessURL | urlpath) else
+           if .downloadURL then (.downloadURL | urlpath) else
+               null
+           end
+        end
+     end | sub("^/"; ""))
+;
+
 # conversion for a POD-to-NERDm distribution node.  A distribution gets converted
 # to a DataFile component
 #
 # Input: a Distribution object
 # Output: a Component object with an DataFile type given as @type
 #
-def dist2download: 
+def dist2download:
     .["filepath"] = ( .downloadURL | sub(".*/"; "") ) |
     .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
     if .format then .format = { description: .format } else . end
 ;
@@ -71,7 +97,8 @@ def dist2download:
 # Output: a Component object with an Hidden type given as @type
 #
 def dist2hidden:
-    .["@type"] = [ "nrd:Hidden", "dcat:Distribution" ] 
+    .["@type"] = [ "nrd:Hidden", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("#"))
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution gets converted
@@ -92,7 +119,8 @@ def dist2inaccess:
 # Output: a Component object with an AccessPage type given as @type
 #
 def dist2accesspage:
-    .["@type"] = [ "nrd:AccessPage", "dcat:Distribution" ]
+    .["@type"] = [ "nrd:AccessPage", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("#"))
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution gets converted
@@ -265,7 +293,8 @@ def podds2resource:
     if .doi then . else del(.doi) end |
     if .theme then . else del(.theme) end |
     if .issued then . else del(.issued) end |
-    if .components then .inventory = (.components | inventory_components) else . end
+    if .components then .inventory = (.components | inventory_components) else . end |
+    if .["@id"] then .["@context"] = [ .["@context"], { "@base": .["@id"] }] else . end
 ;
 
 # Converts an entire POD Catalog to an array of NERDm Resource nodes
