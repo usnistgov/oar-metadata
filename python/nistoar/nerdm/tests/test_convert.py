@@ -4,7 +4,7 @@ import nistoar.nerdm.convert as cvt
 
 mddir = os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-assert os.path.basename(mddir) == "metadata", "Bad mddir: "+mddir
+# assert os.path.basename(mddir) == "metadata", "Bad mddir: "+mddir
 jqlibdir = os.path.join(mddir, "jq")
 datadir = os.path.join(jqlibdir, "tests", "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
