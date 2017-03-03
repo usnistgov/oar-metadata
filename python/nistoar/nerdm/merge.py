@@ -44,6 +44,23 @@ class KeepBase(Strategy):
     def get_schema(self, walk, schema, meta, **kwargs):
         return walk.resolve_refs(schema)
 
+class PreferBase(Strategy):
+    """
+    a jsonmerge strategy that will retain the base value unless it is 
+    not set, in which the head value is taken.  The head effectively 
+    serves as a default value.
+    """
+
+    def merge(self, walk, base, head, schema, meta, **kwargs):
+        if (base is None or base.is_undef()) and \
+           head is not None and not head.is_undef():
+            return head
+
+        return base
+
+    def get_schema(self, walk, schema, meta, **kwargs):
+        return walk.resolve_refs(schema)
+
 class UniqueArray(Strategy):
     """
     merge arrays by only appending values not in the base, with caveats.
@@ -250,6 +267,7 @@ class TopicArray(ArrayMergeByMultiId):
     
 STRATEGIES = {
     "keepBase": KeepBase(),
+    "preferBase": PreferBase(),
     "uniqueArray": UniqueArray(),
     "arrayMergeByMultiId": ArrayMergeByMultiId(),
     "topicArray": TopicArray()

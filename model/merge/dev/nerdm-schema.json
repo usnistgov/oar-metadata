@@ -18,7 +18,7 @@
                         "Acronyms should be avoided"
                     ],
                     "type": "string",
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
 
                 "description": {
@@ -113,7 +113,7 @@
                             "description": "Data asset is not available to members of the public"
                         }
                     },
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
 
                 "license": {
@@ -133,7 +133,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
 
                 "rights": { 
@@ -153,7 +153,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
 
                 "components": {
@@ -184,7 +184,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "isPartOf": {
@@ -209,7 +209,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "landingPage": {
@@ -224,7 +224,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "references": {
@@ -515,20 +515,31 @@
                         "the first value should be considered its primary type.  This is usually a subtype of Component."
                     ],
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": { "type": "string" },
+                    "mergeStrategy": "uniqueArray",
+                    "mergeOptions": {
+                        "incompatible": [
+                            [ "nrdp:DataFile", "nrdp:Subcollection",
+                              "nrd:Hidden", "nrdp:AccessPage",
+                              "nrdp:SearchPage" ]
+                        ]
+                    }
                 },
                 "title": {
                     "description": "a descriptive title for the component",
-                    "type": "string"
+                    "type": "string",
+                    "mergeStrategy": "preferBase"
                 },
                 "description": {
                     "description": "a description of the nature and contents of the component, including the role it plays as part of the resource",
-                    "type": "string"
+                    "type": "string",
+                    "mergeStrategy": "preferBase"
                 },
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
                     "type": "array",
-                    "items": { "$ref": "#/definitions/Topic" }
+                    "items": { "$ref": "#/definitions/Topic" },
+                    "mergeStrategy": "topicArray"
                 },
                 "conformsTo": {
                     "title": "Standard",
@@ -541,7 +552,8 @@
                         {
                             "type": "null"
                         }
-                    ]
+                    ],
+                    "mergeStrategy": "preferBase"
                 }
                 
             }
