@@ -92,7 +92,7 @@ include "pod2nerdm"; dist2inaccess
 #
 include "pod2nerdm"; dist2accesspage
 {"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays"}
-{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrd:AccessPage", "dcat:Distribution" ],"@id":"#10.18434/T42C7D"}
+{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrdp:AccessPage", "dcat:Distribution" ],"@id":"#10.18434/T42C7D","_extensionSchemas":["https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage"]}
 
 #--------------
 # testing dist2comp()
@@ -131,7 +131,7 @@ include "pod2nerdm"; dist2comp
 #
 include "pod2nerdm"; dist2comp
 {"accessURL": "http://webbook.nist.gov/chemistry/","description": "Landing page for the NIST Chemistry WebBook.","mediaType": "text/html"}
-{ "accessURL": "http://webbook.nist.gov/chemistry/","description": "Landing page for the NIST Chemistry WebBook.","mediaType": "text/html","@type": ["nrd:AccessPage","dcat:Distribution"],"@id":"#chemistry/"}
+{ "accessURL": "http://webbook.nist.gov/chemistry/","description": "Landing page for the NIST Chemistry WebBook.","mediaType": "text/html","@type": ["nrdp:AccessPage","dcat:Distribution"],"@id":"#chemistry/","_extensionSchemas":["https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage"]}
 
 # testing dist2comp()
 #

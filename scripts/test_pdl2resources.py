@@ -60,7 +60,7 @@ class TestConvert(test.TestCase):
 
         sys.stderr.write("\nValidated {0} files".format(str(passed)))
         self.assertEquals(len(failed), 0,
-                          "{0} converted file(s) failed validation")
+             "{0} converted file(s) failed validation".format(str(len(failed))))
 
         
 
