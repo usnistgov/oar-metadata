@@ -140,7 +140,7 @@
                         }
                         
                     },
-                    "required": [ "bureauCode", "programCode" ]
+                    "required": [ "bureauCode", "programCode", "ediid" ]
                 }
             ]
         },
