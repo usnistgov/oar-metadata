@@ -318,8 +318,119 @@
                             [ "nrdp:PublicDataResource", "nrdp:DataFile" ]
                         ]
                     }
-                }
+                },
 
+                "accrualPeriodicity": {
+                    "title": "Frequency",
+                    "description": "Frequency with which dataset is published.",
+                    "anyOf": [
+                        {
+                            "enum": [
+                                "irregular"
+                            ],
+                            "valueDocumentation": {
+                                "irregular": {
+                                    "description": "the data is updated or republished on an irregular schedule"
+                                }
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "pattern": "^R\\/P(?:\\d+(?:\\.\\d+)?Y)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?W)?(?:\\d+(?:\\.\\d+)?D)?(?:T(?:\\d+(?:\\.\\d+)?H)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "bureauCode": {
+                    "title": "Bureau Code",
+                    "description": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
+                    "notes": [
+                        "OMB Circular A-11, Appendix C is available via http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
+                        "A machine-readable listing of the defined codes is available via https://project-open-data.cio.gov/data/omb_bureau_codes.csv",
+                        "Codes have the format of 015:01"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[0-9]{3}:[0-9]{2}$"
+                    },
+                    "uniqueItems": true,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Bureau Code",
+                        "referenceProperty": "pod:bureauCode"
+                    },
+                    "mergeStrategy": "keepBase"
+                },
+
+                "programCode": {
+                    "title": "Program Code",
+                    "description": "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset",
+                    "notes": [
+                        "A machine-readable listing of the defined codes is available via https://www.performance.gov/sites/default/files/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
+                        "Codes have the format of 015:001"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[0-9]{3}:[0-9]{3}$"
+                    },
+                    "uniqueItems": true,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Program Code",
+                        "referenceProperty": "pod:programCode"
+                    },
+                    "mergeStrategy": "keepBase"
+                },
+
+                "dataQuality": {
+                    "title": "Data Quality",
+                    "description": "Whether the dataset meets the agency's Information Quality Guidelines",
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "primaryITInvestmentUII": {
+                    "title": "Primary IT Investment UII",
+                    "description": "The IT Unique Investment Identifier (UII) that is associated with this dataset",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "[0-9]{3}-[0-9]{9}"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "keepBase"
+                },
+
+                "systemOfRecords": {
+                    "title": "System of Records",
+                    "description": "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "keepBase"
+                }
             },
 
             "required": [
@@ -554,7 +665,92 @@
                         }
                     ],
                     "mergeStrategy": "preferBase"
+                },
+                
+                "filepath": {
+                    "description": "a name for the data file reflecting its hierarchical location in the data source collection",
+                    "notes": [
+                        "Forward slashes delimit the hierarchical names in the path",
+                        "If there are no slashes in this value, this file is assumed to be at the top of the file hierarchy",
+                        "The base name of this value (i.e. the last field in the path) can be used as the default filename to give to the file if downloaded.",
+                        "The component title may have the same value."
+                    ],
+                    "type": "string",
+                    "mergeStrategy": "overwrite"
+                },
+                
+                "downloadURL": {
+                    "title": "Download URL",
+                    "description": "URL providing direct access to a downloadable file of a dataset",
+                    "type": "string",
+                    "format": "uri",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Download URL",
+                        "referenceProperty": "dcat:downloadURL"
+                    },
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "mediaType": {
+                    "title": "Media Type",
+                    "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s downloadURL",
+                    "anyOf": [
+                        {
+                            "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+
+                "format": {
+                    "title": "Format",
+                    "description": "A human-readable description of the file format of a distribution",
+                    "$ref": "#/definitions/Format",
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "describedBy": {
+                    "title": "Data Dictionary",
+                    "description": "URL to the data dictionary for the distribution found at the downloadURL",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "describedByType": {
+                    "title": "Data Dictionary Type",
+                    "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s describedBy URL",
+                    "anyOf": [
+                        {
+                            "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+
+                "accessURL": {
+                    "description": "the URL for accessing this indirect access to the resource",
+                    "type": "string",
+                    "format": "uri",
+                    "mergeStrategy": "preferBase"
                 }
+
                 
             }
         },
