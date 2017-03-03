@@ -38,18 +38,6 @@ def dciteRefType: nerdm_schema + "/definitions/DCiteDocumentReference";
 #
 def resid:  if $id then $id else null end;
 
-# conversion for a POD-to-NERDm reference node
-#
-# Input: a string containing the reference URL
-# Output: a DCiteDocumentReference object
-#
-def cvtref:  {
-    "@type": "deo:BibliographicReference",
-    "refType": "IsReferencedBy",
-    "location": .,
-    "_extensionSchemas": [ dciteRefType ]
-};
-
 # extract the path component from a URI
 #
 # Input: string
@@ -57,6 +45,19 @@ def cvtref:  {
 def urlpath:
     sub("^\\w+:(//\\w+\\.\\w+(\\.\\w+)*(:\\d+)?)?"; "")
 ;
+
+# conversion for a POD-to-NERDm reference node
+#
+# Input: a string containing the reference URL
+# Output: a DCiteDocumentReference object
+#
+def cvtref:  {
+    "@type": "deo:BibliographicReference",
+    "@id": ("#ref:" + (. | urlpath | sub("^/"; ""))),
+    "refType": "IsReferencedBy",
+    "location": .,
+    "_extensionSchemas": [ dciteRefType ]
+};
 
 # create a relative identifier for a component based on its metadata
 #

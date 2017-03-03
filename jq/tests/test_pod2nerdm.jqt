@@ -49,7 +49,7 @@ null
 #
 include "pod2nerdm"; map(cvtref)
 [ "http://goob.net/doc1.txt", "https://goob.gov/doc2.txt" ]
-[{ "@type": "deo:BibliographicReference", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": "deo:BibliographicReference", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "https://goob.gov/doc2.txt"}]
+[{ "@type": "deo:BibliographicReference","@id":"#ref:doc1.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": "deo:BibliographicReference","@id":"#ref:doc2.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "https://goob.gov/doc2.txt"}]
 
 #---------------
 # testing urlpath()
