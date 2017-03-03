@@ -8,7 +8,7 @@ import nistoar.nerdm.merge as mrg
 
 mddir = os.path.dirname(os.path.dirname(os.path.dirname(
             os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-mrgdir = os.path.join(mddir, "model", "merge")
+mrgdir = os.path.join(mddir, "etc", "merge")
 assert os.path.exists(mrgdir), "Missing merge dir"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 

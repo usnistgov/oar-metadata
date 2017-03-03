@@ -120,8 +120,10 @@ def dist2inaccess:
 # Output: a Component object with an AccessPage type given as @type
 #
 def dist2accesspage:
-    .["@type"] = [ "nrd:AccessPage", "dcat:Distribution" ] |
-    .["@id"] = (. | componentID("#"))
+    .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("#")) |
+    .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage" ] |
+    if .format then .format = { description: .format } else . end
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution gets converted
