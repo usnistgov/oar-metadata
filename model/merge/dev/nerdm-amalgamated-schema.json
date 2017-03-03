@@ -755,6 +755,42 @@
             }
         },
 
+        "Format": {
+            "description": "a description of a file format that a file employs",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "a human-readable description of the format",
+                    "type": "string"
+                },
+                
+                "scheme": {
+                    "description": "a URI that identifies the format type registry or identification system that the value is defined in.",
+                    "type": "string",
+                    "format": "uri",
+                    "asOnotology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Schema",
+                        "referenceProperty": "vold:vocabulary"
+                    }
+                },
+
+                "@id": {
+                    "description": "the unique identifier for the format",
+                    "type": "string",
+                    "format": "uri"
+                },
+
+                "tag": {
+                    "description": "a short, display-able token or abbreviation for the format",
+                    "notes": [
+                        "As a token, it is intended that applications can search for this value and find all files having the same format.  Thus, regardless of whether the @id field is provided, all references to the same format should use the same tag value."
+                    ],
+                    "type": "string"
+                }
+            }
+        },
+
         "IncludedResource": {
             "description": "A reference to another resource (which has its own record) that is a part of this resource",
             "notes": [
