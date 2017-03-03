@@ -359,6 +359,17 @@
                     }
                 },
 
+                "ediid": {
+                    "description": "the NIST EDI identifier assigned to the resource",
+                    "type": "string",
+                    "minLength": 5,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "EDI Identifier",
+                        "referenceProperty": "dc:identifier"
+                    }
+                },
+                
                 "abbrev": {
                     "description": "an abbreviated form of the resource's title",
                     "notes": [
