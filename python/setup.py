@@ -6,7 +6,7 @@ setup(name='nistoar',
       description="the NERDm metadata support for nistoar",
       author="Ray Plante",
       author_email="raymond.plante@nist.gov",
-      url='https://github.com/usnistgov/oar-pdr',
+      url='https://github.com/usnistgov/oar-metadata',
       packages=['nistoar', 'nistoar.nerdm', 'nistoar.id',
                 'nistoar.rmm', 'nistoar.rmm.mongo']
 )
