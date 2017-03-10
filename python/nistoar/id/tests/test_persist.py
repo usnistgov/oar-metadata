@@ -101,11 +101,22 @@ class TestEDIBasedMinter(unittest.TestCase):
     def setUp(self):
         self.tf = Tempfiles()
         self.tf.track("issued-ids.json")
-        self.mntr = persist.EDIBasedMinter("mds5", "pdr5", self.tf.root)
+        cfg = { 'shoulder_for_seq': "pdr5",
+                'shoulder_for_edi': "mds5",
+                'registry': { 'cache_on_register': True }
+        }
+        self.mntr = persist.EDIBasedMinter(self.tf.root, cfg)
 
     def tearDown(self):
         self.mntr = None
         self.tf.clean()
+
+    def test_ctor(self):
+        self.assertTrue(self.mntr.seqminter)
+        self.assertEqual(self.mntr.seedkey, 'ediid')
+        self.assertEqual(self.mntr._seededmask, 'ark:/88434/mds5.zeeeeek')
+        self.assertEqual(self.mntr._div, 1000000)
+        self.assertIn("cache_on_register", self.mntr.registry.cfg)
 
     def test_hash(self):
         hx = '36FF2AB549C0F0CDE0531A570681F1E81474'
@@ -146,6 +157,7 @@ class TestEDIBasedMinter(unittest.TestCase):
         self.assertGreater(len(id2), len(id))
         self.assertEqual(id2[-3], '0')
         self.assertTrue(noid.validate(id2))
+        self.assertEqual(self.mntr._collision_count, 1)
 
     def test_mint(self):
         seqid = self.mntr.mint()
@@ -154,10 +166,27 @@ class TestEDIBasedMinter(unittest.TestCase):
         eid = self.mntr.mint({'ediid': 'EBC9DB05EDEA5B0EE043065706812DF81'})
         self.assertNotEqual(eid, seqid)
         self.assertEqual(eid[:15], 'ark:/88434/mds5')
-        self.assertEqual(len(eid), 22)
+        self.assertEqual(len(eid), 21)
 
         self.assertTrue(self.mntr.issued(eid))
         self.assertTrue(self.mntr.issued(seqid))
+
+    def test_data(self):
+        eid = self.mntr.mint({'ediid': 'EBC9DB05EDEA5B0EE043065706812DF81'})
+        seqid = self.mntr.mint()
+        self.assertEqual(
+          self.mntr.datafor(eid), {'ediid': 'EBC9DB05EDEA5B0EE043065706812DF81'})
+        self.assertIsNone(self.mntr.datafor(seqid))
+
+    def test_cache(self):
+        eid = self.mntr.mint({'ediid': 'EBC9DB05EDEA5B0EE043065706812DF81'})
+        seqid = self.mntr.mint()
+        
+        with open(os.path.join(self.tf.root, "issued-ids.json")) as fd:
+            data = json.load(fd)
+        self.assertTrue(isinstance(data, dict))
+        self.assertIn(eid, data)
+        self.assertIn(seqid, data)
 
 if __name__ == '__main__':
     unittest.main()

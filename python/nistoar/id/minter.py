@@ -206,17 +206,17 @@ class NoidMinter(IDMinter):
             return n
 
 NIST_ARK_NAAN = "88434"
-PDR_SHOULDER = "pdr0"        
+DEF_PDR_SHOULDER = "pdr0"        
                 
-class PDRMinter(NoidMinter):
+class PDR0Minter(NoidMinter):
     """
     An identifier minter customized for the PDR
     """
 
-    def __init__(self, count=1, shoulder=PDR_SHOULDER):
-        super(PDRMinter, self).__init__('ark:/{0}/{1}.zeeek'.
-                                        format(NIST_ARK_NAAN, PDR_SHOULDER),
-                                        count)
+    def __init__(self, count=1, shoulder=DEF_PDR_SHOULDER):
+        super(PDR0Minter, self).__init__('ark:/{0}/{1}.zeeek'.
+                                         format(NIST_ARK_NAAN, shoulder),
+                                         count)
 
                                         
 

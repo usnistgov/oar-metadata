@@ -4,6 +4,7 @@ its IDs and related data to a file on disk.
 """
 import os, logging, json
 from collections import Mapping
+from copy import deepcopy
 from .minter import IDRegistry, IDMinter, NoidMinter, NIST_ARK_NAAN
 import pynoid as noid
 
@@ -11,24 +12,50 @@ log = logging.getLogger(__name__)
 
 class SimplePersistentIDRegistry(IDRegistry):
     """
-    a registry that persists its information to disk
+    a registry that persists its information to disk.  
+
+    The persisted file is JSON format containing an object whose properties
+    are the currently issued IDs and the values are the data associated with
+    them.  
+
+    This class can take a configuration dictionary on construction; the 
+    following parameters are supported:
+    :param id_store_file  str:  the name to give to the file where IDs 
+                                are persisted (default: 'issued-ids.json')
+    :param cache_on register bool:  if True (default) each newly registered ID
+                                is persisted immediately upon call to 
+                                registerID(); if False, the IDs will only be
+                                persisted with a call to cache_data().
+    :param pretty_print bool:   if True, persisted ID file will be written out
+                                in JSON with "pretty print" formatting for 
+                                easier reading by a human.
     """
 
-    def __init__(self, parentdir, config=None):
-        assert os.path.isdir(parentdir)
+    def __init__(self, parentdir=None, config=None):
+        if parentdir:
+            assert os.path.isdir(parentdir)
 
         if config is None:
             config = {}
         if not isinstance(config, Mapping):
             raise TypeError("Configuration not a dictionary: " + str(config))
-        self.cfg = config
-        self.store = os.path.join(parentdir,
-                              self.cfg.get('id_store_file', 'issued-ids.json'))
+        self.cfg = deepcopy(config)
+
         self.data = {}
-        self.reload_data()
-        if not self.data:
-            log.info("IDRegistry: starting with an empty registry")
         self.cache_pending = False
+
+        # set up the registry disk storage
+        self.store = None
+        if parentdir:
+            self.store = os.path.join(parentdir,
+                              self.cfg.get('id_store_file', 'issued-ids.json'))
+            self.reload_data()
+            if not self.data:
+                log.info("IDRegistry: starting with an empty registry")
+
+        if not self.store:
+            self.cfg['cache_on_register'] = False
+
 
     def reload_data(self):
         if os.path.exists(self.store):
@@ -85,10 +112,30 @@ class EDIBasedMinter(IDMinter):
     data contains a key 'ediid', the ID will be computed based on the key's
     value (and the configured template).  If the key is not present, the 
     issued ID is based on a sequence (via NoidMinter).  
+
+    This class can take a configuration dictionary on construction; the 
+    following parameters are supported:
+    :param registry  dict:    configuration parameters for the ID registry 
+                              that persists issued IDs; see the documentation
+                              for SimplePersistentIDRegistry for the supported
+                              parameters in this dictionary.
+    :param ediid_data_key str:  the string key to use to extract the EDI ID 
+                              from the data dictionary provided to mint()
+                              (default: 'ediid')
+    :param shoulder_for_edi str:  the ARK shoulder to use when minting 
+                              IDs based on the EDI Identifier (default: 'mds0')
+    :param shoulder_for_seq str:  the ARK shoulder to use when minting 
+                              IDs based on a sequence number (default: 'pdr0')
+    :param hashorder int:     a number that sets the length of the EDI ID hash
+                              used for generating an ARK identifer
+                              (default: 6).  This roughly sets the number 
+                              IDs that can be issued without having to avoid 
+                              collisions.
+    :param seqstart int:      the starting sequence number to use for minting
+                              IDs not based on an EDI ID (default: 1)
     """
 
-    def __init__(self, edishoulder, seqshoulder, regdir, count=1, hashorder=6,
-                 seedkey='ediid'):
+    def __init__(self, regdir, config, seqstart=None):
         """
         Create the minter.
 
@@ -107,15 +154,34 @@ class EDIBasedMinter(IDMinter):
         :param seedkey str:  the name of the key in data to look for the 
                                 EDIID value under (default: 'ediid')
         """
-        self.seedkey = seedkey
-        self.registry = SimplePersistentIDRegistry(regdir)
+        #        , edishoulder, seqshoulder, regdir, count=1, hashorder=6,
+        #                 seedkey='ediid'):
+        if config is None:
+            config = {}
+        if not isinstance(config, Mapping):
+            raise TypeError("Configuration not a dictionary: " + str(config))
+        self.cfg = config
 
-        self._prefix = 'ark:/{0}/'.format(NIST_ARK_NAAN)
-        self._seededmask = self._prefix + edishoulder + '.zeeeeeek'
-        self.seqminter = NoidMinter(self._prefix+seqshoulder+'.zeeek',
-                                    count=count)
-        self._div = 10 ** hashorder
+        self.registry = SimplePersistentIDRegistry(regdir,
+                                                   self.cfg.get('registry', {}))
+
+        self.seedkey = self.cfg.get('ediid_data_key', 'ediid')
+        edishldr = self.cfg.get('shoulder_for_edi', 'mds0')
+        seqshldr = self.cfg.get('shoulder_for_seq', 'pdr0')
+        prefix = 'ark:/{0}/'.format(NIST_ARK_NAAN)
+        self._seededmask = prefix + edishldr + '.zeeeeek'
+        self._div = 10 ** self.cfg.get('hashorder', 6)
+
+        if not seqstart:
+            seqstart = self.cfg.get('sequence_start', 1)
+        if not isinstance(seqstart, int):
+            raise TypeError("EDIBasedMinter: seqstart arg is not an int: "+
+                            str(seqstart))
+
+        self.seqminter = NoidMinter(prefix+seqshldr+'.zeeek', count=seqstart)
+
         self._annotn = 1
+        self._collision_count = 0
 
     def _hash(self, hexid):
         s = 0
@@ -144,6 +210,8 @@ class EDIBasedMinter(IDMinter):
     def _seededmint(self, mask, n):
         out = noid.mint(self._seededmask, n)
         if self.issued(out):
+            log.debug("apparent EDI-ARK id collision: %s", out)
+            self._collision_count += 1
             mask = out[:-1]+"0.zek"
             while self.issued(out):
                 out = noid.mint(mask, self._annotn)
@@ -156,3 +224,5 @@ class EDIBasedMinter(IDMinter):
     def datafor(self, id):
         return self.registry.get_data(id)
 
+
+PDRMinter = EDIBasedMinter

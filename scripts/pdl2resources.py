@@ -41,7 +41,8 @@ except ImportError, e:
     import nistoar
 
 from nistoar.nerdm.convert import PODds2Res
-from nistoar.id.minter import PDRMinter
+from nistoar.id import PDRMinter, NIST_ARK_NAAN
+SHOULDER_POS = len("ark:/"+NIST_ARK_NAAN+"/")
 
 schemadir = os.path.join(basedir, "etc", "schemas")
 if not os.path.exists(schemadir):
@@ -82,7 +83,7 @@ def main(args):
     opts = parser.parse_args(args)
 
     seq = IDSEQ + opts.start
-    minter = PDRMinter(seq, 'pdr0')
+    minter = PDRMinter(None, { 'shoulder_for_edi': 'mds0' })
     cvtr = PODds2Res(jqlib)
 
     ensure_out_dir(opts.odir)
@@ -112,8 +113,11 @@ def main(args):
     if opts.count >= 0:
         lim = opts.start + opts.count
     for i in range(opts.start, lim):
-        id = minter.mint()
-        basename = id[id.index("pdr0"):]
+        iddata = {}
+        if "identifier" in dss[i]:
+            iddata['ediid'] = dss[i]['identifier']
+        id = minter.mint(iddata)
+        basename = id[SHOULDER_POS:]
         res = cvtr.convert_data(dss[i], id)
         if opts.fixtheme:
             set_theme_as_topic(res, tax)
