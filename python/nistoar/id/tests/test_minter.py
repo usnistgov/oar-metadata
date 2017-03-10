@@ -131,13 +131,20 @@ class TestNoidMinter(unittest.TestCase):
 
     def test_mint_k(self):
         self.minter = minter.NoidMinter(self.minter.mask+'k', 0)
-        self.assertEquals(self.minter.mint(), "0000")
-        self.assertEquals(self.minter.mint(), "0013")
-        self.assertEquals(self.minter.mint(), "0026")
+        for val in "0000 0013 0026".split():
+            id = self.minter.mint()
+            self.assertEqual(id, val)
+            self.assertTrue(noid.validate(id))
+
         self.minter.nextn = 10
-        self.assertEquals(self.minter.mint(), "00b1")
+        id = self.minter.mint()
+        self.assertEqual(id, "00b1")
+        self.assertTrue(noid.validate(id))
+        
         self.minter.nextn = 5432
-        self.assertEquals(self.minter.mint(), "m791")
+        id = self.minter.mint()
+        self.assertEqual(id, "m791")
+        self.assertTrue(noid.validate(id))
 
     def test_masks(self):
         for mask in "dddd eeee eded".split():
@@ -161,11 +168,15 @@ class TestNoidMinter(unittest.TestCase):
 class TestNoidMinter(unittest.TestCase):
 
     def setUp(self):
-        self.minter = minter.PDRMinter()
+        self.minter = minter.PDR0Minter()
 
     def testMint(self):
         self.minter.nextn = 5432
-        self.assertEquals(self.minter.mint(), "ark:/88434/pdr06f90")
+        id = self.minter.mint()
+        self.assertEquals(id, "ark:/88434/pdr06f90")
+        self.assertTrue(noid.validate(id))
+        with self.assertRaises(noid.ValidationError):
+            noid.validate("ark:/88434/pdr06t90")
 
 
         
