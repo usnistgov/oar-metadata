@@ -1,12 +1,13 @@
 """
 This module provides an ID minting and registry implementation that persists 
-its IDs and related data to a file on disk.
+its IDs and related data to a file on disk.  This implementation provides 
+locking to prevent two processes from acquiring the same ID.
 """
 import os, logging, json
 from collections import Mapping
 from copy import deepcopy
 from .minter import IDRegistry, IDMinter, NoidMinter, NIST_ARK_NAAN
-import pynoid as noid
+import pynoid as noid, filelock
 
 log = logging.getLogger(__name__)
 
@@ -46,9 +47,13 @@ class SimplePersistentIDRegistry(IDRegistry):
 
         # set up the registry disk storage
         self.store = None
+        self.lock = None
         if parentdir:
             self.store = os.path.join(parentdir,
                               self.cfg.get('id_store_file', 'issued-ids.json'))
+
+        self.lock = self._mylock(self.store)
+        if self.store:
             self.reload_data()
             if not self.data:
                 log.info("IDRegistry: starting with an empty registry")
@@ -59,18 +64,23 @@ class SimplePersistentIDRegistry(IDRegistry):
 
     def reload_data(self):
         if os.path.exists(self.store):
-            with open(self.store) as fd:
-                data = json.load(fd)
-            self.data = data
+            with self.lock:
+                with open(self.store) as fd:
+                    data = json.load(fd)
+                self.data = data
 
     def cache_data(self):
-        extra = {}
-        if self.cfg.get('pretty_print', True):
-            extra['separators'] = (',', ': ')
-            extra['indent'] = 4
-        with open(self.store, 'w') as fd:
-            json.dump(self.data, fd, **extra)
-        self.cache_pending = False
+        if not self.store:
+            raise RuntimeError("Can't cache: No caching storage configured")
+
+        with self.lock:
+            extra = {}
+            if self.cfg.get('pretty_print', True):
+                extra['separators'] = (',', ': ')
+                extra['indent'] = 4
+            with open(self.store, 'w') as fd:
+                json.dump(self.data, fd, **extra)
+            self.cache_pending = False
 
     def registerID(self, id, data=None):
         """
@@ -82,12 +92,13 @@ class SimplePersistentIDRegistry(IDRegistry):
         :param data dict:  any data to store with the identifier.
         :raises ValueError:  if the id has already exists in storage.
         """
-        if id in self.data:
-            raise ValueError("id is already registered: " + id)
-        self.data[id] = data
-        self.cache_pending = True
-        if self.cfg.get('cache_on_register', True):
-            self.cache_data()
+        with self.lock:
+            if id in self.data:
+                raise ValueError("id is already registered: " + id)
+            self.data[id] = data
+            self.cache_pending = True
+            if self.cfg.get('cache_on_register', True):
+                self.cache_data()
 
     def get_data(self, id):
         """
@@ -102,6 +113,21 @@ class SimplePersistentIDRegistry(IDRegistry):
         :param id str:  the identifier string to check
         """
         return id in self.data
+
+    class _mylock(object):
+        def __init__(self, storefile=None):
+            self._lock = None
+            if storefile:
+                lockfile = os.path.splitext(storefile)[0]+".lock"
+                self._lock = filelock.FileLock(lockfile)
+        def __enter__(self):
+            if self._lock:
+                self._lock.acquire(timeout=30)
+            return self
+        def __exit__(self, exc_type, exc_value, traceback):
+            if self._lock:
+                self._lock.release()
+            return None
 
 class EDIBasedMinter(IDMinter):
     """
@@ -196,15 +222,18 @@ class EDIBasedMinter(IDMinter):
         return an available identifier string.  
         """
         out = None
-        if isinstance(data, Mapping) and self.seedkey in data:
-            n = self._hash(data[self.seedkey])
+        with self.registry.lock:
 
-            out = self._seededmint(self._seededmask, n)
+            if isinstance(data, Mapping) and self.seedkey in data:
+                # create an ID based on the EDI ID
+                n = self._hash(data[self.seedkey])
+                out = self._seededmint(self._seededmask, n)
+            else:
+                # create an ID based on a running sequence
+                out = self.seqminter.mint(data)
+                
+            self.registry.registerID(out, data)
 
-        else:
-            out = self.seqminter.mint(data)
-
-        self.registry.registerID(out, data)
         return out
 
     def _seededmint(self, mask, n):
