@@ -165,7 +165,7 @@ class TestNoidMinter(unittest.TestCase):
                    "id {0} forgotten for mask={1}".format(repr(id), repr(mask)))
 
 
-class TestNoidMinter(unittest.TestCase):
+class TestPDRMinter(unittest.TestCase):
 
     def setUp(self):
         self.minter = minter.PDR0Minter()
