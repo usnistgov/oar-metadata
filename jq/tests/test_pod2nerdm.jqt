@@ -55,8 +55,8 @@ include "pod2nerdm"; map(cvtref)
 # testing urlpath()
 #
 include "pod2nerdm"; map(urlpath)
-[ "http://goob.net/doc1.txt", "https://goob.gov/gurn/doc2.txt", "file:/blah/blah", "http://dx.doi.org/10.082093/DOSFIASD" ]
-[ "/doc1.txt", "/gurn/doc2.txt", "/blah/blah", "/10.082093/DOSFIASD" ]
+[ "http://goob.net/doc1.txt", "https://goob.gov/gurn/doc2.txt", "file:/blah/blah", "http://dx.doi.org/10.082093/DOSFIASD", "https://www.nist.gov/od/ds/3A1EE2F169DD3B8CE0531A570681DB5D1491/trial3/trial3a.json" ]
+[ "/doc1.txt", "/gurn/doc2.txt", "/blah/blah", "/10.082093/DOSFIASD", "/od/ds/3A1EE2F169DD3B8CE0531A570681DB5D1491/trial3/trial3a.json" ]
 
 #---------------
 # testing componentID()

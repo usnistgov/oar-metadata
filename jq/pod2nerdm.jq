@@ -76,14 +76,36 @@ def componentID(prefix):
      end | sub("^/"; ""))
 ;
 
-# conversion for a POD-to-NERDm distribution node.  A distribution gets converted
-# to a DataFile component
+# convert a downloadURL into a filepath value.  This will recognize special
+# URL form corresponding to NIST's S3 buckets and the data distribution service
+#
+# Input:  URL string
+# Output: string, representing a filepath to assume
+#
+def filepath:
+    if test("https?://s3.amazonaws.com/nist-srd/\\w+/") then
+       sub("https?://s3.amazonaws.com/nist-srd/\\w+/"; "")
+    else
+      if test("https?://s3.amazonaws.com/nist-\\w+/") then
+         sub("https?://s3.amazonaws.com/nist-\\w+/"; "")
+      else
+        if test("https?://www.nist.gov/od/ds/\\w+/") then
+           sub("https?://www.nist.gov/od/ds/\\w+/"; "")
+        else
+           sub(".*/"; "")
+        end
+      end
+    end
+;
+
+# conversion for a POD-to-NERDm distribution node.  A distribution with a
+# downloadURL gets converted to a DataFile component
 #
 # Input: a Distribution object
-# Output: a Component object with an DataFile type given as @type
+# Output: a Component object with a DataFile type given as @type
 #
 def dist2download:
-    .["filepath"] = ( .downloadURL | sub(".*/"; "") ) |
+    .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
