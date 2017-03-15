@@ -5,7 +5,7 @@ execdir=`dirname $0`
 [ "$execdir" = "" -o "$execdir" = "." ] && execdir=$PWD
 set -ex
 
-docker build -t oarpdr/pymongo $execdir/pymongo
-docker build -t oarpdr/jq $execdir/jq
-docker build -t oarpdr/ejsonschema $execdir/ejsonschema
-docker build -t oarpdr/mdtests $execdir/mdtests
+docker build -t oarmeta/pymongo $execdir/pymongo
+docker build -t oarmeta/jq $execdir/jq
+docker build -t oarmeta/ejsonschema $execdir/ejsonschema
+docker build -t oarmeta/mdtests $execdir/mdtests
