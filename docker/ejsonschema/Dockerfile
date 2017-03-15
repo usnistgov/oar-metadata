@@ -1,4 +1,4 @@
-FROM oarpdr/jq:latest
+FROM oarmeta/jq:latest
 
 RUN apt-get update && apt-get install -y python python-pip python-dev unzip
 RUN pip install json-spec jsonschema requests pynoid 

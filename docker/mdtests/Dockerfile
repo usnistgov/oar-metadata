@@ -1,4 +1,4 @@
-FROM oarpdr/ejsonschema
+FROM oarmeta/ejsonschema
 
 COPY entrypoint.sh /root/entrypoint.sh
 
