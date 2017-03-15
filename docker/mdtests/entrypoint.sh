@@ -8,6 +8,7 @@ while [ "$1" != "" ]; do
         testall)
             [ -x $mongo_ctl ] && $mongod_ctl start && sleep 1
             scripts/testall.py
+            echo $? > testall.exit
             ;;
         install)
             scripts/install.sh
@@ -24,5 +25,6 @@ while [ "$1" != "" ]; do
             echo Available commands:  testall install shell
             ;;
     esac
+    
     shift
 done

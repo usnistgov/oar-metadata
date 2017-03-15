@@ -40,7 +40,9 @@ print "Executing nistoar python tests..."
 
 ldr = unittest.TestLoader()
 suite = ldr.discover(pydir, "test_*.py")
-unittest.TextTestRunner().run(suite)
+result = unittest.TextTestRunner().run(suite)
+if not result.wasSuccessful():
+    status += 16
 
 if status:
     print("NOT OK!")

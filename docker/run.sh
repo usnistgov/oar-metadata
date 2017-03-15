@@ -9,8 +9,8 @@ set -e
 
 $execdir/buildall.sh
 
-ti="-ti"
-[ "$1" == "testall" ] && ti=
+ti=
+(echo "$@" | grep -qs shell) && ti="-ti"
 
 echo docker run $ti --rm -v $codedir:/dev/oar-metadata oarmeta/mdtests "$@"
 exec docker run $ti --rm -v $codedir:/dev/oar-metadata oarmeta/mdtests "$@"
