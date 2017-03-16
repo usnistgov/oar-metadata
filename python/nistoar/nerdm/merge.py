@@ -363,7 +363,7 @@ class DirBasedMergerFactory(MergerFactoryBase):
         with open(schemafile) as fd:
             schema = json.load(fd)
 
-        out = Merger(schema, self.strategies, def_objclass='OrderedDict')
+        out = Merger(schema, self.strategies, 'OrderedDict')
         for schema in cache.schemas().values():
             out.cache_schema(schema)
 

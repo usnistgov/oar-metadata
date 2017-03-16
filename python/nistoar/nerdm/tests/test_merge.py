@@ -22,8 +22,8 @@ class TestKeepBase(unittest.TestCase):
     def test_merge(self):
         keep = mrg.KeepBase()
         schema = {'mergeStrategy': 'keepBase'}
-        merger = jsonmerge.Merger(schema=schema, strategies={'keepBase': keep},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema, {'keepBase': keep},
+                                  'OrderedDict')
 
         mrgd = merger.merge(None, {'a': 1})
         self.assertIsNone(mrgd)
@@ -48,9 +48,9 @@ class TestPreferBase(unittest.TestCase):
     def test_merge(self):
         strat = mrg.PreferBase()
         schema = {'mergeStrategy': 'preferBase'}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'preferBase': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'preferBase': strat},
+                                  'OrderedDict')
 
         mrgd = merger.merge(None, {'a': 1})
         self.assertEqual(mrgd, {'a': 1})
@@ -75,9 +75,9 @@ class TestUniqueArray(unittest.TestCase):
     def test_merge(self):
         strat = mrg.UniqueArray()
         schema = {'mergeStrategy': 'uniqueArray'}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'uniqueArray': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'uniqueArray': strat},
+                                  'OrderedDict')
 
         base = [ "a", "e", "i" ]
         head = [ "b", "i", "z", "a" ]
@@ -92,9 +92,9 @@ class TestUniqueArray(unittest.TestCase):
                       'incompatible': [[ "a", "e", "i", "o", "u" ],
                                        [ 1, 3, 5, 7, 11 ]]
                   }}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'uniqueArray': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'uniqueArray': strat},
+                                  'OrderedDict')
 
         base = [ "a", "e", "c", 3 ]
         head = [ "b", "i", 4, 5, "z" ]
@@ -112,9 +112,9 @@ class TestArrayMergeByMultiId(unittest.TestCase):
     def test_merge_def(self):
         strat = mrg.ArrayMergeByMultiId()
         schema = {'mergeStrategy': 'arrayMergeByMultiId'}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'arrayMergeByMultiId': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'arrayMergeByMultiId': strat},
+                                  'OrderedDict')
 
         base = [ { "@id": "goob", "foo": "bar" },
                  { "@id": "hank", "foo": "bin" } ]
@@ -134,9 +134,9 @@ class TestArrayMergeByMultiId(unittest.TestCase):
                   'mergeOptions': {
                       'idRef': [ "@id", "foo" ]
                   }}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'arrayMergeByMultiId': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'arrayMergeByMultiId': strat},
+                                  'OrderedDict')
 
         base = [ { "@id": "goob", "foo": "bar" },
                  { "@id": "goob", "foo": "bin" } ]
@@ -159,9 +159,8 @@ class TestArrayMergeByMultiId(unittest.TestCase):
                       'idRef': [ "@id", "foo" ],
                       'ignoreId': { "@id": "goob" }
                   }}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'arrayMergeByMultiId': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'arrayMergeByMultiId': strat}, 'OrderedDict')
 
         base = [ { "@id": "goob", "foo": "bar" },
                  { "@id": "goob", "foo": "bin" } ]
@@ -186,9 +185,9 @@ class TestTopicArray(unittest.TestCase):
     def test_merge_def(self):
         strat = mrg.TopicArray()
         schema = {'mergeStrategy': 'topicArray'}
-        merger = jsonmerge.Merger(schema=schema,
-                                  strategies={'topicArray': strat},
-                                  def_objclass='OrderedDict')
+        merger = jsonmerge.Merger(schema,
+                                  {'topicArray': strat},
+                                  'OrderedDict')
 
 
         base = [
@@ -245,6 +244,7 @@ class TestDirBaseMergerFactory(unittest.TestCase):
             annot = json.load(fd, object_pairs_hook=OrderedDict)
 
         merged = merger.merge(orig, annot)
+        self.assertIsInstance(merged, OrderedDict)
 
         self.assertNotIn("postalAddress", orig["contactPoint"])
         self.assertIn("postalAddress", merged["contactPoint"])
