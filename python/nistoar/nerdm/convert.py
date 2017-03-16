@@ -49,3 +49,58 @@ class PODds2Res(object):
         """
         return self.jqt.transform_file(poddsfile, {"id": id})
 
+class ComponentCounter(object):
+    """
+    a class for calculating inventories using conversion macros
+    """
+
+    def __init__(self, jqlibdir):
+        """
+        create the counter
+
+        :param jqlibdir str:   path to the directory containing the nerdm jq
+                               modules
+        """
+        self._modules = ["pod2nerdm:nerdm"]
+        self._jqlibdir = jqlibdir
+
+        self._inv_jqt = self._make_jqt('nerdm::inventory_components')
+                              
+    def _make_jqt(self, macro):
+        return jq.Jq(macro, self._jqlibdir, self._modules)
+
+    def inventory(self, components):
+        """
+        return an inventory NERDm property value that reflects the make-up of 
+        the given array of component data.
+        """
+        datastr = json.dumps(components)
+        return self._inv_jqt.transform(datastr)
+
+    def inventory_collection(self, components, collpath):
+        """
+        return an inventory for components within a given subcollection.
+
+        :param components list:  a list of components that includes those within
+                                 the requested subcollection
+        :param collpath    str:  the filepath for the desired subcollection to 
+                                 inventory
+        """
+        macro = 'nerdm::inventory_collection("{0}")'.format(collpath)
+        jqt = self._make_jqt(macro)
+        datastr = json.dumps(components)
+        return jqt.transform(datastr)
+
+    def inventory_by_type(self, components, collpath):
+        """
+        return an inventory broken down by type within a given subcollection.
+
+        :param components list:  a list of components that includes those within
+                                 the requested subcollection
+        :param collpath    str:  the filepath for the desired subcollection to 
+                                 inventory
+        """
+        macro = 'nerdm::inventory_by_type("{0}")'.format(collpath)
+        jqt = self._make_jqt(macro)
+        datastr = json.dumps(components)
+        return jqt.transform(datastr)
