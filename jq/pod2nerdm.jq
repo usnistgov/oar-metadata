@@ -120,8 +120,9 @@ def dist2download:
 # Output: a Component object with an Hidden type given as @type
 #
 def dist2hidden:
+    (if (.accessURL | test("doi.org")) then "#doi:" else "#hdn:" end) as $pfx |
     .["@type"] = [ "nrd:Hidden", "dcat:Distribution" ] |
-    .["@id"] = (. | componentID("#"))
+    .["@id"] = (. | componentID($pfx))
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution gets converted
@@ -253,6 +254,7 @@ def select_comp_type(type; within):
 # within: a filepath to a subcollection
 #
 def inventory_by_type(within):
+    select_comp_within(within) |
     [ (obj_types|.[]) as $t |
       { "forType": $t,
         "childCount": (select_comp_children(within) |
@@ -264,11 +266,12 @@ def inventory_by_type:
 ;
 
 def inventory_collection(within):
+    inventory_by_type(within) as $bt |
     select_comp_within(within) |
     { "forCollection": within,
       "childCount": (select_comp_children(within) | length),
       "descCount": length,
-      "byType": inventory_by_type(within),
+      "byType": $bt,
       "childCollections": [ select_comp_children(within) |
                             select_obj_type("nrdp:Subcollection") |
                             .[] | .filepath ] }

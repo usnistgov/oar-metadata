@@ -78,7 +78,7 @@ include "pod2nerdm"; dist2download
 #
 include "pod2nerdm"; dist2hidden
 {"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays"}
-{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrd:Hidden", "dcat:Distribution" ],"@id":"#10.18434/T42C7D"}
+{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrd:Hidden", "dcat:Distribution" ],"@id":"#doi:10.18434/T42C7D"}
 
 #--------------
 # testing dist2inaccess()
@@ -101,7 +101,7 @@ include "pod2nerdm"; dist2accesspage
 #
 include "pod2nerdm"; dist2comp
 {"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays"}
-{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrd:Hidden", "dcat:Distribution" ],"@id":"#10.18434/T42C7D"}
+{"accessURL": "https://doi.org/10.18434/T42C7D","title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays","@type": [ "nrd:Hidden", "dcat:Distribution" ],"@id":"#doi:10.18434/T42C7D"}
 
 #--------------
 # testing dist2comp()
