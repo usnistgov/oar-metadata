@@ -265,6 +265,29 @@ include "pod2nerdm"; .inventory = (.components | inventory_components)
 { "components": [{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}] }
 {"components":[{"title":"Titanium Boride","filepath":"foo/srd13_B-101.json","@type":["nrdp:DataFile","dcat:Distribution"]},{"title":"foo","filepath":"foo","@type":["nrdp:Subcollection"]},{"title":"Titanium Boride","filepath":"foo/bar/srd13_B-101.json","@type":["nrdp:DataFile","dcat:Distribution"]},{"title":"foo bar","filepath":"foo/bar","@type":["nrdp:Subcollection"]},{"title":"foo bar goo","filepath":"foo/bar/goo","@type":["nrdp:Subcollection"]}],"inventory": [ {"forCollection":"","childCount":1,"descCount":5,"byType":[{"forType":"dcat:Distribution","childCount":0,"descCount":2},{"forType":"nrdp:DataFile","childCount":0,"descCount":2},{"forType":"nrdp:Subcollection","childCount":1,"descCount":3}],"childCollections":["foo"]}, {"forCollection":"foo","childCount":2,"descCount":4,"byType":[{"forType":"dcat:Distribution","childCount":1,"descCount":2},{"forType":"nrdp:DataFile","childCount":1,"descCount":2},{"forType":"nrdp:Subcollection","childCount":1,"descCount":2}],"childCollections":["foo/bar"]}, {"forCollection":"foo/bar","childCount":2,"descCount":2,"byType":[{"forType":"dcat:Distribution","childCount":1,"descCount":1},{"forType":"nrdp:DataFile","childCount":1,"descCount":1},{"forType":"nrdp:Subcollection","childCount":1,"descCount":1}],"childCollections":["foo/bar/goo"]}, {"forCollection":"foo/bar/goo","childCount":0,"descCount":0,"byType":[],"childCollections":[]}]}
 
+# hierarchy -- flat top level collection
+include "pod2nerdm"; hierarchy("")
+[ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B" } ]
+[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B" }]
+
+# hierarchy -- 2 levels
+include "pod2nerdm"; hierarchy("")
+[ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] } ]
+[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [] }]
+
+# hierarchy -- 3 levels
+include "pod2nerdm"; hierarchy("")
+[ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] } ]
+[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
+
+# hierarchy -- 3 levels with non-data component
+include "pod2nerdm"; hierarchy("")
+[ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"@type": [ "AccessPage" ]}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] } ]
+[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
+
+include "pod2nerdm"; hierarchy("")
+[ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] },  {"filepath": "B/D", "@type": [ "Subcollection" ] }, {"filepath": "B/D/A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}]
+[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }, {"filepath": "B/D", "children": [ {"filepath": "B/D/A", "downloadURL": "/dev/null" }]}]}]
 
 
 # testing podds2resoure:

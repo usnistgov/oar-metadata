@@ -282,6 +282,25 @@ def inventory_components:
      inventory_collection($coll)]
 ;
 
+# create a hierarchy description of the components within a subcollection
+#
+# Input: Component array
+# Output: a FileHierarcy object
+# within: a filepath to the desired subcollection to get a hierarchy for; ""
+#           refers to the root collection.
+# 
+def hierarchy(within):
+    select_comp_within(within) | map(select(.filepath)) | . as $desc | 
+    select_comp_children(within) |
+    map( { filepath, downloadURL, type: .["@type"], } | .filepath as $fp |
+         if .type and (.type|contains(["Subcollection"])) then
+             .children = ($desc | hierarchy($fp))
+         else . end |
+         if .downloadURL then . else del(.downloadURL) end |
+         del(.type)
+    )  
+;
+
 # Converts an entire POD Dataset node to a NERDm Resource node
 #
 def podds2resource:
@@ -322,7 +341,8 @@ def podds2resource:
     if .theme then . else del(.theme) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
-    if .["@id"] then .["@context"] = [ .["@context"], { "@base": .["@id"] }] else . end
+#    if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |
+    if .["@id"] then .["@context"] = [ .["@context"], { "@base": .["@id"] }] else . end 
 ;
 
 # Converts an entire POD Catalog to an array of NERDm Resource nodes
