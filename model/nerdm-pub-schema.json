@@ -137,12 +137,48 @@
                                     "type": "null"
                                 }
                             ]
+                        },
+
+                        "dataHierarchy": {
+                            "description": "a hierarchical organization of the Subcollection and DataFile components",
+                            "notes": [
+                                "This optional property can be provided to aid display of the data components"
+                            ],
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/DataHierarchyNode"}
                         }
                         
                     },
                     "required": [ "bureauCode", "programCode", "ediid" ]
                 }
             ]
+        },
+
+        "DataHierarchyNode": {
+            "description": "a description of a node (either a DataFile or a Subcollection) in a data hierarchy",
+            "notes": [
+                "Other metadata related to the node may appear as additional properties of this object"
+            ],
+            "type": "object",
+            "properties": {
+                "filepath":  {
+                    "description": "the name of the node reflecting its position in the hierarchy",
+                    "notes": [
+                        "This value must uniquely match a component listed under a resource's components"
+                    ],
+                    "type": "string"
+                },
+
+                "children": {
+                    "description": "the nodes that are direct children of this node",
+                    "notes": [
+                        "This should only appear if the node is of type Subcollection."
+                    ],
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/DataHierarchyNode" }
+                }
+            },
+            "required": [ "filepath" ]
         },
 
         "DataFile": {
@@ -241,6 +277,22 @@
                                 "prefLabel": "Data Dictionary Type",
                                 "referenceProperty": "pod:describedByType"
                             }
+                        },
+
+                        "checksum": {
+                            "title": "Checksum",
+                            "description": "a checksum for the file",
+                            "$ref": "#/definitions/Checksum"
+                        },
+
+                        "size": {
+                            "description": "the size of the file in bytes",
+                            "type": "integer",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "file size",
+                                "referenceProperty": "schema:fileSize"
+                            }
                         }
                         
                     },
@@ -259,6 +311,27 @@
                     }
                 }
             ]
+        },
+
+        "Checksum": {
+            "description": "a checksum with its algorithm noted",
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "description": "the algorithm used to produce the checksum hash",
+                    "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Topic"
+                },
+                "hash": {
+                    "description": "the checksum value",
+                    "type": "string",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "checksum",
+                        "referenceProperty": "dataid:checksum"
+                    }
+                }
+            },
+            "required": [ "sum" ]
         },
 
         "Subcollection": {
