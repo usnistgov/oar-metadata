@@ -22,7 +22,9 @@ class TestJanaf(unittest.TestCase):  #
     def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
     def test_context(self):
         self.assertEquals(self.out['@context'],
-                          "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld")
+                        [ "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld",
+                          {"@base": "ark:ID"} ])
+                          
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
                           "https://www.nist.gov/od/dm/nerdm-schema/v0.1#")
