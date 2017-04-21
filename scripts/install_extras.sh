@@ -25,8 +25,9 @@ echo
 
 # install the merge configurations
 mkdir -p $MERGE_ETCDIR
+merge_etcpath=`(cd $MERGE_ETCDIR && pwd)`
 echo tar cf - merge \| \(cd $MERGE_ETCDIR/.. \&\& tar xf -\)
-(cd $SOURCE_DIR/etc && (tar cf - --exclude-backups --exclude=README\* merge | (cd $MERGE_ETCDIR/.. && tar xf -)))
+(cd $SOURCE_DIR/etc && (tar cf - --exclude-backups --exclude=README\* merge | (cd $merge_etcpath/.. && tar xf -)))
 echo
 
 #install extra scripts
