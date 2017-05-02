@@ -65,7 +65,7 @@ class TestJanaf(unittest.TestCase):  #
         self.assertLessEqual(len(comps), 318,
                    "Extra components; have {0}/{1}".format(len(comps), 318))
 
-        props = "title describedBy downloadURL mediaType".split()
+        props = "title describedBy downloadURL mediaType filepath".split()
         for prop in props:
             self.assertIn(prop, comps[0], "Property not found: " + prop)
             self.assertIsInstance(comps[0][prop], types.StringTypes,
@@ -98,6 +98,14 @@ class TestJanaf(unittest.TestCase):  #
         exts = refs[0]['_extensionSchemas']
         self.assertEquals(len(exts), 1)
         self.assertIn(nerdm+"/definitions/DCiteDocumentReference", exts)
+
+    def test_hierarchy(self):
+        self.assertIn("dataHierarchy", self.out,
+                      "record is missing 'dataHierarchy' field")
+        hier = self.out['dataHierarchy']
+        self.assertEqual(len(hier), 318)
+        self.assertIn('filepath', hier[0])
+        self.assertIn('filepath', hier[-1])
         
 
 class TestValidateNerdm(unittest.TestCase):

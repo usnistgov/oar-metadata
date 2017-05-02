@@ -341,7 +341,7 @@ def podds2resource:
     if .theme then . else del(.theme) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
-#    if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |
+    if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |
     if .["@id"] then .["@context"] = [ .["@context"], { "@base": .["@id"] }] else . end 
 ;
 
