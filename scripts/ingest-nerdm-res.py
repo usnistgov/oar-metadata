@@ -101,7 +101,8 @@ def main(args):
                       .format(parser.prog), file=sys.stderr)
                 for f in res.failures():
                     why = (isinstance(f.errs[0], RecordIngestError) and \
-                               str(f.errs)) or "Validation errors"
+                               "Ingest error") or "Validation errors"
+                    why += ": "+str( [str(e) for e in f.errs] )
                     print("\t{0}: \t{1}".format(str(f.key), why))
             else:
                 print("{0}: {1}: {2} out of {3} records failed to load"
