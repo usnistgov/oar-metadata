@@ -125,7 +125,7 @@ def load_from_file(filepath, loader, validate=True):
 
 def fmterrs(errs):
     msgs = str(errs[0]).split("\n")
-    out = msge[0]
+    out = msgs[0]
     if len(errs) > 1 or len(msgs) > 1:
         out += "..."
     return out
