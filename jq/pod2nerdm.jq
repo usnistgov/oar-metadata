@@ -68,7 +68,7 @@ def cvtref:  {
 def componentID(prefix):
     prefix + 
     (if .filepath then .filepath else
-        if .accessURL then (.accessURL | urlpath) else
+        if .accessURL then (.accessURL | urlpath | sub("^/doi:"; "/")) else
            if .downloadURL then (.downloadURL | urlpath) else
                null
            end
@@ -179,7 +179,7 @@ def dist2comp:
 #
 def doiFromDist:
     (map(select(.accessURL)| .accessURL | scan("https?://.*doi\\.org/.*")) | .[0]) as $auri |
-    if $auri then ($auri | sub("https?://.*doi.org/"; "doi:")) else null end
+    if $auri then ($auri | sub("https?://.*doi.org/(doi:)?"; "doi:")) else null end
 ;
 
 # return a unique list of the @type values from all objects in an array
