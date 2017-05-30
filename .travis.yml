@@ -6,8 +6,8 @@ services:
   - docker
 
 before_install:
-  - cd docker && buildall.sh
+  - cd docker && bash ./buildall.sh
 
 script:
-  - run.sh testall
+  - bash ./run.sh testall
 
