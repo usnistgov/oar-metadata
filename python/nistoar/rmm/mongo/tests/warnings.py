@@ -209,6 +209,7 @@ def warn(message, category=None, stacklevel=1):
         if not filename:
             filename = module
     registry = globals.setdefault("__warningregistry__", {})
+    
     warn_explicit(message, category, filename, lineno, module, registry,
                   globals)
 
@@ -230,9 +231,9 @@ def warn_explicit(message, category, filename, lineno,
         message = category(message)
     key = (text, category, lineno)
     # Quick test for common case
-    if registry.get(key):
-        print "warnings no show: key="+str(key)
-        return
+#    if registry.get(key):
+#        print "warnings no show: key="+str(key)
+#        return
     # Search the filters
     for item in filters:
         action, msg, cat, mod, ln = item
@@ -260,7 +261,6 @@ def warn_explicit(message, category, filename, lineno,
         registry[key] = 1
         oncekey = (text, category)
         if onceregistry.get(oncekey):
-            print "warnings once: key="+str(oncekey)
             return
         onceregistry[oncekey] = 1
     elif action == "always":
@@ -269,7 +269,6 @@ def warn_explicit(message, category, filename, lineno,
         registry[key] = 1
         altkey = (text, category, 0)
         if registry.get(altkey):
-            print "warnings module: altkey="+str(altkey)
             return
         registry[altkey] = 1
     elif action == "default":
@@ -320,7 +319,7 @@ class catch_warnings(object):
 
     """
 
-    def __init__(self, record=False, module=None):
+    def __init__(self, record=False, module=None, reset=False):
         """Specify whether to record warnings and if an alternative module
         should be used other than sys.modules['warnings'].
 
@@ -330,6 +329,8 @@ class catch_warnings(object):
         """
         self._record = record
         self._module = sys.modules['warnings'] if module is None else module
+        if reset:
+            self._module.onceregistry = {}
         self._entered = False
 
     def __repr__(self):
@@ -376,7 +377,6 @@ _warnings_defaults = False
 filters = []
 defaultaction = "default"
 onceregistry = {}
-
 
 # Module initialization
 _processoptions(sys.warnoptions)
