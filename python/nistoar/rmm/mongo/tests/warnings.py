@@ -230,9 +230,9 @@ def warn_explicit(message, category, filename, lineno,
         message = category(message)
     key = (text, category, lineno)
     # Quick test for common case
-#    if registry.get(key):
+    if registry.get(key) and not registryreset:
 #        print "warnings no show: key="+str(key)
-#        return
+        return
     # Search the filters
     for item in filters:
         action, msg, cat, mod, ln = item
@@ -330,6 +330,7 @@ class catch_warnings(object):
         self._module = sys.modules['warnings'] if module is None else module
         if reset:
             self._module.onceregistry = {}
+            self._module.registryreset = True
         self._entered = False
 
     def __repr__(self):
@@ -362,6 +363,8 @@ class catch_warnings(object):
             raise RuntimeError("Cannot exit %r without entering first" % self)
         self._module.filters = self._filters
         self._module.showwarning = self._showwarning
+        self._module.registryreset = False
+        
 
 
 # filters contains a sequence of filter 5-tuples
@@ -376,6 +379,7 @@ _warnings_defaults = False
 filters = []
 defaultaction = "default"
 onceregistry = {}
+registryreset = False
 
 # Module initialization
 _processoptions(sys.warnoptions)
