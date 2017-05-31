@@ -93,9 +93,6 @@ class TestFieldLoader(test.TestCase):
         data = { "name": "title", "type": "array" }
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
-            if len(w) == 0:
-                print "global registry keys: " + str(globals.get("__warningregistry__"))
-                print "onceregistry keys: "+ str(warnings.onceregistry.keys())
             self.assertEqual(len(w), 1)
             self.assertTrue(issubclass(w[-1].category, fields.UpdateWarning))
         c = self.ldr._client.get_default_database().fields.find()
