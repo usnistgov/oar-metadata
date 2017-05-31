@@ -1,6 +1,8 @@
 #!/usr/bin/python
 #
 import os, sys, unittest, pdb
+from nistoar.rmm.mongo.tests import warnings
+sys.modules['warnings'] = warnings
 
 basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 jqlib = os.path.join(basedir, "jq")
