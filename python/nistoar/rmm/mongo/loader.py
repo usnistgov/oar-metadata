@@ -125,7 +125,9 @@ class Loader(object):
                         doload = onupdate(data, key)
 
                     if doload:
+                        print "warning warning: onupdate="+onupdate
                         if onupdate != 'quiet':
+                            print "warning warning: Launching UpdateWarning"
                             warnings.warn("Updating previously loaded record",
                                           UpdateWarning)
 

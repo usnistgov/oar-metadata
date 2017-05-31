@@ -82,17 +82,17 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(c[0]['type'], 'string')
 
         data = { "name": "title", "type": "array" }
+        with self.assertRaises(fields.RecordIngestError):
+            self.ldr.load_data(data, key, 'fail')
+        c = self.ldr._client.get_default_database().fields.find()
+        self.assertEqual(c.count(), 1)
+        self.assertEqual(c[0]['type'], 'string')
+            
+        data = { "name": "title", "type": "array" }
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
             self.assertEqual(len(w), 1)
             self.assertTrue(issubclass(w[-1].category, fields.UpdateWarning))
-        c = self.ldr._client.get_default_database().fields.find()
-        self.assertEqual(c.count(), 1)
-        self.assertEqual(c[0]['type'], 'array')
-            
-        data = { "name": "title", "type": "int" }
-        with self.assertRaises(fields.RecordIngestError):
-            self.ldr.load_data(data, key, 'fail')
         c = self.ldr._client.get_default_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'array')
