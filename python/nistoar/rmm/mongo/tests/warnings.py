@@ -230,6 +230,7 @@ def warn_explicit(message, category, filename, lineno,
     key = (text, category, lineno)
     # Quick test for common case
     if registry.get(key):
+        print "warnings no show: key="+str(key)
         return
     # Search the filters
     for item in filters:
@@ -244,6 +245,7 @@ def warn_explicit(message, category, filename, lineno,
     # Early exit actions
     if action == "ignore":
         registry[key] = 1
+        print "warnings ignore: key="+str(key)
         return
 
     # Prime the linecache for formatting, in case the
@@ -257,6 +259,7 @@ def warn_explicit(message, category, filename, lineno,
         registry[key] = 1
         oncekey = (text, category)
         if onceregistry.get(oncekey):
+            print "warnings once: key="+str(oncekey)
             return
         onceregistry[oncekey] = 1
     elif action == "always":
@@ -265,6 +268,7 @@ def warn_explicit(message, category, filename, lineno,
         registry[key] = 1
         altkey = (text, category, 0)
         if registry.get(altkey):
+            print "warnings module: altkey="+str(altkey)
             return
         registry[altkey] = 1
     elif action == "default":
