@@ -89,6 +89,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(c[0]['type'], 'string')
             
         data = { "name": "title", "type": "array" }
+        warnings.simplefilter("once")
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
             self.assertEqual(len(w), 1)
@@ -96,6 +97,7 @@ class TestFieldLoader(test.TestCase):
         c = self.ldr._client.get_default_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'array')
+        warnings.resetwarnings()
             
         data = { "name": "title", "type": "bool" }
         self.assertEqual(self.ldr.load_data(data, key, 'pass'), 1)
