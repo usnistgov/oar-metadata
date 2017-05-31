@@ -91,8 +91,10 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(c[0]['type'], 'string')
 
         data = { "name": "title", "type": "array" }
+        print "will warn"
         with warnings.catch_warnings(record=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
+            print "should have warned"
             self.assertEqual(len(w), 1)
             self.assertTrue(issubclass(w[-1].category, fields.UpdateWarning))
         c = self.ldr._client.get_default_database().fields.find()
