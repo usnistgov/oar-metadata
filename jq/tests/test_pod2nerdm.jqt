@@ -268,26 +268,26 @@ include "pod2nerdm"; .inventory = (.components | inventory_components)
 # hierarchy -- flat top level collection
 include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B" } ]
-[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B" }]
+[ {"filepath": "A" },{ "filepath": "B" }]
 
 # hierarchy -- 2 levels
 include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] } ]
-[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [] }]
+[ {"filepath": "A" },{ "filepath": "B", "children": [] }]
 
 # hierarchy -- 3 levels
 include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] } ]
-[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
+[ {"filepath": "A" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
 
 # hierarchy -- 3 levels with non-data component
 include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"@type": [ "AccessPage" ]}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] } ]
-[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
+[ {"filepath": "A" },{ "filepath": "B", "children": [ { "filepath": "B/C" }] }]
 
 include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] },  {"filepath": "B/D", "@type": [ "Subcollection" ] }, {"filepath": "B/D/A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}]
-[ {"filepath": "A", "downloadURL": "/dev/null" },{ "filepath": "B", "children": [ { "filepath": "B/C" }, {"filepath": "B/D", "children": [ {"filepath": "B/D/A", "downloadURL": "/dev/null" }]}]}]
+[ {"filepath": "A" },{ "filepath": "B", "children": [ { "filepath": "B/C" }, {"filepath": "B/D", "children": [ {"filepath": "B/D/A" }]}]}]
 
 
 # testing podds2resoure:
