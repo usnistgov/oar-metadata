@@ -51,7 +51,7 @@ class PODds2Res(object):
 
 class ComponentCounter(object):
     """
-    a class for calculating inventories using conversion macros
+    a class for calculating inventories using the jq conversion macros
     """
 
     def __init__(self, jqlibdir):
@@ -104,3 +104,38 @@ class ComponentCounter(object):
         jqt = self._make_jqt(macro)
         datastr = json.dumps(components)
         return jqt.transform(datastr)
+
+class HierarchyBuilder(object):
+    """
+    a class for calculating data hierarchies using the jq conversion macros
+    """
+
+    def __init__(self, jqlibdir):
+        """
+        create the builder.
+
+        :param jqlibdir str:   path to the directory containing the nerdm jq
+                               modules
+        """
+        self._modules = ["pod2nerdm:nerdm"]
+        self._jqlibdir = jqlibdir
+
+        self._hier_jqt = self._make_jqt('nerdm::hierarchy("")')
+                              
+    def _make_jqt(self, macro):
+        return jq.Jq(macro, self._jqlibdir, self._modules)
+
+    def build_hierarchy(self, components):
+        """
+        return an array representing the data hierarchy for a given set of 
+        components.
+
+        This is implemented via the appropriate jq translation macros.  
+        """
+        datastr = json.dumps(components)
+        return self._hier_jqt.transform(datastr)
+
+
+        
+    
+    

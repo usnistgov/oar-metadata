@@ -138,7 +138,7 @@ class Jq(object):
         create the Jq filter machine.  
 
         :param jqfilter str:   the jq filter to apply to the input data; module
-                               import statements can be left by using the 
+                               import statements can be left out by using the 
                                modules argument.
         :param libpath str:    the path to the directory containing needed 
                                jq module files
