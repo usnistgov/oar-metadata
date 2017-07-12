@@ -292,11 +292,10 @@ def inventory_components:
 def hierarchy(within):
     select_comp_within(within) | map(select(.filepath)) | . as $desc | 
     select_comp_children(within) |
-    map( { filepath, downloadURL, type: .["@type"], } | .filepath as $fp |
+    map( { filepath, type: .["@type"], } | .filepath as $fp |
          if .type and (.type|contains(["Subcollection"])) then
              .children = ($desc | hierarchy($fp))
          else . end |
-         if .downloadURL then . else del(.downloadURL) end |
          del(.type)
     )  
 ;
