@@ -91,6 +91,23 @@ fullinv = [
     "childCollections": [ "trial3" ]
 }, trial3inv ]
 
+simplehier = [
+    {
+        "filepath": "trial1.json"
+    },
+    {
+        "filepath": "trial2.json"
+    },
+    {
+        "filepath": "trial3",
+        "children": [
+            {
+                "filepath": "trial3/trial3a.json"
+            }
+        ]
+    }
+]
+
 class TestComponentCounter(unittest.TestCase):
 
     def test_inventory_collection(self):
@@ -107,7 +124,13 @@ class TestComponentCounter(unittest.TestCase):
         cc = cvt.ComponentCounter(jqlibdir)
         inv = cc.inventory(simplenerd['components'])
         self.assertEqual(inv, fullinv)
-        
+
+class TestHierarchyBuilder(unittest.TestCase):
+
+    def test_build_hierarchy(self):
+        hb = cvt.HierarchyBuilder(jqlibdir)
+        hier = hb.build_hierarchy(simplenerd['components'])
+        self.assertEquals(hier, simplehier)
         
 if __name__ == '__main__':
     unittest.main()
