@@ -300,6 +300,36 @@ def hierarchy(within):
     )  
 ;
 
+# Return the SRD resource type value if the input POD Dataset appears
+# to describe an SRD resource
+#
+# Input: POD Dataset
+# Output: string or empty
+#
+def isSRD:
+    if (.title | test(" - SRD \\d")) then "nrd:SRD" else empty end
+;
+
+# Return the resource type value for publid data resource if the input 
+# POD Dataset appears to match as such.  All POD records are assumed to
+# match
+#
+# Input: POD Dataset
+# Output: string or empty
+#
+def isPDR:
+    "nrdp:PublicDataResource"
+;
+
+# Return a list of resource types that an input POD Dataset matches
+#
+# Input: POD Dataset
+# Output: an array of strings
+#
+def resourceTypes:
+    [ isSRD, isPDR ]
+;
+
 # Converts an entire POD Dataset node to a NERDm Resource node
 #
 def podds2resource:
@@ -307,7 +337,7 @@ def podds2resource:
         "@context": nerdm_context,
         "_schema": nerdm_schema,
         "_extensionSchemas": [ nerdm_pub_schema + "/definitions/PublicDataResource" ],
-        "@type": [ "nrdp:PublicDataResource" ],
+        "@type": resourceTypes,
         "@id": resid,
         "doi": (.distribution + []) | doiFromDist,
         title,

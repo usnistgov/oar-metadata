@@ -37,8 +37,9 @@ class TestJanaf(unittest.TestCase):  #
     def test_restypes(self):
         types = self.out['@type']
         self.assertIsInstance(types, list)
-        self.assertEquals(len(types), 1)
-        self.assertEquals(types[0], "nrdp:PublicDataResource")
+        self.assertEquals(len(types), 2)
+        self.assertEquals(types[0], "nrd:SRD")
+        self.assertEquals(types[1], "nrdp:PublicDataResource")
 
     def test_arestr(self):
         props = "title modified ediid landingPage license".split()
