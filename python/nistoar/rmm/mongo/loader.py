@@ -117,8 +117,8 @@ class Loader(object):
                 if curs.count() > 0:
                     # a previous record with matching key exists
                     if onupdate == 'fail':
-                        raise RecordIngestException("Existing record with key "
-                                                    "value; updates not allowed")
+                        raise RecordIngestError("Existing record with key "
+                                                "value; updates not allowed")
 
                     doload = True
                     if hasattr(onupdate, '__call__'):
@@ -131,9 +131,8 @@ class Loader(object):
 
                         result = coll.delete_one(key)
                         if result.deleted_count == 0:
-                            raise RecordIngestException("Failed to remove "
-                                                        "previous record with "
-                                                        "key="+key)
+                            raise RecordIngestError("Failed to remove previous "
+                                                   +"record with key="+key)
                         assert result.deleted_count == 1
 
                     else:
