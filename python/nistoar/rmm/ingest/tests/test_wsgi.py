@@ -1,7 +1,6 @@
 import pdb, os, json, urlparse, warnings, logging
 from cStringIO import StringIO
 import unittest as test
-from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
 
 from nistoar.tests import *
@@ -15,6 +14,7 @@ janaffile = os.path.join(exdir, "janaf.json")
 
 dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
+    from pymongo import MongoClient
     dburl = os.environ.get('MONGO_TESTDB_URL')
 
 assert os.path.exists(schemadir), schemadir
@@ -47,9 +47,10 @@ class TestRMMRecordIngestApp(test.TestCase):
 
     def setUp(self):
         self.config = {
-            "db_url": dburl
+            "db_url": dburl,
+            'nerdm_schema_dir': os.path.abspath(schemadir)
         }
-        
+
         try:
             self.svc = wsgi.app(self.config)
         except Exception, e:
@@ -59,7 +60,9 @@ class TestRMMRecordIngestApp(test.TestCase):
 
     def tearDown(self):
         client = MongoClient(dburl)
-        db = client.get_default_database()
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "record" in db.collection_names():
             db.drop_collection("record")
         
@@ -75,7 +78,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
-        self.assertEqual(body[0], '["nerdm"]')
+        self.assertEqual(body[0].strip(), '["nerdm"]')
 
     def test_is_ready(self):
         req = {
@@ -161,8 +164,10 @@ class TestRMMRecordIngestApp(test.TestCase):
 
     def test_good_post(self):
         client = MongoClient(dburl)
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
         try:
-            db = client.get_default_database()
+            db = client.get_database()
             if "record" in db.collection_names():
                 recs = db['record'].find()
                 self.assertEqual(recs.count(), 0)
@@ -186,7 +191,9 @@ class TestRMMRecordIngestApp(test.TestCase):
         
         client = MongoClient(dburl)
         try:
-            db = client.get_default_database()
+            if not hasattr(client, 'get_database'):
+                client.get_database = client.get_default_database
+            db = client.get_database()
             self.assertIn("record", db.collection_names())
             recs = db['record'].find()
             self.assertEqual(recs.count(), 1)

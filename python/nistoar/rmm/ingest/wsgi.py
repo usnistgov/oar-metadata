@@ -25,11 +25,12 @@ class RMMRecordIngestApp(object):
             self.log.error("Config param not set: db_url")
             raise RuntimeError("Config param not set: db_url")
 
-        if not os.path.exists(oar_home):
-            raise RuntimeError("OAR home directory does not exists: "+oar_home)
         self.schemadir = config.get('nerdm_schema_dir',
                                     os.path.join('etc', 'schemas'))
         if not os.path.isabs(self.schemadir):
+            if not os.path.exists(oar_home):
+                raise RuntimeError("OAR home directory does not exists: " +
+                                   oar_home)
             self.schemadir = os.path.join(oar_home, self.schemadir)
         if not os.path.exists(self.schemadir):
             raise RuntimeError("Schema directory doesn't exists: " +
@@ -102,7 +103,7 @@ class Handler(object):
         path = path.strip('/')
         if not path:
             try:
-                out = json.dumps(self._loaders.keys())
+                out = json.dumps(self._loaders.keys()) + '\n'
             except Exception, ex:
                 log.exception("Internal error: "+str(ex))
                 return self.send_error(500, "Internal error")
@@ -168,14 +169,14 @@ class Handler(object):
                 set_response(400, "Input record is not valid")
                 self.add_header('Content-Type', 'application/json')
                 self.end_headers()
-                return [ json.dumps([str(e) for e in res.errs]) ]
+                return [ json.dumps([str(e) for e in res.errs]) + '\n' ]
 
         except RecordIngestError, ex:
             log.exception("Failed to load posted record: "+str(ex))
             set_response(400, "Input record is not valid (missing @id)")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return [ json.dumps([ "Record is missing @id property" ]) ]
+            return [ json.dumps([ "Record is missing @id property" ]) + '\n' ]
 
         except Exception, ex:
             log.exception("Loading error: "+str(ex))
@@ -188,7 +189,7 @@ class Handler(object):
         
 
 def _get_oar_home():
-    home = os.environ['OAR_HOME']
+    home = os.environ.get('OAR_HOME')
     if home:
         return home
 
