@@ -27,7 +27,9 @@ class TestNERDmLoader(test.TestCase):
 
     def tearDown(self):
         client = MongoClient(dburl)
-        db = client.get_default_database()
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "record" in db.collection_names():
             db.drop_collection("record")
         
@@ -49,7 +51,7 @@ class TestNERDmLoader(test.TestCase):
             data = json.load(fd)
         key = { '@id': "ark:/88434/sdp0fjspek351" }
         self.assertEqual(self.ldr.load_data(data, key, 'fail'), 1)
-        c = self.ldr._client.get_default_database().record.find()
+        c = self.ldr._client.get_database().record.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
 
@@ -60,7 +62,7 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(res.attempt_count, 1)
         self.assertEqual(res.success_count, 1)
         self.assertEqual(res.failure_count, 0)
-        c = self.ldr._client.get_default_database().record.find()
+        c = self.ldr._client.get_database().record.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
 
@@ -69,7 +71,7 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(res.attempt_count, 1)
         self.assertEqual(res.success_count, 1)
         self.assertEqual(res.failure_count, 0)
-        c = self.ldr._client.get_default_database().record.find()
+        c = self.ldr._client.get_database().record.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
 

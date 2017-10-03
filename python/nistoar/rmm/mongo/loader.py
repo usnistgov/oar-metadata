@@ -60,7 +60,12 @@ class Loader(object):
         establish a connection to the database.
         """
         self._client = MongoClient(self._dburl)
-        self._db = self._client.get_default_database()
+
+        # the proper method to use depends on pymongo version
+        if not hasattr(self._client, 'get_database'):
+            self._client.get_database = self._client.get_default_database
+
+        self._db = self._client.get_database()
 
     def disconnect(self):
         """
