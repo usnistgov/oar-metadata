@@ -7,6 +7,7 @@ a framework-based implementation if any further capabilities are needed.
 """
 
 import os, sys, logging, json, cgi, re
+from urlparse import urlsplit, urlunsplit
 from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
@@ -24,6 +25,13 @@ class RMMRecordIngestApp(object):
         if not self.dburl:
             self.log.error("Config param not set: db_url")
             raise RuntimeError("Config param not set: db_url")
+
+        if 'db_authn' in config:
+            acfg = config['db_authn']
+            authn = "{0}@{1}".format(acfg.get('user',''), acfg('pass',''))
+            url = list(urlsplit(self.dburl))
+            url[1] = "{0}:{1}".format(authn, url[1])
+            self.dburl = urlunsplit(url)
 
         self.schemadir = config.get('nerdm_schema_dir',
                                     os.path.join('etc', 'schemas'))
