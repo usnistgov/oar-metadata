@@ -1,5 +1,6 @@
 import pdb, os, json, urlparse, warnings, logging
 from cStringIO import StringIO
+from copy import deepcopy
 import unittest as test
 from ejsonschema import ExtValidator, SchemaValidator
 
@@ -90,6 +91,49 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertEqual(body[0], 'Service ready\n')
+
+    def test_auth(self):
+        # test rejection when auth key provided but wsgi is not configured to
+        # take one
+        req = {
+            'PATH_INFO': '/nerdm/',
+            'REQUEST_METHOD': 'GET',
+            'QUERY_STRING': 'goob=able&auth=9e73'
+        }
+
+        body = self.svc(req, self.start)
+        self.assertGreater(len(self.resp), 0)
+        self.assertIn("401", self.resp[0])
+        self.assertEqual(body, [])
+
+        # now configure the service to require a key
+        cfg = deepcopy(self.config)
+        cfg['auth_key'] = '9e73'
+        self.svc = wsgi.app(cfg)
+
+        # test successful acceptance of key
+        self.resp = []
+        body = self.svc(req, self.start)
+        self.assertGreater(len(self.resp), 0)
+        self.assertIn("200", self.resp[0])
+        self.assertGreater(len(body), 0)
+        self.assertEqual(body[0], 'Service ready\n')
+
+        # test single rejection
+        req['QUERY_STRING'] = 'goob=able&auth=gurn'
+        self.resp = []
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertEqual(body, [])
+
+        # test lack of auth key
+        del req['QUERY_STRING']
+        self.resp = []
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertEqual(body, [])
+
+        
 
     def test_is_not_ready(self):
         req = {

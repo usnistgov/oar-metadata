@@ -84,6 +84,9 @@ class Handler(object):
         meth_handler = 'do_'+self._meth
 
         path = self._env.get('PATH_INFO', '/')[1:]
+        params = cgi.parse_qs(self._env.get('QUERY_STRING', ''))
+        if not self.authorize(params.get('auth',[])):
+            return self.send_error(401, "Not authorized")
 
         if hasattr(self, meth_handler):
             return getattr(self, meth_handler)(path)
