@@ -172,9 +172,12 @@ class Handler(object):
 
         try:
             bodyin = self._env['wsgi.input']
-            rec = json.loads(bodyin.read(clen))
+            doc = bodyin.read(clen)
+            rec = json.loads(doc)
         except Exception, ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
+            log.warn("Input document starts...\n{0}...({1}/{2} chars)"
+                     .format(doc[:75], len(doc), clen))
             return self.send_error(400,
                                    "Failed to load input record (bad format?): "+
                                    str(ex))
