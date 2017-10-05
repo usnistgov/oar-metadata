@@ -138,9 +138,13 @@ def _extract_config_from_csdata(data):
             out.update( data['propertySources'][0]['source'] )
         return out
 
-    except (KeyError, IndexError), ex:
-        raise ConfigurationException("Unexpected format from config server: ".
-                                     format(fmt), cause=ex)
+    except KeyError, ex:
+        raise ConfigurationException("Unexpected format from config server; " +
+                                     "property not found: " + str(ex), cause=ex)
+    except IndexError, ex:
+        raise ConfigurationException("Unexpected format from config server; " +
+                                     "empty propertySource (no item "+str(ex)+
+                                     ").", cause=ex)
 
 
 LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s: %(message)s"
