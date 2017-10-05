@@ -100,6 +100,11 @@ def load_from_url(configurl):
     """
     try:
         resp = requests.get(configurl)
+        if resp.status_code >= 400:
+            raise ConfigurationException(
+                "Server returned erroneous response: {0} {1}"
+                .format(resp.status_code, resp.reason))
+                                         
         ct = resp.headers.get('content-type','')
         if '/yaml' in ct:
             # it's in YAML format
