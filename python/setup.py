@@ -11,6 +11,7 @@ setup(name='nistoar',
                 'nistoar.rmm', 'nistoar.rmm.mongo'],
       scripts=[os.path.join("..","scripts",s) for s in 
                ["pdl2resources.py", "ingest-nerdm-res.py",
-                "ingest-field-info.py", "ingest-taxonomy.py" ]]
+                "ingest-field-info.py", "ingest-taxonomy.py",
+                "ingest-uwsgi.py" ]]
 )
 
