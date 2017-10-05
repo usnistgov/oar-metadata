@@ -176,8 +176,8 @@ class Handler(object):
             rec = json.loads(doc)
         except Exception, ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
-            log.warn("Input document starts...\n{0}...({1}/{2} chars)"
-                     .format(doc[:75], len(doc), clen))
+            log.warn("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
+                     .format(doc[:75], doc[-20:], len(doc), clen))
             return self.send_error(400,
                                    "Failed to load input record (bad format?): "+
                                    str(ex))
