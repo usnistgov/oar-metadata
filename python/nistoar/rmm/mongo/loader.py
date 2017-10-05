@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from ejsonschema import ExtValidator
 from ejsonschema import ValidationError, SchemaError, RefResolutionError
 
-_dburl_re = re.compile(r"^mongodb://\w+(\.\w+)*(:\d+)?/\w+$")
+_dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
 class Loader(object):
     """
@@ -30,7 +30,8 @@ class Loader(object):
                               if None, validation will always be skipped.
         """
         if not _dburl_re.match(dburl):
-            raise ValueError("Loader: Bad dburl format (need 'mongodb://HOST[:PORT]/DBNAME'): "+
+            raise ValueError("Loader: Bad dburl format (need "+
+                             "'mongodb://[USER:PASS@]HOST[:PORT]/DBNAME'): "+
                              dburl)
         self._dburl = dburl
         self.coll = collname
