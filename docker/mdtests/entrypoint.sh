@@ -24,8 +24,9 @@ function test_ingest_wsgi {
         python -c 'import sys, json; fd = open("ingest_out.txt"); data = json.load(fd); sys.exit(0 if len(data)==1 and data[0]=="nerdm" else 11)' || \
         stat=$?
 
-    curl -X POST -d @model/examples/hitsc.json http://localhost:9090/nerdm || \
-        stat=?
+    ( code=`curl -s -w '%{http_code}' -X POST -d @model/examples/hitsc.json http://localhost:9090/nerdm` && \
+      [ "$code" == "200" ] ) || \
+        stat=$?
     set +x
 
     crash_uwsgi
@@ -40,8 +41,10 @@ case "$1" in
         test_ingest_wsgi || stat=$?
         [ "$stat" != "0" ] && {
             echo "testall: One or more test packages failed (last=$stat)"
+            echo NOT OK
             exit $stat
         }
+        echo All OK
         ;;
     install)
         scripts/install.sh
