@@ -1,8 +1,17 @@
 """
 The uWSGI script for launching the preservation service
 """
+from __future__ import print_function
 import os, sys, yaml, json, logging
-import uwsgi
+try:
+    import uwsgi
+except ImportError:
+    print("Warning: running ingest-uwsgi in simulate mode", file=sys.stderr)
+    class uwsgi_mod(object):
+        def __init__(self):
+            self.opt={}
+    uwsgi=uwsgi_mod()
+            
 try:
     import nistoar
 except ImportError:
