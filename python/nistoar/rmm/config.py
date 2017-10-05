@@ -3,7 +3,7 @@ Utilities for obtaining a configuration for a service
 """
 import os, sys, logging, json, yaml, re
 from urlparse import urlparse, urlunparse
-import urllib
+import requests
 
 from .exceptions import ConfigurationException
 
@@ -99,7 +99,7 @@ def load_from_url(configurl):
     :param configurl str:  the URL for retrieving the configuration
     """
     try:
-        resp = urllib.urlopen(configurl)
+        resp = requests.get(configurl)
         ct = resp.headers.get('content-type','')
         if '/yaml' in ct:
             # it's in YAML format
