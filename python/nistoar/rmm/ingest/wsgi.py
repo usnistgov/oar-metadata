@@ -12,6 +12,7 @@ from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
                            RecordIngestError, JSONEncodingError)
+from ..exceptions import ConfigurationException
 
 log = logging.getLogger("RMM").getChild("ingest")
 
@@ -24,13 +25,22 @@ class RMMRecordIngestApp(object):
         self.dburl = config.get('db_url')
         if not self.dburl:
             self.log.error("Config param not set: db_url")
-            raise RuntimeError("Config param not set: db_url")
+            raise ConfigurationException("Config param not set: db_url")
 
         if 'db_authn' in config:
             acfg = config['db_authn']
-            authn = "{0}@{1}".format(acfg.get('user',''), acfg('pass',''))
+            if 'pass' in acfg and not acfg.get('pass'):
+                raise ConfigurationException("Config: Missing password value "+
+                                             "in db_authn.pass")
+            if not acfg.get('user'):
+                raise ConfigurationException("Config param not set: "+
+                                             "db_authn.user")
+            authn = acfg['user']
+            if 'pass' in acfg:
+                authn += ':' + acfg['pass']
+                
             url = list(urlsplit(self.dburl))
-            url[1] = "{0}:{1}".format(authn, url[1])
+            url[1] = "{0}@{1}".format(authn, url[1])
             self.dburl = urlunsplit(url)
 
         self.schemadir = config.get('nerdm_schema_dir',
