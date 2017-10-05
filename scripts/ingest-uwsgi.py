@@ -31,12 +31,12 @@ else:
         confsrc += '/'+confenv
 if not confsrc:
     raise RuntimeError("ingester: nist-oar configuration not provided")
-cfg = config.resolve_configruation(confsrc, confserv)
+cfg = config.resolve_configuration(confsrc, confserv)
 
 # set up logging
 if 'logfile' not in cfg:
     cfg['logfile'] = 'rmm-ingest.log'
-configure_log(config=cfg, addstderr=True)
+config.configure_log(config=cfg, addstderr=True)
 
 # do we have db authentication info, or do we need to get it?
 #
