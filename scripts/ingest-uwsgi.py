@@ -51,7 +51,7 @@ if cfg.get('db_authn') and \
         rmmconfsrc = acfg.get('rmm_config_loc', 'oar-rmm')
         if confenv:
             rmmconfsrc += '/'+confenv
-        rmmcfg = config.resolve_configruation(confsrc, confserv)
+        rmmcfg = config.resolve_configuration(confsrc, confserv)
         acfg['db_authn'] = {
             'user': rmmcfg['oar.mongo.readwrite.user'],
             'pass': rmmcfg['oar.mongo.readwrite.password'],
