@@ -61,8 +61,8 @@ if cfg.get('db_authn') and \
         if confenv:
             rmmconfsrc += '/'+confenv
         rmmcfg = config.resolve_configuration(rmmconfsrc, confserv)
-        acfg['user'] = rmmcfg['oar.mongodb.readwrite.user'],
-        acfg['pass'] = rmmcfg['oar.mongodb.readwrite.password'],
+        acfg['user'] = rmmcfg['oar.mongodb.readwrite.user']
+        acfg['pass'] = rmmcfg['oar.mongodb.readwrite.password']
 
     except Exception, ex:
         raise ConfigurationException("Failed to retrieve Mongo authentication "+
