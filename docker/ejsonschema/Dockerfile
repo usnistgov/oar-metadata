@@ -1,6 +1,7 @@
 FROM oarmeta/jq:latest
 
-RUN apt-get update && apt-get install -y python python-pip python-dev unzip
+RUN apt-get update && apt-get install -y python python-pip python-dev unzip \
+                                         uwsgi uwsgi-plugin-python python-yaml
 RUN pip install json-spec jsonschema requests pynoid filelock
 
 WORKDIR /root

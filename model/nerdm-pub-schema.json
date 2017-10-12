@@ -331,7 +331,7 @@
                     }
                 }
             },
-            "required": [ "sum" ]
+            "required": [ "hash" ]
         },
 
         "Subcollection": {
