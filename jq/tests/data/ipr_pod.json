@@ -1,0 +1,45 @@
+{
+    "@type": "dcat:Dataset",
+    "accessLevel": "public",
+    "bureauCode": [
+        "006:55"
+    ],
+    "contactPoint": {
+        "@type": "vcard:Contact",
+        "fn": "Chandler Becker",
+        "hasEmail": "mailto:chandler.becker@nist.gov"
+    },
+    "description": "This repository provides a source for interatomic potentials (force fields) and evaluation tools to help researchers obtain interatomic models and judge their quality and applicability. Users are encouraged to download interatomic potentials, and developers are welcome to contribute potentials for inclusion. The potentials provided have been submitted or vetted by their developers and appropriate references are provided. While many potentials are metallic and of the embedded-atom (EAM) form, other classes of potentials (e.g., MEAM, Reax, etc.) and materials are welcome. These could include semiconductors, polymers, and/or materials like carbides.  If you do not find the element or alloy potential you are seeking, send an email to Chandler.Becker@nist.gov, and we may be able to help. This site reflects what has been submitted, so it is not a complete survey of interatomic potentials for any or all systems. Here is a list of recent requests for potentials. http://www.ctcms.nist.gov/potentials/requests.html If you find this website useful, including using potentials you downloaded, please cite this project in addition to the proper interatomic potential reference: C.A. Becker,'Atomistic simulations for engineering: Potentials and challenges,' in Tools, Models, Databases and Simulation Tools Developed and Needed to Realize the Vision of ICME, ASM (2011). http://www.ctcms.nist.gov/potentials Please note that, due to the wide range of interatomic potential functions and formats, It is the user's responsibility to check that the interatomic potentials produce expected results.",
+                "distribution": [
+        {
+            "accessURL": "http://www.ctcms.nist.gov/potentials",
+            "mediaType": "text/html"
+        }
+    ],
+    "identifier": "EBC9DB05EDF05B0EE043065706812DF87",
+    "keyword": [
+        "force fields",
+        "integrated computational materials engineering",
+        "interatomic potentials",
+        "materials genome initiative",
+        "materials modeling",
+        "materials science",
+        "molecular dynamics",
+        "molecular simulation",
+        "materials"
+    ],
+    "landingPage": "http://www.ctcms.nist.gov/potentials",
+    "language": [
+        "en"
+    ],
+    "license": "http://www.nist.gov/open/license.cfm",
+    "modified": "2014-03-05",
+    "programCode": [
+        "006:052"
+    ],
+    "publisher": {
+        "@type": "org:Organization",
+        "name": "National Institute of Standards and Technology"
+    },
+    "title": "NIST Interatomic Potentials Repository"
+}
