@@ -41,7 +41,9 @@ class TestTaxonomyLoader(test.TestCase):
 
     def tearDown(self):
         client = MongoClient(dburl)
-        db = client.get_default_database()
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "taxonomy" in db.collection_names():
             db.drop_collection("taxonomy")
         
@@ -52,7 +54,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertIsNone(self.ldr._client)
         self.ldr.connect()
         self.assertIsNotNone(self.ldr._client)
-        self.assertEqual(self.ldr._client.get_default_database().collection_names(), [])
+        self.assertEqual(self.ldr._client.get_database().collection_names(), [])
         self.ldr.disconnect()
         self.assertIsNone(self.ldr._client)
         
@@ -72,23 +74,23 @@ class TestTaxonomyLoader(test.TestCase):
     def test_load_keyless_data(self):
         data = { "term": "title", "parent": "goob", "level": 1 }
         self.assertEqual(self.ldr.load_data(data), 1)
-        self.assertEqual(self.ldr._client.get_default_database().taxonomy.find().count(), 1)
+        self.assertEqual(self.ldr._client.get_database().taxonomy.find().count(), 1)
         data = { "term": "title", "parent": "goob", "level": 2 }
         self.assertEqual(self.ldr.load_data(data), 1)
-        self.assertEqual(self.ldr._client.get_default_database().taxonomy.find().count(), 2)
+        self.assertEqual(self.ldr._client.get_database().taxonomy.find().count(), 2)
         
     def test_load_data(self):
         key = { "term": "title", "parent": "goob" }
         data = { "term": "title", "parent": "goob", "level": 2 }
         self.assertEqual(self.ldr.load_data(data, key, 'fail'), 1)
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 2)
 
         data = { "term": "title", "parent": "goob", "level": 3 }
         with self.assertRaises(taxon.RecordIngestError):
             self.ldr.load_data(data, key, 'fail')
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 2)
             
@@ -101,20 +103,20 @@ class TestTaxonomyLoader(test.TestCase):
             #self.assertEqual(len(w), 1)
             #self.assertTrue(issubclass(w[-1].category, taxon.UpdateWarning))
             self.ldr.load_data(data, key, 'warn')
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 3)
             
         data = { "term": "title", "parent": "goob", "level": 1 }
         self.assertEqual(self.ldr.load_data(data, key, 'pass'), 1)
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 1)
             
         key = { "term": "description", "parent": "goob" }
         data = { "term": "description", "parent": "goob", "level": 2 }
         self.assertEqual(self.ldr.load_data(data, key, 'pass'), 1)
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         
     def test_load_simple_obj(self):
@@ -127,7 +129,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         self.assertTrue(res.succeeded(key))
         self.assertFalse(res.failed(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 2)
         self.assertEqual(c[0]['label'], c[0]['term'])
@@ -139,7 +141,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         self.assertTrue(res.succeeded(key))
         self.assertFalse(res.failed(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 3)
         
@@ -150,9 +152,9 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         self.assertTrue(res.succeeded(key))
         self.assertFalse(res.failed(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
-        c = self.ldr._client.get_default_database().taxonomy.find({'term':'date'})
+        c = self.ldr._client.get_database().taxonomy.find({'term':'date'})
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 1)
         self.assertEqual(c[0]['parent'], "")
@@ -169,7 +171,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         
@@ -186,7 +188,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         
@@ -203,7 +205,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         self.assertEqual(c[0]['parent'], 'goob')
@@ -217,7 +219,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.success_count, 4)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         self.assertNotEqual(c[0]['level'], 2)
         self.assertNotEqual(c[1]['level'], 2)
@@ -228,7 +230,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertEqual(res.success_count, 5)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find()
+        c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
         self.assertEqual(c[0]['level'], 1)
         self.assertEqual(c[1]['level'], 1)
@@ -241,7 +243,7 @@ class TestTaxonomyLoader(test.TestCase):
 
         key = {'term': "Advanced Communications", "parent": ""}
         self.assertTrue(res.succeeded(key))
-        c = self.ldr._client.get_default_database().taxonomy.find(key)
+        c = self.ldr._client.get_database().taxonomy.find(key)
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['level'], 1)
         
