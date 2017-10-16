@@ -91,7 +91,7 @@ class Handler(object):
         self._hdr.add_header(name, value)
 
     def set_response(self, code, message):
-        self._code = 200
+        self._code = code
         self._msg = message
 
     def end_headers(self):
@@ -148,7 +148,7 @@ class Handler(object):
             return self.send_error(405, "POST not supported on this resource")
         elif len(steps) == 1:
             if steps[0] == 'nerdm':
-                self.post_nerdm_record()
+                return self.post_nerdm_record()
             else:
                 return self.send_error(403, "new records are not allowed for " +
                                        "submission to this resource")
