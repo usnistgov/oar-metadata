@@ -289,6 +289,28 @@ include "pod2nerdm"; hierarchy("")
 [ {"filepath": "A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}, {"filepath": "B", "@type": [ "Subcollection" ] }, { "filepath": "B/C", "@type": ["Fool"] },  {"filepath": "B/D", "@type": [ "Subcollection" ] }, {"filepath": "B/D/A", "@type": [ "DataFile" ], "downloadURL": "/dev/null"}]
 [ {"filepath": "A" },{ "filepath": "B", "children": [ { "filepath": "B/C" }, {"filepath": "B/D", "children": [ {"filepath": "B/D/A" }]}]}]
 
+include "pod2nerdm"; isPDR
+{ "@type": "dcat:Dataset", "title": "NIST Interatomic Potentials Repository" }
+"nrdp:PublicDataResource"
+
+include "pod2nerdm"; isPDR
+{ "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
+"nrdp:PublicDataResource"
+
+include "pod2nerdm"; isSRD
+{ "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
+"nrd:SRD"
+
+include "pod2nerdm"; isSRD
+{ "@type": "dcat:Dataset", "title": "NIST Interatomic Potentials Repository" }
+
+include "pod2nerdm"; resourceTypes
+{ "@type": "dcat:Dataset", "title": "NIST Interatomic Potentials Repository" }
+[ "nrdp:PublicDataResource" ]
+
+include "pod2nerdm"; resourceTypes
+{ "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
+[ "nrd:SRD", "nrdp:PublicDataResource" ]
 
 # testing podds2resoure:
 #
