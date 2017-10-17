@@ -205,7 +205,9 @@ class Handler(object):
         except Exception, ex:
             log.exception("Loading error: "+str(ex))
             return self.send_error(500, "Load failure due to internal error")
-            
+
+        log.info("Accepted record %s with @id=%s",
+                 rec.get('ediid','?'), rec.get('@id','?'))
         self.set_response(200, "Record accepted")
         self.end_headers()
         return []
