@@ -46,6 +46,34 @@ def urlpath:
     sub("^\\w+:(//\\w+\\.\\w+(\\.\\w+)*(:\\d+)?)?"; "")
 ;
 
+# trim whitespace from the beginning of a string
+#
+# Input: string
+# Output: string
+#
+def ltrimsp:
+    sub("^\\s+"; "")
+;
+
+# trim whitespace from the end of a string
+#
+# Input: string
+# Output: string
+#
+def rtrimsp:
+    sub("\\s+$"; "")
+;
+
+# trim whitespace from both ends of a string
+#
+# Input: string
+# Output: string
+#
+def trimsp:
+    ltrimsp | rtrimsp
+;
+
+
 # given a string that looks like a file path, return the path to the
 # file's parent directory
 #
@@ -416,7 +444,7 @@ def podds2resource:
         ediid: .identifier,
         landingPage,
         
-        description:  .description | split("\n\n"),
+        description:  .description | split("\n\n") | map(trimsp),
         keyword,
         theme,
         topic: [],

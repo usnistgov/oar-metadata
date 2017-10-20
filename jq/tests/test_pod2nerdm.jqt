@@ -59,6 +59,28 @@ include "pod2nerdm"; map(urlpath)
 [ "/doc1.txt", "/gurn/doc2.txt", "/blah/blah", "/10.082093/DOSFIASD", "/od/ds/3A1EE2F169DD3B8CE0531A570681DB5D1491/trial3/trial3a.json" ]
 
 #---------------
+# testing trimsp
+#
+include "pod2nerdm"; trimsp
+"\t plainfile\n"
+"plainfile"
+
+#---------------
+# testing trimsp
+#
+include "pod2nerdm"; trimsp
+"plainfile"
+"plainfile"
+
+#---------------
+# testing trimsp
+#
+include "pod2nerdm"; trimsp
+"plainfile   "
+"plainfile"
+
+
+#---------------
 # testing dirname()
 #
 include "pod2nerdm"; dirname
