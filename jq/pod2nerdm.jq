@@ -20,15 +20,15 @@
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://www.nist.gov/od/dm/nerdm-schema/v0.1#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.1#";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_pub_schema:  "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#";
 
 # the NERDm context location
 #
-def nerdm_context: "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld";
+def nerdm_context: "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld";
 
 # where the Datacite Document Reference types are defined
 #
@@ -44,6 +44,43 @@ def resid:  if $id then $id else null end;
 # Output: string
 def urlpath:
     sub("^\\w+:(//\\w+\\.\\w+(\\.\\w+)*(:\\d+)?)?"; "")
+;
+
+# given a string that looks like a file path, return the path to the
+# file's parent directory
+#
+# Input: string
+# Output: string
+#
+def dirname:
+    sub("/$";"") | 
+    if contains("/") then
+        sub("/[^/]+$"; "")
+    else
+        ""
+    end
+;
+
+# filter an array of strings, retaining only those that are not in another
+# given input array
+#
+# Input: array of strings
+# Output: array of strings
+# exclude: array of strings to remove from input array
+#
+def remove_elements(exclude):
+    map(. as $el | select( (exclude | index($el)) == null ))
+;
+
+# given a list of filepaths, return a unique array of ancestor collection
+# filepaths
+#
+# Input: array of strings
+# Output: array of strings
+#
+def ansc_coll_paths:
+    map(dirname) | map([while(length > 0; dirname)]) |
+    reduce .[] as $ary ([]; .+$ary) | unique
 ;
 
 # conversion for a POD-to-NERDm reference node
@@ -89,10 +126,14 @@ def filepath:
       if test("https?://s3.amazonaws.com/nist-\\w+/") then
          sub("https?://s3.amazonaws.com/nist-\\w+/"; "")
       else
-        if test("https?://www.nist.gov/od/ds/\\w+/") then
-           sub("https?://www.nist.gov/od/ds/\\w+/"; "")
+        if test("https?://opendata.nist.gov/\\w+/") then
+           sub("https?://opendata.nist.gov/\\w+/"; "")
         else
-           sub(".*/"; "")
+          if test("https?://data.nist.gov/od/ds/\\w+/") then
+             sub("https?://data.nist.gov/od/ds/\\w+/"; "")
+          else
+             sub(".*/"; "")
+          end
         end
       end
     end
@@ -108,7 +149,7 @@ def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -145,7 +186,7 @@ def dist2inaccess:
 def dist2accesspage:
     .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("#")) |
-    .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -245,6 +286,33 @@ def select_obj_type(type):
 #
 def select_comp_type(type; within):
     select_obj_type(type) | select_comp_within(within)
+;
+
+# create a default Subcollection component for a given filepath
+#
+# Input: filepath string
+# Output: Component
+#
+def create_subcoll_for:
+    {
+        "@id": ("cmps/" + .),
+        "@type": [ "nrdp:Subcollection" ],
+        filepath: .,
+        "_extensionSchemas": [ nerdm_pub_schema + "/definitions/Subcollection" ]
+    }
+;
+
+# create Subcollection components for the filepaths found a given array of
+# components and insert them into the beginning of that array.
+#
+# Input: array of components
+# Output: (expanded) array of components
+#
+def insert_subcoll_comps:
+    (select_comp_type("nrdp:Subcollection";"") |
+     map(select(.filepath)|.filepath)) as $subcolls |
+    (map(select(.filepath)|.filepath) | ansc_coll_paths |
+     remove_elements($subcolls) | map(create_subcoll_for)) + .
 ;
 
 # create an array of TypeInventories summarizing the input set of Components
@@ -348,7 +416,7 @@ def podds2resource:
         ediid: .identifier,
         landingPage,
         
-        description: [ .description ],
+        description:  .description | split("\n\n"),
         keyword,
         theme,
         topic: [],
@@ -365,7 +433,7 @@ def podds2resource:
         programCode
     } |
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
-    if .components then .components = (.components | map(dist2comp)) else del(.components) end |
+    if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
     if .theme then . else del(.theme) end |
     if .issued then . else del(.issued) end |

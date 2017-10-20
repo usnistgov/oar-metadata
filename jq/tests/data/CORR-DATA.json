@@ -1,0 +1,42 @@
+{
+  "title":"CORR-DATA",
+  "description":"Corrosion is defined as the deterioration of a material due to chemical reactions with its environment. Understanding corrosion, and corrosion rates, is necessary to ensure that the design of objects we interact with every day, from the bridges we drive over to the containers used to transport chemicals, from the pipes that carry our water to the utensils we cook with, are safe and perform to specifications.\n\nThe Corr-Data dataset was created by the staff of the NACE-NIST Corrosion Data Program. This program was established by a joint agreement between NACE (National Association of Corrosion Engineers) International and NIST (National Institute of Standards and Technology) in Dec. of 1982 and ran until 1997. At its founding, the objective of this program was to provide engineers with software for the then new personal computers that would help them solve corrosion problems. Over the 15 years this program ran, over 20 databases and expert advisory systems for alloys selection were produced and released. While software can go out of date, the data remains relevant. The data describe observations of various samples in potentially corrosive environments under particular conditions (concentrations and temperatures) to see if, how, and at what rate they corrode. The data include over 24,000 records which have been extracted from over 250 different source documents.\n\nThe data provided here is from published results, but it should only be considered indicative of how the specified material was observed to perform in the given environment one time. The user needs to keep in mind that corrosion is a highly stochastic process and that behavior can vary greatly with small variations in the environment or material. This data is provided to help users select materials for further evaluation and should not be considered, or construed, as advice on the usability of any material in any environment. Only thoroughly evaluated test results for the whole range of material, loading, and environmental conditions should be used for critical decision making.",
+  "modified":"1997-01-01",
+  "publisher": {
+    "name":"National Institute of Standards and Technology",
+    "@type":"org:Organization"
+  },
+  "contactPoint": {
+    "fn":"Richard Ricker",
+    "hasEmail":"mailto:richard.ricker@nist.gov"
+  },
+  "identifier":"54AE54FB37AC022DE0531A570681D4291851",
+  "accessLevel":"public",
+  "license":"https://www.nist.gov/open/license",
+  "distribution": [
+    {
+      "accessURL":"https://researchdata.nist.gov/Materials-Physical-Properties/CORR-DATA-Database/akgq-mt9y",
+      "description":"This website gives users access to multiple download formats of the CORR-DATA data set.",
+      "title":"CORR-DATA"
+    },
+    {
+      "accessURL":"https://doi.org/10.18434/M3TH4R"
+    },
+    {
+      "downloadURL":"https://opendata.nist.gov/1851/CORR-DATA_Database.zip",
+      "mediaType":"text/plain"
+    },
+    {
+      "downloadURL":"https://opendata.nist.gov/1851/sha256/CORR-DATA_Database.zip.sha256",
+      "mediaType":"text/plain"
+    }
+  ],
+  "accrualPeriodicity":"irregular",
+  "landingPage":"https://researchdata.nist.gov/Materials-Physical-Properties/CORR-DATA-Database/akgq-mt9y",
+  "@type":"dcat:Dataset",
+  "keyword":["corrosion","NACE"],
+  "bureauCode":["006:55"],
+  "programCode":["006:052"],
+  "language":["en"],
+  "theme":["Metals","Materials characterization"]
+}

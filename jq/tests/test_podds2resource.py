@@ -3,10 +3,11 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://www.nist.gov/od/dm/nerdm-schema/v0.1#"
-nerdmpub = "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.1#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
+corrfile =  os.path.join(datadir, "CORR-DATA.json")
 pdlfile = os.path.join(datadir, "nist-pdl-oct2016.json")
 jqlib = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 schemadir = os.path.join(os.path.dirname(jqlib), "model")
@@ -22,12 +23,12 @@ class TestJanaf(unittest.TestCase):  #
     def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
     def test_context(self):
         self.assertEquals(self.out['@context'],
-                        [ "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld",
+                        [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
                           {"@base": "ark:ID"} ])
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://www.nist.gov/od/dm/nerdm-schema/v0.1#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.1#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -54,6 +55,9 @@ class TestJanaf(unittest.TestCase):  #
             self.assertIn(prop, self.out, "Property not found: " + prop)
             self.assertIsInstance(self.out[prop], list,
                 "Property '{0}' not a list: {1}".format(prop, self.out[prop]))
+
+    def test_description(self):
+        self.assertEqual(len(self.out['description']), 1)
 
     def test_ediid(self):
         self.assertEquals(self.out['ediid'],
@@ -105,6 +109,100 @@ class TestJanaf(unittest.TestCase):  #
                       "record is missing 'dataHierarchy' field")
         hier = self.out['dataHierarchy']
         self.assertEqual(len(hier), 318)
+        self.assertIn('filepath', hier[0])
+        self.assertIn('filepath', hier[-1])
+        
+
+class TestCORR(unittest.TestCase):  # 
+
+    def setUp(self):
+        # pdb.set_trace() # nerdm::podds2resourc
+        self.out = send_file_thru_jq('nerdm::podds2resource', corrfile,
+                                     {"id": "ark:ID"})
+
+    def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
+    def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_context(self):
+        self.assertEquals(self.out['@context'],
+                        [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
+                          {"@base": "ark:ID"} ])
+                          
+    def test_schema(self):
+        self.assertEquals(self.out['_schema'],
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.1#")
+    def test_extsch(self):
+        
+        exts = self.out['_extensionSchemas']
+        self.assertEquals(len(exts), 1)
+        self.assertIn(nerdmpub+"/definitions/PublicDataResource", exts)
+
+    def test_restypes(self):
+        types = self.out['@type']
+        self.assertIsInstance(types, list)
+        self.assertEquals(len(types), 1)
+        self.assertEquals(types[0], "nrdp:PublicDataResource")
+
+    def test_arestr(self):
+        props = "title modified ediid landingPage license".split()
+        for prop in props:
+            self.assertIn(prop, self.out, "Property not found: " + prop)
+            self.assertIsInstance(self.out[prop], types.StringTypes,
+                "Property '{0}' not a string: {1}".format(prop, self.out[prop]))
+
+    def test_arearrays(self):
+        props = "description bureauCode programCode language components".split()
+        for prop in props:
+            self.assertIn(prop, self.out, "Property not found: " + prop)
+            self.assertIsInstance(self.out[prop], list,
+                "Property '{0}' not a list: {1}".format(prop, self.out[prop]))
+
+    def test_description(self):
+        self.assertEqual(len(self.out['description']), 3)
+
+    def test_ediid(self):
+        self.assertEquals(self.out['ediid'],
+                          "54AE54FB37AC022DE0531A570681D4291851")
+
+    def test_components(self):
+        comps = self.out['components']
+#        self.assertGreaterEqual(len(comps), 5,
+#                   "Missing components; only {0}/{1}".format(len(comps), 5))
+        self.assertLessEqual(len(comps), 5,
+                   "Extra components; have {0}/{1}".format(len(comps), 5))
+
+        props = "downloadURL mediaType filepath".split()
+        for prop in props:
+            self.assertIn(prop, comps[3], "Property not found: " + prop)
+            self.assertIsInstance(comps[3][prop], types.StringTypes,
+                "Property '{0}' not a string: {1}".format(prop, comps[3][prop]))
+
+        exts = comps[3]['_extensionSchemas']
+        self.assertEquals(len(exts), 1)
+        self.assertIn(nerdmpub+"/definitions/DataFile", exts)
+
+        typs = comps[3]['@type']
+        self.assertEquals(len(typs), 2)
+        self.assertEquals(typs[0], "nrdp:DataFile")
+        self.assertEquals(typs[1], "dcat:Distribution")
+
+        props = "downloadURL".split()
+        for prop in props:
+            self.assertTrue(comps[3][prop].startswith("https://opendata.nist.gov/"),
+                            prop+" property not a URL: "+comps[3][prop])
+
+        # check for inserted subcollection
+        self.assertEqual(comps[0]['@type'], ["nrdp:Subcollection"])
+        self.assertEqual(comps[0]['@id'], "cmps/sha256")
+        self.assertEqual(comps[0]['filepath'], "sha256")
+        self.assertEqual(comps[4]['filepath'],
+                         "sha256/CORR-DATA_Database.zip.sha256")
+        self.assertIn("_extensionSchemas", comps[0])
+
+    def test_hierarchy(self):
+        self.assertIn("dataHierarchy", self.out,
+                      "record is missing 'dataHierarchy' field")
+        hier = self.out['dataHierarchy']
+        self.assertEqual(len(hier), 2)
         self.assertIn('filepath', hier[0])
         self.assertIn('filepath', hier[-1])
         
