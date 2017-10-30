@@ -160,7 +160,11 @@ def filepath:
           if test("https?://data.nist.gov/od/ds/\\w+/") then
              sub("https?://data.nist.gov/od/ds/\\w+/"; "")
           else
-             sub(".*/"; "")
+            if test("https?://testdata.nist.gov/od/ds/\\w+/") then
+               sub("https?://testdata.nist.gov/od/ds/\\w+/"; "")
+            else
+               sub(".*/"; "")
+            end
           end
         end
       end
