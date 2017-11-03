@@ -1,0 +1,91 @@
+h1,h2 {
+    color: #886906;
+}
+
+.preheading {
+    font-size: small;
+    font-style: italic;
+}
+.preheading a {
+    text-decoration: none
+}
+.preheading a:hover {
+    text-decoration: underline
+}
+.heading {
+    font-size: large;
+}
+
+.md_entry {
+    border: 3px solid;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.md_entry h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.md_entry h3,h5 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.md_entry h5 {
+    margin-left: 0px;
+}
+.md_entry hr {
+    margin-top: 2px;
+    margin-bottom: 10px;
+}
+.md_entry dl {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.md_type {
+    background: #e9da94;
+    border-color:  #998015;
+}
+.md_type hr {
+    border-color: #998015;
+}
+.md_prop {
+    background: #a9e1ac;
+    border-color:  #098111;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+.md_prop hr {
+    border-color: #098111;
+}
+
+.type_body {
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+.notes ul {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.reference {
+    font-family: consolas, "Liberation Mono", courier, monospace;
+    background-color: #dcdce1;
+    padding: 0 2px 0 3px;
+    border-radius: 2px;
+}
+.reference a {
+    text-decoration: none;
+}
+.reference a:hover {
+    text-decoration: underline;
+}
+
+code {
+    font-size: large;
+}

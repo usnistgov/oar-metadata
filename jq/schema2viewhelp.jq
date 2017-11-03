@@ -94,6 +94,10 @@ def property2view:
     } +
     property2valuedoc 
 ;
+def property2view(name; parenttype):
+    { name: name, parent: parenttype } +
+    property2view 
+;
 
 def ensure_title(deftitle):
     if .value.title then . else (.value.title = deftitle) end
@@ -103,8 +107,8 @@ def ensure_titles:
     to_entries | map( ensure_title(.key) ) | from_entries
 ;
 
-def type2view:
-    { description, brief: .description } +
+def type2view(name):
+    { name: name, description: [.description], brief: .description, use: [] } +
     (if .allOf then
         (.allOf |{ inheritsFrom: map(select(.["$ref"]) | .["$ref"] | stripref)})
      else {} end) + { properties:
@@ -113,16 +117,22 @@ def type2view:
                 | reduce .[] as $itm ({}; . + $itm))
       else
         (if .properties then .properties else {} end)
-      end) | ensure_titles | map_values( property2view )) }
+      end) | ensure_titles | to_entries |
+      map( .key as $key | .value | property2view($key; name) )) }
 ;
    
 def schema2view: {
     title,
-    description,
-#    types: (.definitions | map_values( type2view ))
-    types: (.definitions | map_values( type2view ))
+    description: [.description],
+    types: (.definitions | to_entries |
+            map( .key as $key | .value | type2view($key) ))
 };
 
+# this function was intended to join the outputs of multiple files.
+# It doesn't work. 
 def all_schema2view:
-    [schema2view] | reduce .[] as $s ({}; . + $s)
+    [schema2view] |
+    if (length > 1) then
+        reduce .[1:length] as $s (.[0]; .types += $s.types)
+    else .[0] end
 ;
