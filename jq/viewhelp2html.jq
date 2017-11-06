@@ -77,7 +77,7 @@ def layout_type:
                    | join(" <p>\n")+"\n"),
 
      ("  <dt> <strong>How it is used:</strong> </dt>\n" + 
-      "  <dd> <span class=\"Type reference\">\n"),
+      "  <dd> "),
 
      (.use | map( wrap_template(" {0} \n") )
            | join("</dd> <p>\n  <dd> ")),
@@ -89,7 +89,32 @@ def layout_type:
      (.properties | map( layout_property ) | .[]),
 
      ("</div> <!-- end properties section -->\n" +
-      "</div> <!-- end type description -->\n\n"))
+      "</div> <!-- end type description -->\n\n<p>\n\n"))
 
    as $p (""; . + $p)
 ;
+
+def layout_schema:
+#     .types[] | layout_type
+    reduce (.types[] | layout_type) as $t ("<h2>Resource Types</h2>\n"; . + $t)
+;
+
+def view2html:
+   { title: .title} as $title |
+   
+   ("<html> <head>\n" +
+    (.title | wrap_template("<title>{0}</title>\n")) + 
+    "<style>\nbody {\n   font-family: Helvetica Neue, Arial, sans-serif;\n}\n"+
+    "</style>\n<link rel=\"stylesheet\" type=\"text/css\" " +
+    "href=\"helpview.css\" />\n"+
+    "</head>\n\n<body>\n" +
+    (.title | wrap_template("<h1>{0}</h1>\n\n"))),
+
+   (layout_schema),
+
+   ("</body>\n</html>\n")
+;
+
+
+
+
