@@ -104,6 +104,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("401", self.resp[0])
+        self.assertNotIn("WWW-Authenticate: Bearer", self.resp)
         self.assertEqual(body, [])
 
         # now configure the service to require a key
@@ -124,6 +125,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.resp = []
         body = self.svc(req, self.start)
         self.assertIn("401", self.resp[0])
+        self.assertNotIn("WWW-Authenticate: Bearer", self.resp)
         self.assertEqual(body, [])
 
         # test lack of auth key
@@ -133,6 +135,39 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertIn("401", self.resp[0])
         self.assertEqual(body, [])
 
+        # test header access key
+        cfg['auth_method'] = 'header'
+        self.svc = wsgi.app(cfg)
+
+        self.resp = []
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Bearer 9e73'
+        body = self.svc(req, self.start)
+        self.assertGreater(len(self.resp), 0)
+        self.assertIn("200", self.resp[0])
+        self.assertGreater(len(body), 0)
+        self.assertEqual(body[0], 'Service ready\n')
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Token 9e73'
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Bearer'
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+        
+        
         
 
     def test_is_not_ready(self):
