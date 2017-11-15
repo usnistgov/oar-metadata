@@ -28,6 +28,7 @@ def setUpModule():
     loghdlr = logging.FileHandler(os.path.join(tmpdir(),"test_wsgi.log"))
     loghdlr.setLevel(logging.INFO)
     rootlog.addHandler(loghdlr)
+    rootlog.setLevel(logging.INFO)
 
 def tearDownModule():
     global loghdlr

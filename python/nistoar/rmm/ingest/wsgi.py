@@ -63,6 +63,13 @@ class RMMRecordIngestApp(object):
         if authmeth != 'header':
             authmeth = 'qparam'
         self._auth = (authmeth, authkey)
+        if authkey:
+            if authmeth == 'header':
+                log.info("Authorization key is required of clients via HTTP Header")
+            else:
+                log.info("Authorization key is required of clients via query parameter")
+        else:
+            log.warn("No authorization key required of clients")
         
 
     def handle_request(self, env, start_resp):
