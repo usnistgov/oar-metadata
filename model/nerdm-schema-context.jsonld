@@ -11,7 +11,7 @@
         "deo": "http://purl.org/spar/deo/",
         "org": "",
         "pod": "https://project-open-data.cio.gov/v1.1/schema#",
-        "nrd": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+        "nrd": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
         "sdpperson": "https://nist.org/od/dm/person/",
 
         "title": "dc:title",
@@ -40,7 +40,7 @@
         "proxyFor": "ore:proxyFor"
     }
 
-    "@id": "https://www.nist.gov/od/dm/nerdm-context.jsonld",
+    "@id": "https://data.nist.gov/od/dm/nerdm-context.jsonld",
     "title": "The core NIST Extended Resource Data model (NERDm) JSON-LD context",
     "description": "This is the base context definition for encoding core NERDm metadata in JSON-LD format"
 }
