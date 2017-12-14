@@ -58,7 +58,7 @@ case "$1" in
         ;;
     *)
         echo Unknown command: $1
-        echo Available commands:  testall install shell
+        echo Available commands:  testall install testshell shell
         exit 100
         ;;
 esac
