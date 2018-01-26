@@ -1,0 +1,21 @@
+#! /bin/bash
+#
+# testall:  run all package tests
+#
+set -e
+prog=`basename $0`
+execdir=`dirname $0`
+[ "$execdir" = "" -o "$execdir" = "." ] && execdir=$PWD
+PACKAGE_DIR=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
+
+PKGLIBDIR=`ls python/build/lib.* | head -1`
+TESTLIBDIR=$PACKAGE_DIR/python
+
+if [ -n "$PYTHONPATH" ]; then
+    PYTHONPATH=${TESTLIBDIR}:${PKGLIBDIR}:$PYTHONPATH
+else
+    PYTHONPATH=${TESTLIBDIR}:$PKGLIBDIR
+fi
+
+exec $PACKAGE_DIR/scripts/testall.py $@
+

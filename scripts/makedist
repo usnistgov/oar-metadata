@@ -1,6 +1,8 @@
 #! /bin/bash
 #
-# build.sh:  build the package
+# makedist:  build the package's distributions
+#
+# This package only provides one distribution: pdr-nerdm
 #
 set -e
 prog=`basename $0`
