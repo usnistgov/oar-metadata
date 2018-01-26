@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from ejsonschema import ExtValidator
 from ejsonschema import ValidationError, SchemaError, RefResolutionError
 
-_dburl_re = re.compile(r"^mongodb://\w+(\.\w+)*(:\d+)?/\w+$")
+_dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
 class Loader(object):
     """
@@ -30,7 +30,8 @@ class Loader(object):
                               if None, validation will always be skipped.
         """
         if not _dburl_re.match(dburl):
-            raise ValueError("Loader: Bad dburl format (need 'mongodb://HOST[:PORT]/DBNAME'): "+
+            raise ValueError("Loader: Bad dburl format (need "+
+                             "'mongodb://[USER:PASS@]HOST[:PORT]/DBNAME'): "+
                              dburl)
         self._dburl = dburl
         self.coll = collname
@@ -60,7 +61,12 @@ class Loader(object):
         establish a connection to the database.
         """
         self._client = MongoClient(self._dburl)
-        self._db = self._client.get_default_database()
+
+        # the proper method to use depends on pymongo version
+        if not hasattr(self._client, 'get_database'):
+            self._client.get_database = self._client.get_default_database
+
+        self._db = self._client.get_database()
 
     def disconnect(self):
         """
@@ -117,8 +123,8 @@ class Loader(object):
                 if curs.count() > 0:
                     # a previous record with matching key exists
                     if onupdate == 'fail':
-                        raise RecordIngestException("Existing record with key "
-                                                    "value; updates not allowed")
+                        raise RecordIngestError("Existing record with key "
+                                                "value; updates not allowed")
 
                     doload = True
                     if hasattr(onupdate, '__call__'):
@@ -131,9 +137,8 @@ class Loader(object):
 
                         result = coll.delete_one(key)
                         if result.deleted_count == 0:
-                            raise RecordIngestException("Failed to remove "
-                                                        "previous record with "
-                                                        "key="+key)
+                            raise RecordIngestError("Failed to remove previous "
+                                                   +"record with key="+key)
                         assert result.deleted_count == 1
 
                     else:

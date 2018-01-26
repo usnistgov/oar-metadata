@@ -1,0 +1,15 @@
+version: 0.0
+
+os: linux
+# 1) Copy all the build files to the sdp html folder
+files:
+  - source:  dist/pdr-nerdm.zip
+    destination: /home/ubuntu/oar-docker/apps/rmm/ingest
+    
+hooks:
+ BeforeInstall:
+   - location:  scripts/beforecicd.sh
+     runas: root
+ AfterInstall:
+   - location:  scripts/aftercicd.sh
+     runas: root

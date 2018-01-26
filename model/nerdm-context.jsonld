@@ -12,11 +12,11 @@
         "skos": "http://www.w3.org/2004/02/skos/core#",
         "pod": "https://project-open-data.cio.gov/v1.1/schema#",
         "rmmperson": "https://nist.org/od/dm/person/",
-        "nrd": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
-        "nrdp": "https://www.nist.gov/od/dm/nerdm-pub-schema/v0.1#"
+        "nrd": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
+        "nrdp": "https://data.nist.gov/od/dm/nerdm-pub-schema/v0.1#"
     }
 
-    "@id": "https://www.nist.gov/od/dm/nerdm-context.jsonld",
+    "@id": "https://data.nist.gov/od/dm/nerdm-context.jsonld",
     "title": "The NIST Extended Resource Data model (NERDm) JSON-LD context",
     "description": "This is the base context definition for encoding NERDm metadata in JSON-LD format"
 }

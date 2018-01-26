@@ -101,7 +101,8 @@ def main(args):
                       .format(parser.prog), file=sys.stderr)
                 for f in res.failures():
                     why = (isinstance(f.errs[0], RecordIngestError) and \
-                               str(f.errs)) or "Validation errors"
+                               "Ingest error") or "Validation errors"
+                    why += ": "+fmterrs(f.errs)
                     print("\t{0}: \t{1}".format(str(f.key), why))
             else:
                 print("{0}: {1}: {2} out of {3} records failed to load"
@@ -113,7 +114,7 @@ def main(args):
                                                        totres.attempt_count))
 
     if totres.failure_count > 0:
-        stat = 1
+        stat = 2
     return stat
 
 def load_from_dir(dirpath, loader, validate=True):
@@ -122,6 +123,13 @@ def load_from_dir(dirpath, loader, validate=True):
 def load_from_file(filepath, loader, validate=True):
     return loader.load_from_file(filepath, validate)
 
+def fmterrs(errs):
+    msgs = str(errs[0]).split("\n")
+    out = msgs[0]
+    if len(errs) > 1 or len(msgs) > 1:
+        out += "..."
+    return out
+    
     
 if __name__ == '__main__':
     sys.exit(main(sys.argv[1:]))

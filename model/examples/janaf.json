@@ -1,7 +1,7 @@
 {
-    "@context": "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
-    "_extensionSchemas": [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataPublication" ],
+    "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataPublication" ],
 
     "@type": [ "nrd:SRD", "nrdp:DataPublication", "nrdp:PublicDataResource" ],
     "@id": "ark:/88434/sdp0fjspek351",
@@ -114,7 +114,7 @@
             "label": "JPCRD Monograph: NIST-JANAF Thermochemical Tables, Pt. 1 (AL-C",
             "location": "http://kinetics.nist.gov/janaf/pdf/JANAF-FourthEd-1998-1Vol1-Intro.pdf",
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
+                "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
             ]
         },
         {
@@ -123,7 +123,7 @@
             "label": "JPCRD Monograph: NIST-JANAF Thermochemical Tables, Pt. 2 (Cr-Zr)",
             "location": "http://kinetics.nist.gov/janaf/pdf/JANAF-FourthEd-1998-1Vol2-Intro.pdf",
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
+                "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
             ]
         }
     ],
@@ -149,11 +149,331 @@
             "childCollections": []
         }
     ],
+    "dataHierarchy": [
+        { "filepath": "srd13_B-101.json" },
+        { "filepath": "srd13_B-102.json" },
+        { "filepath": "srd13_B-103.json" },
+        { "filepath": "srd13_B-104.json" },
+        { "filepath": "srd13_B-105.json" },
+        { "filepath": "srd13_B-106.json" },
+        { "filepath": "srd13_B-107.json" },
+        { "filepath": "srd13_B-108.json" },
+        { "filepath": "srd13_B-109.json" },
+        { "filepath": "srd13_B-110.json" },
+        { "filepath": "srd13_B-111.json" },
+        { "filepath": "srd13_B-112.json" },
+        { "filepath": "srd13_B-113.json" },
+        { "filepath": "srd13_B-114.json" },
+        { "filepath": "srd13_B-115.json" },
+        { "filepath": "srd13_B-116.json" },
+        { "filepath": "srd13_B-117.json" },
+        { "filepath": "srd13_B-118.json" },
+        { "filepath": "srd13_B-119.json" },
+        { "filepath": "srd13_B-120.json" },
+        { "filepath": "srd13_B-121.json" },
+        { "filepath": "srd13_B-122.json" },
+        { "filepath": "srd13_B-123.json" },
+        { "filepath": "srd13_B-124.json" },
+        { "filepath": "srd13_B-125.json" },
+        { "filepath": "srd13_B-126.json" },
+        { "filepath": "srd13_B-127.json" },
+        { "filepath": "srd13_B-128.json" },
+        { "filepath": "srd13_B-129.json" },
+        { "filepath": "srd13_B-130.json" },
+        { "filepath": "srd13_B-131.json" },
+        { "filepath": "srd13_B-132.json" },
+        { "filepath": "srd13_B-133.json" },
+        { "filepath": "srd13_B-134.json" },
+        { "filepath": "srd13_B-135.json" },
+        { "filepath": "srd13_B-136.json" },
+        { "filepath": "srd13_B-137.json" },
+        { "filepath": "srd13_B-138.json" },
+        { "filepath": "srd13_B-139.json" },
+        { "filepath": "srd13_janaf-zipfile.zip" },
+        { "filepath": "srd13_janaf.species.json" },
+        { "filepath": "srd13_Al-001.json" },
+        { "filepath": "srd13_Al-002.json" },
+        { "filepath": "srd13_Al-003.json" },
+        { "filepath": "srd13_Al-004.json" },
+        { "filepath": "srd13_Al-005.json" },
+        { "filepath": "srd13_Al-006.json" },
+        { "filepath": "srd13_Al-007.json" },
+        { "filepath": "srd13_Al-008.json" },
+        { "filepath": "srd13_Al-009.json" },
+        { "filepath": "srd13_Al-010.json" },
+        { "filepath": "srd13_Al-011.json" },
+        { "filepath": "srd13_Al-012.json" },
+        { "filepath": "srd13_Al-013.json" },
+        { "filepath": "srd13_Al-014.json" },
+        { "filepath": "srd13_Al-015.json" },
+        { "filepath": "srd13_Al-016.json" },
+        { "filepath": "srd13_Al-017.json" },
+        { "filepath": "srd13_Al-018.json" },
+        { "filepath": "srd13_Al-019.json" },
+        { "filepath": "srd13_Al-020.json" },
+        { "filepath": "srd13_Al-021.json" },
+        { "filepath": "srd13_Al-022.json" },
+        { "filepath": "srd13_Al-023.json" },
+        { "filepath": "srd13_Al-024.json" },
+        { "filepath": "srd13_Al-025.json" },
+        { "filepath": "srd13_Al-026.json" },
+        { "filepath": "srd13_Al-027.json" },
+        { "filepath": "srd13_Al-028.json" },
+        { "filepath": "srd13_Al-029.json" },
+        { "filepath": "srd13_Al-030.json" },
+        { "filepath": "srd13_Al-031.json" },
+        { "filepath": "srd13_Al-032.json" },
+        { "filepath": "srd13_Al-033.json" },
+        { "filepath": "srd13_Al-034.json" },
+        { "filepath": "srd13_Al-035.json" },
+        { "filepath": "srd13_Al-036.json" },
+        { "filepath": "srd13_Al-037.json" },
+        { "filepath": "srd13_Al-038.json" },
+        { "filepath": "srd13_Al-039.json" },
+        { "filepath": "srd13_Al-040.json" },
+        { "filepath": "srd13_Al-041.json" },
+        { "filepath": "srd13_Al-042.json" },
+        { "filepath": "srd13_Al-043.json" },
+        { "filepath": "srd13_Al-044.json" },
+        { "filepath": "srd13_Al-045.json" },
+        { "filepath": "srd13_Al-046.json" },
+        { "filepath": "srd13_Al-047.json" },
+        { "filepath": "srd13_Al-048.json" },
+        { "filepath": "srd13_Al-049.json" },
+        { "filepath": "srd13_Al-050.json" },
+        { "filepath": "srd13_Al-051.json" },
+        { "filepath": "srd13_Al-052.json" },
+        { "filepath": "srd13_Al-053.json" },
+        { "filepath": "srd13_Al-054.json" },
+        { "filepath": "srd13_Al-055.json" },
+        { "filepath": "srd13_Al-056.json" },
+        { "filepath": "srd13_Al-057.json" },
+        { "filepath": "srd13_Al-058.json" },
+        { "filepath": "srd13_Al-059.json" },
+        { "filepath": "srd13_Al-060.json" },
+        { "filepath": "srd13_Al-061.json" },
+        { "filepath": "srd13_Al-062.json" },
+        { "filepath": "srd13_Al-063.json" },
+        { "filepath": "srd13_Al-064.json" },
+        { "filepath": "srd13_Al-065.json" },
+        { "filepath": "srd13_Al-066.json" },
+        { "filepath": "srd13_Al-067.json" },
+        { "filepath": "srd13_Al-068.json" },
+        { "filepath": "srd13_Al-069.json" },
+        { "filepath": "srd13_Al-070.json" },
+        { "filepath": "srd13_Al-071.json" },
+        { "filepath": "srd13_Al-072.json" },
+        { "filepath": "srd13_Al-073.json" },
+        { "filepath": "srd13_Al-074.json" },
+        { "filepath": "srd13_Al-075.json" },
+        { "filepath": "srd13_Al-076.json" },
+        { "filepath": "srd13_Al-077.json" },
+        { "filepath": "srd13_Al-078.json" },
+        { "filepath": "srd13_Al-079.json" },
+        { "filepath": "srd13_Al-080.json" },
+        { "filepath": "srd13_Al-081.json" },
+        { "filepath": "srd13_Al-082.json" },
+        { "filepath": "srd13_Al-083.json" },
+        { "filepath": "srd13_Al-084.json" },
+        { "filepath": "srd13_Al-085.json" },
+        { "filepath": "srd13_Rn-002.json" },
+        { "filepath": "srd13_Al-086.json" },
+        { "filepath": "srd13_Al-087.json" },
+        { "filepath": "srd13_Al-088.json" },
+        { "filepath": "srd13_Al-089.json" },
+        { "filepath": "srd13_Al-090.json" },
+        { "filepath": "srd13_Al-091.json" },
+        { "filepath": "srd13_Al-092.json" },
+        { "filepath": "srd13_Al-093.json" },
+        { "filepath": "srd13_Al-094.json" },
+        { "filepath": "srd13_Al-095.json" },
+        { "filepath": "srd13_Al-096.json" },
+        { "filepath": "srd13_Al-097.json" },
+        { "filepath": "srd13_Al-098.json" },
+        { "filepath": "srd13_Al-099.json" },
+        { "filepath": "srd13_Al-100.json" },
+        { "filepath": "srd13_Al-101.json" },
+        { "filepath": "srd13_Al-102.json" },
+        { "filepath": "srd13_Al-103.json" },
+        { "filepath": "srd13_Al-104.json" },
+        { "filepath": "srd13_Al-105.json" },
+        { "filepath": "srd13_Al-106.json" },
+        { "filepath": "srd13_Al-107.json" },
+        { "filepath": "srd13_Al-108.json" },
+        { "filepath": "srd13_Al-109.json" },
+        { "filepath": "srd13_Al-110.json" },
+        { "filepath": "srd13_Al-111.json" },
+        { "filepath": "srd13_Al-112.json" },
+        { "filepath": "srd13_Ar-001.json" },
+        { "filepath": "srd13_Ar-002.json" },
+        { "filepath": "srd13_B-001.json" },
+        { "filepath": "srd13_B-002.json" },
+        { "filepath": "srd13_B-003.json" },
+        { "filepath": "srd13_B-004.json" },
+        { "filepath": "srd13_B-005.json" },
+        { "filepath": "srd13_B-006.json" },
+        { "filepath": "srd13_B-007.json" },
+        { "filepath": "srd13_B-008.json" },
+        { "filepath": "srd13_B-009.json" },
+        { "filepath": "srd13_B-010.json" },
+        { "filepath": "srd13_B-011.json" },
+        { "filepath": "srd13_B-012.json" },
+        { "filepath": "srd13_B-013.json" },
+        { "filepath": "srd13_B-014.json" },
+        { "filepath": "srd13_B-015.json" },
+        { "filepath": "srd13_B-016.json" },
+        { "filepath": "srd13_B-017.json" },
+        { "filepath": "srd13_B-018.json" },
+        { "filepath": "srd13_B-019.json" },
+        { "filepath": "srd13_B-020.json" },
+        { "filepath": "srd13_B-021.json" },
+        { "filepath": "srd13_B-022.json" },
+        { "filepath": "srd13_B-023.json" },
+        { "filepath": "srd13_B-024.json" },
+        { "filepath": "srd13_B-025.json" },
+        { "filepath": "srd13_B-026.json" },
+        { "filepath": "srd13_B-027.json" },
+        { "filepath": "srd13_B-028.json" },
+        { "filepath": "srd13_B-029.json" },
+        { "filepath": "srd13_B-030.json" },
+        { "filepath": "srd13_B-031.json" },
+        { "filepath": "srd13_B-032.json" },
+        { "filepath": "srd13_B-033.json" },
+        { "filepath": "srd13_B-034.json" },
+        { "filepath": "srd13_B-035.json" },
+        { "filepath": "srd13_B-036.json" },
+        { "filepath": "srd13_B-037.json" },
+        { "filepath": "srd13_B-038.json" },
+        { "filepath": "srd13_B-039.json" },
+        { "filepath": "srd13_B-040.json" },
+        { "filepath": "srd13_B-041.json" },
+        { "filepath": "srd13_B-042.json" },
+        { "filepath": "srd13_B-043.json" },
+        { "filepath": "srd13_B-044.json" },
+        { "filepath": "srd13_B-045.json" },
+        { "filepath": "srd13_B-046.json" },
+        { "filepath": "srd13_B-047.json" },
+        { "filepath": "srd13_B-048.json" },
+        { "filepath": "srd13_B-049.json" },
+        { "filepath": "srd13_B-050.json" },
+        { "filepath": "srd13_B-051.json" },
+        { "filepath": "srd13_B-052.json" },
+        { "filepath": "srd13_B-053.json" },
+        { "filepath": "srd13_B-054.json" },
+        { "filepath": "srd13_B-055.json" },
+        { "filepath": "srd13_B-056.json" },
+        { "filepath": "srd13_B-057.json" },
+        { "filepath": "srd13_B-058.json" },
+        { "filepath": "srd13_B-059.json" },
+        { "filepath": "srd13_B-060.json" },
+        { "filepath": "srd13_B-061.json" },
+        { "filepath": "srd13_B-062.json" },
+        { "filepath": "srd13_B-063.json" },
+        { "filepath": "srd13_B-064.json" },
+        { "filepath": "srd13_B-065.json" },
+        { "filepath": "srd13_B-066.json" },
+        { "filepath": "srd13_B-067.json" },
+        { "filepath": "srd13_B-068.json" },
+        { "filepath": "srd13_B-069.json" },
+        { "filepath": "srd13_B-070.json" },
+        { "filepath": "srd13_B-071.json" },
+        { "filepath": "srd13_B-072.json" },
+        { "filepath": "srd13_B-073.json" },
+        { "filepath": "srd13_B-074.json" },
+        { "filepath": "srd13_B-075.json" },
+        { "filepath": "srd13_B-076.json" },
+        { "filepath": "srd13_B-077.json" },
+        { "filepath": "srd13_B-078.json" },
+        { "filepath": "srd13_B-079.json" },
+        { "filepath": "srd13_B-080.json" },
+        { "filepath": "srd13_B-081.json" },
+        { "filepath": "srd13_B-082.json" },
+        { "filepath": "srd13_B-083.json" },
+        { "filepath": "srd13_B-084.json" },
+        { "filepath": "srd13_B-085.json" },
+        { "filepath": "srd13_B-086.json" },
+        { "filepath": "srd13_B-087.json" },
+        { "filepath": "srd13_B-088.json" },
+        { "filepath": "srd13_B-089.json" },
+        { "filepath": "srd13_B-090.json" },
+        { "filepath": "srd13_B-091.json" },
+        { "filepath": "srd13_B-092.json" },
+        { "filepath": "srd13_B-093.json" },
+        { "filepath": "srd13_B-094.json" },
+        { "filepath": "srd13_B-095.json" },
+        { "filepath": "srd13_B-096.json" },
+        { "filepath": "srd13_B-097.json" },
+        { "filepath": "srd13_B-098.json" },
+        { "filepath": "srd13_B-099.json" },
+        { "filepath": "srd13_B-100.json" },
+        { "filepath": "srd13_B-140.json" },
+        { "filepath": "srd13_Ba-001.json" },
+        { "filepath": "srd13_Ba-002.json" },
+        { "filepath": "srd13_Ba-003.json" },
+        { "filepath": "srd13_Br-004.json" },
+        { "filepath": "srd13_Br-005.json" },
+        { "filepath": "srd13_Br-006.json" },
+        { "filepath": "srd13_Br-007.json" },
+        { "filepath": "srd13_Br-008.json" },
+        { "filepath": "srd13_Br-009.json" },
+        { "filepath": "srd13_Br-010.json" },
+        { "filepath": "srd13_Br-011.json" },
+        { "filepath": "srd13_Br-012.json" },
+        { "filepath": "srd13_Br-013.json" },
+        { "filepath": "srd13_Br-014.json" },
+        { "filepath": "srd13_Br-015.json" },
+        { "filepath": "srd13_Br-016.json" },
+        { "filepath": "srd13_Br-017.json" },
+        { "filepath": "srd13_Br-018.json" },
+        { "filepath": "srd13_Br-019.json" },
+        { "filepath": "srd13_Br-020.json" },
+        { "filepath": "srd13_Br-021.json" },
+        { "filepath": "srd13_Br-022.json" },
+        { "filepath": "srd13_Br-023.json" },
+        { "filepath": "srd13_Br-024.json" },
+        { "filepath": "srd13_Br-025.json" },
+        { "filepath": "srd13_Br-026.json" },
+        { "filepath": "srd13_Br-027.json" },
+        { "filepath": "srd13_Br-028.json" },
+        { "filepath": "srd13_Br-029.json" },
+        { "filepath": "srd13_Br-030.json" },
+        { "filepath": "srd13_Br-031.json" },
+        { "filepath": "srd13_Br-032.json" },
+        { "filepath": "srd13_Br-033.json" },
+        { "filepath": "srd13_Br-034.json" },
+        { "filepath": "srd13_Br-035.json" },
+        { "filepath": "srd13_Br-036.json" },
+        { "filepath": "srd13_Br-037.json" },
+        { "filepath": "srd13_Br-038.json" },
+        { "filepath": "srd13_Br-039.json" },
+        { "filepath": "srd13_Br-040.json" },
+        { "filepath": "srd13_Br-041.json" },
+        { "filepath": "srd13_Br-042.json" },
+        { "filepath": "srd13_Br-043.json" },
+        { "filepath": "srd13_Br-044.json" },
+        { "filepath": "srd13_Br-045.json" },
+        { "filepath": "srd13_Br-046.json" },
+        { "filepath": "srd13_Br-047.json" },
+        { "filepath": "srd13_Br-048.json" },
+        { "filepath": "srd13_Br-049.json" },
+        { "filepath": "srd13_Br-050.json" },
+        { "filepath": "srd13_Br-051.json" },
+        { "filepath": "srd13_Br-052.json" },
+        { "filepath": "srd13_Br-053.json" },
+        { "filepath": "srd13_Br-054.json" },
+        { "filepath": "srd13_Br-055.json" },
+        { "filepath": "srd13_Br-056.json" },
+        { "filepath": "srd13_Br-057.json" },
+        { "filepath": "srd13_Br-058.json" },
+        { "filepath": "srd13_Br-059.json" },
+        { "filepath": "srd13_Br-060.json" },
+        { "filepath": "srd13_Br-061.json" }
+    ],
     "components": [
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-101.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-101.json",
@@ -164,7 +484,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-102.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-102.json",
@@ -175,7 +495,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-103.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-103.json",
@@ -186,7 +506,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-104.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-104.json",
@@ -197,7 +517,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-105.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-105.json",
@@ -208,7 +528,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-106.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-106.json",
@@ -219,7 +539,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-107.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-107.json",
@@ -230,7 +550,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-108.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-108.json",
@@ -241,7 +561,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-109.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-109.json",
@@ -252,7 +572,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-110.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-110.json",
@@ -263,7 +583,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-111.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-111.json",
@@ -274,7 +594,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-112.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-112.json",
@@ -285,7 +605,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-113.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-113.json",
@@ -296,7 +616,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-114.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-114.json",
@@ -307,7 +627,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-115.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-115.json",
@@ -318,7 +638,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-116.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-116.json",
@@ -329,7 +649,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-117.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-117.json",
@@ -340,7 +660,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-118.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-118.json",
@@ -351,7 +671,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-119.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-119.json",
@@ -362,7 +682,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-120.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-120.json",
@@ -373,7 +693,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-121.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-121.json",
@@ -384,7 +704,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-122.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-122.json",
@@ -395,7 +715,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-123.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-123.json",
@@ -406,7 +726,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-124.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-124.json",
@@ -417,11 +737,11 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-125.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-125.json",
@@ -432,11 +752,11 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-126.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-126.json",
@@ -447,7 +767,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-127.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-127.json",
@@ -458,7 +778,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-128.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-128.json",
@@ -469,7 +789,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-129.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-129.json",
@@ -480,7 +800,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-130.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-130.json",
@@ -491,7 +811,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-131.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-131.json",
@@ -502,7 +822,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-132.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-132.json",
@@ -513,7 +833,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-133.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-133.json",
@@ -524,7 +844,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-134.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-134.json",
@@ -535,7 +855,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-135.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-135.json",
@@ -546,7 +866,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-136.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-136.json",
@@ -557,7 +877,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-137.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-137.json",
@@ -568,7 +888,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-138.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-138.json",
@@ -579,7 +899,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-139.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-139.json",
@@ -590,7 +910,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_janaf-zipfile.zip",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_janaf-zipfile.zip",
@@ -601,7 +921,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
 
             "filepath": "srd13_janaf.species.json",
@@ -613,7 +933,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-001.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-001.json",
@@ -624,7 +944,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-002.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-002.json",
@@ -635,7 +955,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-003.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-003.json",
@@ -646,7 +966,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-004.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-004.json",
@@ -657,7 +977,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-005.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-005.json",
@@ -668,7 +988,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-006.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-006.json",
@@ -679,7 +999,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-007.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-007.json",
@@ -690,7 +1010,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-008.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-008.json",
@@ -701,7 +1021,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-009.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-009.json",
@@ -712,7 +1032,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-010.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-010.json",
@@ -723,7 +1043,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-011.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-011.json",
@@ -734,7 +1054,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-012.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-012.json",
@@ -745,7 +1065,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-013.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-013.json",
@@ -756,7 +1076,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-014.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-014.json",
@@ -767,7 +1087,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-015.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-015.json",
@@ -778,7 +1098,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-016.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-016.json",
@@ -789,7 +1109,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-017.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-017.json",
@@ -800,7 +1120,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-018.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-018.json",
@@ -811,7 +1131,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-019.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-019.json",
@@ -822,7 +1142,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-020.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-020.json",
@@ -833,7 +1153,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-021.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-021.json",
@@ -844,7 +1164,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-022.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-022.json",
@@ -855,7 +1175,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-023.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-023.json",
@@ -866,7 +1186,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-024.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-024.json",
@@ -877,7 +1197,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-025.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-025.json",
@@ -888,7 +1208,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-026.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-026.json",
@@ -899,7 +1219,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-027.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-027.json",
@@ -910,7 +1230,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-028.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-028.json",
@@ -921,7 +1241,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-029.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-029.json",
@@ -932,7 +1252,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-030.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-030.json",
@@ -943,7 +1263,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-031.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-031.json",
@@ -954,7 +1274,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-032.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-032.json",
@@ -965,7 +1285,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-033.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-033.json",
@@ -976,7 +1296,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-034.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-034.json",
@@ -987,7 +1307,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-035.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-035.json",
@@ -998,7 +1318,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-036.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-036.json",
@@ -1009,7 +1329,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-037.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-037.json",
@@ -1020,7 +1340,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-038.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-038.json",
@@ -1031,7 +1351,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-039.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-039.json",
@@ -1042,7 +1362,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-040.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-040.json",
@@ -1053,7 +1373,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-041.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-041.json",
@@ -1064,7 +1384,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-042.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-042.json",
@@ -1075,7 +1395,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-043.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-043.json",
@@ -1086,7 +1406,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-044.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-044.json",
@@ -1097,7 +1417,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-045.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-045.json",
@@ -1108,7 +1428,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-046.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-046.json",
@@ -1119,7 +1439,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-047.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-047.json",
@@ -1130,7 +1450,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-048.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-048.json",
@@ -1141,7 +1461,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-049.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-049.json",
@@ -1152,7 +1472,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-050.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-050.json",
@@ -1163,7 +1483,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-051.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-051.json",
@@ -1174,7 +1494,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-052.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-052.json",
@@ -1185,7 +1505,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-053.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-053.json",
@@ -1196,7 +1516,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-054.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-054.json",
@@ -1207,7 +1527,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-055.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-055.json",
@@ -1218,7 +1538,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-056.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-056.json",
@@ -1229,7 +1549,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-057.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-057.json",
@@ -1240,7 +1560,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-058.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-058.json",
@@ -1251,7 +1571,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-059.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-059.json",
@@ -1262,7 +1582,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-060.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-060.json",
@@ -1273,7 +1593,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-061.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-061.json",
@@ -1284,7 +1604,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-062.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-062.json",
@@ -1295,7 +1615,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-063.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-063.json",
@@ -1306,7 +1626,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-064.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-064.json",
@@ -1317,7 +1637,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-065.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-065.json",
@@ -1328,7 +1648,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-066.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-066.json",
@@ -1339,7 +1659,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-067.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-067.json",
@@ -1350,7 +1670,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-068.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-068.json",
@@ -1361,7 +1681,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-069.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-069.json",
@@ -1372,7 +1692,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-070.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-070.json",
@@ -1383,7 +1703,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-071.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-071.json",
@@ -1394,7 +1714,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-072.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-072.json",
@@ -1405,7 +1725,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-073.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-073.json",
@@ -1416,7 +1736,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-074.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-074.json",
@@ -1427,7 +1747,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-075.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-075.json",
@@ -1438,7 +1758,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-076.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-076.json",
@@ -1449,7 +1769,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-077.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-077.json",
@@ -1460,7 +1780,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-078.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-078.json",
@@ -1471,7 +1791,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-079.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-079.json",
@@ -1482,7 +1802,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-080.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-080.json",
@@ -1493,7 +1813,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-081.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-081.json",
@@ -1504,7 +1824,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-082.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-082.json",
@@ -1515,7 +1835,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-083.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-083.json",
@@ -1526,7 +1846,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-084.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-084.json",
@@ -1537,7 +1857,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-085.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-085.json",
@@ -1548,7 +1868,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Rn-002.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Rn-002.json",
@@ -1559,7 +1879,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-086.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-086.json",
@@ -1570,7 +1890,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-087.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-087.json",
@@ -1581,7 +1901,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-088.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-088.json",
@@ -1592,7 +1912,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-089.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-089.json",
@@ -1603,7 +1923,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-090.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-090.json",
@@ -1614,7 +1934,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-091.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-091.json",
@@ -1625,7 +1945,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-092.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-092.json",
@@ -1636,7 +1956,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-093.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-093.json",
@@ -1647,7 +1967,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-094.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-094.json",
@@ -1658,7 +1978,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-095.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-095.json",
@@ -1669,7 +1989,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-096.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-096.json",
@@ -1680,7 +2000,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-097.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-097.json",
@@ -1691,7 +2011,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-098.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-098.json",
@@ -1702,7 +2022,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-099.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-099.json",
@@ -1713,7 +2033,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-100.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-100.json",
@@ -1724,7 +2044,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-101.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-101.json",
@@ -1735,7 +2055,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-102.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-102.json",
@@ -1746,7 +2066,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-103.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-103.json",
@@ -1757,7 +2077,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-104.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-104.json",
@@ -1768,7 +2088,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-105.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-105.json",
@@ -1779,7 +2099,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-106.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-106.json",
@@ -1790,7 +2110,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-107.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-107.json",
@@ -1801,7 +2121,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-108.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-108.json",
@@ -1812,7 +2132,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-109.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-109.json",
@@ -1823,7 +2143,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-110.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-110.json",
@@ -1834,7 +2154,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-111.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-111.json",
@@ -1845,7 +2165,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Al-112.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-112.json",
@@ -1856,7 +2176,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Ar-001.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Ar-001.json",
@@ -1867,7 +2187,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Ar-002.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Ar-002.json",
@@ -1878,7 +2198,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-001.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-001.json",
@@ -1889,7 +2209,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-002.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-002.json",
@@ -1900,7 +2220,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-003.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-003.json",
@@ -1911,7 +2231,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-004.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-004.json",
@@ -1922,7 +2242,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-005.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-005.json",
@@ -1933,7 +2253,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-006.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-006.json",
@@ -1944,7 +2264,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-007.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-007.json",
@@ -1955,7 +2275,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-008.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-008.json",
@@ -1966,7 +2286,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-009.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-009.json",
@@ -1977,7 +2297,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-010.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-010.json",
@@ -1988,7 +2308,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-011.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-011.json",
@@ -1999,7 +2319,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-012.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-012.json",
@@ -2010,7 +2330,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-013.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-013.json",
@@ -2021,7 +2341,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-014.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-014.json",
@@ -2032,7 +2352,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-015.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-015.json",
@@ -2043,7 +2363,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-016.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-016.json",
@@ -2054,7 +2374,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-017.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-017.json",
@@ -2065,7 +2385,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-018.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-018.json",
@@ -2076,7 +2396,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-019.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-019.json",
@@ -2087,7 +2407,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-020.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-020.json",
@@ -2098,7 +2418,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-021.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-021.json",
@@ -2109,7 +2429,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-022.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-022.json",
@@ -2120,7 +2440,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-023.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-023.json",
@@ -2131,7 +2451,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-024.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-024.json",
@@ -2142,7 +2462,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-025.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-025.json",
@@ -2153,7 +2473,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-026.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-026.json",
@@ -2164,7 +2484,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-027.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-027.json",
@@ -2175,7 +2495,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-028.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-028.json",
@@ -2186,7 +2506,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-029.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-029.json",
@@ -2197,7 +2517,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-030.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-030.json",
@@ -2208,7 +2528,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-031.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-031.json",
@@ -2219,7 +2539,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-032.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-032.json",
@@ -2230,7 +2550,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-033.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-033.json",
@@ -2241,7 +2561,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-034.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-034.json",
@@ -2252,7 +2572,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-035.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-035.json",
@@ -2263,7 +2583,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-036.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-036.json",
@@ -2274,7 +2594,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-037.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-037.json",
@@ -2285,7 +2605,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-038.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-038.json",
@@ -2296,7 +2616,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-039.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-039.json",
@@ -2307,7 +2627,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-040.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-040.json",
@@ -2318,7 +2638,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-041.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-041.json",
@@ -2329,7 +2649,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-042.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-042.json",
@@ -2340,7 +2660,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-043.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-043.json",
@@ -2351,7 +2671,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-044.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-044.json",
@@ -2362,7 +2682,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-045.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-045.json",
@@ -2373,7 +2693,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-046.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-046.json",
@@ -2384,7 +2704,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-047.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-047.json",
@@ -2395,7 +2715,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-048.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-048.json",
@@ -2406,7 +2726,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-049.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-049.json",
@@ -2417,7 +2737,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-050.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-050.json",
@@ -2428,7 +2748,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-051.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-051.json",
@@ -2439,7 +2759,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-052.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-052.json",
@@ -2450,7 +2770,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-053.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-053.json",
@@ -2461,7 +2781,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-054.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-054.json",
@@ -2472,7 +2792,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-055.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-055.json",
@@ -2483,7 +2803,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-056.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-056.json",
@@ -2494,7 +2814,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-057.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-057.json",
@@ -2505,7 +2825,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-058.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-058.json",
@@ -2516,7 +2836,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-059.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-059.json",
@@ -2527,7 +2847,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-060.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-060.json",
@@ -2538,7 +2858,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-061.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-061.json",
@@ -2549,7 +2869,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-062.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-062.json",
@@ -2560,7 +2880,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-063.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-063.json",
@@ -2571,7 +2891,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-064.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-064.json",
@@ -2582,7 +2902,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-065.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-065.json",
@@ -2593,7 +2913,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-066.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-066.json",
@@ -2604,7 +2924,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-067.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-067.json",
@@ -2615,7 +2935,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-068.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-068.json",
@@ -2626,7 +2946,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-069.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-069.json",
@@ -2637,7 +2957,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-070.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-070.json",
@@ -2648,7 +2968,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-071.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-071.json",
@@ -2659,7 +2979,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-072.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-072.json",
@@ -2670,7 +2990,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-073.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-073.json",
@@ -2681,7 +3001,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-074.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-074.json",
@@ -2692,7 +3012,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-075.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-075.json",
@@ -2703,7 +3023,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-076.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-076.json",
@@ -2714,7 +3034,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-077.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-077.json",
@@ -2725,7 +3045,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-078.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-078.json",
@@ -2736,7 +3056,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-079.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-079.json",
@@ -2747,7 +3067,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-080.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-080.json",
@@ -2758,7 +3078,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-081.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-081.json",
@@ -2769,7 +3089,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-082.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-082.json",
@@ -2780,7 +3100,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-083.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-083.json",
@@ -2791,7 +3111,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-084.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-084.json",
@@ -2802,7 +3122,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-085.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-085.json",
@@ -2813,7 +3133,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-086.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-086.json",
@@ -2824,7 +3144,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-087.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-087.json",
@@ -2835,7 +3155,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-088.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-088.json",
@@ -2846,7 +3166,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-089.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-089.json",
@@ -2857,7 +3177,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-090.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-090.json",
@@ -2868,7 +3188,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-091.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-091.json",
@@ -2879,7 +3199,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-092.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-092.json",
@@ -2890,7 +3210,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-093.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-093.json",
@@ -2901,7 +3221,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-094.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-094.json",
@@ -2912,7 +3232,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-095.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-095.json",
@@ -2923,7 +3243,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-096.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-096.json",
@@ -2934,7 +3254,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-097.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-097.json",
@@ -2945,7 +3265,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-098.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-098.json",
@@ -2956,7 +3276,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-099.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-099.json",
@@ -2967,7 +3287,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-100.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-100.json",
@@ -2978,7 +3298,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_B-140.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-140.json",
@@ -2989,7 +3309,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Ba-001.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Ba-001.json",
@@ -3000,7 +3320,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Ba-002.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Ba-002.json",
@@ -3011,7 +3331,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Ba-003.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Ba-003.json",
@@ -3022,7 +3342,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-004.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-004.json",
@@ -3033,7 +3353,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-005.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-005.json",
@@ -3044,7 +3364,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-006.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-006.json",
@@ -3055,7 +3375,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-007.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-007.json",
@@ -3066,7 +3386,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-008.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-008.json",
@@ -3077,7 +3397,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-009.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-009.json",
@@ -3088,7 +3408,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-010.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-010.json",
@@ -3099,7 +3419,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-011.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-011.json",
@@ -3110,7 +3430,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-012.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-012.json",
@@ -3121,7 +3441,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-013.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-013.json",
@@ -3132,7 +3452,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-014.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-014.json",
@@ -3143,7 +3463,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-015.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-015.json",
@@ -3154,7 +3474,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-016.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-016.json",
@@ -3165,7 +3485,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-017.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-017.json",
@@ -3176,7 +3496,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-018.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-018.json",
@@ -3187,7 +3507,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-019.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-019.json",
@@ -3198,7 +3518,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-020.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-020.json",
@@ -3209,7 +3529,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-021.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-021.json",
@@ -3220,7 +3540,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-022.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-022.json",
@@ -3231,7 +3551,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-023.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-023.json",
@@ -3242,7 +3562,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-024.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-024.json",
@@ -3253,7 +3573,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-025.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-025.json",
@@ -3264,7 +3584,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-026.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-026.json",
@@ -3275,7 +3595,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-027.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-027.json",
@@ -3286,7 +3606,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-028.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-028.json",
@@ -3297,7 +3617,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-029.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-029.json",
@@ -3308,7 +3628,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-030.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-030.json",
@@ -3319,7 +3639,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-031.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-031.json",
@@ -3330,7 +3650,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-032.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-032.json",
@@ -3341,7 +3661,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-033.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-033.json",
@@ -3352,7 +3672,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-034.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-034.json",
@@ -3363,7 +3683,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-035.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-035.json",
@@ -3374,7 +3694,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-036.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-036.json",
@@ -3385,7 +3705,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-037.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-037.json",
@@ -3396,7 +3716,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-038.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-038.json",
@@ -3407,7 +3727,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-039.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-039.json",
@@ -3418,7 +3738,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-040.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-040.json",
@@ -3429,7 +3749,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-041.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-041.json",
@@ -3440,7 +3760,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-042.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-042.json",
@@ -3451,7 +3771,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-043.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-043.json",
@@ -3462,7 +3782,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-044.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-044.json",
@@ -3473,7 +3793,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-045.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-045.json",
@@ -3484,7 +3804,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-046.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-046.json",
@@ -3495,7 +3815,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-047.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-047.json",
@@ -3506,7 +3826,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-048.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-048.json",
@@ -3517,7 +3837,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-049.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-049.json",
@@ -3528,7 +3848,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-050.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-050.json",
@@ -3539,7 +3859,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-051.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-051.json",
@@ -3550,7 +3870,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-052.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-052.json",
@@ -3561,7 +3881,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-053.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-053.json",
@@ -3572,7 +3892,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-054.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-054.json",
@@ -3583,7 +3903,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-055.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-055.json",
@@ -3594,7 +3914,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-056.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-056.json",
@@ -3605,7 +3925,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-057.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-057.json",
@@ -3616,7 +3936,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-058.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-058.json",
@@ -3627,7 +3947,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-059.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-059.json",
@@ -3638,7 +3958,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-060.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-060.json",
@@ -3649,7 +3969,7 @@
         {
             "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
             "_extensionSchemas": [
-                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
             ],
             "filepath": "srd13_Br-061.json",
             "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Br-061.json",

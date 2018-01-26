@@ -1,4 +1,6 @@
-import pdb, os, json, urlparse, warnings
+import pdb, os, sys, json, urlparse #, warnings
+from nistoar.rmm.mongo.tests import warnings
+sys.modules['warnings'] = warnings
 import unittest as test
 from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
@@ -41,7 +43,9 @@ class TestFieldLoader(test.TestCase):
 
     def tearDown(self):
         client = MongoClient(dburl)
-        db = client.get_default_database()
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "fields" in db.collection_names():
             db.drop_collection("fields")
         
@@ -52,7 +56,7 @@ class TestFieldLoader(test.TestCase):
         self.assertIsNone(self.ldr._client)
         self.ldr.connect()
         self.assertIsNotNone(self.ldr._client)
-        self.assertEqual(self.ldr._client.get_default_database().collection_names(), [])
+        self.assertEqual(self.ldr._client.get_database().collection_names(), [])
         self.ldr.disconnect()
         self.assertIsNone(self.ldr._client)
         
@@ -68,45 +72,45 @@ class TestFieldLoader(test.TestCase):
     def test_load_keyless_data(self):
         data = { "name": "title", "type": "string" }
         self.assertEqual(self.ldr.load_data(data), 1)
-        self.assertEqual(self.ldr._client.get_default_database().fields.find().count(), 1)
+        self.assertEqual(self.ldr._client.get_database().fields.find().count(), 1)
         data = { "name": "title", "type": "string" }
         self.assertEqual(self.ldr.load_data(data), 1)
-        self.assertEqual(self.ldr._client.get_default_database().fields.find().count(), 2)
+        self.assertEqual(self.ldr._client.get_database().fields.find().count(), 2)
         
     def test_load_data(self):
         key = { "name": "title" }
         data = { "name": "title", "type": "string" }
         self.assertEqual(self.ldr.load_data(data, key, 'fail'), 1)
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'string')
 
         data = { "name": "title", "type": "array" }
         with self.assertRaises(fields.RecordIngestError):
             self.ldr.load_data(data, key, 'fail')
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'string')
-            
+
         data = { "name": "title", "type": "array" }
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True, reset=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
             self.assertEqual(len(w), 1)
             self.assertTrue(issubclass(w[-1].category, fields.UpdateWarning))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'array')
             
         data = { "name": "title", "type": "bool" }
         self.assertEqual(self.ldr.load_data(data, key, 'pass'), 1)
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'bool')
             
         key = { "name": "description" }
         data = { "name": "description", "type": "bool" }
         self.assertEqual(self.ldr.load_data(data, key, 'pass'), 1)
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         
     def test_load_simple_obj(self):
@@ -118,7 +122,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         self.assertTrue(res.succeeded({'name': "title"}))
         self.assertFalse(res.failed({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'string')
 
@@ -129,7 +133,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         self.assertTrue(res.succeeded({'name': "title"}))
         self.assertFalse(res.failed({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'array')
         
@@ -142,7 +146,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         
@@ -157,7 +161,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         
@@ -172,7 +176,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.success_count, 2)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         self.assertEquals(len(res.failures()), 1)
         self.assertEqual(c[0]['type'], 'string')
@@ -185,7 +189,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.success_count, 4)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         self.assertNotEqual(c[0]['type'], 'string')
         self.assertNotEqual(c[1]['type'], 'string')
@@ -196,7 +200,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.success_count, 5)
         self.assertEqual(res.failure_count, 1)
         self.assertTrue(res.succeeded({'name': "description"}))
-        c = self.ldr._client.get_default_database().fields.find()
+        c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
         self.assertEqual(c[0]['type'], 'bool')
         self.assertEqual(c[1]['type'], 'bool')
@@ -208,7 +212,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(res.failure_count, 0)
         
         self.assertTrue(res.succeeded({'name': "title"}))
-        c = self.ldr._client.get_default_database().fields.find({'name':'title'})
+        c = self.ldr._client.get_database().fields.find({'name':'title'})
         self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['type'], 'string')
         self.assertIn('searchable', c[0]['tags'])

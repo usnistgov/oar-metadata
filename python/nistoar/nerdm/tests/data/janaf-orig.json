@@ -1,0 +1,153 @@
+{
+    "@context": "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld",
+    "_schema": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+    "_extensionSchemas": [
+        "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/PublicDataResource"
+    ],
+    "@type": [
+        "nrdp:PublicDataResource"
+    ],
+    "@id": "ark:/88434/pdr02cjs",
+    "title": "NIST-JANAF Thermochemical Tables - SRD 13",
+    "contactPoint": {
+        "hasEmail": "mailto:thomas.allison@nist.gov",
+        "fn": "Thomas Allison"
+    },
+    "modified": "2013-01-01",
+    "ediid": "ECBCC1C1301D2ED9E04306570681B10735",
+    "landingPage": "http://kinetics.nist.gov/janaf/",
+    "description": [
+        "This database contains the data from the 3rd edition of the NIST-JANAF Thermochemical Tables."
+    ],
+    "keyword": [
+        "thermochemical tables"
+    ],
+    "topic": [],
+    "references": [
+        {
+            "@type": "deo:BibliographicReference",
+            "@id": "#ref/jpcrdS1V14.pdf",
+            "refType": "IsReferencedBy",
+            "location": "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf",
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
+            ]
+        }
+    ],
+    "accessLevel": "public",
+    "license": "http://www.nist.gov/open/license.cfm",
+    "inventory": [
+        {
+            "forCollection": "",
+            "childCount": 3,
+            "descCount": 7,
+            "byType": [
+                {
+                    "forType": "dcat:Distribution",
+                    "childCount": 2,
+                    "descCount": 6
+                },
+                {
+                    "forType": "nrdp:DataFile",
+                    "childCount": 2,
+                    "descCount": 6
+                }
+            ],
+            "childCollections": [ "cryolite" ]
+        }
+    ],
+    "components": [
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+            "@id": "#cmp/srd13_B-113.json",
+            "filepath": "srd13_B-113.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_B-113.json",
+            "mediaType": "application/json"
+        },
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+
+            "@id": "#cmp/srd13_janaf.species.json",
+            "filepath": "srd13_janaf.species.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_janaf.species.json",
+            "mediaType": "application/json",
+            "description": "An index file containing metadata for each of the species, including chemical name, data file name, CAS Number (Chemical Abstracts Registry Number), molecular formula (in Hill-sorted order), and state (or phase)."
+        },
+        {
+            "@type": [ "nrdp:Subcollection" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/Subcollection"
+            ],
+            "@id": "#cmp/cryolite",
+            "filepath": "cryolite",
+            "title": "Cryolite"
+        },
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+            "@id": "#cmp/cryolite/srd13_Al-052.json",
+            "filepath": "cryolite/srd13_Al-052.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-052.json",
+            "mediaType": "application/json",
+            "describedBy": "http://www.nist.gov/srd/srd_data/srd13_janaf-data-defs.json"
+        },
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+            "@id": "#cmp/cryolite/srd13_Al-053.json",
+            "filepath": "cryolite/srd13_Al-053.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-053.json",
+            "mediaType": "application/json",
+            "describedBy": "http://www.nist.gov/srd/srd_data/srd13_janaf-data-defs.json"
+        },
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+            "@id": "#cmp/cryolite/srd13_Al-054.json",
+            "filepath": "cryolite/srd13_Al-054.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-054.json",
+            "mediaType": "application/json",
+            "describedBy": "http://www.nist.gov/srd/srd_data/srd13_janaf-data-defs.json",
+            "description": "Cryolite",
+            "title": "Al-054"
+        },
+        {
+            "@type": [ "nrdp:DataFile", "dcat:Distribution" ],
+            "_extensionSchemas": [
+                "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"
+            ],
+            "@id": "#cmp/cryolite/srd13_Al-055.json",
+            "filepath": "cryolite/srd13_Al-055.json",
+            "downloadURL": "http://www.nist.gov/srd/srd_data/srd13_Al-055.json",
+            "mediaType": "application/json",
+            "describedBy": "http://www.nist.gov/srd/srd_data/srd13_janaf-data-defs.json",
+            "description": "Cryolite",
+            "title": "Al-055"
+        }
+    ],
+    "publisher": {
+        "@type": "org:Organization",
+        "name": "National Institute of Standards and Technology"
+    },
+    "language": [
+        "en"
+    ],
+    "bureauCode": [
+        "006:55"
+    ],
+    "programCode": [
+        "006:052"
+    ]
+}

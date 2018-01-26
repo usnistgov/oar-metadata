@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -359,6 +359,17 @@
                     }
                 },
 
+                "ediid": {
+                    "description": "the NIST EDI identifier assigned to the resource",
+                    "type": "string",
+                    "minLength": 5,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "EDI Identifier",
+                        "referenceProperty": "dc:identifier"
+                    }
+                },
+                
                 "abbrev": {
                     "description": "an abbreviated form of the resource's title",
                     "notes": [
@@ -395,6 +406,16 @@
             "description": "descriptive reference to a document",
             "type": "object",
             "properties": {
+                "@id": {
+                    "description": "a (relative) identifier for the reference",
+                    "notes": [
+                        "This identifier refers specifically to the reference within a resource; it does not refer to document itself (which preferably has its own DOI).",
+                        "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                        "A relative identifier requires that @base be set to the Resource identifier in the @context."
+                    ],
+                    "type": "string"
+                },
+
                 "@type": {
                     "type": "string",
                     "enum": [ "deo:BibliographicReference" ]
@@ -660,6 +681,14 @@
                 "Include a $extensionSchema property to validate this description against a Component sub-type"
             ],
             "properties": {
+                "@id": {
+                    "description": "a (relative) identifier for the distribution",
+                    "notes": [
+                        "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                        "A relative identifier requires that @base be set to the Resource identifier in the @context."
+                    ],
+                    "type": "string"
+                },
                 "@type": {
                     "description": "the types of components that this component can be classified as",
                     "notes": [
