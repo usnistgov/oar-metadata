@@ -25,8 +25,8 @@ function get_reponame {
 
 function get_branchname {
     if [ -n "$GIT_COMMIT" ]; then
-        commit=`git rev-parse --abbrev-ref HEAD`
-        echo ${commit:0:7}
+        branch=`git rev-parse --abbrev-ref HEAD`
+        echo $branch
     elif (basename "$PACKAGE_DIR" | grep -sqP '^oar-[^\-]+-'); then
         basename "$PACKAGE_DIR" | sed -re 's/^.*-//'
     else
