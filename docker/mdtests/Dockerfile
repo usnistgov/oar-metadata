@@ -1,5 +1,7 @@
 FROM oarmeta/ejsonschema
 
+RUN apt-get update && apt-get install zip
+
 COPY entrypoint.sh /root/entrypoint.sh
 
 RUN mkdir -p /dev/oar-metadata

@@ -34,6 +34,9 @@ function test_ingest_wsgi {
 }
 
 case "$1" in
+    build)
+        scripts/makedist
+        ;;
     testall)
         [ -x $mongo_ctl ] && $mongod_ctl start && sleep 1
         stat=0
@@ -58,7 +61,7 @@ case "$1" in
         ;;
     *)
         echo Unknown command: $1
-        echo Available commands:  testall install shell
+        echo Available commands:  build testall install shell
         exit 100
         ;;
 esac

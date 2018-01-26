@@ -17,5 +17,5 @@ else
     PYTHONPATH=${TESTLIBDIR}:$PKGLIBDIR
 fi
 
-exec $PACKAGE_DIR/scripts/testall.py $@
+exec $PACKAGE_DIR/scripts/testall.py
 

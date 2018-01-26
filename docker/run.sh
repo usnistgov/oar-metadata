@@ -7,10 +7,10 @@ codedir=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 
 set -e
 
-$execdir/buildall.sh
+# $execdir/buildall.sh
 
 ti=
 (echo "$@" | grep -qs shell) && ti="-ti"
 
-echo docker run $ti --rm -v $codedir:/dev/oar-metadata oarmeta/mdtests "$@"
-exec docker run $ti --rm -v $codedir:/dev/oar-metadata oarmeta/mdtests "$@"
+echo docker run $ti --rm -v $codedir:/dev/oar-metadata oar-metadata/mdtests "$@"
+exec docker run $ti --rm -v $codedir:/dev/oar-metadata oar-metadata/mdtests "$@"
