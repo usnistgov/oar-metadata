@@ -37,7 +37,7 @@ fi
 # to read the current contents of VERSION.  Thus, inject_version.sh does not
 # exist.
 #
-[ -e "$PACKAGE_DIR/scripts/inject_version.sh" ] && {
+[ ! -e "$PACKAGE_DIR/scripts/inject_version.sh" ] || {
     bash "$PACKAGE_DIR/scripts/inject_version.sh" $version $PACKAGE_NAME
 }
 
