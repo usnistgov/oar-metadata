@@ -51,8 +51,8 @@ function sort_build_images {
 }
 
 function collect_build_opts {
-    # No additional build options needed at the moment
-    true
+    [ -n "$OAR_DOCKER_UID" ] || OAR_DOCKER_UID=`id -u`
+    echo "--build-arg=devuid=$OAR_DOCKER_UID"
 }
 
 function setup_build {
@@ -98,6 +98,12 @@ while [ "$1" != "" ]; do
 done
 
 (echo $LOGPATH | egrep -qs '^/') || LOGPATH=$PWD/$LOGPATH
+
+# Set the user that Docker containers should run as.  Be default, this is set
+# to the user running this script so that any files created within the container
+# will be owned by this user (rather than, say, root).
+#
+OAR_DOCKER_UID=`id -u`
 
 # Build from inside the docker dir
 # 
