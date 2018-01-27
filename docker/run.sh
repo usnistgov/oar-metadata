@@ -7,7 +7,15 @@ codedir=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 
 set -e
 
-# $execdir/buildall.sh
+(docker images | grep -qs oar-metadata/mdtests) || {
+    echo "${prog}: Docker image mdtests not found; building now..."
+    echo '+' $execdir/dockbuild.sh -q
+    $execdir/dockbuild.sh -q || {
+        echo "${prog}: Failed to build docker containers; see" \
+             "docker/dockbuild.logfor details."
+        false
+    }
+}
 
 ti=
 (echo "$@" | grep -qs shell) && ti="-ti"
