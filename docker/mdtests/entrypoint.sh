@@ -34,12 +34,18 @@ function test_ingest_wsgi {
 }
 
 case "$1" in
-    build)
+    makedist)
         scripts/makedist
+        ;;
+    build)
+        scripts/setversion.sh
+        (cd python && python setup.py build)
         ;;
     testall)
         [ -x $mongo_ctl ] && $mongod_ctl start && sleep 1
         stat=0
+        scripts/setversion.sh
+        (cd python && python setup.py build)
         scripts/testall.py || stat=$?
         test_ingest_wsgi || stat=$?
         [ "$stat" != "0" ] && {

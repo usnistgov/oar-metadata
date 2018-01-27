@@ -8,7 +8,7 @@ execdir=`dirname $0`
 [ "$execdir" = "" -o "$execdir" = "." ] && execdir=$PWD
 PACKAGE_DIR=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 
-PKGLIBDIR=`ls python/build/lib.* | head -1`
+PKGLIBDIR=`ls $PACKAGE_DIR/python/build/lib.* | head -1`
 TESTLIBDIR=$PACKAGE_DIR/python
 
 if [ -n "$PYTHONPATH" ]; then
@@ -17,5 +17,7 @@ else
     PYTHONPATH=${TESTLIBDIR}:$PKGLIBDIR
 fi
 
+$PACKAGE_DIR/scripts/setversion.sh
+(cd $PACKAGE_DIR/python && python setup.py build)
 exec $PACKAGE_DIR/scripts/testall.py
 
