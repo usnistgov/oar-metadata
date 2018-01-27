@@ -1,4 +1,4 @@
-FROM oarmeta/ejsonschema
+FROM oar-metadata/ejsonschema
 
 RUN apt-get update && apt-get install zip
 
