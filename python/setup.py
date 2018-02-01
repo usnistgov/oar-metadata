@@ -2,14 +2,32 @@ import glob, os, shutil
 from distutils.core import setup
 from distutils.command.build import build as _build
 
+def set_version():
+    try:
+        pkgdir = os.environ.get('PACKAGE_DIR', '..')
+        setver = os.path.join(pkgdir,'scripts','setversion.sh')
+        if os.path.exists(setver):
+            if not os.access(setver, os.X_OK):
+                setver = "bash "+setver
+            excode = os.system(setver)
+            if excode != 0:
+                raise RuntimeError("setversion.sh encountered an error")
+    except Exception as ex:
+        print("Unable to set build version: " + str(ex))
+
 def get_version():
     out = "dev"
     pkgdir = os.environ.get('PACKAGE_DIR', '..')
     versfile = os.path.join(pkgdir, 'VERSION')
-    with open(versfile) as fd:
-        parts = fd.readline().split()
-    if len(parts) > 0:
-        out = parts[-1]
+    if not os.path.exists(versfile):
+        set_version()
+    if os.path.exists(versfile):
+        with open(versfile) as fd:
+            parts = fd.readline().split()
+        if len(parts) > 0:
+            out = parts[-1]
+    else:
+        out = "(unknown)"
     return out
 
 def write_version_mod(version):
