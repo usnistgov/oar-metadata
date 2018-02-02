@@ -13,6 +13,10 @@ class TestJqCommand(unittest.TestCase):
     def setUp(self):
         self.jqc = jq.JqCommand()
 
+    def test_version(self):
+        self.assertGreater(len(self.jqc.version), 1)
+        self.assertGreater(len(jq.get_version()), 1)
+
     def test_library(self):
         self.assertIsNone(self.jqc.library)
         self.jqc.library = jqlibdir

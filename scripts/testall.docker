@@ -7,9 +7,9 @@ export CODEDIR=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 export DOCKERDIR=$CODEDIR/docker
 
 echo '##################################'
-echo '# 
-echo '# Running tests via docker
-echo '# 
+echo '#' 
+echo '# Running tests via docker'
+echo '#' 
 echo '##################################'
 echo '(Assuming docker containers have been built)'
 
