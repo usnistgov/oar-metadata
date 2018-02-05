@@ -39,7 +39,7 @@ class JqCommand(object):
         try:
             vers = subproc.check_output(cmd)
             if verre.match(vers):
-                vers = verre.sub('', vers)
+                vers = verre.sub('', vers).strip()
             return vers
         except subproc.CalledProcessError as ex:
             raise RuntimeError("Unable to execute jq (is it installed?)")
