@@ -38,6 +38,9 @@ RUN chmod a+rx /usr/local/bin/entrypoint.sh
 COPY mdtests.sh /usr/local/bin/mdtests.sh
 RUN chmod a+rx /usr/local/bin/mdtests.sh
 
+VOLUME /dev/oar-pdr
+VOLUME /app/dist
+
 RUN mkdir -p /dev/oar-metadata
 WORKDIR /dev/oar-metadata
 

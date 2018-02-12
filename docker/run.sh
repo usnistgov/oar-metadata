@@ -20,5 +20,41 @@ set -e
 ti=
 (echo "$@" | grep -qs shell) && ti="-ti"
 
-echo docker run $ti --rm -v $codedir:/dev/oar-metadata oar-metadata/mdtests "$@"
-exec docker run $ti --rm -v $codedir:/dev/oar-metadata oar-metadata/mdtests "$@"
+distvol=
+distdir=
+cmd=
+args=()
+while [ "$1" != "" ]; do
+    case "$1" in
+        --dist-dir)
+            shift
+            distdir="$1"
+            mkdir -p $distdir
+            distdir=`(cd $distdir > /dev/null 2>&1; pwd)`
+            distvol="-v ${distdir}:/app/dist"
+            args=(${args[@]} "--dist-dir=/app/dist")
+            ;;
+        --dist-dir=*)
+            distdir=`echo $1 | sed -e 's/[^=]*=//'`
+            mkdir -p $distdir
+            distdir=`(cd $distdir > /dev/null 2>&1; pwd)`
+            distvol="-v ${distdir}:/app/dist"
+            args=(${args[@]} "--dist-dir=/app/dist")
+            ;;
+        -*)
+            args=(${args[@]} $1)
+            ;;
+        *)
+            if [ -z "$cmd" ]; then
+                cmd=$1
+            else
+                args=(${args[@]} $1)
+            fi
+            ;;
+    esac
+    shift
+done
+
+
+echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
+exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
