@@ -30,20 +30,23 @@ function test_ingest_wsgi {
     return $stat
 }
 
+cmd=$1
 case "$1" in
     makedist)
-        scripts/makedist
+        shift
+        scripts/makedist "$@"
         ;;
     build)
         scripts/setversion.sh
         (cd python && python setup.py build)
         ;;
     testall)
+        shift
         # wrapper root shell should have already started mongodb
         stat=0
         scripts/setversion.sh
         (cd python && python setup.py build)
-        scripts/testall.py || stat=$?
+        scripts/testall.py "$@" || stat=$?
         test_ingest_wsgi || stat=$?
         [ "$stat" != "0" ] && {
             echo "testall: One or more test packages failed (last=$stat)"
@@ -70,5 +73,5 @@ case "$1" in
 esac
 
 EXCODE=$?
-echo $EXCODE > $1.exit
+echo $EXCODE > $cmd.exit
 exit $EXCODE
