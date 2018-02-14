@@ -1,6 +1,6 @@
 FROM oar-metadata/ejsonschema
 
-RUN apt-get update && apt-get install -y zip wget
+RUN apt-get update && apt-get install -y zip wget git
 
 ENV GOSU_VERSION 1.10
 RUN set -ex; \
