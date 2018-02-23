@@ -56,7 +56,7 @@ if not cfg:
     confsrvc = get_confservice()
     if confsrvc:
         appname = uwsgi.opt.get('oar_config_appname',
-                                os.environ.get('OAR_CONFIG_APP'))
+                                os.environ.get('OAR_CONFIG_APP', 'rmm-ingest'))
         cfg = confsrvc.get(appname)
 
 if not cfg:
