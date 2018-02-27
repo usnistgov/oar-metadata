@@ -24,8 +24,22 @@ class RMMRecordIngestApp(object):
         self.base_path = config.get('base_path', DEF_BASE_PATH)
         self.dburl = config.get('db_url')
         if not self.dburl:
-            self.log.error("Config param not set: db_url")
+            log.error("Config param not set: db_url")
             raise ConfigurationException("Config param not set: db_url")
+
+        self.archdir = config.get('archive_dir')
+        if not self.archdir:
+            log.error("Config param not set: archive_dir")
+            raise ConfigurationException("Config param not set: archive_dir")
+        if not os.path.exists(self.archdir):
+            raise RuntimeError("Requested archive directory, {0}, does not exist"
+                               .format(self.archdir))
+        cachedir = os.path.join(self.archdir, "_cache")
+        if not os.path.exists(cachedir):
+            try:
+                os.mkdir(cachedir)
+            except OSError as ex:
+                raise RuntimeError("Failed to init archive cache: " + str(ex))
 
         if 'db_authn' in config:
             acfg = config['db_authn']
@@ -73,7 +87,8 @@ class RMMRecordIngestApp(object):
         
 
     def handle_request(self, env, start_resp):
-        handler = Handler(self._loaders, env, start_resp, self._auth)
+        handler = Handler(self._loaders, env, start_resp,
+                          self.archdir, self._auth)
         return handler.handle()
 
     def __call__(self, env, start_resp):
@@ -83,7 +98,7 @@ app = RMMRecordIngestApp
 
 class Handler(object):
 
-    def __init__(self, loaders, wsgienv, start_resp, auth=None):
+    def __init__(self, loaders, wsgienv, start_resp, archdir, auth=None):
         self._env = wsgienv
         self._start = start_resp
         self._meth = wsgienv.get('REQUEST_METHOD', 'GET')
@@ -91,6 +106,7 @@ class Handler(object):
         self._code = 0
         self._msg = "unknown status"
         self._auth = auth
+        self._archdir = archdir
 
         self._loaders = loaders
 
@@ -192,6 +208,51 @@ class Handler(object):
         else:
             return self.send_error(404, "resource does not exist")
 
+    def nerdm_archive_cache(self, rec):
+        """
+        cache a NERDm record into a local disk archive.  The cache is for 
+        records that have been accepted but not ingested.  
+        """
+        try:
+            arkid = rec['@id']
+            outfile = os.path.join(self._archdir, '_cache',
+                                   os.path.basename(arkid)+".json")
+            with open(outfile, 'w') as fd:
+                json.dump(rec, fd, indent=2)
+
+            return arkid
+        
+        except KeyError as ex:
+            # this shouldn't happen if the record was already validated
+            raise RecordIngestError("submitted record is missing the @id "+
+                                    "property")
+        except ValueError as ex:
+            # this shouldn't happen if the record was already validated
+            raise RecordIngestError("submitted record is apparently invalid; "+
+                                    "unable to submit")
+        except OSError as ex:
+            raise RuntimeError("Failed to cache record ({0}): {1}"
+                               .format(arkid, str(ex)))
+
+    def nerdm_archive_commit(self, arkid):
+        """
+        commit a previously cached record to the local disk archive.  This
+        method is called after the record has been successfully ingested to
+        the RMM's database.
+        """
+        outfile = os.path.join(self._archdir, '_cache',
+                               os.path.basename(arkid)+".json")
+        if not os.path.exists(outfile):
+            raise RuntimeError("record to commit ({0}) not found in cache: {1}"
+                               .format(arkid, outfile))
+        try:
+            os.rename(outfile,
+                      os.path.join(self._archdir, os.path.basename(outfile)))
+        except OSError as ex:
+            raise RuntimeError("Failed to archvie record ({0}): {1}"
+                               .format(arkid, str(ex)))
+        
+
     def post_nerdm_record(self):
         """
         Accept a NERDm record for ingest into the RMM
@@ -220,6 +281,8 @@ class Handler(object):
                                    str(ex))
 
         try:
+            recid = self.nerdm_archive_cache(rec)
+            
             res = loader.load(rec, validate=True)
             if res.failure_count > 0:
                 res = res.failures()[0]
@@ -242,6 +305,11 @@ class Handler(object):
         except Exception, ex:
             log.exception("Loading error: "+str(ex))
             return self.send_error(500, "Load failure due to internal error")
+
+        try:
+            self.nerdm_archive_commit(recid)
+        except Exception as ex:
+            log.exception("Commit error: "+str(ex))
 
         log.info("Accepted record %s with @id=%s",
                  rec.get('ediid','?'), rec.get('@id','?'))
