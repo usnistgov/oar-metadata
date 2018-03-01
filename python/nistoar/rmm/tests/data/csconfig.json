@@ -10,9 +10,7 @@
                 "oar.mongodb.port": "3333",
                 "oar.mongodb.host": "mongoinit",
                 "oar.mongodb.database.name": "TestDB",
-                "stuff": {
-                    "filter": "off"
-                }
+                "stuff.filter": "off"
             }
         },
         {
@@ -20,10 +18,8 @@
             "source": {
                 "oar.mongodb.database.name": "ProdDB",
                 "name": "Hank",
-                "stuff": {
-                    "filter": "on",
-                    "mode": "validate"
-                }
+                "stuff.filter": "on",
+                "stuff.mode": "validate"
             }
         }
     ]
