@@ -26,21 +26,42 @@ from nistoar.rmm import config
 from nistoar.rmm.exceptions import ConfigurationException
 from nistoar.rmm.ingest import wsgi
 
-# get configuration
-confserv = uwsgi.opt.get('oar_config_baseurl',
-                         os.environ.get('OAR_CONFIGSERVER'))
-confenv = uwsgi.opt.get('oar_config_env',
-                         os.environ.get('OAR_CONFIG_ENV'))
+confsrvc = None
+def get_confservice():
+    cfgsrvc = None
+    if 'oar_config_service' in uwsgi.opt:
+        # this service is based on uwsgi command-line inputs
+        cfgsrvc = config.ConfigService(uwsgi.opt.get('oar_config_service'),
+                                        uwsgi.opt.get('oar_config_env'))
+        timeout = int(uwsgi.opt.get('oar_config_timeout', 10))
+                               
+    else:
+        # this service is based on environment variables
+        cfgsrvc = config.service
+        timeout = int(os.environ.get('OAR_CONFIG_TIMEOUT', 10))
+
+    cfgsrvc.wait_until_up(timeout, True, sys.stderr)
+    return cfgsrvc
+
+
+# determine where the configuration is coming from.  Check first to see
+# files were provided via the uwsgi command line.
+cfg = None
 confsrc = uwsgi.opt.get("oar_config_file")
 if confsrc:
-    confsrc = "file:" + confsrc
-else:
-    confsrc = uwsgi.opt.get('oar_config_loc', 'rmm-ingest-service')
-    if confenv:
-        confsrc += '/'+confenv
-if not confsrc:
-    raise RuntimeError("ingester: nist-oar configuration not provided")
-cfg = config.resolve_configuration(confsrc, confserv)
+    cfg = config.resolve_configuration("file:" + confsrc)
+
+if not cfg:
+    # get the configuration from the config service
+    confsrvc = get_confservice()
+    if confsrvc:
+        appname = uwsgi.opt.get('oar_config_appname',
+                                os.environ.get('OAR_CONFIG_APP', 'rmm-ingest'))
+        cfg = confsrvc.get(appname)
+
+if not cfg:
+    raise ConfigurationException("ingester: nist-oar configuration not "+
+                                 "provided")
 
 # set up logging
 if 'logfile' not in cfg:
@@ -57,10 +78,21 @@ if cfg.get('db_authn') and \
    (not cfg['db_authn'].get('user') or not cfg['db_authn'].get('pass')):
     acfg = cfg['db_authn']
     try:
-        rmmconfsrc = acfg.get('rmm_config_loc', 'oar-rmm')
-        if confenv:
-            rmmconfsrc += '/'+confenv
-        rmmcfg = config.resolve_configuration(rmmconfsrc, confserv)
+        rmmcfg = None
+        rmmconfsrc = uwsgi.opt.get("oar_rmm_config_file",
+                                   acfg.get("rmm_config_file"))
+        if rmmconfsrc:
+            rmmcfg = config.resolve_configuration(rmmconfsrc)
+
+        if not rmmcfg:
+            if not confsrvc:
+                convsrvc = get_confservice()
+            if not confsrvc:
+                raise ConfigurationException("ingester: configuration not "+
+                                     "available; set db_authn.rmm_config_file")
+            rmmcfg = confsrvc.get(acfg.get('rmm_config_loc', 'oar-rmm'),
+                                  flat=True)
+
         acfg['user'] = rmmcfg['oar.mongodb.readwrite.user']
         acfg['pass'] = rmmcfg['oar.mongodb.readwrite.password']
 
