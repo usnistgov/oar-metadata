@@ -1,10 +1,13 @@
 """
 A python interface to the PDR's jq-based JSON transformation
 """
-import os, json, subprocess as subproc, types
+import os, json, subprocess as subproc, types, re
 from collections import OrderedDict
 
 jsonDecoder = json.JSONDecoder(object_pairs_hook=OrderedDict)
+
+def get_version():
+    return JqCommand().version
 
 class JqCommand(object):
     """
@@ -28,6 +31,18 @@ class JqCommand(object):
         self.jqexe = jqpath
         if not self.jqexe:
             self.jqexe = "jq"
+
+    @property
+    def version(self):
+        verre = re.compile(r'^jq[^-]*-')
+        cmd = [ self.jqexe, "--version" ]
+        try:
+            vers = subproc.check_output(cmd)
+            if verre.match(vers):
+                vers = verre.sub('', vers).strip()
+            return vers
+        except subproc.CalledProcessError as ex:
+            raise RuntimeError("Unable to execute jq (is it installed?)")
 
     @property
     def library(self):
