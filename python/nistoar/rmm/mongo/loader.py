@@ -16,7 +16,7 @@ class Loader(object):
     """
     __metaclass__ = ABCMeta
 
-    def __init__(self, dburl, collname=None, schemadir=None):
+    def __init__(self, dburl, collname=None, schemadir=None, log=None):
         """
         create the loader.  Validation will always be skipped if a schemadir
         is not provided.
@@ -28,6 +28,9 @@ class Loader(object):
         :param schemadir str: the path to a directory containing the JSON 
                               schemas needed to validate the input JSON data;
                               if None, validation will always be skipped.
+        :param log logging.Logger:  a logging instance that messages can be 
+                              sent to.  If not provided, warnings might be 
+                              issued via the warnings module.  
         """
         if not _dburl_re.match(dburl):
             raise ValueError("Loader: Bad dburl format (need "+
@@ -35,6 +38,7 @@ class Loader(object):
                              dburl)
         self._dburl = dburl
         self.coll = collname
+        self.log = log
 
         if schemadir:
             self._val = ExtValidator.with_schema_dir(schemadir, ejsprefix='_')
@@ -132,8 +136,11 @@ class Loader(object):
 
                     if doload:
                         if onupdate != 'quiet':
-                            warnings.warn("Updating previously loaded record",
-                                          UpdateWarning)
+                            msg = "Updating previously loaded record"
+                            if self.log:
+                                self.log.warn(msg)
+                            else:
+                                warnings.warn(msg, UpdateWarning)
 
                         result = coll.delete_one(key)
                         if result.deleted_count == 0:
@@ -150,6 +157,9 @@ class Loader(object):
         except RecordIngestError, ex:
             raise
         except Exception, ex:
+            if self.log:
+                self.log.exception("Unexpected loading error: "+str(ex))
+                raise RuntimeError("Unexpected loading error: "+str(ex))
             raise RecordIngestError("Failed to load record: "+str(ex), ex)
 
     @abstractmethod
