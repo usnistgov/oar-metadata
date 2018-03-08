@@ -51,15 +51,15 @@ class TestConfig(test.TestCase):
         with open(cfgfile) as fd:
             csdata = json.load(fd)
 
-        cfg = config._extract_config_from_csdata(csdata)
-        names = "oar.mongodb.port oar.mongodb.host oar.mongodb.database.name stuff name".split()
+        cfg = config.ConfigService.extract(csdata, flat=True)
+        names = "oar.mongodb.port oar.mongodb.host oar.mongodb.database.name stuff.filter stuff.mode name".split()
         for name in names:
             self.assertIn(name, cfg)
         self.assertEqual(len(cfg.keys()), len(names))
         self.assertEqual(cfg['oar.mongodb.database.name'], "TestDB")
         self.assertEqual(cfg['oar.mongodb.port'], "3333")
         self.assertEqual(cfg['name'], "Hank")
-        self.assertEqual(cfg['stuff'], { "filter": "off" })
+        self.assertEqual(cfg['stuff.filter'], "off")
 
     @test.skipIf(not os.environ.get('CONFIG_SERVER_URL'),
                  "test config server not available")
