@@ -1,6 +1,12 @@
 #! /bin/bash
 #
 function launch_uwsgi {
+    [ \! -e docker/_docker_uwsgi.log ] || rm docker/_docker_uwsgi.log
+    [ \! -e docker/_docker_ingest.log ] || rm docker/_docker_ingest.log
+    [ \! -e docker/_docker_ingest_archive ] || \
+        rm -rf docker/_docker_ingest_archive
+    mkdir docker/_docker_ingest_archive
+    
     echo starting uwsgi...
     uwsgi --daemonize docker/_docker_uwsgi.log --plugin python    \
           --http-socket :9090 --wsgi-file scripts/ingest-uwsgi.py \
