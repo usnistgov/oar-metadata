@@ -151,8 +151,8 @@ def filepath:
     if test("https?://s3.amazonaws.com/nist-srd/\\w+/") then
        sub("https?://s3.amazonaws.com/nist-srd/\\w+/"; "")
     else
-      if test("https?://s3.amazonaws.com/nist-\\w+/") then
-         sub("https?://s3.amazonaws.com/nist-\\w+/"; "")
+      if test("https?://s3.amazonaws.com/nist-\\w+/\\w+/") then
+         sub("https?://s3.amazonaws.com/nist-\\w+/\\w+/"; "")
       else
         if test("https?://opendata.nist.gov/\\w+/") then
            sub("https?://opendata.nist.gov/\\w+/"; "")
