@@ -179,9 +179,23 @@ def filepath:
 #
 def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
-    .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
+    .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
+    if .format then .format = { description: .format } else . end
+;
+
+# conversion for a POD-to-NERDm distribution node.  A distribution with a
+# downloadURL and a .sha256 extension gets converted to a ChecksumFile component
+#
+# Input: a Distribution object
+# Output: a Component object with a ChecksumFile type given as @type
+#
+def dist2checksum:
+    .["filepath"] = ( .downloadURL | filepath ) |
+    .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("cmps/")) |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -231,7 +245,11 @@ def dist2accesspage:
 #
 def dist2comp: 
     if .downloadURL then
-        dist2download
+        if (.downloadURL | endswith(".sha256")) then
+            dist2checksum
+        else
+            dist2download
+        end
     else if .accessURL then
         if (.accessURL | test("doi.org")) then
           dist2hidden

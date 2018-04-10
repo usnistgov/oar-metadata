@@ -81,9 +81,10 @@ class TestJanaf(unittest.TestCase):  #
         self.assertIn(nerdmpub+"/definitions/DataFile", exts)
 
         typs = comps[0]['@type']
-        self.assertEquals(len(typs), 2)
+        self.assertEquals(len(typs), 3)
         self.assertEquals(typs[0], "nrdp:DataFile")
-        self.assertEquals(typs[1], "dcat:Distribution")
+        self.assertEquals(typs[1], "nrdp:DownloadableFile")
+        self.assertEquals(typs[2], "dcat:Distribution")
 
         props = "describedBy downloadURL".split()
         for prop in props:
@@ -181,9 +182,10 @@ class TestCORR(unittest.TestCase):  #
         self.assertIn(nerdmpub+"/definitions/DataFile", exts)
 
         typs = comps[3]['@type']
-        self.assertEquals(len(typs), 2)
+        self.assertEquals(len(typs), 3)
         self.assertEquals(typs[0], "nrdp:DataFile")
-        self.assertEquals(typs[1], "dcat:Distribution")
+        self.assertEquals(typs[1], "nrdp:DownloadableFile")
+        self.assertEquals(typs[2], "dcat:Distribution")
 
         props = "downloadURL".split()
         for prop in props:
