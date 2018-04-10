@@ -196,6 +196,7 @@ def dist2checksum:
     .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile" ] |
+    .["mediaType"] = "text/plain" |
     if .format then .format = { description: .format } else . end
 ;
 
