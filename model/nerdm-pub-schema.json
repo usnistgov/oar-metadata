@@ -341,7 +341,7 @@
                         
                         "describes": {
                             "type": "string",
-                            "format": "uri-reference"
+                            "format": "uri-reference",
                             "asOntology": {
                                 "@context": "profile-schema-onto.json",
                                 "prefLabel": "Checksum for",
