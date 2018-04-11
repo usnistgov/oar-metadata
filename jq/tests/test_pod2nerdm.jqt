@@ -104,11 +104,50 @@ include "pod2nerdm"; dirname
 ""
 
 #---------------
-# testing remove elements
+# testing basename()
 #
-include "pod2nerdm"; remove_elements(["a", "a/b/c", "foo"])
-["a", "a/b", "a/b/c", "bar"]
-["a/b", "bar"]
+include "pod2nerdm"; basename
+"plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/bar/now/plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/plainfile/"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/"
+"foo"
+
+include "pod2nerdm"; basename
+""
+""
+
+include "pod2nerdm"; basename
+"/"
+""
+
+#---------------
+# testing remove_extension
+#
+include "pod2nerdm"; [.[]|remove_extension]
+["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
+["a", "a", "a", "a.b", "trial3/trial3a.json", "trial3/trial3a", ".cshrc"]
+
+
+#---------------
+# testing extension
+#
+include "pod2nerdm"; [.[]|extension]
+["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
+["", "JPG", "b", "c", "sha256", "json", ""]
 
 
 #---------------
@@ -132,6 +171,13 @@ include "pod2nerdm"; map(componentID("#"))
 include "pod2nerdm"; dist2download
 {"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json", "mediaType": "application/json","title": "Titanium Boride" }
 {"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json","mediaType": "application/json", "title": "Titanium Boride", "filepath":"srd13_B-101.json", "@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"]}
+
+#--------------
+# testing dist2checksum()
+#
+include "pod2nerdm"; dist2checksum
+{"downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json.sha256", "title": "Checksum for srd13_B-101.json" }
+{"downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json.sha256","mediaType": "text/plain", "description": "SHA-256 checksum value for srd13_B-101.json", "title": "Checksum for srd13_B-101.json", "filepath":"srd13_B-101.json.sha256", "algorithm": {"@type": "Thing","tag": "sha256"},"@type": ["nrdp:ChecksumFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json.sha256","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile"]}
 
 #--------------
 # testing dist2hidden()

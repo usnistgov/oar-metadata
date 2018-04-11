@@ -293,6 +293,25 @@
                 { "$ref": "#/definitions/DownloadableFile" },
                 {
                     "properties": {
+                        "algorithm": {
+                            "description": "the algorithm used to produce the checksum hash",
+                            "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Topic"
+                        },
+                        
+                        "valid": {
+                            "type": "boolean",
+                            "description": "A flag, if True, indicating the the hash value contained in this ChecksumFile is confirmed to be correct for its associated data file."
+                        }
+                        
+                        "describes": {
+                            "type": "string",
+                            "format": "uri-reference"
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Checksum for",
+                                "referenceProperty": "ov:describes"
+                            }
+                        }
                     }
                 }
             ]

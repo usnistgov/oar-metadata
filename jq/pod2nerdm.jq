@@ -89,6 +89,40 @@ def dirname:
     end
 ;
 
+# given a string that looks like a file path, return the unqualified file
+# name.
+#
+# Input: string
+# Output: string
+#
+def basename:
+    sub("/$";"") | 
+    if contains("/") then
+        sub("^.*/"; "")
+    else
+        .
+    end
+;
+
+# remove the filename extension from the input
+#
+# Input: string
+# Output: string
+#
+def remove_extension:
+    if test("\\w\\.") then sub("\\.[^\\.]*$"; "") else . end
+;
+
+# assuming an input file name or path return the filename extension or
+# an empty string if none exists
+#
+# Input: string
+# Output: string
+#
+def extension:
+    if test("\\w\\.") then sub("^.*\\."; "") else "" end
+;
+
 # filter an array of strings, retaining only those that are not in another
 # given input array
 #
@@ -197,6 +231,8 @@ def dist2checksum:
     .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile" ] |
     .["mediaType"] = "text/plain" |
+    .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
+    if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
     if .format then .format = { description: .format } else . end
 ;
 
