@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#",
-    "rev": "wd1",
+    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#",
+    "rev": "wd2",
     "title": "The NERDm extension metadata for Public Data",
     "description": "These classes extend the based NERDm schema to different types of published data",
     "definitions": {
@@ -13,7 +13,7 @@
                 "This must be convertable to a compliant and complete POD record; thus, this class adds all remaining POD elements missing from the core"
             ],
             "allOf": [
-                { "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Resource"},
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Resource"},
                 {
                     "type": "object",
                     "properties": {
@@ -145,10 +145,10 @@
             ]
         },
 
-        "DataFile": {
+        "DownloadableFile": {
             "description": "a description of a downloadable, finite stream of data",
             "allOf": [
-                { "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
                 {
                     "properties": {
 
@@ -205,6 +205,46 @@
                             }
                         },
                 
+                        "checksum": {
+                            "title": "Checksum",
+                            "description": "a checksum for the file",
+                            "$ref": "#/definitions/Checksum"
+                        },
+
+                        "size": {
+                            "description": "the size of the file in bytes",
+                            "type": "integer",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "file size",
+                                "referenceProperty": "schema:fileSize"
+                            }
+                        }
+                        
+                    },
+                    "required": [ "filepath" ],
+
+                    "dependencies": {
+                        "downloadURL": {
+                            "properties": {
+                                "mediaType": {
+                                    "type": "string",
+                                    "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$"
+                                }
+                            },
+                            "required": [ "mediaType" ]
+                        }
+                    }
+                }
+            ]
+        },
+
+        "DataFile": {
+            "description": "a description of a downloadable file that was provided by the authors (as opposed to a system or checksum file produced by the publication system).",
+            "allOf": [
+                { "$ref": "#/definitions/DownloadableFile" },
+                {
+                    "properties": {
                         "describedBy": {
                             "title": "Data Dictionary",
                             "description": "URL to the data dictionary for the distribution found at the downloadURL",
@@ -242,23 +282,60 @@
                                 "referenceProperty": "pod:describedByType"
                             }
                         }
-                        
-                    },
-                    "required": [ "filepath" ],
+                    }
+                }
+            ]
+        },
 
-                    "dependencies": {
-                        "downloadURL": {
-                            "properties": {
-                                "mediaType": {
-                                    "type": "string",
-                                    "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$"
-                                }
-                            },
-                            "required": [ "mediaType" ]
+        "ChecksumFile": {
+            "description": "a downloadable file that contains the checksum value for a DataFile.",
+            "allOf": [
+                { "$ref": "#/definitions/DownloadableFile" },
+                {
+                    "properties": {
+                        "algorithm": {
+                            "description": "the algorithm used to produce the checksum hash",
+                            "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Topic"
+                        },
+                        
+                        "valid": {
+                            "type": "boolean",
+                            "description": "A flag, if True, indicating the the hash value contained in this ChecksumFile is confirmed to be correct for its associated data file."
+                        }
+                        
+                        "describes": {
+                            "type": "string",
+                            "format": "uri-reference"
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Checksum for",
+                                "referenceProperty": "ov:describes"
+                            }
                         }
                     }
                 }
             ]
+        },
+
+        "Checksum": {
+            "description": "a checksum with its algorithm noted",
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "description": "the algorithm used to produce the checksum hash",
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Topic"
+                },
+                "hash": {
+                    "description": "the checksum value",
+                    "type": "string",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "checksum",
+                        "referenceProperty": "dataid:checksum"
+                    }
+                }
+            },
+            "required": [ "hash" ]
         },
 
         "Subcollection": {
@@ -267,7 +344,7 @@
                 "This Component subtype implements hierarchical resources; a subcollection is equivalent to a directory that can contain other components, including other subcollections."
             ],
             "allOf": [
-                { "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
                 {
                     "properties": {
                         
@@ -312,6 +389,108 @@
                 "prefLabel": "Subcollection",
                 "referenceProperty": "fedora:Container"
             }
+        },
+
+        "AccessPage": {
+            "description": "a web page that provides indirect access to the resource",
+            "notes": [
+                "This type should not be used to capture a resource's home page as this would be redundant with the landingPage resource property."
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
+                {
+                    "properties": {
+                        "accessURL": {
+                            "description": "the URL for accessing this indirect access to the resource",
+                            "type": "string",
+                            "format": "uri"
+                        },
+
+                        "format": {
+                            "title": "Format",
+                            "description": "A human-readable description of the file format of a distribution",
+                            "$ref": "#/definitions/Format",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Format",
+                                "referenceProperty": "dc:format"
+                            }
+                        }
+                    },
+                    "required": [ "accessURL" ]
+                }
+            ]
+        },
+
+        "SearchPage": {
+            "description": "a web page that can be used to search the contents of the resource",
+            "notes": [
+                "Provide this component even if the accessURL is the same as the landing page; this indicates that the landing page provides a search tool in it."
+            ],
+            "allOf": [
+                { "$ref": "#/definitions/AccessPage" }
+            ]
+        },
+
+        "API": {
+            "description": "an application programming interface to the resource",
+            "notes": [
+                "This is typically a web-based interface",
+                "When converting an API component to a POD distribution, the output format should set to 'API'."
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
+                {
+                    "properties": {
+                        "accessURL": {
+                            "description": "the URL for accessing this indirect access to the resource",
+                            "type": "string",
+                            "format": "uri"
+                        },
+                
+                        "describedBy": {
+                            "title": "API Description",
+                            "description": "URL to a formal or informal description of the API",
+                            "notes": [
+                                "Use describedByType to help distinguish between formal and informal (i.e. human readable) descriptions."
+                            ],
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "format": "uri"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Data Dictionary",
+                                "referenceProperty": "http://www.w3.org/2007/05/powder-s#describedby"
+                            }
+                        },
+                        
+                        "describedByType": {
+                            "title": "API Descriptions Type",
+                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s describedBy URL",
+                            "anyOf": [
+                                {
+                                    "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Data Dictionary Type",
+                                "referenceProperty": "pod:describedByType"
+                            }
+                        }
+                    }
+                }
+            ]
         },
 
         "Format": {
@@ -479,7 +658,7 @@
                     "description": "The institution the person was affiliated with at the time of publication",
                     "type": "array",
                     "items": {
-                        "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/ResourceReference"
+                        "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/ResourceReference"
                     },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",

@@ -6,6 +6,7 @@
         "foaf": "http://xmlns.com/foaf/0.1/",
         "vivo": "http://vivoweb.org/ontology/core#",
         "ore": "http://www.openarchives.org/ore/terms/",
+        "ov": "http://vocab.org/open/",
         "dpr": "https://nist.org/dp/dpr/",
         "vcard": "http://www.w3.org/2006/vcard/ns#",
         "bibo": "http://purl.org/ontology/bibo/",
