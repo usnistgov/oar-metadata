@@ -52,6 +52,14 @@ include "pod2nerdm"; map(cvtref)
 [{ "@type": "deo:BibliographicReference","@id":"#ref:doc1.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": "deo:BibliographicReference","@id":"#ref:doc2.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "https://goob.gov/doc2.txt"}]
 
 #---------------
+# testing filepath()
+#
+include "pod2nerdm"; map(filepath)
+[ "http://goob.net/root/doc.txt", "https://s3.amazonaws.com/nist-zub/90210/foo/bar", "http://s3.amazonaws.com/nist-srd/14/data.zip", "https://data.nist.gov/od/ds/2309849843752/my%20data.zip", "https://testdata.nist.gov/od/ds/2309849843752/coll%23/my%20data.zip" ]
+[ "doc.txt", "foo/bar", "data.zip", "my data.zip", "coll#/my data.zip" ]
+
+
+#---------------
 # testing urlpath()
 #
 include "pod2nerdm"; map(urlpath)
@@ -137,7 +145,7 @@ include "pod2nerdm"; basename
 #---------------
 # testing remove_extension
 #
-include "pod2nerdm"; [.[]|remove_extension]
+include "pod2nerdm"; map(remove_extension)
 ["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
 ["a", "a", "a", "a.b", "trial3/trial3a.json", "trial3/trial3a", ".cshrc"]
 
@@ -145,7 +153,7 @@ include "pod2nerdm"; [.[]|remove_extension]
 #---------------
 # testing extension
 #
-include "pod2nerdm"; [.[]|extension]
+include "pod2nerdm"; map(extension)
 ["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
 ["", "JPG", "b", "c", "sha256", "json", ""]
 

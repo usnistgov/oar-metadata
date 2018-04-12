@@ -17,6 +17,7 @@
 # Here, CATFILE is the POD catalog file.  (In this example, the output records
 # are all given a null identifier.)
 
+include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
@@ -202,7 +203,7 @@ def filepath:
           end
         end
       end
-    end
+    end | url_decode
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution with a
