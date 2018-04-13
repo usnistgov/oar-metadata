@@ -17,6 +17,7 @@
 # Here, CATFILE is the POD catalog file.  (In this example, the output records
 # are all given a null identifier.)
 
+include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
@@ -87,6 +88,40 @@ def dirname:
     else
         ""
     end
+;
+
+# given a string that looks like a file path, return the unqualified file
+# name.
+#
+# Input: string
+# Output: string
+#
+def basename:
+    sub("/$";"") | 
+    if contains("/") then
+        sub("^.*/"; "")
+    else
+        .
+    end
+;
+
+# remove the filename extension from the input
+#
+# Input: string
+# Output: string
+#
+def remove_extension:
+    if test("\\w\\.") then sub("\\.[^\\.]*$"; "") else . end
+;
+
+# assuming an input file name or path return the filename extension or
+# an empty string if none exists
+#
+# Input: string
+# Output: string
+#
+def extension:
+    if test("\\w\\.") then sub("^.*\\."; "") else "" end
 ;
 
 # filter an array of strings, retaining only those that are not in another
@@ -168,7 +203,7 @@ def filepath:
           end
         end
       end
-    end
+    end | url_decode_plus
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution with a
@@ -179,9 +214,26 @@ def filepath:
 #
 def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
-    .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
+    .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
     .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
+    if .format then .format = { description: .format } else . end
+;
+
+# conversion for a POD-to-NERDm distribution node.  A distribution with a
+# downloadURL and a .sha256 extension gets converted to a ChecksumFile component
+#
+# Input: a Distribution object
+# Output: a Component object with a ChecksumFile type given as @type
+#
+def dist2checksum:
+    .["filepath"] = ( .downloadURL | filepath ) |
+    .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("cmps/")) |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile" ] |
+    .["mediaType"] = "text/plain" |
+    .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
+    if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
     if .format then .format = { description: .format } else . end
 ;
 
@@ -231,7 +283,11 @@ def dist2accesspage:
 #
 def dist2comp: 
     if .downloadURL then
-        dist2download
+        if (.downloadURL | endswith(".sha256")) then
+            dist2checksum
+        else
+            dist2download
+        end
     else if .accessURL then
         if (.accessURL | test("doi.org")) then
           dist2hidden

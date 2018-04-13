@@ -52,6 +52,14 @@ include "pod2nerdm"; map(cvtref)
 [{ "@type": "deo:BibliographicReference","@id":"#ref:doc1.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": "deo:BibliographicReference","@id":"#ref:doc2.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference" ], "location": "https://goob.gov/doc2.txt"}]
 
 #---------------
+# testing filepath()
+#
+include "pod2nerdm"; map(filepath)
+[ "http://goob.net/root/doc.txt", "https://s3.amazonaws.com/nist-zub/90210/foo/bar", "http://s3.amazonaws.com/nist-srd/14/data.zip", "https://data.nist.gov/od/ds/2309849843752/my%20data.zip", "https://testdata.nist.gov/od/ds/2309849843752/coll%23/my+%2Bdata.zip" ]
+[ "doc.txt", "foo/bar", "data.zip", "my data.zip", "coll#/my +data.zip" ]
+
+
+#---------------
 # testing urlpath()
 #
 include "pod2nerdm"; map(urlpath)
@@ -104,11 +112,50 @@ include "pod2nerdm"; dirname
 ""
 
 #---------------
-# testing remove elements
+# testing basename()
 #
-include "pod2nerdm"; remove_elements(["a", "a/b/c", "foo"])
-["a", "a/b", "a/b/c", "bar"]
-["a/b", "bar"]
+include "pod2nerdm"; basename
+"plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/bar/now/plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/plainfile"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/plainfile/"
+"plainfile"
+
+include "pod2nerdm"; basename
+"foo/"
+"foo"
+
+include "pod2nerdm"; basename
+""
+""
+
+include "pod2nerdm"; basename
+"/"
+""
+
+#---------------
+# testing remove_extension
+#
+include "pod2nerdm"; map(remove_extension)
+["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
+["a", "a", "a", "a.b", "trial3/trial3a.json", "trial3/trial3a", ".cshrc"]
+
+
+#---------------
+# testing extension
+#
+include "pod2nerdm"; map(extension)
+["a", "a.JPG", "a.b", "a.b.c", "trial3/trial3a.json.sha256", "trial3/trial3a.json", ".cshrc"]
+["", "JPG", "b", "c", "sha256", "json", ""]
 
 
 #---------------
@@ -131,7 +178,14 @@ include "pod2nerdm"; map(componentID("#"))
 #
 include "pod2nerdm"; dist2download
 {"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json", "mediaType": "application/json","title": "Titanium Boride" }
-{"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json","mediaType": "application/json", "title": "Titanium Boride", "filepath":"srd13_B-101.json", "@type": ["nrdp:DataFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"]}
+{"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json","mediaType": "application/json", "title": "Titanium Boride", "filepath":"srd13_B-101.json", "@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"]}
+
+#--------------
+# testing dist2checksum()
+#
+include "pod2nerdm"; dist2checksum
+{"downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json.sha256", "title": "Checksum for srd13_B-101.json" }
+{"downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json.sha256","mediaType": "text/plain", "description": "SHA-256 checksum value for srd13_B-101.json", "title": "Checksum for srd13_B-101.json", "filepath":"srd13_B-101.json.sha256", "algorithm": {"@type": "Thing","tag": "sha256"},"@type": ["nrdp:ChecksumFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json.sha256","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/ChecksumFile"]}
 
 #--------------
 # testing dist2hidden()
@@ -171,7 +225,7 @@ include "pod2nerdm"; dist2comp
 #
 include "pod2nerdm"; dist2comp
 {"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json", "mediaType": "application/json","title": "Titanium Boride" }
-{"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json","mediaType": "application/json", "title": "Titanium Boride", "filepath":"srd13_B-101.json", "@type": ["nrdp:DataFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"]}
+{"describedBy": "http://data.nist.gov/srd/srd_data/srd13_janaf-data-defs.json", "downloadURL": "http://data.nist.gov/srd/srd_data/srd13_B-101.json","mediaType": "application/json", "title": "Titanium Boride", "filepath":"srd13_B-101.json", "@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/srd13_B-101.json","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"]}
 
 #--------------
 # testing dist2comp()
@@ -181,7 +235,7 @@ include "pod2nerdm"; dist2comp
 #
 include "pod2nerdm"; dist2comp
 {"accessURL": "http://www.nsrl.nist.gov/Downloads.htm","conformsTo": "http://www.nsrl.nist.gov/Documents/Data-Formats-of-the-NSRL-Reference-Data-Set-16.pdf","downloadURL": "http://www.nsrl.nist.gov/RDS/rds_2.50/RDS_250.iso","format": "ISO 9660 disk image","mediaType": "application/zip" }
-{"accessURL": "http://www.nsrl.nist.gov/Downloads.htm","conformsTo": "http://www.nsrl.nist.gov/Documents/Data-Formats-of-the-NSRL-Reference-Data-Set-16.pdf","downloadURL": "http://www.nsrl.nist.gov/RDS/rds_2.50/RDS_250.iso","format": { "description": "ISO 9660 disk image"},"mediaType": "application/zip", "filepath":"RDS_250.iso", "@type": ["nrdp:DataFile","dcat:Distribution"],"@id":"cmps/RDS_250.iso","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"] }
+{"accessURL": "http://www.nsrl.nist.gov/Downloads.htm","conformsTo": "http://www.nsrl.nist.gov/Documents/Data-Formats-of-the-NSRL-Reference-Data-Set-16.pdf","downloadURL": "http://www.nsrl.nist.gov/RDS/rds_2.50/RDS_250.iso","format": { "description": "ISO 9660 disk image"},"mediaType": "application/zip", "filepath":"RDS_250.iso", "@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"],"@id":"cmps/RDS_250.iso","_extensionSchemas": ["https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile"] }
 
 #--------------
 # testing dist2comp()
@@ -252,16 +306,16 @@ include "pod2nerdm"; obj_types
 # file below a particular subcollection
 #
 include "pod2nerdm"; select_comp_within("foo/bar")
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
-[{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 
 # testing select_obj_type
 #
 # This successfully tests selecting a component from throughout the hierarchy
 #
 include "pod2nerdm"; select_obj_type("dcat:Distribution")
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]}]
 
 # testing select_obj_type
 #
@@ -269,7 +323,7 @@ include "pod2nerdm"; select_obj_type("dcat:Distribution")
 # hierarchy.
 #
 include "pod2nerdm"; select_obj_type("nrdp:Subcollection")
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 [{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 
 # testing select_obj_type
@@ -278,7 +332,7 @@ include "pod2nerdm"; select_obj_type("nrdp:Subcollection")
 # type.
 #
 include "pod2nerdm"; select_obj_type("gurn:Goober")
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 []
 
 # testing select_comp_type
@@ -286,7 +340,7 @@ include "pod2nerdm"; select_obj_type("gurn:Goober")
 # This tests selecting a type below a specific subcollection in the hierarchy.
 #
 include "pod2nerdm"; select_comp_type("nrdp:Subcollection"; "foo/bar")
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{"title": "foo bar","filepath": "foo/bar","@type": ["nrdp:Subcollection"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 [{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 
 # testing create_subcoll_for
@@ -298,8 +352,8 @@ include "pod2nerdm"; create_subcoll_for
 # testing insert_subcoll_comps
 #
 include "pod2nerdm"; insert_subcoll_comps
-[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
-[{"@id": "cmps/foo/bar", "@type": ["nrdp:Subcollection"], "filepath": "foo/bar", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/Subcollection" ]},{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
+[{"@id": "cmps/foo/bar", "@type": ["nrdp:Subcollection"], "filepath": "foo/bar", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/Subcollection" ]},{ "title": "Titanium Boride", "filepath": "foo/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo", "filepath": "foo", "@type": [ "nrdp:Subcollection"]},{"title": "Titanium Boride","filepath": "foo/bar/srd13_B-101.json","@type": ["nrdp:DataFile","nrdp:DownloadableFile","dcat:Distribution"]},{ "title": "foo bar goo", "filepath": "foo/bar/goo", "@type": ["nrdp:Subcollection"]}]
 
 
 
