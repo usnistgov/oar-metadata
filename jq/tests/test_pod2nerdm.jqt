@@ -55,8 +55,8 @@ include "pod2nerdm"; map(cvtref)
 # testing filepath()
 #
 include "pod2nerdm"; map(filepath)
-[ "http://goob.net/root/doc.txt", "https://s3.amazonaws.com/nist-zub/90210/foo/bar", "http://s3.amazonaws.com/nist-srd/14/data.zip", "https://data.nist.gov/od/ds/2309849843752/my%20data.zip", "https://testdata.nist.gov/od/ds/2309849843752/coll%23/my%20data.zip" ]
-[ "doc.txt", "foo/bar", "data.zip", "my data.zip", "coll#/my data.zip" ]
+[ "http://goob.net/root/doc.txt", "https://s3.amazonaws.com/nist-zub/90210/foo/bar", "http://s3.amazonaws.com/nist-srd/14/data.zip", "https://data.nist.gov/od/ds/2309849843752/my%20data.zip", "https://testdata.nist.gov/od/ds/2309849843752/coll%23/my+%2Bdata.zip" ]
+[ "doc.txt", "foo/bar", "data.zip", "my data.zip", "coll#/my +data.zip" ]
 
 
 #---------------

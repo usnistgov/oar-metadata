@@ -203,7 +203,7 @@ def filepath:
           end
         end
       end
-    end | url_decode
+    end | url_decode_plus
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution with a

@@ -43,3 +43,14 @@ def url_decode:
          else [ $i + 1, .[1] + $in[$i:$i+1] ]
          end)
   | .[1];  # answer
+
+# replace url-encodings, including pluses (+), with their corresponding
+# characters.  This is like url_encode, except that it also replaces each
+# plus with a space.
+#
+# Input:  string
+# Output: string
+# 
+def url_decode_plus:
+  gsub("\\+"; " ") | url_decode 
+;
