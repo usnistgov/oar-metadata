@@ -74,7 +74,6 @@ def trimsp:
     ltrimsp | rtrimsp
 ;
 
-
 # given a string that looks like a file path, return the path to the
 # file's parent directory
 #
@@ -504,7 +503,7 @@ def podds2resource:
         ediid: .identifier,
         landingPage,
         
-        description:  .description | split("\n\n") | map(trimsp),
+        description:  .description | split("\n\n") | map(trimsp|select(length>0)),
         keyword,
         theme,
         topic: [],

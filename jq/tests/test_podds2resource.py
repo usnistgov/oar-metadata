@@ -57,6 +57,7 @@ class TestJanaf(unittest.TestCase):  #
                 "Property '{0}' not a list: {1}".format(prop, self.out[prop]))
 
     def test_description(self):
+        self.assertFalse(any([p.strip() == "" for p in self.out['description']]))
         self.assertEqual(len(self.out['description']), 1)
 
     def test_ediid(self):
@@ -158,6 +159,7 @@ class TestCORR(unittest.TestCase):  #
                 "Property '{0}' not a list: {1}".format(prop, self.out[prop]))
 
     def test_description(self):
+        self.assertFalse(any([p.strip() == "" for p in self.out['description']]))
         self.assertEqual(len(self.out['description']), 3)
 
     def test_ediid(self):
