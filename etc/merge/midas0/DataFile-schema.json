@@ -1,0 +1,5 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.1/DataFile#",
+    "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component"
+}

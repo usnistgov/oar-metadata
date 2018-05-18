@@ -312,7 +312,12 @@
                     ],
                     "type": "array",
                     "items": { "type": "string" } ,
-                    "mergeStrategy": "preferHead"
+                    "mergeStrategy": "uniqueArray",
+                    "mergeOptions": {
+                        "incompatible": [
+                            [ "nrdp:PublicDataResource", "nrdp:DataFile" ]
+                        ]
+                    }
                 },
 
                 "accrualPeriodicity": {

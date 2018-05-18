@@ -1,7 +1,7 @@
 This directory contains annotated schemas used to merge NERDm
-documents.  Specifically, it contains schemas for the **dev** merge
-conventions: representing a convention in development to be renamed
-later once put into use.
+documents.  Specifically, it contains schemas for the **initdef** merge
+conventions, used to initialize generated metadata based the input data
+(e.g. from MIDAS) with default values.
 
 Because of limitations of jsonmerge (including its lack of awareness
 of ejsonschema conventions), the core NERDm schema is represented by
