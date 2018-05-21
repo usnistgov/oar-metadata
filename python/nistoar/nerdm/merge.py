@@ -61,6 +61,23 @@ class PreferBase(Strategy):
     def get_schema(self, walk, schema, meta, **kwargs):
         return walk.resolve_refs(schema)
 
+class PreferHead(Strategy):
+    """
+    a jsonmerge strategy that will take the head value unless it is 
+    not set, in which the base value is retained.  The base effectively 
+    serves as a default value.
+    """
+
+    def merge(self, walk, base, head, schema, meta, **kwargs):
+        if (head is None or head.is_undef()) and \
+           base is not None and not base.is_undef():
+            return base
+
+        return head
+
+    def get_schema(self, walk, schema, meta, **kwargs):
+        return walk.resolve_refs(schema)
+
 class UniqueArray(Strategy):
     """
     merge arrays by only appending values not in the base, with caveats.
@@ -268,6 +285,7 @@ class TopicArray(ArrayMergeByMultiId):
 STRATEGIES = {
     "keepBase": KeepBase(),
     "preferBase": PreferBase(),
+    "preferHead": PreferHead(),
     "uniqueArray": UniqueArray(),
     "arrayMergeByMultiId": ArrayMergeByMultiId(),
     "topicArray": TopicArray()
@@ -372,7 +390,7 @@ class DirBasedMergerFactory(MergerFactoryBase):
     def strategy_conventions(self):
         """
         return a list of the supported strategy conventions.  Any name from 
-        this list can be passed to the makeMerger() function.
+        this list can be passed to the make_merger() function.
         """
         return [d for d in os.listdir(self.root) if not d.startswith('.')]
         
