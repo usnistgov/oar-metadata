@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
     "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
-    "rev": "wd1",
+    "rev": "wd2",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
     "definitions": {
@@ -23,6 +23,24 @@
                         "prefLabel": "Title",
                         "referenceProperty": "dc:title"
                     }
+                },
+
+                "version": {
+                    "title": "Version",
+                    "description": "a string indicating the version of the release of this resource",
+                    "type": "string",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Version",
+                        "referenceProperty": "schema:version"
+                    }
+                },
+
+                "versionHistory": {
+                    "title": "History",
+                    "description": "a list describing the release of different versions of this resource",
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/VersionRelease" }
                 },
 
                 "description": {
@@ -83,15 +101,7 @@
                 "issued": {
                     "title": "Release Date",
                     "description": "Date of formal issuance of the resource",
-                    "anyOf": [
-                        {
-                            "type": "string",
-                            "pattern": "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ],
+                    "$ref": "#/definitions/FlexibleDate",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Release Date",
@@ -402,6 +412,73 @@
             ]
         },
 
+        "VersionRelease": {
+            "description": "notes about a versioned release of the resource",
+            "type": "object",
+            "properties": {
+                
+                "version": {
+                    "title": "Version",
+                    "description": "a string indicating a version of the release of this resource",
+                    "type": "string",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Version",
+                        "referenceProperty": "schema:version"
+                    }
+                },
+
+                "issued": {
+                    "title": "Release Date",
+                    "description": "Date of formal issuance of the resource",
+                    "$ref": "#/definitions/FlexibleDate",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Release Date",
+                        "referenceProperty": "dc:issued",
+                        "range": "xsd:date"
+                    }
+                },
+
+                "description": {
+                    "description": "a brief summary of the occasion for the release",
+                    "type": "string"
+                },
+
+                "location": {
+                    "description": "the URL for accessing the document",
+                    "notes": [
+                        "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
+                    ],
+                    "type": "string",
+                    "format": "uri"
+                },
+                
+                "refid": {
+                    "description": "An persistent ID for the referenced document.",
+                    "notes": [
+                        "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
+                        "location may use the URL form of the ID."
+                    ],
+                    "type": "string"
+                }
+            },
+            "required": [ "version" ]
+        },
+
+        "FlexibleDate": {
+            "description": "a flexible format for a resource-related date",
+            "anyOf": [
+                {
+                    "type": "string",
+                    "pattern": "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        }, 
+
         "DocumentReference": {
             "description": "descriptive reference to a document",
             "type": "object",
@@ -435,6 +512,11 @@
                     "notes": [
                         "This is intended to be briefer than a citation."
                     ],
+                    "type": "string"
+                },
+
+                "description": {
+                    "description": "a brief, human-readable description of what this reference refers to and/or why it is being referenced.",
                     "type": "string"
                 },
 
@@ -481,12 +563,42 @@
                 { "$ref": "#/definitions/DocumentReference" },
                 {
                     "properties": {
+                        "refTargetType": {
+                            "description": "the type of resource that the reference's location resolves to.",
+                            "notes": [
+                                "This allows one to distinguish between literature references, references to other data products, and references to arbitrary web sites",
+                                "If not set, the type is either not known or does not qualify as one of the enumerated values."
+                            ],
+                            "type": "string",
+                            "enum": [ "document", "data", "website" ],
+                            "valueDocumentation": {
+                                "document":  {
+                                    "description": "The referenced resource is a readable document",
+                                    "notes": [
+                                        "When the refId is a DOI, it should be a CrossRef DOI"
+                                    ]
+                                },
+                                "data":  {
+                                    "description": "The referenced resource is a data resource.",
+                                    "notes": [
+                                        "When the refId is a DOI, it should be a DataCite DOI"
+                                    ]
+                                },
+                                "website": {
+                                    "description": "The referenced resource is a web site or portal",
+                                    "notes": [
+                                        "This type should typically refer to a resource that has neither a DataCite nor Crossref DOI assigned to it but whose location resolves to a viewable web site."
+                                    ]
+                                }
+                            }
+                        },
                         "refType": {
                             "type": "string",
                             "enum": [ "IsDocumentedBy", "IsSupplementedBy",
                                       "IsCitedBy", "Cites", "IsReviewedBy",
                                       "IsReferencedBy", "References",
-                                      "IsSourceOf", "IsDerivedFrom"   ],
+                                      "IsSourceOf", "IsDerivedFrom",
+                                      "IsNewVersionOf", "IsPreviousVersionOf" ],
                             "valueDocumentation": {
                                 "IsDocumentedBy": {
                                     "description": "The referenced document provides documentation of the resource.",
@@ -536,6 +648,18 @@
                                     "description": "The referenced document is the source upon which the resource is based.",
                                     "notes": [
                                         "In other words, the resource is derived from the referenced document."
+                                    ]
+                                },
+                                "IsNewVersionOf": {
+                                    "description": "The referenced resource is a previous version of this resource.",
+                                    "notes": [
+                                        "This usually means that the referenced resource is deprecated by this one."
+                                    ]
+                                },
+                                "IsPreviousVersionOf": {
+                                    "description": "The referenced resource is a newer version of this resource.",
+                                    "notes": [
+                                        "This usually means that the referenced resource deprecates this one."
                                     ]
                                 }
                             }
