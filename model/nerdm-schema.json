@@ -43,6 +43,33 @@
                     "items": { "$ref": "#/definitions/VersionRelease" }
                 },
 
+                "replaces": {
+                    "title": "Replaces",
+                    "description": "a listing of other existing resources that are deprecated by this resource",
+                    "type": "array",
+                    "items": { "$ref": "#/definition/SlimReference" }
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Replaces",
+                        "referenceProperty": "dc:replaces"
+                    }
+                },
+
+                "isReplacedBy": {
+                    "title": "Replaced by",
+                    "description": "another existing resources that should be considered a replacement for this resource",
+                    "notes": [
+                        "This typically refers to a newer version of this resource",
+                        "In the PDR system, this value is automatically generated given the overall state of the PDR's catalog"
+                    ]
+                    "$ref": "#/definition/SlimReference",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Is replaced by",
+                        "referenceProperty": "dc:replaces"
+                    }
+                },
+
                 "description": {
                     "title": "Description",                    
                     "description": "Human-readable description (e.g., an abstract) of the resource",
@@ -455,7 +482,7 @@
                 },
                 
                 "refid": {
-                    "description": "An persistent ID for the referenced document.",
+                    "description": "A persistent ID for the referenced document.",
                     "notes": [
                         "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
                         "location may use the URL form of the ID."
@@ -477,7 +504,37 @@
                     "type": "null"
                 }
             ]
-        }, 
+        },
+
+        "SlimReference": {
+            "description": "an internal reference to another resource",
+            "notes": [
+                "It is assumed that the NERDm record can be retrieved via the given refid",
+                "Compared to other types for obects of relationship, this sets only minimal metadata since fuller information can be found by locally resolving the refid value."
+            ],
+            "properties": {
+                "refid": {
+                    "description": "A persistent ID for the referenced resource.",
+                    "notes": [
+                        "In this context, this is a PDR ARK identifier."
+                    ],
+                    "type": "string"
+                },
+
+                "issued": {
+                    "description": "The date the referenced resource was issued",
+                    "notes": [
+                        "This is intended for determining relative newness--i.e. being newer or older than the referring resource."
+                    ],
+                    "$ref": "#/definitions/FlexibleDate"
+                }
+
+                "description": {
+                    "description": "a brief explanation as to why this resource is being referenced.",
+                    "type": "string"
+                }
+            }
+        },
 
         "DocumentReference": {
             "description": "descriptive reference to a document",
@@ -531,7 +588,7 @@
                 },
 
                 "refid": {
-                    "description": "An persistent ID for the referenced document.",
+                    "description": "a persistent ID for the referenced document.",
                     "notes": [
                         "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
                         "location may use the URL form of the ID."
