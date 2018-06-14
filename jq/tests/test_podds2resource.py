@@ -96,15 +96,16 @@ class TestJanaf(unittest.TestCase):  #
         refs =self.out['references']
         self.assertEquals(len(refs), 1)
 
-        self.assertIsInstance(refs[0]['@type'], types.StringTypes)
-        self.assertEquals(refs[0]['@type'], "deo:BibliographicReference")
+        self.assertIsInstance(refs[0]['@type'], list)
+        self.assertIsInstance(refs[0]['@type'][0], types.StringTypes)
+        self.assertEquals(refs[0]['@type'], ["deo:BibliographicReference"])
         self.assertEquals(refs[0]['refType'], "IsReferencedBy")
         self.assertEquals(refs[0]['location'],
                           "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf")
 
         exts = refs[0]['_extensionSchemas']
         self.assertEquals(len(exts), 1)
-        self.assertIn(nerdm+"/definitions/DCiteDocumentReference", exts)
+        self.assertIn(nerdm+"/definitions/DCiteReference", exts)
 
     def test_hierarchy(self):
         self.assertIn("dataHierarchy", self.out,

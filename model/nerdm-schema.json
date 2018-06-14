@@ -47,7 +47,12 @@
                     "title": "Replaces",
                     "description": "a listing of other existing resources that are deprecated by this resource",
                     "type": "array",
-                    "items": { "$ref": "#/definition/SlimReference" }
+                    "items": {
+                        "allOf": [
+                            { "$ref": "#/definition/RelatedResource" },
+                            { "required": [ "@id", "proxyFor", "label", "issued" ] }
+                        ]
+                    },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Replaces",
@@ -61,12 +66,16 @@
                     "notes": [
                         "This typically refers to a newer version of this resource",
                         "In the PDR system, this value is automatically generated given the overall state of the PDR's catalog"
-                    ]
-                    "$ref": "#/definition/SlimReference",
+                    ],
+                    "allOf": [
+                        { "$ref": "#/definition/RelatedResource" },
+                        { "required": [ "@id", "proxyFor", "label", "issued" ] }
+                    ],
+                    
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Is replaced by",
-                        "referenceProperty": "dc:replaces"
+                        "referenceProperty": "dc:isReplacedBy"
                     }
                 },
 
@@ -332,10 +341,10 @@
                 },
                 
                 "references": {
-                    "title": "Related Documents",
+                    "title": "Related Resources",
                     "description": "Related documents such as technical information about a dataset, developer documentation, etc.",
                     "type": "array",
-                    "items": { "$ref": "#/definitions/DocumentReference" },
+                    "items": { "$ref": "#/definitions/BibliographicReference" },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "References",
@@ -439,60 +448,6 @@
             ]
         },
 
-        "VersionRelease": {
-            "description": "notes about a versioned release of the resource",
-            "type": "object",
-            "properties": {
-                
-                "version": {
-                    "title": "Version",
-                    "description": "a string indicating a version of the release of this resource",
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Version",
-                        "referenceProperty": "schema:version"
-                    }
-                },
-
-                "issued": {
-                    "title": "Release Date",
-                    "description": "Date of formal issuance of the resource",
-                    "$ref": "#/definitions/FlexibleDate",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "referenceProperty": "dc:issued",
-                        "range": "xsd:date"
-                    }
-                },
-
-                "description": {
-                    "description": "a brief summary of the occasion for the release",
-                    "type": "string"
-                },
-
-                "location": {
-                    "description": "the URL for accessing the document",
-                    "notes": [
-                        "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
-                    ],
-                    "type": "string",
-                    "format": "uri"
-                },
-                
-                "refid": {
-                    "description": "A persistent ID for the referenced document.",
-                    "notes": [
-                        "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
-                        "location may use the URL form of the ID."
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [ "version" ]
-        },
-
         "FlexibleDate": {
             "description": "a flexible format for a resource-related date",
             "anyOf": [
@@ -506,234 +461,41 @@
             ]
         },
 
-        "SlimReference": {
-            "description": "an internal reference to another resource",
+        "RelatedResource": {
+            "description": "a resource that is related in some way to this resource",
             "notes": [
-                "It is assumed that the NERDm record can be retrieved via the given refid",
-                "Compared to other types for obects of relationship, this sets only minimal metadata since fuller information can be found by locally resolving the refid value."
+                "This serves as a base type for various kinds of references."
             ],
-            "properties": {
-                "refid": {
-                    "description": "A persistent ID for the referenced resource.",
-                    "notes": [
-                        "In this context, this is a PDR ARK identifier."
-                    ],
-                    "type": "string"
-                },
-
-                "issued": {
-                    "description": "The date the referenced resource was issued",
-                    "notes": [
-                        "This is intended for determining relative newness--i.e. being newer or older than the referring resource."
-                    ],
-                    "$ref": "#/definitions/FlexibleDate"
-                }
-
-                "description": {
-                    "description": "a brief explanation as to why this resource is being referenced.",
-                    "type": "string"
-                }
-            }
-        },
-
-        "DocumentReference": {
-            "description": "descriptive reference to a document",
             "type": "object",
+
             "properties": {
                 "@id": {
-                    "description": "a (relative) identifier for the reference",
+                    "description": "an identifier for the reference",
                     "notes": [
-                        "This identifier refers specifically to the reference within a resource; it does not refer to document itself (which preferably has its own DOI).",
+                        "The most well-known PID used to identify the resource (see also notes for proxyFor",
+                        "This identifier can be a relative URL which can be used in special cases (See the notes for BibliographicReference:@type for when this ID should not refer to the referenced work).",
                         "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
                         "A relative identifier requires that @base be set to the Resource identifier in the @context."
                     ],
                     "type": "string"
                 },
-
                 "@type": {
-                    "type": "string",
-                    "enum": [ "deo:BibliographicReference" ]
-                },
-
-                "location": {
-                    "description": "the URL for accessing the document",
-                    "notes": [
-                        "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
-                    ],
-                    "type": "string",
-                    "format": "uri"
-                },
-
-                "label": {
-                    "description": "a recommended label or title to display as the text for a link to the document",
-                    "notes": [
-                        "This is intended to be briefer than a citation."
-                    ],
-                    "type": "string"
-                },
-
-                "description": {
-                    "description": "a brief, human-readable description of what this reference refers to and/or why it is being referenced.",
-                    "type": "string"
-                },
-
-                "citation": {
-                    "description": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
-                    "type": "string",
-                    "asOntology": {
-                        "@conxtext": "profile-schema-onto.json",
-                        "prefLabel": "Cite as",
-                        "referenceProperty": "dc:bibliographicCitation"
-                    }
-                },
-
-                "refid": {
-                    "description": "a persistent ID for the referenced document.",
-                    "notes": [
-                        "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
-                        "location may use the URL form of the ID."
-                    ],
-                    "type": "string"
-                },
-
-                "refType": {
-                    "description": "the type of relationship that this document has with the resource",
-                    "notes": [
-                        "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
-                        "The DCiteDocumentReference type sets DataCite terms as controlled vocabulary"
-                    ],
-                    "type": "string"
-                }
-            },
-            "required": [ "@type", "location" ]
-        },
-
-        "DCiteDocumentReference": {
-            "description": "a descriptive reference to a document with a controlled vocabulary for its reference type (refType)",
-            "notes": [
-                "This object is intended to point to human-readable documents",
-                "Use 'isDocumentedBy' to indicate documents that provide the most comprehensive explanation of the contents of the resource.  List these documents in order of importance (as the first one will be exported as the 'describedBy' document when converted to the POD schema).",
-                "Use 'isSourceOf' if the document provides analysis and interpretation of the resource.  In particular, journal articles that are co-published with this resource should be listed with this type.  It is recommended that these documents be listed either in order of publication date or importance.",
-                "Documents may be listed more than once having different types, namely both 'isDocumentedBy' and 'isSourceOf'; however, it is recommended that such multiple classifications should be minimized."
-            ],
-            "allOf": [
-                { "$ref": "#/definitions/DocumentReference" },
-                {
-                    "properties": {
-                        "refTargetType": {
-                            "description": "the type of resource that the reference's location resolves to.",
-                            "notes": [
-                                "This allows one to distinguish between literature references, references to other data products, and references to arbitrary web sites",
-                                "If not set, the type is either not known or does not qualify as one of the enumerated values."
-                            ],
+                    "anyOf": [
+                        {
                             "type": "string",
-                            "enum": [ "document", "data", "website" ],
-                            "valueDocumentation": {
-                                "document":  {
-                                    "description": "The referenced resource is a readable document",
-                                    "notes": [
-                                        "When the refId is a DOI, it should be a CrossRef DOI"
-                                    ]
-                                },
-                                "data":  {
-                                    "description": "The referenced resource is a data resource.",
-                                    "notes": [
-                                        "When the refId is a DOI, it should be a DataCite DOI"
-                                    ]
-                                },
-                                "website": {
-                                    "description": "The referenced resource is a web site or portal",
-                                    "notes": [
-                                        "This type should typically refer to a resource that has neither a DataCite nor Crossref DOI assigned to it but whose location resolves to a viewable web site."
-                                    ]
-                                }
-                            }
+                            "enum": [ "deo:BibliographicReference" ]
                         },
-                        "refType": {
-                            "type": "string",
-                            "enum": [ "IsDocumentedBy", "IsSupplementedBy",
-                                      "IsCitedBy", "Cites", "IsReviewedBy",
-                                      "IsReferencedBy", "References",
-                                      "IsSourceOf", "IsDerivedFrom",
-                                      "IsNewVersionOf", "IsPreviousVersionOf" ],
-                            "valueDocumentation": {
-                                "IsDocumentedBy": {
-                                    "description": "The referenced document provides documentation of the resource.",
-                                    "notes": [
-                                    ]
-                                },
-                                "IsSupplementedBy": {
-                                    "description": "The referenced document is a supplement to the resource.",
-                                    "notes": [
-                                    ]
-                                },
-                                "IsCitedBy": {
-                                    "description": "The referenced document cites the resource in some way.",
-                                    "notes": [
-                                        "This relationship indicates is lighter than IsReferenceBy: the referenced document may discuss this resource without drawing on and using data or information from this resource."
-                                    ]
-                                },
-                                "Cites": {
-                                    "description": "This resource cites the referenced document.",
-                                    "notes": [
-                                        "Like IsCitedBy, this relationship indicates is lighter than References: the referenced document may discuss this resource without drawing on and using data or information from this resource."
-                                    ]
-                                },
-                                "IsReviewedBy": {
-                                    "description": "The referenced document reviews this resource.",
-                                    "notes": [
-                                        "This is a lighter relationship than the resource property, describedBy; the latter refers to a document that is the primary, detailed description and/or analysis of this resource"
-                                    ]
-                                },
-                                "IsReferencedBy": {
-                                    "description": "The resource is used as a source of information by the referenced document.",
-                                    "notes": [
-                                    ]
-                                },
-                                "References": {
-                                    "description": "The referenced document is used as a source of information by the resource.",
-                                    "notes": [
-                                    ]
-                                },
-                                "IsSourceOf": {
-                                    "description": "The resource is the source of upon which the referenced document is based.",
-                                    "notes": [
-                                        "In other words, the referenced document is derived from the resource."
-                                    ]
-                                },
-                                "IsDerivedFrom": {
-                                    "description": "The referenced document is the source upon which the resource is based.",
-                                    "notes": [
-                                        "In other words, the resource is derived from the referenced document."
-                                    ]
-                                },
-                                "IsNewVersionOf": {
-                                    "description": "The referenced resource is a previous version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource is deprecated by this one."
-                                    ]
-                                },
-                                "IsPreviousVersionOf": {
-                                    "description": "The referenced resource is a newer version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource deprecates this one."
-                                    ]
-                                }
-                            }
+                        {
+                            "type": "array",
+                            "items": { "type": "string"  }
                         }
-                    },
-                    "required": [ "refType" ]
-                }
-            ]
-        },
+                    ],
+                    "notes": [
+                        "The single string value option is provided for backward compatibility (and may be removed in future versions; see BibliographicReference).  When this is used, the node represents a reference and not the thing being referenced; the @id contains a relative URI, representing this reference"
+                    ]
+                },
 
-        "ResourceReference": {
-            "description":  "a reference to another resource that may have an associated ID",
-            "notes": [
-                "While providing a resType property is recommended, it is required if the proxyFor ID is given."
-            ],
-            "type": "object",
-            "properties": {
+                
                 "title": {
                     "description": "the name of the resource being referenced",
                     "notes": [
@@ -756,25 +518,222 @@
                         "referenceProperty": "ore:proxyFor"
                     }
                 },
-                "resourceType": {
-                    "description":  "the linked-data class types for the referenced resource",
+                "location": {
+                    "description": "the URL for accessing the resource",
+                    "type": "string",
+                    "format": "uri"
+                },
+
+                "label": {
+                    "description": "a recommended label or title to display as the text for a link to the document",
                     "notes": [
-                        "The value must always be given as an array, even when only one type is provided.",
-                        "Multiple values indicate that the Resource can be considered of multiple types; it is recommended that the primary type (usually the most specific) should be given first.",
-                        "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
-                        
+                        "This is intended to be briefer than a citation.  It should be short enough to use as tag to an entry in reference list as inserted into a document's text"
                     ],
-                    "type": "array",
-                    "items": { "type": "string" } 
-                    
+                    "type": "string"
+                },
+
+                "issued": {
+                    "description": "The date the referenced resource was issued",
+                    "notes": [
+                        "This is intended for determining relative newness--i.e. being newer or older than the referring resource."
+                    ],
+                    "$ref": "#/definitions/FlexibleDate"
+                },
+
+                "description": {
+                    "description": "a brief, human-readable description of what this reference refers to and/or why it is being referenced.",
+                    "type": "string"
                 }
+
             },
-            "required": [ "title" ],
+
             "dependencies": {
                 "proxyFor": {
-                    "required": [ "resType" ]
+                    "required": [ "@type" ]
                 }
-            }
+            }            
+        },
+
+        "ResourceReference": {
+            "description":  "a reference to another resource that may have an associated ID",
+            "notes": [
+                "While providing a resType property is recommended, it is required if the proxyFor ID is given."
+            ],
+            "allOf": [
+                { "$ref": "#/definitions/RelatedResource" },
+                {
+                    "required": [ "title" ]
+                }
+            ]
+        },
+
+        "VersionRelease": {
+            "description": "notes about a versioned release of the resource",
+            "allOf": [
+                { "$ref": "#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating a version of the release of this resource",
+                            "notes": [
+                                "label could contain the same value"
+                            ],
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        }
+                    },
+                    "required": [ "version", "issued" ]
+                }
+            ]
+        },
+
+        "BibliographicReference": {
+            "description": "a reference to a creative work that provides information or data that is important to this resource.",
+            "notes": [
+                "Recognized @type list values include:",
+                "npg:Document -- a work that is primarily meant to be human readable and could appropriately be identified with a CrossRef DOI",
+                "npg:Dataset -- a reference that could appropriately be identified with a DataCite DOI",
+                "npg:Article -- a work that is published in a book, journal, or other periodical",
+                "schema:Book -- a book, typically physically-bound.",
+                "deo:BibliographicReference -- a generic citable reference.  This is considered a superclass of all reference types and the default type when the specific type cannot be determined.",
+                "npg:Document and npg:Dataset should be considered mutually exclusive and should not appear in the same list.  npg:Article and schema:Book should be considered subclasses of npg:document"
+            ],
+            "allOf": [
+                { "$ref": "#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "citation": {
+                            "description": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
+                            "type": "string",
+                            "asOntology": {
+                                "@conxtext": "profile-schema-onto.json",
+                                "prefLabel": "Cite as",
+                                "referenceProperty": "dc:bibliographicCitation"
+                            }
+                        },
+                        "refType": {
+                            "description": "the type of relationship that this document has with the resource",
+                            "notes": [
+                                "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
+                                "The DCiteReference type sets DataCite terms as controlled vocabulary"
+                            ],
+                            "type": "string"
+                        }
+                    },
+                    "required": [ "@type", "location" ]
+                }
+            ]
+        },
+
+        "DCiteReference": {
+            "description": "a bibliographical reference with a controlled vocabulary for its reference type (refType)",
+            "notes": [
+                "Note that some refType values are specifically for references of type npg:Document:  'isDocumentedBy', 'isReviewedBy'",
+                "Use 'isDocumentedBy' to indicate documents that provide the most comprehensive explanation of the contents of the resource.  List these documents in order of importance (as the first one will be exported as the 'describedBy' document when converted to the POD schema).",
+                "Use 'isSourceOf' if the document provides analysis and interpretation of the resource.  In particular, journal articles that are co-published with this resource should be listed with this type.  It is recommended that these documents be listed either in order of publication date or importance.",
+                "Documents may be listed more than once having different types, namely both 'isDocumentedBy' and 'isSourceOf'; however, it is recommended that such multiple classifications should be minimized."
+            ],
+            "allOf": [
+                { "$ref": "#/definitions/BibliographicReference" },
+                {
+                    "properties": {
+                        "refType": {
+                            "description": "a term indicating the nature of the relationship between this resource and the one being referenced",
+                            "notes": [
+                                "Note that with this term, the subject of relationship is the resource described by this NERDm record and the object is the referenced resource given by the @id property in this node.  Although this violates the JSON-LD semantics that properties in this node should describe what's given with the local @id--the referenced resource, in this case--it is more consistant with their use in the DataCite schema."
+                            ],
+                            "type": "string",
+                            "enum": [ "IsDocumentedBy", "IsSupplementedTo",
+                                      "IsCitedBy", "Cites", "IsReviewedBy",
+                                      "IsReferencedBy", "References",
+                                      "IsSourceOf", "IsDerivedFrom",
+                                      "IsNewVersionOf", "IsPreviousVersionOf" ],
+                            "valueDocumentation": {
+                                "IsDocumentedBy": {
+                                    "description": "The referenced document provides documentation of this resource.",
+                                    "notes": [
+                                        "This type should be applied to the reference that provides the best, most complete, or otherwise most preferred description of how the data in this resource was created.",
+                                        "This resource is expected to be or include a human-readable document."
+                                    ]
+                                },
+                                "IsSupplementedTo": {
+                                    "description": "The referenced document is a supplement to this resource.",
+                                    "notes": [
+                                        "a supplement typically refers to data (often small) that appears closely attached to a journal article."
+                                    ]
+                                },
+                                "IsCitedBy": {
+                                    "description": "The referenced document cites the resource in some way.",
+                                    "notes": [
+                                        "This relationship indicates is lighter than IsReferenceBy: the referenced document may discuss this resource without drawing on and using data or information from this resource."
+                                    ]
+                                },
+                                "Cites": {
+                                    "description": "This resource cites the referenced document.",
+                                    "notes": [
+                                        "Human readable descriptions can refer to this type of resource via its label, e.g. '...previous research [Smith98; Jones10]...'",
+                                        "Like IsCitedBy, the relationship indicated is lighter than References: this resource makes reference to the referenced resource in discussion without necessarily drawing on and using data or information from that resource."
+                                    ]
+                                },
+                                "IsReviewedBy": {
+                                    "description": "The referenced document reviews this resource.",
+                                    "notes": [
+                                        "This is a lighter relationship than the resource property, describedBy; the latter refers to a document that is the primary, detailed description and/or analysis of this resource"
+                                    ]
+                                },
+                                "IsReferencedBy": {
+                                    "description": "The resource is used as a source of information by the referenced document.",
+                                    "notes": [
+                                    ]
+                                },
+                                "References": {
+                                    "description": "The referenced document is used as a source of information by the resource.",
+                                    "notes": [
+                                    ]
+                                },
+                                "IsSourceOf": {
+                                    "description": "The resource is the source of upon which the referenced resource is based.",
+                                    "notes": [
+                                        "In other words, the referenced document is derived from the resource.",
+                                        "This is a stronger relationship than 'References'"
+                                    ]
+                                },
+                                "IsDerivedFrom": {
+                                    "description": "The referenced document is the source upon which the resource is based.",
+                                    "notes": [
+                                        "In other words, the resource is derived from the referenced document.",
+                                        "This is a stronger relationship than 'IsReferencedBy'"
+                                    ]
+                                },
+                                "IsNewVersionOf": {
+                                    "description": "The referenced resource is a previous version of this resource.",
+                                    "notes": [
+                                        "This usually means that the referenced resource is deprecated by this one."
+                                    ]
+                                },
+                                "IsPreviousVersionOf": {
+                                    "description": "The referenced resource is a newer version of this resource.",
+                                    "notes": [
+                                        "This usually means that the referenced resource deprecates this one."
+                                    ]
+                                },
+                                "IsVariantOf": {
+                                    "description": "The referenced resource contains the content of this resource in a different form.",
+                                    "notes": [
+                                        "As an example, the referenced resource may be based on the same raw data but calibrated differently."
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "required": [ "refType" ]
+                }
+            ]
         },
 
         "Inventory": {
@@ -926,7 +885,29 @@
             ],
             "allOf": [
                 { "$ref": "#/definitions/Component" },
-                { "$ref": "#/definitions/ResourceReference" }
+                { "$ref": "#/definitions/ResourceReference" },
+                {
+                    "properties": {
+                        "@id": {
+                            "description": "a relative identifier for this component",
+                            "notes": [
+                                "@id should be the ID for the included resource as a component of this resource; use the required proxyFor property to give the native ID of the included resource."
+                            ]
+                        },
+                        "resourceType": {
+                            "description":  "the linked-data class types for the included resource",
+                            "notes": [
+                                "The @type should contain values that are subclasses of Component; resourceType is provided to list the Resource types for the included resource.",
+                                "Just like a Resource:@type, the value must always be given as an array, even when only one type is provided.",
+                                "Multiple values indicate that the Resource can be considered of multiple types",
+                                "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+                            ],
+                            "type": "array",
+                            "items": { "type": "string" } 
+                        }
+                    },
+                    "required": [ "proxyFor", "resourceType" ]
+                }
             ]
         },
 

@@ -33,7 +33,7 @@ def nerdm_context: "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld";
 
 # where the Datacite Document Reference types are defined
 #
-def dciteRefType: nerdm_schema + "/definitions/DCiteDocumentReference";
+def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
 
 # the resource identifier provided on the command line
 #
@@ -151,7 +151,7 @@ def ansc_coll_paths:
 # Output: a DCiteDocumentReference object
 #
 def cvtref:  {
-    "@type": "deo:BibliographicReference",
+    "@type": ["deo:BibliographicReference"],
     "@id": ("#ref:" + (. | urlpath | sub("^/"; ""))),
     "refType": "IsReferencedBy",
     "location": .,
