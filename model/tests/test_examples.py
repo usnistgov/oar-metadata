@@ -38,6 +38,18 @@ class TestExamples(test.TestCase):
     def test_validate_ceramicsportal(self):
         self.validate_file("ceramicsportal.json")
 
+    def test_validate_janaf_0_1(self):
+        self.validate_file("janaf-0.1.json")
+
+    def test_validate_janaf_hier_0_1(self):
+        self.validate_file("janaf-hier-0.1.json")
+
+    def test_validate_hitsc_0_1(self):
+        self.validate_file("hitsc-0.1.json")
+
+    def test_validate_ceramicsportal_0_1(self):
+        self.validate_file("ceramicsportal-0.1.json")
+
 class TestSchemas(test.TestCase):
 
     def setUp(self):

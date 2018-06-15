@@ -3,8 +3,8 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.1#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.2#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")
@@ -28,7 +28,7 @@ class TestJanaf(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.1#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.2#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -96,15 +96,16 @@ class TestJanaf(unittest.TestCase):  #
         refs =self.out['references']
         self.assertEquals(len(refs), 1)
 
-        self.assertIsInstance(refs[0]['@type'], types.StringTypes)
-        self.assertEquals(refs[0]['@type'], "deo:BibliographicReference")
+        self.assertIsInstance(refs[0]['@type'], list)
+        self.assertIsInstance(refs[0]['@type'][0], types.StringTypes)
+        self.assertEquals(refs[0]['@type'], ["deo:BibliographicReference"])
         self.assertEquals(refs[0]['refType'], "IsReferencedBy")
         self.assertEquals(refs[0]['location'],
                           "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf")
 
         exts = refs[0]['_extensionSchemas']
         self.assertEquals(len(exts), 1)
-        self.assertIn(nerdm+"/definitions/DCiteDocumentReference", exts)
+        self.assertIn(nerdm+"/definitions/DCiteReference", exts)
 
     def test_hierarchy(self):
         self.assertIn("dataHierarchy", self.out,
@@ -131,7 +132,7 @@ class TestCORR(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.1#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.2#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
