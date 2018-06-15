@@ -6,6 +6,15 @@
     "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublishedDataResource" ],
     "@id": "ark:/88434/sdp0fjspek353",
     "title": "NIST High Temperature Superconducting Materials Database - SRD 62",
+    "version": "1.0",
+    "versionHistory": [
+        {
+            "version": "1.0",
+            "issued": "2015-06-22",
+            "refid": "ark:/88434/sdp0fjspek353",
+            "description": "initial release"
+        }
+    ],
     "abbrev": [ "SRD#62" ],
     "isPartOf": {
         "@id": "ark:/88434/sdp0fjspek352",
