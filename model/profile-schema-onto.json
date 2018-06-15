@@ -7,6 +7,7 @@
         "skos": "http://www.w3.org/2004/02/skos/core#",
         "xsd": "http://www.w3.org/2001/XMLSchema#",
         "psch": "http://www.nist.gov/dp/di/ont/pod-onto.json#",
+        "schema": "http://schema.org",
 
         "isDefinedBy": "rdfs:isDefinedBy",
         "prefLabel": "owl:prefLabel",
