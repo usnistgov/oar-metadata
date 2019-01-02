@@ -2,6 +2,15 @@
 #
 # This formats the documentation into a particular HTML layout
 #
+
+# insert data into an (HTML) template.  The template, read as the input
+# stream, should contain insert points of the form {name} where name
+# corresponds to a property name from the data, provided as an argument
+#
+# Input: string, the HTML template containing {} insert points
+# Output:  the realized HTML
+# data:  object, the data to insert into
+# 
 def template(data): 
     . as $tmpl |
     reduce (capture("{(?<a>[^}]+)}"; "g") | .a) as $lab
@@ -12,6 +21,38 @@ def wrap_template(tmpl; tag):
 ;
 def wrap_template(tmpl):
     wrap_template(tmpl; "0")
+;
+def make_type_link(tname):
+    "<a href=\"#{0}\">{0}</a>" | template({"0": tname})
+;
+def make_prop_link(pname; tname):
+    "<a href=\"#{0}\">{1}</a>" | template({"0": (tname+"."+pname), "1": pname})
+;
+def _make_links:
+    if .type then
+      .type as $type | 
+      (if .prop then
+         (.prop as $prop | 
+          .prop |= make_prop_link($prop; $type))
+       else . end |
+       .type |= make_type_link($type))
+    else
+      .
+    end
+;
+
+def show_message:
+    [((objects |
+       if .template then
+         if .data then
+           ((.data|_make_links) as $data | .template | template($data))
+         else
+           .template
+         end
+       else
+         empty
+       end),
+      strings, "")] | .[0]
 ;
 
 def allowed_values:
@@ -26,6 +67,21 @@ def allowed_values:
 
        ("       </dl></dd>\n"))
     as $ln (""; . + $ln)
+;
+
+def layout_prop_type:
+  (if .type == "object" then .of
+   else
+     if .type == "array" then .each
+     else null
+     end
+   end) as $type | .show |
+  if $type
+  then
+    sub($type; "<a href=\"#"+$type+"\">"+$type+"</a>")
+  else
+    .
+  end
 ;
 
 def layout_property:
@@ -44,8 +100,7 @@ def layout_property:
                  | join(" <p>\n")+"\n"),
     
    ("  <dt> <strong>Value type:</strong> </dt>\n" +
-    "  <dd> {show} </dd>\n" 
-    | template($prop|.type)),
+    "  <dd> " + (.type|layout_prop_type) + " </dd>\n"),
 
    (if .examples then
       "  <dt> <strong>Example Values:</strong>\n  <dd> " +
@@ -79,10 +134,10 @@ def layout_type:
      ("  <dt> <strong>How it is used:</strong> </dt>\n" + 
       "  <dd> "),
 
-     (.use | map( wrap_template(" {0} \n") )
-           | join("</dd> <p>\n  <dd> ")),
+     (select(.use) | .use | map( show_message )
+           | join(" </dd>\n  <dd> ")),
 
-     ("       </dd>\n" +
+     (" </dd>\n" +
       "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
       "<div class=\"md_props\">\n\n"),
 

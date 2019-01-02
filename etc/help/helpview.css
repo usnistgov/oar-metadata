@@ -3,7 +3,7 @@ h1,h2 {
 }
 
 .preheading {
-    font-size: small;
+    font-size: smaller;
     font-style: italic;
 }
 .preheading a {
@@ -45,6 +45,7 @@ h1,h2 {
 .md_type {
     background: #e9da94;
     border-color:  #998015;
+    border-radius: 8px;
 }
 .md_type hr {
     border-color: #998015;
@@ -52,6 +53,7 @@ h1,h2 {
 .md_prop {
     background: #a9e1ac;
     border-color:  #098111;
+    border-radius: 6px;
     margin-left: 3px;
     margin-right: 3px;
     padding-left: 5px;

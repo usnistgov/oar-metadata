@@ -22,27 +22,39 @@ def show_type:
     else
       if .["$ref"] then
         (.["$ref"] | stripref) + " object"
-      else 
-        if .type == "string" then
-            "text" +
-            if .format == "uri" then
-                " (URL)"
-            else
-                if .format then " ("+.format+")" else "" end
-            end
+      else
+        if .type then
+          if .type == "string" then
+              "text" +
+              if .format == "uri" then
+                  " (URL)"
+              else
+                  if .format then " ("+.format+")" else "" end
+              end
+          else
+              if .type == "array" then
+                  "list of " +
+                  if .items.type == "string" then
+                      "text values"
+                  else (.items | show_type) + "s" end
+              else
+                  if .type == "int" then "integer"
+                  else
+                     if .type == "float" then "decimal"
+                     else .type end
+                  end
+              end
+          end
         else
-            if .type == "array" then
-                "list of " +
-                if .items.type == "string" then
-                    "text values"
-                else (.items | show_type) + "s" end
-            else
-                if .type == "int" then "integer"
-                else
-                   if .type == "float" then "decimal"
-                   else .type end
-                end
-            end
+          if .enum then
+             if (.enum|length) > 1 then
+                "fixed value, one of: \"" + (.enum | join("\", \"")) + "\""
+             else
+                "fixed value: \"" + .enum[0] + "\""
+             end
+          else
+             "(see JSON schema)"
+          end
         end
       end
     end
@@ -50,29 +62,170 @@ def show_type:
 
 def typeinfo:
     if .anyOf then
-      (.anyOf | map(select(.type!="null")) |
-       if (length > 1) then
-          { type: map( typeinfo ) }
-       else
-          if (length > 0) then
-             (.[0] | typeinfo)
-          else
-             { type: "null" }
-          end
-       end)
-    else 
-      if .type == "array" then
-         { type, each: .items | iteminfo } 
+      if (.anyOf|length) > 1 then
+        (.anyOf |
+         { type: (map(select(.type!="null") | typeinfo) +
+                  (map(select(.type="null")) | .[0] | [{ type: "null" }])) })
       else
-         if .["$ref"] then
-            { type: "object", of: .["$ref"] | stripref }
-         else
+        (.anyOf[0] | typeinfo)
+      end
+    else
+      if .["$ref"] then
+        { type: "object", of: .["$ref"] | stripref }
+      else
+        if .type then
+          if .type == "array" then
+            { type, each: .items | iteminfo } 
+          else
             { type }
-         end
+          end
+        else
+          if .enum then
+            { type: "fixed" }
+          else
+            { type: "unknown" }
+          end
+        end
       end
     end +
     if .format then { format } else {} end +
     { show: show_type }
+;
+
+def index_refs:
+    .
+;
+
+def upd_index_for(key; val):
+   if .[key]
+   then 
+     .[key] |= .[key] + [val]
+   else
+     .[key] |= [val]
+   end
+;
+
+def select_ref:
+    .[] | select(.["$ref"])
+;
+
+def merge_in_index(updidx):
+    reduce (updidx|keys_unsorted)[] as $key
+      (.; if .[$key]
+          then
+            .[$key] += updidx[$key]
+          else
+            .[$key] |= updidx[$key]
+          end)
+;
+
+def extract_use_from_proptype(name; tp):
+    if .of then
+      (.of as $type | {} |
+       .[$type] |=
+         { "template": "value type for the {prop} property in the {type} type",
+           "data": { "prop": name, "type": tp }, id: "value-type"} )
+    else
+      if .each then
+        (.each as $type | {} |
+         .[$type] |=
+           { "template":
+                  "value type for the {prop} list property of the {type} type",
+              "data": { "prop": name, "type": tp }, id: "list-type"} )
+      else
+        empty
+      end
+    end
+;
+
+def extract_use_from_prop_post(name; tp):
+    .type |
+    (arrays |  
+       map( extract_use_from_prop_type(name; tp) ) |
+       reduce .[] as $item ({}; .|merge_in_index($item)),
+     objects |
+       extract_use_from_prop_type(name; tp)
+    )
+;
+
+def extract_use_from_prop(name; tp):
+    if .["$ref"]
+    then
+      ({"template": "value type for the {prop} property in the {type} type",
+        "data": { "prop": name, "type": tp }, id: "value-type"} as $val |
+       (.["$ref"] | stripref) as $ref |
+       ({}|.[$ref] |= [$val]))
+    else
+      if .items["$ref"]
+      then
+        ({"template":
+                   "value type for the {prop} list property of the {type} type",
+          "data": { "prop": name, "type": tp }, id: "list-type"} as $val |
+         (.items["$ref"] | stripref) as $ref |
+         ({}|.[$ref] |= [$val]))
+      else
+        if (.allOf and (.allOf | select_ref))
+        then
+          ({"template":
+             "part of the value type for the {prop} property of the {type} type",
+            "data": { "prop": name, "type": tp }, id: "value-part"}  as $val |
+           [.allOf | select_ref | (.["$ref"] | stripref) as $ref |
+            ({}|.[$ref] |= [$val])] |
+           reduce .[] as $item ({}; .|merge_in_index($item)))
+        else
+          empty
+        end
+      end
+    end
+;
+
+def extract_use_in_allOf(name):
+    select(.allOf) | .allOf |
+    ((select_ref | .["$ref"] | stripref as $ref |
+      {template: "basis for extension type, {type}",
+        data: { type: name }, id: "base-type" }      as $val |
+      ({}|.[$ref] |= [$val])
+     ),
+     (.[] | select(.properties) | .properties | to_entries |
+      (.[] | .key as $pname | .value |
+       extract_use_from_prop($pname; name))
+     )
+    )
+;
+
+def extract_use_from_type_post(tpname):
+    [((select(.inheritsFrom) | .inheritsFrom as $type |
+       {}| .[$type] |= 
+         { template: "basis for extension type, {type}",
+           data: { "type": name }, id: "base-type" } ),
+      (select(.properties) |
+       .properties | to_entries | .[] | .key as $pname | .value |
+       extract_use_from_prop($pname; tpname)))] |
+    reduce .[] as $item ({}; .|merge_in_index($item))
+;
+
+def extract_use_from_type(tpname):
+    [(
+      (extract_use_in_allOf(tpname)),   # select types with allOf
+      (select(.properties) |            # select object types
+       .properties | to_entries | .[] | .key as $pname | .value |
+       extract_use_from_prop($pname; tpname))
+      )] |
+    reduce .[] as $item ({}; .|merge_in_index($item))
+;
+
+# Input:  viewhelp types element node
+def find_properties_of_type(tname):
+    select(.properties) | .properties |
+    [ .[] | (select(.type.of == tname), select(.type.each == tname)) | .name ]
+;
+# Input:  viewhelp types node
+def find_typeproperties_of_type(tname):
+    [ .[] | 
+      select( (find_properties_of_type(tname) | length) > 0 ) |
+      .name as $name | find_properties_of_type(tname) |
+      .[] | { "type": $name, "prop": . }
+    ]
 ;
 
 def property2valuedoc:
@@ -108,7 +261,7 @@ def ensure_titles:
 ;
 
 def type2view(name):
-    { name: name, description: [.description], brief: .description, use: [] } +
+    { name: name, description: [.description], brief: .description } +
     (if .allOf then
         (.allOf |{ inheritsFrom: map(select(.["$ref"]) | .["$ref"] | stripref)})
      else {} end) + { properties:
@@ -120,13 +273,60 @@ def type2view(name):
       end) | ensure_titles | to_entries |
       map( .key as $key | .value | property2view($key; name) )) }
 ;
+
+def extract_polymorph_use_for_type(parent):
+   (find_typeproperties_of_type(parent) | .[] |
+    {
+      template: "As an allowed value type in the {prop} property in the {type} type",
+      data: .,
+      id: "polymorph-type"
+    }),
+    (. as $tps |
+     map(select(.name==parent) | select(.inheritsFrom) | .inheritsFrom |.[]) |
+     (.[] | . as $gp | ($tps | extract_polymorph_use_for_type($gp)))
+    )
+;
+
+# In: .definitions
+def extract_polymorph_use:
+    to_entries | map(.key as $tn | .value | type2view($tn)) | . as $tps |
+    map(select(.inheritsFrom) | .name as $tn | .inheritsFrom as $parents | {} |
+        .[$tn] = [$parents | .[] | . as $parent |
+                  ($tps | extract_polymorph_use_for_type($parent))
+                 ] |
+        if (.[$tn]|length) < 1 then del(.[$tn]) else . end 
+       ) |
+    reduce .[] as $item ({}; .|merge_in_index($item))
+;
+
+def build_use_index:
+    extract_polymorph_use as $initidx |
+    to_entries |
+    reduce .[] as $type ($initidx;
+       .|merge_in_index($type| .value | extract_use_from_type($type["key"])))
+;
+
+def type2view(name; useidx):
+    type2view(name) |
+    if (useidx[name]) then
+       (.use |= useidx[name])
+    else
+       .
+    end
+;
    
-def schema2view: {
-    title,
-    description: [.description],
-    types: (.definitions | to_entries |
-            map( .key as $key | .value | type2view($key) ))
-};
+def schema2view: 
+    (.definitions | build_use_index) as $useidx |
+    {
+      title,
+      description: (.description | [
+         (strings),
+         (arrays | .[])
+      ]),
+      types: (.definitions | to_entries |
+              map( .key as $key | .value | type2view($key; $useidx) ))
+    }
+;
 
 # this function was intended to join the outputs of multiple files.
 # It doesn't work. 
@@ -136,3 +336,15 @@ def all_schema2view:
         reduce .[1:length] as $s (.[0]; .types += $s.types)
     else .[0] end
 ;
+
+def combine_schemas:
+    [.,inputs] | (.[0] | .definitions = {} | .description = []) as $head | 
+    reduce .[] as $schema ($head; .["definitions"] += ($schema|.definitions) |
+                                  .["description"] += ($schema|[.description]))
+;
+
+def schemasuite2view:
+    combine_schemas | schema2view
+;
+
+      
