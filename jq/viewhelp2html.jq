@@ -151,11 +151,13 @@ def layout_type:
      (select(.use) | .use | map( show_message )
            | join(" </dd>\n  <dd> ")),
 
-     (" </dd>\n" +
-      "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
-      "<div class=\"md_props\">\n\n"),
+     (if .properties then
+       ((" </dd>\n" +
+         "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
+         "<div class=\"md_props\">\n\n"),
 
-     (select(.properties) | .properties | map( layout_property ) | .[]),
+        (.properties | map( layout_property ) | .[]))
+      else "" end),
 
      ("</div> <!-- end properties section -->\n" +
       "</div> <!-- end type description -->\n\n<p>\n\n"))
