@@ -104,7 +104,7 @@ def layout_property:
    ("  <dt> <strong>Value type:</strong> </dt>\n" +
     "  <dd> " + (.type|layout_prop_type) + " </dd>\n"),
 
-   (if .examples then
+   (if (.examples|length) > 0 then
       "  <dt> <strong>Example Values:</strong>\n  <dd> " +
       (.examples | map( wrap_template("<code>{0}</code>") ) |
        join(", <br />\n       ") + "\n")
@@ -112,11 +112,6 @@ def layout_property:
     
    (if .allowed then
       (.allowed | allowed_values ) 
-    else "" end),
-
-   (if (.examples|length) > 0 then
-      ("<dt> <strong>Example Values:</strong> </dt>\n",
-       (.examples[]|("<dd> "+.+" </dd>\n")))
     else "" end),
 
    "</dl>\n\n",
