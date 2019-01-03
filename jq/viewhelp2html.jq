@@ -113,8 +113,22 @@ def layout_property:
    (if .allowed then
       (.allowed | allowed_values ) 
     else "" end),
+
+   (if (.examples|length) > 0 then
+      ("<dt> <strong>Example Values:</strong> </dt>\n",
+       (.examples[]|("<dd> "+.+" </dd>\n")))
+    else "" end),
+
+   "</dl>\n\n",
+
+   (if (.notes|length) > 0 then
+      ("<div class=\"notes\">",
+       "<strong>Notes:</strong>\n<ul>\n",
+       (.notes[]|("  <li> "+.+" </li>\n")),
+       "</ul>\n</div>\n")
+    else "" end),
     
-   ("</dl>\n</div> <!-- end property description -->\n\n"))
+   ("\n</div> <!-- end property description -->\n\n"))
    as $p (""; . + $p)
 ;
 
@@ -137,10 +151,10 @@ def layout_type:
                    | join(" <p>\n")+"\n"),
 
      ("  <dt> <strong>Where it is used:</strong> </dt>\n" + 
-      "  <dd> as a "),
+      "  <dd> "),
 
      (select(.use) | .use | map( show_message )
-           | join(" </dd>\n  <dd> as a ")),
+           | join(" </dd>\n  <dd> ")),
 
      (" </dd>\n" +
       "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +

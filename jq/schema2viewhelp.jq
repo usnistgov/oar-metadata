@@ -131,14 +131,15 @@ def extract_use_from_proptype(name; tp):
     if .of then
       (.of as $type | {} |
        .[$type] |=
-         { "template": "value type for the {prop} property in the {type} type",
+         { "template":
+              "as a value type for the {prop} property in the {type} type",
            "data": { "prop": name, "type": tp }, id: "value-type"} )
     else
       if .each then
         (.each as $type | {} |
          .[$type] |=
            { "template":
-                  "value type for the {prop} list property of the {type} type",
+              "as a value type for the {prop} list property of the {type} type",
               "data": { "prop": name, "type": tp }, id: "list-type"} )
       else
         empty
@@ -159,7 +160,8 @@ def extract_use_from_prop_post(name; tp):
 def extract_use_from_prop(name; tp):
     if .["$ref"]
     then
-      ({"template": "value type for the {prop} property in the {type} type",
+      ({"template":
+             "as a value type for the {prop} property in the {type} type",
         "data": { "prop": name, "type": tp }, id: "value-type"} as $val |
        (.["$ref"] | stripref) as $ref |
        ({}|.[$ref] |= [$val]))
@@ -167,7 +169,7 @@ def extract_use_from_prop(name; tp):
       if .items["$ref"]
       then
         ({"template":
-                   "value type for the {prop} list property of the {type} type",
+              "as a value type for the {prop} list property of the {type} type",
           "data": { "prop": name, "type": tp }, id: "list-type"} as $val |
          (.items["$ref"] | stripref) as $ref |
          ({}|.[$ref] |= [$val]))
@@ -175,7 +177,7 @@ def extract_use_from_prop(name; tp):
         if (.allOf and (.allOf | select_ref))
         then
           ({"template":
-             "part of the value type for the {prop} property of the {type} type",
+             "as a part of the value type for the {prop} property of the {type} type",
             "data": { "prop": name, "type": tp }, id: "value-part"}  as $val |
            [.allOf | select_ref | (.["$ref"] | stripref) as $ref |
             ({}|.[$ref] |= [$val])] |
@@ -190,7 +192,7 @@ def extract_use_from_prop(name; tp):
 def extract_use_in_allOf(name):
     select(.allOf) | .allOf |
     ((select_ref | .["$ref"] | stripref as $ref |
-      {template: "basis for extension type, {type}",
+      {template: "as the basis for extension type, {type}",
         data: { type: name }, id: "base-type" }      as $val |
       ({}|.[$ref] |= [$val])
      ),
@@ -204,7 +206,7 @@ def extract_use_in_allOf(name):
 def extract_use_from_type_post(tpname):
     [((select(.inheritsFrom) | .inheritsFrom as $type |
        {}| .[$type] |= 
-         { template: "basis for extension type, {type}",
+         { template: "as the basis for extension type, {type}",
            data: { "type": name }, id: "base-type" } ),
       (select(.properties) |
        .properties | to_entries | .[] | .key as $pname | .value |
@@ -251,7 +253,10 @@ def property2view:
       type: typeinfo,
       description: [ .description ],
       brief: .description,
-      label: .title
+      label: .title,
+      schema_notes: .notes,
+      examples: [],
+      notes: []
     } +
     property2valuedoc 
 ;
@@ -304,7 +309,7 @@ def type2view(name):
 def extract_polymorph_use_for_type(parent):
    (find_typeproperties_of_type(parent) | .[] |
     {
-      template: "As an allowed value type in the {prop} property in the {type} type",
+      template: "as an allowed value type in the {prop} property in the {type} type",
       data: .,
       id: "polymorph-type"
     }),
