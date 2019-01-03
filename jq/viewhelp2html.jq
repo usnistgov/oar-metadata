@@ -23,10 +23,10 @@ def wrap_template(tmpl):
     wrap_template(tmpl; "0")
 ;
 def make_type_link(tname):
-    "<a href=\"#{0}\">{0}</a>" | template({"0": tname})
+    "<span class=\"Type reference\"><a href=\"#{0}\">{0}</a></span>" | template({"0": tname})
 ;
 def make_prop_link(pname; tname):
-    "<a href=\"#{0}\">{1}</a>" | template({"0": (tname+"."+pname), "1": pname})
+    "<span class=\"Property reference\"><a href=\"#{0}\">{1}</a></span>" | template({"0": (tname+"."+pname), "1": pname})
 ;
 def _make_links:
     if .type then
@@ -76,12 +76,14 @@ def layout_prop_type:
      else null
      end
    end) as $type | .show |
-  if $type
-  then
-    sub($type; "<a href=\"#"+$type+"\">"+$type+"</a>")
-  else
-    .
-  end
+  ((strings |
+    if $type
+    then
+      sub($type; "<span class=\"Type reference\"><a href=\"#"+$type+"\">"+$type+"</a></span>")
+    else
+      .
+    end),
+   (objects | show_message)) 
 ;
 
 def layout_property:
@@ -118,6 +120,7 @@ def layout_property:
 
 def layout_type:
   . as $type |
+  (.show|show_message) as $show |
   reduce  
     (("<a name=\"{name}\"></a>\n" + 
       "<div class=\"md_entry md_type\">\n" +
@@ -125,23 +128,25 @@ def layout_type:
       "<span class=\"preheading\"><a href=\"#def_type\">Named Type</a></span>" +
       "<br />\n<span class=\"Type heading\">{name}</span>\n"+
       "</h3>\n<hr />\n\n<dl>\n" +
+      "  <dt> <strong>JSON type:</strong> </dt>\n" +
+      "  <dd> "+$show+" </span>\n" +
       "  <dt> <strong>What it represents:</strong> </dt>\n" 
       | template($type)),
 
      (.description | map( wrap_template("  <dd> {0} </dd>") )
                    | join(" <p>\n")+"\n"),
 
-     ("  <dt> <strong>How it is used:</strong> </dt>\n" + 
-      "  <dd> "),
+     ("  <dt> <strong>Where it is used:</strong> </dt>\n" + 
+      "  <dd> as a "),
 
      (select(.use) | .use | map( show_message )
-           | join(" </dd>\n  <dd> ")),
+           | join(" </dd>\n  <dd> as a ")),
 
      (" </dd>\n" +
       "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
       "<div class=\"md_props\">\n\n"),
 
-     (.properties | map( layout_property ) | .[]),
+     (select(.properties) | .properties | map( layout_property ) | .[]),
 
      ("</div> <!-- end properties section -->\n" +
       "</div> <!-- end type description -->\n\n<p>\n\n"))

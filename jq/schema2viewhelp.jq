@@ -33,10 +33,18 @@ def show_type:
               end
           else
               if .type == "array" then
-                  "list of " +
                   if .items.type == "string" then
-                      "text values"
-                  else (.items | show_type) + "s" end
+                      "list of text values"
+                  else
+                    if .items["$ref"] then
+                      {
+                         template: "list of {type} objects",
+                         data: { type: (.items["$ref"]|stripref) }
+                      }
+                    else
+                      "list of " + (.items | show_type) + "s"
+                    end
+                  end
               else
                   if .type == "int" then "integer"
                   else
@@ -263,15 +271,34 @@ def ensure_titles:
 def type2view(name):
     { name: name, description: [.description], brief: .description } +
     (if .allOf then
-        (.allOf |{ inheritsFrom: map(select(.["$ref"]) | .["$ref"] | stripref)})
-     else {} end) + { properties:
-    ((if .allOf then
-        (.allOf | map(select(.properties) | .properties) 
-                | reduce .[] as $itm ({}; . + $itm))
-      else
-        (if .properties then .properties else {} end)
-      end) | ensure_titles | to_entries |
-      map( .key as $key | .value | property2view($key; name) )) }
+       (
+         .allOf |
+         {
+           jtype: "object", show: "object",
+           inheritsFrom: map(select(.["$ref"]) | .["$ref"] | stripref),
+           properties: (map(select(.properties) | .properties) |
+                        reduce .[] as $itm ({}; . + $itm) ) 
+         } |
+         if (.properties|length) > 0 then . else
+           del(.properties)
+         end
+       )
+     else
+       if .items then
+         { jtype: "array", each: .items.type, show: show_type }
+       else
+         (if .type then
+            { jtype: .type, show: show_type }
+          else
+            { jtype: "object", show: "object" }
+          end +
+          if .properties then {properties} else {} end)
+       end
+     end) |
+    if .properties then
+      .properties |= (ensure_titles | to_entries |
+                      map( .key as $key | .value | property2view($key; name) ))
+    else . end
 ;
 
 def extract_polymorph_use_for_type(parent):

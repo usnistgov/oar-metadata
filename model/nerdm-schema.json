@@ -945,7 +945,7 @@
         "PostalAddress": {
             "description": "a line-delimited listing of a postal address",
             "type": "array",
-            "item": { "type": "string", "minLength": 1 },
+            "items": { "type": "string", "minLength": 1 },
             "asOntology": {
                 "@context": "profile-schema-onto.json",
                 "referenceProperty": "vcard:hasAddress"
