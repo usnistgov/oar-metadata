@@ -1,4 +1,4 @@
-h1,h2 {
+h1,h2,h3 {
     color: #886906;
 }
 
@@ -28,6 +28,7 @@ h1,h2 {
     margin-bottom: 5px;
 }
 .md_entry h3,h5 {
+    color: black;
     margin-top: 0px;
     margin-bottom: 0px;
 }

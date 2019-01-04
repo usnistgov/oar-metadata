@@ -367,11 +367,50 @@ def type2view(name; useidx; propidx):
     else
        .
     end |
+
     if .inheritsFrom then
        .inheritedProperties |= [] |
        reduce (.inheritsFrom|.[]) as $p
               (.; .inheritedProperties += inherited_from($p; propidx))
-    else . end
+    else . end |
+
+    . + { cat: (
+      if .inheritedProperties then
+        if (.inheritedProperties|map(select(.from=="Component"))|length) > 0
+        then
+          "Component"
+        else
+          if (.inheritedProperties|map(select(.from=="Resource"))|length) > 0
+          then
+            "Resource"
+          else
+            "Other"
+          end
+        end
+      else
+        if .inheritsFrom then
+          if (.inheritsFrom | map(select(.=="Component")) |length) > 0 then
+            "Component"
+          else
+            if (.inheritsFrom | map(select(.=="Resource")) |length) > 0 then
+              "Resource"
+            else
+              "Other"
+            end
+          end
+        else
+          if .name == "Component" then
+            "Component"
+          else
+            if .name == "Resource" then
+              "Resource"
+            else
+              "Other"
+            end
+          end
+        end
+      end
+    )}
 ;
    
 def schema2view: 

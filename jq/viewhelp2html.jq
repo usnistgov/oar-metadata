@@ -205,9 +205,42 @@ def layout_type:
    as $p (""; . + $p)
 ;
 
-def layout_schema:
+def layout_schema(title):
 #     .types[] | layout_type
-    reduce (.types[] | layout_type) as $t ("<h2>Resource Types</h2>\n"; . + $t)
+    "<h2> "+title+" </h2>\n\n" +
+
+    "<h3> Index </h3>\n<ul>\n"+
+    "  <li> <a href=\"#sec:Resource\">Resource Types</a> </li>\n  <ul>\n"+
+    (.types | map(select(.cat == "Resource") |
+                  "    <li> " + make_type_link(.name; .brief) + " </li> ") |
+     join("\n")) +
+
+    "  </ul>  <li> <a href=\"#sec:Component\">Component Types</a> </li>\n  <ul>\n"+
+    (.types | map(select(.cat == "Component") |
+                  "    <li> " + make_type_link(.name; .brief) + " </li> ") |
+     join("\n")) +
+
+    "  </ul>  <li> <a href=\"#sec:Other\">Other Types</a> </li>\n  <ul>\n"+
+    (.types | map(select(.cat != "Component" and .cat != "Resource") |
+                  "    <li> " + make_type_link(.name; .brief) + " </li> ") |
+     join("\n")) +
+
+    "  </ul>\n</ul>\n\n" +
+
+    reduce
+       (.types[] | select(.cat == "Resource") | layout_type) as $t
+       ("<a name=\"sec:Resource\"></a>\n<h3>Resource Types</h3>\n\n"; . + $t) +
+    reduce
+       (.types[] | select(.cat == "Component") | layout_type) as $t
+       ("<a name=\"sec:Component\"></a>\n<h3>Component Types</h3>\n\n"; . +$t) +
+    reduce
+       (.types[] | select(.cat != "Component" and .cat != "Resource")
+                 | layout_type) as $t
+       ("<a name=\"sec:Other\"></a>\n<h3>Other Types</h3>\n\n"; . + $t)
+;
+
+def layout_schema:
+    layout_schema("Reference: Complex Types")
 ;
 
 def view2html:
