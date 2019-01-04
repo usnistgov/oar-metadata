@@ -22,20 +22,33 @@ def wrap_template(tmpl; tag):
 def wrap_template(tmpl):
     wrap_template(tmpl; "0")
 ;
-def make_type_link(tname):
-    "<span class=\"Type reference\"><a href=\"#{0}\">{0}</a></span>" | template({"0": tname})
+def make_type_link(tname; title):
+    (title | gsub("\""; "\\\"")) as $title | 
+    { tn: tname, ti: $title } as $data |
+    "<span class=\"Type reference\"><a href=\"#{tn}\"" | template($data) +
+    (if ($title|length) > 0 then
+       (" title=\"{ti}\"" | template($data))
+     else "" end) +
+    ">{tn}</a></span>" | template($data)
 ;
-def make_prop_link(pname; tname):
-    "<span class=\"Property reference\"><a href=\"#{0}\">{1}</a></span>" | template({"0": (tname+"."+pname), "1": pname})
+def make_prop_link(pname; tname; title):
+    (title | gsub("\""; "\\\"")) as $title | 
+    { pn: pname, tn: tname, ti: $title } as $data |
+    "<span class=\"Property reference\"><a href=\"#{tn}.{pn}\""|template($data)+
+    (if ($title|length) > 0 then
+       (" title=\"{ti}\"" | template($data))
+     else "" end) +
+    ">{pn}</a></span>" | template($data)
 ;
 def _make_links:
     if .type then
-      .type as $type | 
+      .type as $type |
+      (if .title then .title else "" end) as $title |
       (if .prop then
          (.prop as $prop | 
-          .prop |= make_prop_link($prop; $type))
+          .prop |= make_prop_link($prop; $type; $title))
        else . end |
-       .type |= make_type_link($type))
+       .type |= make_type_link($type; $title))
     else
       .
     end
@@ -127,6 +140,26 @@ def layout_property:
    as $p (""; . + $p)
 ;
 
+def layout_inherited_properties:
+   if (.properties|length) > 0 then
+     ({ type: .from, title: .brief } | _make_links) as $type |
+     .properties as $props |
+     reduce
+       (("<div class=\"md_entry md_iprop\">\n" +
+         "<dl>\n  <dt> Inherited from {type}: </dt>\n" +
+         "  <dd> "
+         | template($type)),
+
+        (.properties |
+         map({ type: .parent, prop: .name, title: .brief }| _make_links| .prop)|
+         join(",\n       ")),
+
+        "\n  </dd>\n</dl>\n</div>\n\n"
+       )
+     as $item (""; . + $item)
+   else "" end
+;
+
 def layout_type:
   . as $type |
   (.show|show_message) as $show |
@@ -150,14 +183,21 @@ def layout_type:
 
      (select(.use) | .use | map( show_message )
            | join(" </dd>\n  <dd> ")),
+         
+     " </dd>\n</dl>",
 
-     (if .properties then
-       ((" </dd>\n" +
-         "</dl> <p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
+     (if .properties or .inheritedProperties then
+       (("<p>\n\n<h4>Properties:</h4>\n</div>\n\n" +
          "<div class=\"md_props\">\n\n"),
 
-        (.properties | map( layout_property ) | .[]))
-      else "" end),
+        (if .inheritedProperties then
+          (.inheritedProperties | map( layout_inherited_properties ) | .[])
+         else empty end),
+
+        (if .properties then
+          (.properties | map( layout_property ) | .[])
+         else empty end))
+      else empty end),
 
      ("</div> <!-- end properties section -->\n" +
       "</div> <!-- end type description -->\n\n<p>\n\n"))

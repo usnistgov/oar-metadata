@@ -255,8 +255,8 @@ def property2view:
       brief: .description,
       label: .title,
       schema_notes: .notes,
-      examples: [],
-      notes: []
+      notes: [],
+      examples: []
     } +
     property2valuedoc 
 ;
@@ -338,17 +338,45 @@ def build_use_index:
        .|merge_in_index($type| .value | extract_use_from_type($type["key"])))
 ;
 
-def type2view(name; useidx):
+def build_prop_index:
+    to_entries | map(.key as $nm|.value|type2view($nm)) |
+    reduce .[] as $type ({}; .[($type|.name)] |= $type)
+;
+
+def inherited_from(parent; propidx):
+    if (propidx[parent]) then
+       parent as $prnt |
+       propidx[parent] | [
+         (select(.inheritsFrom) | .inheritsFrom |
+          map(inherited_from(.; propidx) |.[]) | .[]),
+         {
+           from: $prnt,
+           brief: .brief,
+         } +
+         if .properties then
+            { properties: .properties }
+         else {} end
+       ]
+    else [] end
+;
+
+def type2view(name; useidx; propidx):
     type2view(name) |
     if (useidx[name]) then
        (.use |= useidx[name])
     else
        .
-    end
+    end |
+    if .inheritsFrom then
+       .inheritedProperties |= [] |
+       reduce (.inheritsFrom|.[]) as $p
+              (.; .inheritedProperties += inherited_from($p; propidx))
+    else . end
 ;
    
 def schema2view: 
     (.definitions | build_use_index) as $useidx |
+    (.definitions | build_prop_index) as $propidx |
     {
       title,
       description: (.description | [
@@ -356,7 +384,7 @@ def schema2view:
          (arrays | .[])
       ]),
       types: (.definitions | to_entries |
-              map( .key as $key | .value | type2view($key; $useidx) ))
+              map( .key as $key | .value | type2view($key; $useidx; $propidx) ))
     }
 ;
 

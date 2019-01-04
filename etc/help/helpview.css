@@ -64,6 +64,16 @@ h1,h2 {
 .md_prop hr {
     border-color: #098111;
 }
+.md_iprop {
+    border-color:  #098111;
+    border-radius: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
 
 .type_body {
     padding-left: 11px;
