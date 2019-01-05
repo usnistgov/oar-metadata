@@ -1,0 +1,53 @@
+<h1>The NIST Extensible Resource Data Model: <br />
+    a Reader's Guide to NERDm Metadata</h1>
+
+<h4>Table of Contents</h4>
+<ul>
+  <li> <a href="#sec:intro">Introduction</a> </li>
+  <li> <a href="#sec:namedtypes">NERDm Reference: Named Types</a> </li>
+       <ul>
+         <li> <a href="#sec:Resource">Resource Types</a> </li>
+         <li> <a href="#sec:Component">Component Types</a> </li>
+         <li> <a href="#sec:Other">Other Types</a> </li>
+       </ul> </li>
+  <li> <a href="#sec:glossary">Glossary</a> </li>
+</ul>
+
+<a name="sec:intro"></a>
+<h2>Introduction</h2>
+
+<p>
+
+The NERDm schema is used to encode metadata describing various kinds
+of <em>resources</em>--datasets, data collections, web portals,
+software, and tools--that are offered by NIST through its
+<a href="https://data.nist.gov/">data science portal</a>.  Resources
+are the main kind of "thing" that NERDm metadata is used to describe,
+and there are different types resources.  NERDm metadata is encoded in
+JSON format (specifically, <a href="https://json-ld.org">JSON-LD</a>),
+but this guide attempts to describe the metadata without relying on
+much knowledge of that format.  The purpose of this document is to
+guide readers that wish to inspect NERDm JSON records and understand
+that the metadata means.  
+</p>
+
+<p>
+(Software developers that wish to read and process NERDm records may
+also find this document useful for browsing metadata definitions.
+However, they can also consult the
+<a href="https://json-schema.org/">JSON Schema</a> definition
+documents useful.  The NERDm schema has two parts: a
+<a href="https://data.nist.gov/od/dm/nerdm-schema/">core schema</a>,
+and an <a href="https://data.nist.gov/od/dm/nerdm-pub-schema/">an
+extension schema for describing data publications</a>.)
+</p>
+
+<p>
+Below is an annotated example of a NERDm record describing a data
+resource.  The metadata is in the form of a set of <em>properties</em>.  A
+<a href="#def:property" title="definition: property">property</a> is a
+piece of metadata that has a <em>name</em> and a <em>value</em>.  The
+<a href="def:value_type" title="definition: value type">value</a> can
+be a single value (e.g. text, a number, true/false), a list of values,
+or a complex values made up of sub-properties.  
+</p>

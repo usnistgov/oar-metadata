@@ -100,5 +100,7 @@ h1,h2,h3 {
 }
 
 code {
-    font-size: large;
+    font-size: larger;
+    background-color: #eeeeee;
+#    font-weight: bolder;
 }

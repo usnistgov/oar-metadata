@@ -1,0 +1,4718 @@
+{
+  "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
+  "description": [
+    "A JSON Schema specfying the core NERDm classes",
+    "These classes extend the based NERDm schema to different types of published data"
+  ],
+  "types": [
+    {
+      "name": "Resource",
+      "description": [
+          "a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application.",
+          "There are different types of Resources; this <i>Named Type</i> represents a generic resource.  The other Resource types described later in this section add additional metadata to the base set shown here to describe more specific kinds of resources (like data publications, APIs, etc.)"
+      ],
+      "brief": "a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "title",
+          "parent": "Resource",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "Human-readable, descriptive name of the resource"
+          ],
+          "brief": "Human-readable, descriptive name of the resource",
+          "label": "Title",
+          "schema_notes": [
+            "Acronyms should be avoided"
+          ],
+          "notes": [],
+          "examples": [
+            "\"The NIST High Temperature Superconducting Materials Database\"",
+            "\"Organic Contaminants in Non-Fortified Human Milk\""
+          ]
+        },
+        {
+          "name": "description",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "Human-readable description (e.g., an abstract) of the resource"
+          ],
+          "brief": "Human-readable description (e.g., an abstract) of the resource",
+          "label": "Description",
+          "schema_notes": [
+            "Each element in the array should be considered a separate paragraph"
+          ],
+            "notes": [
+                "Each list element should be considered as a separate paragraph."
+            ],
+          "examples": []
+        },
+        {
+          "name": "keyword",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users."
+          ],
+          "brief": "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.",
+          "label": "Tags",
+          "schema_notes": [
+            "Surround each keyword with quotes. Separate keywords with commas. Avoid duplicate keywords in the same record."
+          ],
+            "notes": [
+                "Each value in the list represents a different keyword.  Keywords can be made up of multiple words"
+            ],
+            "examples": [
+                "metals",
+                "quantum mechanics"
+            ]
+        },
+        {
+          "name": "topic",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "Topic",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "Topic"
+              }
+            }
+          },
+          "description": [
+            "A tag or label taken from a pre-defined vocabulary for a thing or concept that this resource addresses or speaks to"
+          ],
+          "brief": "A tag or label taken from a pre-defined vocabulary for a thing or concept that this resource addresses or speaks to",
+          "label": "topic",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "modified",
+          "parent": "Resource",
+          "type": {
+            "type": "object",
+            "of": "ISO8601DateRange",
+            "show": "ISO8601DateRange object"
+          },
+          "description": [
+            "Most recent date on which the dataset was changed, updated or modified."
+          ],
+          "brief": "Most recent date on which the dataset was changed, updated or modified.",
+          "label": "modified",
+          "schema_notes": [
+            "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
+          ],
+            "notes": [
+                "The value is usually a single formated date, like <code>2017-04-21</code>, or a data and time, like <code>2019-02-23T14:31:10.3</code>",
+                "A special format is used to indicate the resource is regularly update; e.g., <code>R/P1W</code> (for once a week); see <a href=\"#ISO8601DateRange\"><span class=\"Type Reference\">ISO8601DateRange</span></a> for details."
+            ],
+          "examples": []
+        },
+        {
+          "name": "issued",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "Date of formal issuance of the resource"
+          ],
+          "brief": "Date of formal issuance of the resource",
+          "label": "Release Date",
+          "schema_notes": null,
+          "notes": [
+              "The value is usually a single formated date, like <code>2017-04-21</code>"
+          ],
+          "examples": []
+        },
+        {
+          "name": "publisher",
+          "parent": "Resource",
+          "type": {
+            "type": "object",
+            "of": "Organization",
+            "show": "Organization object"
+          },
+          "description": [
+            "The publishing entity and optionally their parent organization(s)."
+          ],
+          "brief": "The publishing entity and optionally their parent organization(s).",
+          "label": "publisher",
+          "schema_notes": [
+            "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "contactPoint",
+          "parent": "Resource",
+          "type": {
+            "type": "object",
+            "of": "ContactInfo",
+            "show": "ContactInfo object"
+          },
+          "description": [
+            "Contact information for getting more information about this resource"
+          ],
+          "brief": "Contact information for getting more information about this resource",
+          "label": "contactPoint",
+          "schema_notes": [
+            "This should include at least a name and an email address",
+            "The information can reflect either a person or a group (such as a help desk)"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "accessLevel",
+          "parent": "Resource",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available"
+          ],
+          "brief": "The degree to which this dataset is publicly-available (or is restricted in some way)",
+          "label": "Public Access Level",
+          "schema_notes": [],
+          "notes": [],
+          "examples": [],
+          "allowed": {
+            "public": "Data asset is or could be made publicly available to all without restrictions",
+            "restricted public": "Data asset is available under certain use restrictions",
+            "non-public": "Data asset is not available to members of the public"
+          }
+        },
+        {
+          "name": "license",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+            "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published"
+          ],
+          "brief": "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published",
+          "label": "License",
+          "schema_notes": [
+            "Software and data developed primarily by federal employees must be considered in the public domain; software primarily developed by contract can be assigned a license, including an open source license.",
+            "By default, NIST-produced data and software should point to http://www.nist.gov/data/license.cfm",
+            "See Open Licenses (https://project-open-data.cio.gov/open-licenses/) for more information."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "rights",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "information regarding access or restrictions based on privacy, security, or other policies"
+          ],
+          "brief": "information regarding access or restrictions based on privacy, security, or other policies",
+          "label": "Rights",
+          "schema_notes": [
+            "This should also provide an explanation for the selected \"accessLevel\" including instructions for how to access a restricted file, if applicable, or explanation for why a \"non-public\" or \"restricted public\" data assetis not \"public,\" if applicable.",
+            "Text must be 255 or fewer characters."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "components",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "Component",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "Component"
+              }
+            }
+          },
+          "description": [
+            "a listing of the various component resources, tools, and distributions of this resource.  A component usually represents data that is part of this resource that be retrieved or a way to interact with the data."
+          ],
+          "brief": "a listing of the various component resources, tools, and distributions of this resource",
+          "label": "components",
+          "schema_notes": [
+            "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
+            "The @type property will indicate which type of component it is.  The first value in the @type list should be considered the primary or most important classification.",
+            "If an item's @type includes dcat:Distribution, the item should be convertable to a distribution in the POD schema.",
+            "The order should be considered meaningful (at least for components of the same type).  The meaning or intention behind the order can depend on the type; however, generally, display of the components of a common type should preserve the order.  For clarity then, it is recommended that items of the same primary type should be grouped together in the list."
+          ],
+            "notes": [
+                "This list often includes the list of data files (represented as <span class=\"Type reference\"><a href=\"#DataFile\" title=\"a downloadable, finite stream of data\">DataFile</a></span> components) that are available to download.",
+                "Data files can be organized into a hierarchy of subcollections (like file folders).  When this is the case, this list will also include <span class=\"Type reference\"><a href=\"#Subcollection\" title=\"A grouping of components within a named subcollection of the resource\">Subcollection</a></span> components.  Both <span class=\"Type reference\"><a href=\"#DataFile\" title=\"a downloadable, finite stream of data\">DataFile</a></span> and <span class=\"Type reference\"><a href=\"#Subcollection\" title=\"A grouping of components within a named subcollection of the resource\">Subcollection</a></span> components included a <span class=\"Property reference\"><a href=\"#DataFile.filepath\" title=\"a name for the data file reflecting its hierarchical location in the data source collection\">filepath</a></span> that indicates where it is located in the hierarchy."
+            ],
+          "examples": []
+        },
+        {
+          "name": "conformsTo",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+            "URI used to identify a standardized specification the resource conforms to"
+          ],
+          "brief": "URI used to identify a standardized specification the resource conforms to",
+          "label": "Standard",
+          "schema_notes": null,
+            "notes": [
+                "This identifier might refer to a file or dataset format, to database schema, or to a web API."
+            ],
+          "examples": []
+        },
+        {
+          "name": "isPartOf",
+          "parent": "Resource",
+          "type": {
+            "type": "object",
+            "of": "ResourceReference",
+            "show": "ResourceReference object"
+          },
+          "description": [
+            "The collection of which the dataset is a subset"
+          ],
+          "brief": "The collection of which the dataset is a subset",
+          "label": "Collection",
+          "schema_notes": null,
+            "notes": [
+                "The resource being referenced normally is one that is also described by a NERDm record which is accessible via its identifier (given in the <a href=\"#ResourceReference.proxyFor\" title=\"a local identifier representing this resource\">proxyFor</a></span> property)."
+            ],
+          "examples": []
+        },
+        {
+          "name": "language",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "list of text values"
+          },
+          "description": [
+            "The primary language used in the dataset"
+          ],
+          "brief": "The primary language used in the dataset",
+          "label": "Language",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "landingPage",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+            "a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.  This page represents the definitive location for accessing the resource."
+          ],
+          "brief": "a URL to a human-friendly web page for accessing the resource.",
+          "label": "Homepage URL",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "references",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "DocumentReference",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "DocumentReference"
+              }
+            }
+          },
+          "description": [
+            "Related documents such as literature articles, technical reports about a dataset, developer documentation, etc. that refer to or describe this resource"
+          ],
+          "brief": "Other documents describing or relating to this resource",
+          "label": "Related Documents",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "theme",
+          "parent": "Resource",
+          "type": {
+            "type": [
+              {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "list of text values"
+          },
+          "description": [
+            "Main thematic category of the dataset."
+          ],
+          "brief": "Main thematic category of the dataset.",
+          "label": "Category",
+          "schema_notes": [
+            "Could include ISO Topic Categories (http://www.isotopicmaps.org/)"
+          ],
+            "notes": [
+                "Values are taken from the Taxonomy of NIST Research Areas."
+            ],
+          "examples": []
+        },
+        {
+          "name": "@id",
+          "parent": "Resource",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "The NIST-assigned unique identifier for the resource"
+          ],
+          "brief": "The NIST-assigned identifier for the resource",
+          "label": "@id",
+          "schema_notes": [
+            "It is expected that this field will contain a type of identifier that is of a uniform type across all resource descriptions in the system",
+            "This identifier should, by default, resolve to the metadata record (or some rendering of it) rather than to the resource itself (e.g. via its landing page)."
+          ],
+            "notes": [
+                "This identifier takes a the form of a NIST-issued ARK identifier (and thus starts with <code>ark:/88434/</code>)",
+                "If the resource has been assigned a DOI, it will appear in the <a href=\"#Resource.doi\" title=\"The Digital Object Identifier (DOI)\">doi</a></span>"
+            ],
+          "examples": []
+        },
+        {
+          "name": "doi",
+          "parent": "Resource",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "A Digital Object Identifier (DOI) in non-resolving form."
+          ],
+          "brief": "The Digital Object Identifier (DOI)",
+          "label": "doi",
+          "schema_notes": [
+            "The DOI value should not have the resolver URI base, but should have the form 'doi:NNNNN/XXXXXX'",
+            "It is expected that this will primarily be Datacite DOIs"
+          ],
+          "notes": [],
+            "examples": [
+                "\"doi:10.18434/T42S31\""
+            ]
+        },
+        {
+          "name": "ediid",
+          "parent": "Resource",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the NIST EDI identifier assigned to the resource.  This is the identifier assigned by the MIDAS system."
+          ],
+          "brief": "the NIST EDI identifier assigned to the resource",
+          "label": "ediid",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "abbrev",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "An abbreviated form of the resource's title.  This abbreviation can be used as a compact, human-readable reference to the resource."
+          ],
+          "brief": "an abbreviated form of the resource's title",
+          "label": "abbrev",
+          "schema_notes": [
+            "this can be used as a label for a compact display or text for a link to this resource"
+          ],
+          "notes": [],
+            "examples": [
+                "\"SRD 13\"",
+                "\"JRes-NIST\""
+            ]
+        },
+        {
+          "name": "@type",
+          "parent": "Resource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "The linked-data class types for this resource.  The labels given in this list indicate the kind of thing is being described by metadata."
+          ],
+          "brief": "the linked-data class types for this resource",
+          "label": "@type",
+          "schema_notes": [
+            "The value must always be given as an array, even when only one type is provided.",
+            "Multiple values indicate that the Resource can be considered of multiple types",
+            "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+          ],
+            "notes": [
+                "This property is a list because it is possible for a resource to be catorgorized as multiple types simultaneously",
+                "The first value in the list will be the most specific resource type that applies to the resource and should be considered, therefore, its primary type.",
+                "Often, the values refer to <i>Named Types</i> defined explicitly in the NERDm schema (e.g. <span class=\"Type reference\"><a href=\"#DataPublication\" title=\"Data presented by one or more authors as citable publication\">DataPublication</a></span>); in this case, the resource metadata can include the extended metadata properties for that type.",
+                "Some values are just semantic labels that do not imply the existance of additional extended metadata.",
+                "These values are intended to be compliant with use of @type property in the JSON-LD format."
+            ],
+            "examples": [
+                "\"nrdp:DataPublication\"", "\"nrdp:SRD\"", "\"dcat:Dataset\""
+            ]
+        }
+      ],
+      "use": [
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "PublicDataResource"
+          },
+          "id": "base-type"
+        }
+      ],
+      "cat": "Resource"
+    },
+    {
+      "name": "DocumentReference",
+      "description": [
+        "descriptive reference to a document"
+      ],
+      "brief": "descriptive reference to a document",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@id",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a (relative) identifier for the reference"
+          ],
+          "brief": "a (relative) identifier for the reference",
+          "label": "@id",
+          "schema_notes": [
+            "This identifier refers specifically to the reference within a resource; it does not refer to document itself (which preferably has its own DOI).",
+            "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+            "A relative identifier requires that @base be set to the Resource identifier in the @context."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "@type",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            null
+          ],
+          "brief": null,
+          "label": "@type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "location",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "the URL for accessing the document"
+          ],
+          "brief": "the URL for accessing the document",
+          "label": "location",
+          "schema_notes": [
+            "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "label",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a recommended label or title to display as the text for a link to the document"
+          ],
+          "brief": "a recommended label or title to display as the text for a link to the document",
+          "label": "label",
+          "schema_notes": [
+            "This is intended to be briefer than a citation."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "citation",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a full formated citation string for the reference, appropriate for inclusion in a bibliography"
+          ],
+          "brief": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
+          "label": "citation",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "refid",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "An persistent ID for the referenced document."
+          ],
+          "brief": "An persistent ID for the referenced document.",
+          "label": "refid",
+          "schema_notes": [
+            "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
+            "location may use the URL form of the ID."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "refType",
+          "parent": "DocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the type of relationship that this document has with the resource"
+          ],
+          "brief": "the type of relationship that this document has with the resource",
+          "label": "refType",
+          "schema_notes": [
+            "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
+            "The DCiteDocumentReference type sets DataCite terms as controlled vocabulary"
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "references",
+            "type": "Resource"
+          },
+          "id": "list-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "DCiteDocumentReference"
+          },
+          "id": "base-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "DCiteDocumentReference",
+      "description": [
+        "a descriptive reference to a document with a controlled vocabulary for its reference type (refType)"
+      ],
+      "brief": "a descriptive reference to a document with a controlled vocabulary for its reference type (refType)",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "DocumentReference"
+      ],
+      "properties": [
+        {
+          "name": "refType",
+          "parent": "DCiteDocumentReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            null
+          ],
+          "brief": null,
+          "label": "refType",
+          "schema_notes": null,
+          "notes": [],
+          "examples": [],
+          "allowed": {
+            "IsDocumentedBy": "The referenced document provides documentation of the resource.",
+            "IsSupplementedBy": "The referenced document is a supplement to the resource.",
+            "IsCitedBy": "The referenced document cites the resource in some way.",
+            "Cites": "This resource cites the referenced document.",
+            "IsReviewedBy": "The referenced document reviews this resource.",
+            "IsReferencedBy": "The resource is used as a source of information by the referenced document.",
+            "References": "The referenced document is used as a source of information by the resource.",
+            "IsSourceOf": "The resource is the source of upon which the referenced document is based.",
+            "IsDerivedFrom": "The referenced document is the source upon which the resource is based."
+          }
+        }
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "references"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "DocumentReference",
+          "brief": "descriptive reference to a document",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the reference"
+              ],
+              "brief": "a (relative) identifier for the reference",
+              "label": "@id",
+              "schema_notes": [
+                "This identifier refers specifically to the reference within a resource; it does not refer to document itself (which preferably has its own DOI).",
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                null
+              ],
+              "brief": null,
+              "label": "@type",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "location",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              "description": [
+                "the URL for accessing the document"
+              ],
+              "brief": "the URL for accessing the document",
+              "label": "location",
+              "schema_notes": [
+                "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "label",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a recommended label or title to display as the text for a link to the document"
+              ],
+              "brief": "a recommended label or title to display as the text for a link to the document",
+              "label": "label",
+              "schema_notes": [
+                "This is intended to be briefer than a citation."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "citation",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a full formated citation string for the reference, appropriate for inclusion in a bibliography"
+              ],
+              "brief": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
+              "label": "citation",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "refid",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "An persistent ID for the referenced document."
+              ],
+              "brief": "An persistent ID for the referenced document.",
+              "label": "refid",
+              "schema_notes": [
+                "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
+                "location may use the URL form of the ID."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "refType",
+              "parent": "DocumentReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "the type of relationship that this document has with the resource"
+              ],
+              "brief": "the type of relationship that this document has with the resource",
+              "label": "refType",
+              "schema_notes": [
+                "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
+                "The DCiteDocumentReference type sets DataCite terms as controlled vocabulary"
+              ],
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "ResourceReference",
+      "description": [
+        "a reference to another resource that may have an associated ID"
+      ],
+      "brief": "a reference to another resource that may have an associated ID",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "title",
+          "parent": "ResourceReference",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the name of the resource being referenced"
+          ],
+          "brief": "the name of the resource being referenced",
+          "label": "title",
+          "schema_notes": [
+            "This value is intended for display.",
+            "This can be, but is not required to be, the same title given in the metadata record describing the resource"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "proxyFor",
+          "parent": "ResourceReference",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "a local identifier representing this resource"
+          ],
+          "brief": "a local identifier representing this resource",
+          "label": "proxyFor",
+          "schema_notes": [
+            "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "resourceType",
+          "parent": "ResourceReference",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "the linked-data class types for the referenced resource"
+          ],
+          "brief": "the linked-data class types for the referenced resource",
+          "label": "resourceType",
+          "schema_notes": [
+            "The value must always be given as an array, even when only one type is provided.",
+            "Multiple values indicate that the Resource can be considered of multiple types; it is recommended that the primary type (usually the most specific) should be given first.",
+            "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "isPartOf",
+            "type": "Resource"
+          },
+          "id": "value-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "IncludedResource"
+          },
+          "id": "base-type"
+        },
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "affiliation",
+            "type": "Person"
+          },
+          "id": "list-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "Component",
+      "description": [
+          "A description of one component of a resource.  A component can be a downloadable file, a subcollection of files, an API, or search page.",
+          "This <i>Named Type</i> represents a generic component; other Component types described later in this section represent specific kinds of components."
+      ],
+      "brief": "a component of a resource",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@id",
+          "parent": "Component",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a relative identifier for the distribution  It can be appended to its <a href=\"#Resource.@id\">resource identifier</a> to get a globally unique version of the identifier."
+          ],
+          "brief": "a relative identifier for the component.",
+          "label": "@id",
+          "schema_notes": [
+            "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+            "A relative identifier requires that @base be set to the Resource identifier in the @context."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "@type",
+          "parent": "Component",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "the types of components that this component can be classified as"
+          ],
+          "brief": "the types of components that this component can be classified as",
+          "label": "@type",
+          "schema_notes": [
+            "the first value should be considered its primary type.  This is usually a subtype of Component."
+          ],
+            "notes": [
+                "This property is a list because it is possible for a component to be catorgorized as multiple types simultaneously",
+                "An included value of <code>nrd:Hidden</code> indicates that the component is part of the NIST-internal management of the resource and is not expected to be useful to external users",
+                "These values are intended to be compliant with use of @type property in the JSON-LD format."
+            ],
+            "examples": [
+                "\"nrdp:DataFile\"",
+                "\"nrdp:Subcollection\"",
+                "\"nrd:Hidden\"",
+                "\"dcat:Distribution\""
+            ]
+        },
+        {
+          "name": "title",
+          "parent": "Component",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a descriptive title for the component"
+          ],
+          "brief": "a descriptive title for the component",
+          "label": "title",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "description",
+          "parent": "Component",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a description of the nature and contents of the component, including the role it plays as part of the resource"
+          ],
+          "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+          "label": "description",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "topic",
+          "parent": "Component",
+          "type": {
+            "type": "array",
+            "each": "Topic",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "Topic"
+              }
+            }
+          },
+          "description": [
+            "A tag or label taken from a pre-defined vocabulary for a thing or concept that this component addresses or speaks to"
+          ],
+          "brief": "A tag or label taken from a pre-defined vocabulary for a thing or concept that this component addresses or speaks to",
+          "label": "topic",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "conformsTo",
+          "parent": "Component",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+            "URI used to identify a standardized specification the component conforms to"
+          ],
+          "brief": "URI used to identify a standardized specification the component conforms to",
+          "label": "Standard",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "components",
+            "type": "Resource"
+          },
+          "id": "list-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "IncludedResource"
+          },
+          "id": "base-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "DataFile"
+          },
+          "id": "base-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "Subcollection"
+          },
+          "id": "base-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "AccessPage"
+          },
+          "id": "base-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "API"
+          },
+          "id": "base-type"
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "IncludedResource",
+      "description": [
+        "A reference to another resource (which has its own record) that is a part of this resource"
+      ],
+      "brief": "A reference to another resource (which has its own record) that is a part of this resource",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Component",
+        "ResourceReference"
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        },
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "isPartOf"
+          },
+          "id": "polymorph-type"
+        },
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Person",
+            "prop": "affiliation"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        },
+        {
+          "from": "ResourceReference",
+          "brief": "a reference to another resource that may have an associated ID",
+          "properties": [
+            {
+              "name": "title",
+              "parent": "ResourceReference",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "the name of the resource being referenced"
+              ],
+              "brief": "the name of the resource being referenced",
+              "label": "title",
+              "schema_notes": [
+                "This value is intended for display.",
+                "This can be, but is not required to be, the same title given in the metadata record describing the resource"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "proxyFor",
+              "parent": "ResourceReference",
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              "description": [
+                "a local identifier representing this resource"
+              ],
+              "brief": "a local identifier representing this resource",
+              "label": "proxyFor",
+              "schema_notes": [
+                "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "resourceType",
+              "parent": "ResourceReference",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the linked-data class types for the referenced resource"
+              ],
+              "brief": "the linked-data class types for the referenced resource",
+              "label": "resourceType",
+              "schema_notes": [
+                "The value must always be given as an array, even when only one type is provided.",
+                "Multiple values indicate that the Resource can be considered of multiple types; it is recommended that the primary type (usually the most specific) should be given first.",
+                "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+              ],
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "ISO8601DateRange",
+      "description": [
+          "a single date-time, a date range, or a periodic time interval compliant with the <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 standard for date-times and intervals</a>",
+          "The format of the value is restricted to 3 forms.  A single date has the form YYYY-MM-DDThh:mm:ss.sTZD, as in <code>\"2017-03-24T03:45:33.1\"</code>; note that any lowere precision version of this form is acceptable, such as <code>\"2017-03-24\"</code> or <code>\"2017\"</code>.",
+          "A date range is expressed with two single dates in the above form separated by a forward slash (<code>/</code>)--as, in <code>\"2016-01/2016-12\"</code>",
+          "The third form from indicates a periodic interval, used to indicate that a resource is updated on a regular basis.  Examples include <code>\"R/P1D\"</code> for daily, <code>\"R5/P2W\"</code> for 5 times, every 2 weeks.  Consult the <a href=\"https://en.wikipedia.org/wiki/ISO_8601\">ISO 8601 standard</a> for the detailed syntax."
+      ],
+      "brief": "a single date-time, date-time range, or a periodic time interval",
+      "jtype": "string",
+      "show": "text",
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "modified",
+            "type": "Resource"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "Topic",
+      "description": [
+        "a container for an identified concept term or proper thing"
+      ],
+      "brief": "a container for an identified concept term or proper thing",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@type",
+          "parent": "Topic",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a label indicating whether the value refers to a concept or a thing"
+          ],
+          "brief": "a label indicating whether the value refers to a concept or a thing",
+          "label": "@type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": [],
+          "allowed": {
+            "Concept": "label indicating that the value refers to a concept (as in owl:Concept)",
+            "Thing": "label indicating that the value refers to a named person, place, or thing (as in skos:Thing)"
+          }
+        },
+        {
+          "name": "scheme",
+          "parent": "Topic",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in."
+          ],
+          "brief": "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in.",
+          "label": "scheme",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "@id",
+          "parent": "Topic",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "the unique identifier identifying the concept or thing"
+          ],
+          "brief": "the unique identifier identifying the concept or thing",
+          "label": "@id",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "tag",
+          "parent": "Topic",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a short, display-able token that locally represents the concept or thing"
+          ],
+          "brief": "a short, display-able token that locally represents the concept or thing",
+          "label": "tag",
+          "schema_notes": [
+            "As a token, it is intended that applications can search for this value and find all resources that are talking about the same thing.  Thus, regardless of whether the @id field is provided, all references to the same concept or thing should use the same tag value."
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "topic",
+            "type": "Resource"
+          },
+          "id": "list-type"
+        },
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "topic",
+            "type": "Component"
+          },
+          "id": "list-type"
+        },
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "algorithm",
+            "type": "Checksum"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "Organization",
+      "description": [
+        "a named organization that may be part of a larger organization"
+      ],
+      "brief": "a named organization that may be part of a larger organization",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@type",
+          "parent": "Organization",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "IRI for the JSON-LD data type. This should be org:Organization for each publisher"
+          ],
+          "brief": "IRI for the JSON-LD data type. This should be org:Organization for each publisher",
+          "label": "Metadata Context",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "name",
+          "parent": "Organization",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "The plain-text name of the organization"
+          ],
+          "brief": "The plain-text name of the organization",
+          "label": "Publisher Name",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "subOrganizationOf",
+          "parent": "Organization",
+          "type": {
+            "type": "object",
+            "of": "Organization",
+            "show": "Organization object"
+          },
+          "description": [
+            "A parent organizational entity"
+          ],
+          "brief": "A parent organizational entity",
+          "label": "subOrganizationOf",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "publisher",
+            "type": "Resource"
+          },
+          "id": "value-type"
+        },
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "subOrganizationOf",
+            "type": "Organization"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "ContactInfo",
+      "description": [
+        "Information describing various ways to contact an entity"
+      ],
+      "brief": "Information describing various ways to contact an entity",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@type",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            null
+          ],
+          "brief": null,
+          "label": "@type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "fn",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "full name of the contact person, role, or organization"
+          ],
+          "brief": "full name of the contact person, role, or organization",
+          "label": "Contact Name",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "hasEmail",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "The email address of the resource contact"
+          ],
+          "brief": "The email address of the resource contact",
+          "label": "Email",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "postalAddress",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "object",
+            "of": "PostalAddress",
+            "show": "PostalAddress object"
+          },
+          "description": [
+            "the contact mailing address"
+          ],
+          "brief": "the contact mailing address",
+          "label": "postalAddress",
+          "schema_notes": [],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "phoneNumber",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the contact telephone number"
+          ],
+          "brief": "the contact telephone number",
+          "label": "phoneNumber",
+          "schema_notes": [
+            "Complete international dialing codes should be given, e.g. '+1-410-338-1234'"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "timezone",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the time zone where the contact typically operates"
+          ],
+          "brief": "the time zone where the contact typically operates",
+          "label": "timezone",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "proxyFor",
+          "parent": "ContactInfo",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "a local identifier representing this person"
+          ],
+          "brief": "a local identifier representing this person",
+          "label": "proxyFor",
+          "schema_notes": [
+            "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "contactPoint",
+            "type": "Resource"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "PostalAddress",
+      "description": [
+        "a line-delimited listing of a postal address"
+      ],
+      "brief": "a line-delimited listing of a postal address",
+      "jtype": "array",
+      "each": "string",
+      "show": "list of text values",
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "postalAddress",
+            "type": "ContactInfo"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "Identifier",
+      "description": [
+        "a complete description of an identifier, including the scheme that it adheres to"
+      ],
+      "brief": "a complete description of an identifier, including the scheme that it adheres to",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "scheme",
+          "parent": "Identifier",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a label indicating the system that the identifier adheres to"
+          ],
+          "brief": "a label indicating the system that the identifier adheres to",
+          "label": "scheme",
+          "schema_notes": [
+            "this label may imply a particular resolver to use"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "value",
+          "parent": "Identifier",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the value of the identifier"
+          ],
+          "brief": "the value of the identifier",
+          "label": "value",
+          "schema_notes": [
+            "if no scheme is provided, a URI form of the identifier should be given"
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "PublicDataResource",
+      "description": [
+        "a resource that can/should have a record in NIST's public data listing (PDL)"
+      ],
+      "brief": "a resource that can/should have a record in NIST's public data listing (PDL)",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Resource"
+      ],
+      "properties": [
+        {
+          "name": "accrualPeriodicity",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": [
+              {
+                "type": "fixed",
+                "show": "fixed value: \"irregular\""
+              },
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "fixed value: \"irregular\" or text"
+          },
+          "description": [
+            "Frequency with which dataset is published."
+          ],
+          "brief": "Frequency with which dataset is published.",
+          "label": "Frequency",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "bureauCode",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency"
+          ],
+          "brief": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
+          "label": "Bureau Code",
+          "schema_notes": [
+            "OMB Circular A-11, Appendix C is available via http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
+            "A machine-readable listing of the defined codes is available via https://project-open-data.cio.gov/data/omb_bureau_codes.csv",
+            "Codes have the format of 015:01"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "programCode",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset"
+          ],
+          "brief": "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset",
+          "label": "Program Code",
+          "schema_notes": [
+            "A machine-readable listing of the defined codes is available via https://www.performance.gov/sites/default/files/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
+            "Codes have the format of 015:001"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "dataQuality",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": [
+              {
+                "type": "boolean",
+                "show": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "boolean"
+          },
+          "description": [
+            "Whether the dataset meets the agency's Information Quality Guidelines"
+          ],
+          "brief": "Whether the dataset meets the agency's Information Quality Guidelines",
+          "label": "Data Quality",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "primaryITInvestmentUII",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "The IT Unique Investment Identifier (UII) that is associated with this dataset"
+          ],
+          "brief": "The IT Unique Investment Identifier (UII) that is associated with this dataset",
+          "label": "Primary IT Investment UII",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "systemOfRecords",
+          "parent": "PublicDataResource",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974"
+          ],
+          "brief": "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974",
+          "label": "System of Records",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "DataPublication"
+          },
+          "id": "base-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Resource",
+          "brief": "a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application",
+          "properties": [
+            {
+              "name": "title",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "Human-readable, descriptive name of the resource"
+              ],
+              "brief": "Human-readable, descriptive name of the resource",
+              "label": "Title",
+              "schema_notes": [
+                "Acronyms should be avoided"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "Human-readable description (e.g., an abstract) of the resource"
+              ],
+              "brief": "Human-readable description (e.g., an abstract) of the resource",
+              "label": "Description",
+              "schema_notes": [
+                "Each element in the array should be considered a separate paragraph"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "keyword",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users."
+              ],
+              "brief": "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.",
+              "label": "Tags",
+              "schema_notes": [
+                "Surround each keyword with quotes. Separate keywords with commas. Avoid duplicate keywords in the same record."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this resource addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this resource addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "modified",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ISO8601DateRange",
+                "show": "ISO8601DateRange object"
+              },
+              "description": [
+                "Most recent date on which the dataset was changed, updated or modified."
+              ],
+              "brief": "Most recent date on which the dataset was changed, updated or modified.",
+              "label": "modified",
+              "schema_notes": [
+                "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "issued",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "Date of formal issuance of the resource"
+              ],
+              "brief": "Date of formal issuance of the resource",
+              "label": "Release Date",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "publisher",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "Organization",
+                "show": "Organization object"
+              },
+              "description": [
+                "The publishing entity and optionally their parent organization(s)."
+              ],
+              "brief": "The publishing entity and optionally their parent organization(s).",
+              "label": "publisher",
+              "schema_notes": [
+                "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "contactPoint",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ContactInfo",
+                "show": "ContactInfo object"
+              },
+              "description": [
+                "Contact information for getting more information about this resource"
+              ],
+              "brief": "Contact information for getting more information about this resource",
+              "label": "contactPoint",
+              "schema_notes": [
+                "This should include at least a name and an email address",
+                "The information can reflect either a person or a group (such as a help desk)"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "accessLevel",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available"
+              ],
+              "brief": "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available",
+              "label": "Public Access Level",
+              "schema_notes": [],
+              "notes": [],
+              "examples": [],
+              "allowed": {
+                "public": "Data asset is or could be made publicly available to all without restrictions",
+                "restricted public": "Data asset is available under certain use restrictions",
+                "non-public": "Data asset is not available to members of the public"
+              }
+            },
+            {
+              "name": "license",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published"
+              ],
+              "brief": "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published",
+              "label": "License",
+              "schema_notes": [
+                "Software and data developed primarily by federal employees must be considered in the public domain; software primarily developed by contract can be assigned a license, including an open source license.",
+                "By default, NIST-produced data and software should point to http://www.nist.gov/data/license.cfm",
+                "See Open Licenses (https://project-open-data.cio.gov/open-licenses/) for more information."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "rights",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "information regarding access or restrictions based on privacy, security, or other policies"
+              ],
+              "brief": "information regarding access or restrictions based on privacy, security, or other policies",
+              "label": "Rights",
+              "schema_notes": [
+                "This should also provide an explanation for the selected \"accessLevel\" including instructions for how to access a restricted file, if applicable, or explanation for why a \"non-public\" or \"restricted public\" data assetis not \"public,\" if applicable.",
+                "Text must be 255 or fewer characters."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "components",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "Component",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Component"
+                  }
+                }
+              },
+              "description": [
+                "a listing of the various component resources, tools, and distributions of this resource"
+              ],
+              "brief": "a listing of the various component resources, tools, and distributions of this resource",
+              "label": "components",
+              "schema_notes": [
+                "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
+                "The @type property will indicate which type of component it is.  The first value in the @type list should be considered the primary or most important classification.",
+                "If an item's @type includes dcat:Distribution, the item should be convertable to a distribution in the POD schema.",
+                "The order should be considered meaningful (at least for components of the same type).  The meaning or intention behind the order can depend on the type; however, generally, display of the components of a common type should preserve the order.  For clarity then, it is recommended that items of the same primary type should be grouped together in the list."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the resource conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the resource conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "isPartOf",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ResourceReference",
+                "show": "ResourceReference object"
+              },
+              "description": [
+                "The collection of which the dataset is a subset"
+              ],
+              "brief": "The collection of which the dataset is a subset",
+              "label": "Collection",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "language",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "array",
+                    "each": "string",
+                    "show": "list of text values"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "list of text values"
+              },
+              "description": [
+                "The primary language used in the dataset"
+              ],
+              "brief": "The primary language used in the dataset",
+              "label": "Language",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "landingPage",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset."
+              ],
+              "brief": "a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.",
+              "label": "Homepage URL",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "references",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "DocumentReference",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "DocumentReference"
+                  }
+                }
+              },
+              "description": [
+                "Related documents such as technical information about a dataset, developer documentation, etc."
+              ],
+              "brief": "Related documents such as technical information about a dataset, developer documentation, etc.",
+              "label": "Related Documents",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "theme",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "array",
+                    "each": "string",
+                    "show": "list of text values"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "list of text values"
+              },
+              "description": [
+                "Main thematic category of the dataset."
+              ],
+              "brief": "Main thematic category of the dataset.",
+              "label": "Category",
+              "schema_notes": [
+                "Could include ISO Topic Categories (http://www.isotopicmaps.org/)"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@id",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "A (primary) unique identifier for the resource"
+              ],
+              "brief": "A (primary) unique identifier for the resource",
+              "label": "@id",
+              "schema_notes": [
+                "It is expected that this field will contain a type of identifier that is of a uniform type across all resource descriptions in the system",
+                "This identifier should, by default, resolve to the metadata record (or some rendering of it) rather than to the resource itself (e.g. via its landing page)."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "doi",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "A Digital Object Identifier (DOI) in non-resolving form."
+              ],
+              "brief": "A Digital Object Identifier (DOI) in non-resolving form.",
+              "label": "doi",
+              "schema_notes": [
+                "The DOI value should not have the resolver URI base, but should have the form 'doi:NNNNN/XXXXXX'",
+                "It is expected that this will primarily be Datacite DOIs"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "ediid",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "the NIST EDI identifier assigned to the resource"
+              ],
+              "brief": "the NIST EDI identifier assigned to the resource",
+              "label": "ediid",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "abbrev",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "an abbreviated form of the resource's title"
+              ],
+              "brief": "an abbreviated form of the resource's title",
+              "label": "abbrev",
+              "schema_notes": [
+                "this can be used as a label for a compact display or text for a link to this resource"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the linked-data class types for this resource"
+              ],
+              "brief": "the linked-data class types for this resource",
+              "label": "@type",
+              "schema_notes": [
+                "The value must always be given as an array, even when only one type is provided.",
+                "Multiple values indicate that the Resource can be considered of multiple types",
+                "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+              ],
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Resource"
+    },
+    {
+      "name": "DataFile",
+      "description": [
+        "a description of a downloadable, finite stream of data"
+      ],
+      "brief": "a downloadable, finite stream of data",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Component"
+      ],
+      "properties": [
+        {
+          "name": "filepath",
+          "parent": "DataFile",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a name for the data file reflecting its hierarchical location in the data source collection"
+          ],
+          "brief": "a name for the data file reflecting its hierarchical location in the data source collection",
+          "label": "filepath",
+          "schema_notes": [
+            "Forward slashes delimit the hierarchical names in the path",
+            "If there are no slashes in this value, this file is assumed to be at the top of the file hierarchy",
+            "The base name of this value (i.e. the last field in the path) can be used as the default filename to give to the file if downloaded.",
+            "The component title may have the same value."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "downloadURL",
+          "parent": "DataFile",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "URL providing direct access to the downloadable data file."
+          ],
+          "brief": "URL for downloading a data file",
+          "label": "Download URL",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "mediaType",
+          "parent": "DataFile",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "The machine-readable file format (IANA Media Type or MIME Type) of the file's downloadURL"
+          ],
+          "brief": "The machine-readable file format (IANA Media Type or MIME Type) of the file's downloadURL",
+          "label": "Media Type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "format",
+          "parent": "DataFile",
+          "type": {
+            "type": "object",
+            "of": "Format",
+            "show": "Format object"
+          },
+          "description": [
+            "A human-readable description of the file format of a distribution"
+          ],
+          "brief": "A human-readable description of the file format of a distribution",
+          "label": "Format",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "describedBy",
+          "parent": "DataFile",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+              "URL to the data dictionary for the distribution found at the <span class=\"Property reference\"><a href=\"#DataFile.downloadURL\" title=\"URL for downloading a data file\">downloadURL</a></span>.",
+              "A data dictionary is usually associated with databases or data files that contain data values with specific labels or names.  For example, the data values may be stored in a data table file or spreadsheet; each column in the table will have a name indicating what the value is.  A data dictionary explains what each name or label means and provide other related information, such as units for the values.  A data dictionary can take a variety of format; if the format is standardized in someway, the <span class=\"Property reference\"><a href=\"#DataFile.describedByType\" title=\"The machine-readable file format of the file's describedBy URL\">describedByType</a></span> will identify the format."
+          ],
+          "brief": "URL to the data dictionary for the file found at the downloadURL",
+          "label": "Data Dictionary",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "describedByType",
+          "parent": "DataFile",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "The machine-readable file format (IANA Media Type or MIME Type) of the file's <span class=\"Property reference\"><a href=\"#DataFile.describedBy\" title=\"URL to the data dictionary for the file found at the downloadURL\">describedBy</a></span> URL"
+          ],
+          "brief": "The machine-readable file format of the file's describedBy URL",
+          "label": "Data Dictionary Type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "checksum",
+          "parent": "DataFile",
+          "type": {
+            "type": "object",
+            "of": "Checksum",
+            "show": "Checksum object"
+          },
+          "description": [
+            "a checksum for the file"
+          ],
+          "brief": "a checksum for the file",
+          "label": "Checksum",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "size",
+          "parent": "DataFile",
+          "type": {
+            "type": "integer",
+            "show": "integer"
+          },
+          "description": [
+            "the size of the file in bytes"
+          ],
+          "brief": "the size of the file in bytes",
+          "label": "size",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "Checksum",
+      "description": [
+        "a checksum with its algorithm noted"
+      ],
+      "brief": "a checksum with its algorithm noted",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "algorithm",
+          "parent": "Checksum",
+          "type": {
+            "type": "object",
+            "of": "Topic",
+            "show": "Topic object"
+          },
+          "description": [
+            "the algorithm used to produce the checksum hash"
+          ],
+          "brief": "the algorithm used to produce the checksum hash",
+          "label": "algorithm",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "hash",
+          "parent": "Checksum",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the checksum value"
+          ],
+          "brief": "the checksum value",
+          "label": "hash",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "checksum",
+            "type": "DataFile"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "Subcollection",
+      "description": [
+        "A grouping of components within a named subcollection of the resource"
+      ],
+      "brief": "A grouping of components within a named subcollection of the resource",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Component"
+      ],
+      "properties": [
+        {
+          "name": "filepath",
+          "parent": "Subcollection",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a name for the data file reflecting its hierarchical location in the data source collection"
+          ],
+          "brief": "a name for the data file reflecting its hierarchical location in the data source collection",
+          "label": "filepath",
+          "schema_notes": [
+            "Forward slashes delimit the hierarchical names in the path",
+            "If there are no slashes in this value, this file is assumed to be at the top of the file hierarchy",
+            "The base name of this value (i.e. the last field in the path) can be used as the default filename to give to the file if downloaded.",
+            "The component title may have the same value."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "contains",
+          "parent": "Subcollection",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "a listing of resource components that are directly part of this subcollection"
+          ],
+          "brief": "a listing of resource components that are directly part of this subcollection",
+          "label": "contains",
+          "schema_notes": [
+            "Each item is a URI identifier (possibly abbreviated)"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "hasParent",
+          "parent": "Subcollection",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "The identifier for the parent collection that contains this subcollection"
+          ],
+          "brief": "The identifier for the parent collection that contains this subcollection",
+          "label": "hasParent",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "AccessPage",
+      "description": [
+        "a web page that provides indirect access to the resource"
+      ],
+      "brief": "a web page that provides indirect access to the resource",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Component"
+      ],
+      "properties": [
+        {
+          "name": "accessURL",
+          "parent": "AccessPage",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "the URL for accessing this indirect access to the resource"
+          ],
+          "brief": "the URL for accessing this indirect access to the resource",
+          "label": "accessURL",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "format",
+          "parent": "AccessPage",
+          "type": {
+            "type": "object",
+            "of": "Format",
+            "show": "Format object"
+          },
+          "description": [
+            "A human-readable description of the file format of a distribution"
+          ],
+          "brief": "A human-readable description of the file format of a distribution",
+          "label": "Format",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        },
+        {
+          "template": "as the basis for extension type, {type}",
+          "data": {
+            "type": "SearchPage"
+          },
+          "id": "base-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "SearchPage",
+      "description": [
+        "a web page that can be used to search the contents of the resource"
+      ],
+      "brief": "a web page that can be used to search the contents of the resource",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "AccessPage"
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        },
+        {
+          "from": "AccessPage",
+          "brief": "a web page that provides indirect access to the resource",
+          "properties": [
+            {
+              "name": "accessURL",
+              "parent": "AccessPage",
+              "type": {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              "description": [
+                "the URL for accessing this indirect access to the resource"
+              ],
+              "brief": "the URL for accessing this indirect access to the resource",
+              "label": "accessURL",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "format",
+              "parent": "AccessPage",
+              "type": {
+                "type": "object",
+                "of": "Format",
+                "show": "Format object"
+              },
+              "description": [
+                "A human-readable description of the file format of a distribution"
+              ],
+              "brief": "A human-readable description of the file format of a distribution",
+              "label": "Format",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "API",
+      "description": [
+        "an application programming interface to the resource"
+      ],
+      "brief": "an application programming interface to the resource",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "Component"
+      ],
+      "properties": [
+        {
+          "name": "accessURL",
+          "parent": "API",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+              "the base URL for accessing the API.",
+              "This URL may or may not be resolvable (consult the documentation at the <span class=\"Property reference\"><a href=\"#API.describedBy\" title=\"URL to the data dictionary for the file found at the downloadURL\">describedBy</a></span> URL).  With some APIs, this base URL will return information for accessing the full capabilities of the service."
+          ],
+          "brief": "the base URL for accessing the API",
+          "label": "accessURL",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "describedBy",
+          "parent": "API",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "format": "uri",
+                "show": "text (URL)"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text (URL)"
+          },
+          "description": [
+            "URL to a formal description or informal documentation of the API."
+          ],
+          "brief": "URL to a formal or informal description of the API",
+          "label": "API Description",
+          "schema_notes": [
+            "Use describedByType to help distinguish between formal and informal (i.e. human readable) descriptions."
+          ],
+            "notes": [
+                "Use <span class=\"Property reference\"><a href=\"#API.describedByType\" title=\"The machine-readable file format of the API's describedBy URL\">describedByType</a></span> to help distinguish between formal and informal (i.e. human readable) descriptions: no <span class=\"Property reference\"><a href=\"#API.describedByType\" title=\"The machine-readable file format of the API's describedBy URL\">describedByType</a></span> value should indicate a human-readable document."
+            ],
+          "examples": []
+        },
+        {
+          "name": "describedByType",
+          "parent": "API",
+          "type": {
+            "type": [
+              {
+                "type": "string",
+                "show": "text"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "show": "text"
+          },
+          "description": [
+            "The machine-readable file format (IANA Media Type or MIME Type) of the API's <span class=\"Property reference\"><a href=\"#API.describedBy\" title=\"URL to the data dictionary for the file found at the downloadURL\">describedBy</a></span> URL."
+          ],
+          "brief": "The machine-readable file format (IANA Media Type or MIME Type) of the API's describedBy URL",
+          "label": "API Descriptions Type",
+          "schema_notes": null,
+            "notes": [
+                "If no value is given for this property, it can be assumed that the document given by the <span class=\"Property reference\"><a href=\"#API.describedBy\" title=\"URL to the data dictionary for the file found at the downloadURL\">describedBy</a></span> URL is human-readable documentation for the API."
+            ],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as an allowed value type in the {prop} property in the {type} type",
+          "data": {
+            "type": "Resource",
+            "prop": "components"
+          },
+          "id": "polymorph-type"
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Component",
+          "brief": "a description of a component of a resource",
+          "properties": [
+            {
+              "name": "@id",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a (relative) identifier for the distribution"
+              ],
+              "brief": "a (relative) identifier for the distribution",
+              "label": "@id",
+              "schema_notes": [
+                "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                "A relative identifier requires that @base be set to the Resource identifier in the @context."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the types of components that this component can be classified as"
+              ],
+              "brief": "the types of components that this component can be classified as",
+              "label": "@type",
+              "schema_notes": [
+                "the first value should be considered its primary type.  This is usually a subtype of Component."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "title",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a descriptive title for the component"
+              ],
+              "brief": "a descriptive title for the component",
+              "label": "title",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Component",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "a description of the nature and contents of the component, including the role it plays as part of the resource"
+              ],
+              "brief": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+              "label": "description",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Component",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this component addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this component addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Component",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the component conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the component conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Component"
+    },
+    {
+      "name": "Format",
+      "description": [
+        "a description of a file format that a file employs"
+      ],
+      "brief": "a description of a file format that a file employs",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "description",
+          "parent": "Format",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a human-readable description of the format"
+          ],
+          "brief": "a human-readable description of the format",
+          "label": "description",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "scheme",
+          "parent": "Format",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "a URI that identifies the format type registry or identification system that the value is defined in."
+          ],
+          "brief": "a URI that identifies the format type registry or identification system that the value is defined in.",
+          "label": "scheme",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "@id",
+          "parent": "Format",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "the unique identifier for the format"
+          ],
+          "brief": "the unique identifier for the format",
+          "label": "@id",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "tag",
+          "parent": "Format",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a short, display-able token or abbreviation for the format"
+          ],
+          "brief": "a short, display-able token or abbreviation for the format",
+          "label": "tag",
+          "schema_notes": [
+            "As a token, it is intended that applications can search for this value and find all files having the same format.  Thus, regardless of whether the @id field is provided, all references to the same format should use the same tag value."
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "format",
+            "type": "DataFile"
+          },
+          "id": "value-type"
+        },
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "format",
+            "type": "AccessPage"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "DataPublication",
+      "description": [
+        "Data presented by one or more authors as citable publication"
+      ],
+      "brief": "Data presented by one or more authors as citable publication",
+      "jtype": "object",
+      "show": "object",
+      "inheritsFrom": [
+        "PublicDataResource"
+      ],
+      "properties": [
+        {
+          "name": "subtitle",
+          "parent": "DataPublication",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "a secondary or sub-title for the resource"
+          ],
+          "brief": "a secondary or sub-title for the resource",
+          "label": "subtitle",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "aka",
+          "parent": "DataPublication",
+          "type": {
+            "type": "array",
+            "each": "string",
+            "show": "list of text values"
+          },
+          "description": [
+            "other (unofficial) titles that this resource is sometimes known as"
+          ],
+          "brief": "other (unofficial) titles that this resource is sometimes known as",
+          "label": "aka",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "authors",
+          "parent": "DataPublication",
+          "type": {
+            "type": "array",
+            "each": "Person",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "Person"
+              }
+            }
+          },
+          "description": [
+            "the ordered list of authors of this data publication"
+          ],
+          "brief": "the ordered list of authors of this data publication",
+          "label": "authors",
+          "schema_notes": [
+            "Authors should generally be assumed to be considered creators of the data; where this is is not true or insufficient, the contributors property can be used ot add or clarify who contributed to data creation."
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "recommendedCitation",
+          "parent": "DataPublication",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "a recommended formatting of a citation to this data publication"
+          ],
+          "brief": "a recommended formatting of a citation to this data publication",
+          "label": "recommendedCitation",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "inheritedProperties": [
+        {
+          "from": "Resource",
+          "brief": "a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application",
+          "properties": [
+            {
+              "name": "title",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "Human-readable, descriptive name of the resource"
+              ],
+              "brief": "Human-readable, descriptive name of the resource",
+              "label": "Title",
+              "schema_notes": [
+                "Acronyms should be avoided"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "description",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "Human-readable description (e.g., an abstract) of the resource"
+              ],
+              "brief": "Human-readable description (e.g., an abstract) of the resource",
+              "label": "Description",
+              "schema_notes": [
+                "Each element in the array should be considered a separate paragraph"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "keyword",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users."
+              ],
+              "brief": "Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.",
+              "label": "Tags",
+              "schema_notes": [
+                "Surround each keyword with quotes. Separate keywords with commas. Avoid duplicate keywords in the same record."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "topic",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "Topic",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Topic"
+                  }
+                }
+              },
+              "description": [
+                "Identified tags referring to things or concepts that this resource addresses or speaks to"
+              ],
+              "brief": "Identified tags referring to things or concepts that this resource addresses or speaks to",
+              "label": "topic",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "modified",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ISO8601DateRange",
+                "show": "ISO8601DateRange object"
+              },
+              "description": [
+                "Most recent date on which the dataset was changed, updated or modified."
+              ],
+              "brief": "Most recent date on which the dataset was changed, updated or modified.",
+              "label": "modified",
+              "schema_notes": [
+                "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "issued",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "Date of formal issuance of the resource"
+              ],
+              "brief": "Date of formal issuance of the resource",
+              "label": "Release Date",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "publisher",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "Organization",
+                "show": "Organization object"
+              },
+              "description": [
+                "The publishing entity and optionally their parent organization(s)."
+              ],
+              "brief": "The publishing entity and optionally their parent organization(s).",
+              "label": "publisher",
+              "schema_notes": [
+                "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "contactPoint",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ContactInfo",
+                "show": "ContactInfo object"
+              },
+              "description": [
+                "Contact information for getting more information about this resource"
+              ],
+              "brief": "Contact information for getting more information about this resource",
+              "label": "contactPoint",
+              "schema_notes": [
+                "This should include at least a name and an email address",
+                "The information can reflect either a person or a group (such as a help desk)"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "accessLevel",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available"
+              ],
+              "brief": "The degree to which this dataset could be made publicly-available, regardless of whether it has been made available",
+              "label": "Public Access Level",
+              "schema_notes": [],
+              "notes": [],
+              "examples": [],
+              "allowed": {
+                "public": "Data asset is or could be made publicly available to all without restrictions",
+                "restricted public": "Data asset is available under certain use restrictions",
+                "non-public": "Data asset is not available to members of the public"
+              }
+            },
+            {
+              "name": "license",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published"
+              ],
+              "brief": "A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published",
+              "label": "License",
+              "schema_notes": [
+                "Software and data developed primarily by federal employees must be considered in the public domain; software primarily developed by contract can be assigned a license, including an open source license.",
+                "By default, NIST-produced data and software should point to http://www.nist.gov/data/license.cfm",
+                "See Open Licenses (https://project-open-data.cio.gov/open-licenses/) for more information."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "rights",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "information regarding access or restrictions based on privacy, security, or other policies"
+              ],
+              "brief": "information regarding access or restrictions based on privacy, security, or other policies",
+              "label": "Rights",
+              "schema_notes": [
+                "This should also provide an explanation for the selected \"accessLevel\" including instructions for how to access a restricted file, if applicable, or explanation for why a \"non-public\" or \"restricted public\" data assetis not \"public,\" if applicable.",
+                "Text must be 255 or fewer characters."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "components",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "Component",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "Component"
+                  }
+                }
+              },
+              "description": [
+                "a listing of the various component resources, tools, and distributions of this resource"
+              ],
+              "brief": "a listing of the various component resources, tools, and distributions of this resource",
+              "label": "components",
+              "schema_notes": [
+                "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
+                "The @type property will indicate which type of component it is.  The first value in the @type list should be considered the primary or most important classification.",
+                "If an item's @type includes dcat:Distribution, the item should be convertable to a distribution in the POD schema.",
+                "The order should be considered meaningful (at least for components of the same type).  The meaning or intention behind the order can depend on the type; however, generally, display of the components of a common type should preserve the order.  For clarity then, it is recommended that items of the same primary type should be grouped together in the list."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "conformsTo",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "URI used to identify a standardized specification the resource conforms to"
+              ],
+              "brief": "URI used to identify a standardized specification the resource conforms to",
+              "label": "Standard",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "isPartOf",
+              "parent": "Resource",
+              "type": {
+                "type": "object",
+                "of": "ResourceReference",
+                "show": "ResourceReference object"
+              },
+              "description": [
+                "The collection of which the dataset is a subset"
+              ],
+              "brief": "The collection of which the dataset is a subset",
+              "label": "Collection",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "language",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "array",
+                    "each": "string",
+                    "show": "list of text values"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "list of text values"
+              },
+              "description": [
+                "The primary language used in the dataset"
+              ],
+              "brief": "The primary language used in the dataset",
+              "label": "Language",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "landingPage",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "format": "uri",
+                    "show": "text (URL)"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text (URL)"
+              },
+              "description": [
+                "a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset."
+              ],
+              "brief": "a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.",
+              "label": "Homepage URL",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "references",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "DocumentReference",
+                "show": {
+                  "template": "list of {type} objects",
+                  "data": {
+                    "type": "DocumentReference"
+                  }
+                }
+              },
+              "description": [
+                "Related documents such as technical information about a dataset, developer documentation, etc."
+              ],
+              "brief": "Related documents such as technical information about a dataset, developer documentation, etc.",
+              "label": "Related Documents",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "theme",
+              "parent": "Resource",
+              "type": {
+                "type": [
+                  {
+                    "type": "array",
+                    "each": "string",
+                    "show": "list of text values"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "list of text values"
+              },
+              "description": [
+                "Main thematic category of the dataset."
+              ],
+              "brief": "Main thematic category of the dataset.",
+              "label": "Category",
+              "schema_notes": [
+                "Could include ISO Topic Categories (http://www.isotopicmaps.org/)"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@id",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "A (primary) unique identifier for the resource"
+              ],
+              "brief": "A (primary) unique identifier for the resource",
+              "label": "@id",
+              "schema_notes": [
+                "It is expected that this field will contain a type of identifier that is of a uniform type across all resource descriptions in the system",
+                "This identifier should, by default, resolve to the metadata record (or some rendering of it) rather than to the resource itself (e.g. via its landing page)."
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "doi",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "A Digital Object Identifier (DOI) in non-resolving form."
+              ],
+              "brief": "A Digital Object Identifier (DOI) in non-resolving form.",
+              "label": "doi",
+              "schema_notes": [
+                "The DOI value should not have the resolver URI base, but should have the form 'doi:NNNNN/XXXXXX'",
+                "It is expected that this will primarily be Datacite DOIs"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "ediid",
+              "parent": "Resource",
+              "type": {
+                "type": "string",
+                "show": "text"
+              },
+              "description": [
+                "the NIST EDI identifier assigned to the resource"
+              ],
+              "brief": "the NIST EDI identifier assigned to the resource",
+              "label": "ediid",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "abbrev",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "an abbreviated form of the resource's title"
+              ],
+              "brief": "an abbreviated form of the resource's title",
+              "label": "abbrev",
+              "schema_notes": [
+                "this can be used as a label for a compact display or text for a link to this resource"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "@type",
+              "parent": "Resource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "the linked-data class types for this resource"
+              ],
+              "brief": "the linked-data class types for this resource",
+              "label": "@type",
+              "schema_notes": [
+                "The value must always be given as an array, even when only one type is provided.",
+                "Multiple values indicate that the Resource can be considered of multiple types",
+                "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+              ],
+              "notes": [],
+              "examples": []
+            }
+          ]
+        },
+        {
+          "from": "PublicDataResource",
+          "brief": "a resource that can/should have a record in NIST's public data listing (PDL)",
+          "properties": [
+            {
+              "name": "accrualPeriodicity",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": [
+                  {
+                    "type": "fixed",
+                    "show": "fixed value: \"irregular\""
+                  },
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "fixed value: \"irregular\" or text"
+              },
+              "description": [
+                "Frequency with which dataset is published."
+              ],
+              "brief": "Frequency with which dataset is published.",
+              "label": "Frequency",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "bureauCode",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency"
+              ],
+              "brief": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
+              "label": "Bureau Code",
+              "schema_notes": [
+                "OMB Circular A-11, Appendix C is available via http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
+                "A machine-readable listing of the defined codes is available via https://project-open-data.cio.gov/data/omb_bureau_codes.csv",
+                "Codes have the format of 015:01"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "programCode",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": "array",
+                "each": "string",
+                "show": "list of text values"
+              },
+              "description": [
+                "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset"
+              ],
+              "brief": "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset",
+              "label": "Program Code",
+              "schema_notes": [
+                "A machine-readable listing of the defined codes is available via https://www.performance.gov/sites/default/files/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
+                "Codes have the format of 015:001"
+              ],
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "dataQuality",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": [
+                  {
+                    "type": "boolean",
+                    "show": "boolean"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "boolean"
+              },
+              "description": [
+                "Whether the dataset meets the agency's Information Quality Guidelines"
+              ],
+              "brief": "Whether the dataset meets the agency's Information Quality Guidelines",
+              "label": "Data Quality",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "primaryITInvestmentUII",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "The IT Unique Investment Identifier (UII) that is associated with this dataset"
+              ],
+              "brief": "The IT Unique Investment Identifier (UII) that is associated with this dataset",
+              "label": "Primary IT Investment UII",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            },
+            {
+              "name": "systemOfRecords",
+              "parent": "PublicDataResource",
+              "type": {
+                "type": [
+                  {
+                    "type": "string",
+                    "show": "text"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "show": "text"
+              },
+              "description": [
+                "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974"
+              ],
+              "brief": "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974",
+              "label": "System of Records",
+              "schema_notes": null,
+              "notes": [],
+              "examples": []
+            }
+          ]
+        }
+      ],
+      "cat": "Resource"
+    },
+    {
+      "name": "Person",
+      "description": [
+        "an identification a Person contributing to the publication of a resource"
+      ],
+      "brief": "an identification a Person contributing to the publication of a resource",
+      "jtype": "object",
+      "show": "object",
+      "properties": [
+        {
+          "name": "@type",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the class indicating that this is a Person"
+          ],
+          "brief": "the class indicating that this is a Person",
+          "label": "@type",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "fn",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the author's full name in the preferred format"
+          ],
+          "brief": "the author's full name in the preferred format",
+          "label": "fn",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "givenName",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the author's given name"
+          ],
+          "brief": "the author's given name",
+          "label": "givenName",
+          "schema_notes": [
+            "Often referred to in English-speaking conventions as the first name"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "familyName",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the author's family name"
+          ],
+          "brief": "the author's family name",
+          "label": "familyName",
+          "schema_notes": [
+            "Often referred to in English-speaking conventions as the last name"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "middleName",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "show": "text"
+          },
+          "description": [
+            "the author's middle names or initials"
+          ],
+          "brief": "the author's middle names or initials",
+          "label": "middleName",
+          "schema_notes": [
+            "Often referred to in English-speaking conventions as the first name"
+          ],
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "orcid",
+          "parent": "Person",
+          "type": {
+            "type": "object",
+            "of": "ORCIDpath",
+            "show": "ORCIDpath object"
+          },
+          "description": [
+            "the author's ORCID"
+          ],
+          "brief": "the author's ORCID",
+          "label": "orcid",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "affiliation",
+          "parent": "Person",
+          "type": {
+            "type": "array",
+            "each": "ResourceReference",
+            "show": {
+              "template": "list of {type} objects",
+              "data": {
+                "type": "ResourceReference"
+              }
+            }
+          },
+          "description": [
+            "The institution the person was affiliated with at the time of publication"
+          ],
+          "brief": "The institution the person was affiliated with at the time of publication",
+          "label": "affiliation",
+          "schema_notes": null,
+          "notes": [],
+          "examples": []
+        },
+        {
+          "name": "proxyFor",
+          "parent": "Person",
+          "type": {
+            "type": "string",
+            "format": "uri",
+            "show": "text (URL)"
+          },
+          "description": [
+            "a local identifier representing this person"
+          ],
+          "brief": "a local identifier representing this person",
+          "label": "proxyFor",
+          "schema_notes": [
+            "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+          ],
+          "notes": [],
+          "examples": []
+        }
+      ],
+      "use": [
+        {
+          "template": "as a value type for the {prop} list property of the {type} type",
+          "data": {
+            "prop": "authors",
+            "type": "DataPublication"
+          },
+          "id": "list-type"
+        }
+      ],
+      "cat": "Other"
+    },
+    {
+      "name": "ORCIDpath",
+      "description": [
+        "the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base)"
+      ],
+      "brief": "the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base)",
+      "jtype": "string",
+      "show": "text",
+      "use": [
+        {
+          "template": "as a value type for the {prop} property in the {type} type",
+          "data": {
+            "prop": "orcid",
+            "type": "Person"
+          },
+          "id": "value-type"
+        }
+      ],
+      "cat": "Other"
+    }
+  ]
+}

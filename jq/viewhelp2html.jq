@@ -104,7 +104,7 @@ def layout_property:
   reduce  
   (("<a name=\"{parent}.{name}\"></a>\n" +
     "<div class=\"md_entry md_prop\">\n<h5>\n" +
-    "<span class=\"preheading\"><a href=\"#def_property\">Property</a> of the\n"+
+    "<span class=\"preheading\"><a href=\"#def:property\" title=\"definition: property\">Property</a> of the\n"+
     "<a href=\"#{parent}\">{parent}</a> type</span> <br />\n" +
     "<span class=\"Property heading\">{name}</span>\n</h5>\n<hr />\n\n" +
     "<dl>\n" + 
@@ -117,12 +117,6 @@ def layout_property:
    ("  <dt> <strong>Value type:</strong> </dt>\n" +
     "  <dd> " + (.type|layout_prop_type) + " </dd>\n"),
 
-   (if (.examples|length) > 0 then
-      "  <dt> <strong>Example Values:</strong>\n  <dd> " +
-      (.examples | map( wrap_template("<code>{0}</code>") ) |
-       join(", <br />\n       ") + "\n")
-    else "" end),
-    
    (if .allowed then
       (.allowed | allowed_values ) 
     else "" end),
@@ -134,6 +128,12 @@ def layout_property:
        "<strong>Notes:</strong>\n<ul>\n",
        (.notes[]|("  <li> "+.+" </li>\n")),
        "</ul>\n</div>\n")
+    else "" end),
+    
+   (if (.examples|length) > 0 then
+      "<dl>  <dt> <strong>Example Values:</strong>\n  <dd> " +
+      (.examples | map( wrap_template("<code>{0}</code>") ) |
+       join(", <br />\n       ") + "\n</dl>")
     else "" end),
     
    ("\n</div> <!-- end property description -->\n\n"))
@@ -167,7 +167,7 @@ def layout_type:
     (("<a name=\"{name}\"></a>\n" + 
       "<div class=\"md_entry md_type\">\n" +
       "<div class=\"type_body\">\n<h3>\n" +
-      "<span class=\"preheading\"><a href=\"#def_type\">Named Type</a></span>" +
+      "<span class=\"preheading\"><a href=\"#def:named_type\" title=\"defintion: named type\">Named Type</a></span>" +
       "<br />\n<span class=\"Type heading\">{name}</span>\n"+
       "</h3>\n<hr />\n\n<dl>\n" +
       "  <dt> <strong>JSON type:</strong> </dt>\n" +
@@ -206,8 +206,7 @@ def layout_type:
 ;
 
 def layout_schema(title):
-#     .types[] | layout_type
-    "<h2> "+title+" </h2>\n\n" +
+    "<a name=\"sec:namedtypes\"></a>\n<h2> "+title+" </h2>\n\n" +
 
     "<h3> Index </h3>\n<ul>\n"+
     "  <li> <a href=\"#sec:Resource\">Resource Types</a> </li>\n  <ul>\n"+
@@ -240,7 +239,7 @@ def layout_schema(title):
 ;
 
 def layout_schema:
-    layout_schema("Reference: Complex Types")
+    layout_schema("NERDm Reference: Named Types")
 ;
 
 def view2html:
