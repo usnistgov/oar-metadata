@@ -109,8 +109,7 @@ jq -Ljq -r 'include "jq/schema2viewhelp"; schemasuite2view' \
    model/nerdm-schema.json model/nerdm-pub-schema.json > etc/help/view.json
 ```
 
-After we have edited the output file, `view.json`, we can convert the result
-to HTML:
+After we have edited the output file, `view.json`, we can convert it to HTML:
 
 ```
 jq -Ljq -r 'include "jq/viewhelp2html"; layout_schema' etc/help/view.json > etc/help/ref-body.html
