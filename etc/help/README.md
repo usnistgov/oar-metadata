@@ -91,7 +91,7 @@ transformations.
 To transform the schemas directly to HTML, execute the following:
 
 ```
-jq -Ljq 'include "jq/schema2viewhelp"; include "jq/viewhelp2html"; schemasuite2view | view2html' \
+jq -Ljq -r 'include "jq/schema2viewhelp"; include "jq/viewhelp2html"; schemasuite2view | view2html' \
    model/nerdm-schema.json model/nerdm-pub-schema.json > etc/help/ref.html
 ```
 
@@ -105,7 +105,7 @@ apply these steps separately.  To create the schema view document (to edit for
 content), execute this instead:
 
 ```
-jq -Ljq 'include "jq/schema2viewhelp"; schemasuite2view' \
+jq -Ljq -r 'include "jq/schema2viewhelp"; schemasuite2view' \
    model/nerdm-schema.json model/nerdm-pub-schema.json > etc/help/view.json
 ```
 
@@ -113,8 +113,7 @@ After we have edited the output file, `view.json`, we can convert the result
 to HTML:
 
 ```
-jq -Ljq 'include "jq/viewhelp2html"; layout_schema' \
-   model/nerdm-schema.json model/nerdm-pub-schema.json > etc/help/ref-body.html
+jq -Ljq -r 'include "jq/viewhelp2html"; layout_schema' etc/help/view.json > etc/help/ref-body.html
 ```
 
 The output from the above command will not include the HTML header and footer
@@ -129,8 +128,7 @@ To create a complete HTML document containing just the reference material, one
 can run the last jq example, substituting `view2html` for `layout_schema`:
 
 ```
-jq -Ljq 'include "jq/viewhelp2html"; view2html' \
-   model/nerdm-schema.json model/nerdm-pub-schema.json > etc/help/ref.html
+jq -Ljq -r 'include "jq/viewhelp2html"; view2html' etc/help/view.json > etc/help/ref.html
 ```
 
 
