@@ -104,3 +104,87 @@ code {
     background-color: #eeeeee;
 #    font-weight: bolder;
 }
+
+.json {
+    font-family: monospace;
+    background-color: #eeeeee;
+    padding: 10px;
+}
+.jc {
+    font-family: monospace;
+    background-color: #eeeeee;
+}
+
+.tiptext {
+  width: 30ch;
+  /* min-width: 15ch; */
+  background-color: #65ff60;
+  color: black;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: 10ch; */
+  font-size: smaller;
+  font-family: Arial;
+  padding:  0.5em 1em 0.5em 1em;
+  line-height: 90%;
+  /* margin-left: -4em; */
+}
+
+#ex-propname {
+    width: 10ch;
+    position: absolute;
+    z-index: 1;
+    top:  4em;
+    left: 1em;
+}
+
+#ex-simpletext {
+    width: 18ch;
+    position: absolute;
+    z-index: 1;
+    top:  0.75em;
+    left: 25.9em;
+}
+
+#ex-array {
+    width: 18ch;
+    position: absolute;
+    z-index: 1;
+    top:  3.75em;
+    left: 29.9em;
+}
+
+#ex-object {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  10em;
+    left: 0.25em;
+}
+
+#ex-propname-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  0.75em;
+    left: 6.9em;
+}
+
+#ex-simpletext-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  0.75em;
+    left: 19.1em;
+}
+
+#ex-object-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  7.2em;
+    left: 8.9em;
+}

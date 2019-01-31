@@ -43,11 +43,82 @@ extension schema for describing data publications</a>.)
 </p>
 
 <p>
-Below is an annotated example of a NERDm record describing a data
+Below is an annotated example of NERDm metadata describing a hypothetical data
 resource.  The metadata is in the form of a set of <em>properties</em>.  A
 <a href="#def:property" title="definition: property">property</a> is a
 piece of metadata that has a <em>name</em> and a <em>value</em>.  The
 <a href="def:value_type" title="definition: value type">value</a> can
 be a single value (e.g. text, a number, true/false), a list of values,
 or a complex values made up of sub-properties.  
+</p>
+
+<div style="position: relative;">
+<pre class="json">
+            {
+                "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>": "Moby Dick",
+                "<a href="#Resource.description" title="Human-readable description of the resource">description</a>": [
+                   "A story about a whale",
+                   "It does not end well."
+                ],
+                "<a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a>": {
+                    "<a href="#ContactInfo.hasEmail" title="The email address of the contact person/group for the resource">hasEmail</a>": "mailto:Herman.Melville@pequod.com",
+                    "<a href="#ContactInfo.fn" title="full name of the contact person or organization">fn</a>": "Herman Melville",
+                    "<a href="#ContactInfo.address" title="the contact postal address">address</a>": [
+                        "Arrowhead",
+                        "Pittsfield, Mass."
+                    ]
+                }
+            }          
+</pre>
+<div class="tiptext" id="ex-propname">
+1. property names
+</div>
+<div class="tiptext" id="ex-simpletext">
+2. simple text value
+</div>
+<div class="tiptext" id="ex-array">
+3. property value that is a list of text values
+</div>
+<div class="tiptext" id="ex-object">
+4. property value that is a set of "sub-properties"
+</div>
+<svg id="ex-propname-ptrs" height="90" width="25">
+  <line x1="0" y1="60" x2="25" y2="20" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="60" x2="25" y2="35" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="60" x2="25" y2="90" style="stroke: #65ff60;stroke-width: 2" />
+</svg>
+<svg id="ex-simpletext-ptrs" height="200" width="290">
+  <line x1="40" y1="10" x2="0" y2="18" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="94" y1="55" x2="65" y2="55" style="stroke: #65ff60;stroke-width: 2" />
+  <polyline points="60,40 65,40 65,73 60,73" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+</svg>
+<svg id="ex-object-ptrs" height="200" width="20">
+  <line x1="0" y1="42" x2="15" y2="42" style="stroke: #65ff60;stroke-width: 2" />
+  <polyline points="20,0 15,0 15,90 20,90" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+</svg>
+</div>
+
+Annotation notes for above example:
+<ol>
+  <li> <em>property names</em> -- These show the name of each property; the name
+       appears before a colon (:).  The links in this example (which are not part of the JSON format) link to the definition of the property in the reference section below.   </li>
+  <li> <em>simple text value</em> -- The
+       <span class="jc">title</span> has a simple text value (also called a
+       <em>string</em>).  Other simple values can be numbers or the words,
+       <span class="jc">true</span>, <span class="jc">false</span>, or
+       <span class="jc">null</span>.  Only text values are surrounded by quotes.
+       </li>
+  <li> <em>property value that is a list of text values</em> -- The value for
+       the <span class="jc">description</span> is a list of text values.  A
+       list value is surrounded by square brackets ([...]). </li>
+  <li> <em>property value that is a set of "sub-properties"</em> -- Some
+       properties can be more complex, requiring multiple pieces of
+       intformation, each with its own "sub-property" name.  The sub-properties
+       are kept together by surrounding them with curly brackets ({...}).  </li>
+</ol>
+
+<p>
+Note also that spaces (outside of quoted text) are optional in the JSON syntax.
+Thus, you may encounter JSON without the extra spaces that make it easier to
+read.  
 </p>
