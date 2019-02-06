@@ -42,6 +42,8 @@ and an <a href="https://data.nist.gov/od/dm/nerdm-pub-schema/">an
 extension schema for describing data publications</a>.)
 </p>
 
+<h3>What a NERDm record looks like</h3>
+
 <p>
 Below is an annotated example of NERDm metadata describing a hypothetical data
 resource.  The metadata is in the form of a set of <em>properties</em>.  A
@@ -52,12 +54,15 @@ be a single value (e.g. text, a number, true/false), a list of values,
 or a complex values made up of sub-properties.  
 </p>
 
+<div class="figure">
 <div style="position: relative;">
-<pre class="json">
+<pre class="json" style="margin-top: 0px; margin-bottom: 0px">
             {
-                "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>": "Moby Dick",
+                "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the resource">@id</a>": "ark:/88434/pdr01893t",
+                "<a href="#Resource.@type" title="The resource types this resource qualifies as">@type</a>": [ "nrdp:DataPublication", "nrdp:PublicDataResource" ],
+                "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>": "Moby Dick: an analysis",
                 "<a href="#Resource.description" title="Human-readable description of the resource">description</a>": [
-                   "A story about a whale",
+                   "Moby-Dick is about a man and a whale",
                    "It does not end well."
                 ],
                 "<a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a>": {
@@ -82,13 +87,15 @@ or a complex values made up of sub-properties.
 <div class="tiptext" id="ex-object">
 4. property value that is a set of "sub-properties"
 </div>
-<svg id="ex-propname-ptrs" height="90" width="25">
-  <line x1="0" y1="60" x2="25" y2="20" style="stroke: #65ff60;stroke-width: 2" />
-  <line x1="0" y1="60" x2="25" y2="35" style="stroke: #65ff60;stroke-width: 2" />
-  <line x1="0" y1="60" x2="25" y2="90" style="stroke: #65ff60;stroke-width: 2" />
+<svg id="ex-propname-ptrs" height="96" width="31">
+  <line x1="0" y1="62" x2="31" y2="0" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="62" x2="31" y2="14" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="62" x2="31" y2="28" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="62" x2="31" y2="42" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="0" y1="62" x2="31" y2="100" style="stroke: #65ff60;stroke-width: 2" />
 </svg>
 <svg id="ex-simpletext-ptrs" height="200" width="290">
-  <line x1="40" y1="10" x2="0" y2="18" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="40" y1="20" x2="0" y2="18" style="stroke: #65ff60;stroke-width: 2" />
   <line x1="94" y1="55" x2="65" y2="55" style="stroke: #65ff60;stroke-width: 2" />
   <polyline points="60,40 65,40 65,73 60,73" style="fill: none; stroke: #65ff60;stroke-width: 2" />
 </svg>
@@ -98,6 +105,7 @@ or a complex values made up of sub-properties.
 </svg>
 </div>
 
+<div class="figure-caption">
 Annotation notes for above example:
 <ol>
   <li> <em>property names</em> -- These show the name of each property; the name
@@ -122,3 +130,43 @@ Note also that spaces (outside of quoted text) are optional in the JSON syntax.
 Thus, you may encounter JSON without the extra spaces that make it easier to
 read.  
 </p>
+</div>
+</div>
+
+<h3>What kinds of information are in a NERDm record</h3>
+
+<p>
+A NERDm record describes, in general, a <em>data resource</em>--that
+is, a source of data that can be used in research.  There are
+different kinds of resources, such as data files, databases, software,
+and even data web portals that include on-line tools.  All data
+resources are described with a <a href="#Resource">common set of
+metadata properties</a>; these properties are defined as part of the
+<a href="#Resource">generic
+<span class="Type reference">Resource</span> type</a>.
+Some types of resources can have additional, specialized metadata.
+For example, the
+<a href="#DataPublication"><span class="Type reference">DataPublication</span>
+Resource type</a> defines the
+<a href="#DataPublication.authors"><span class="Property Reference">authors</span>
+property</a> that lists the authors presenting the data.  
+</p>
+
+<p>
+A data resource often made up of one or more data files that can be
+downloaded.  If the resource is a database, it may instead provide a
+search page available through a web browser or an API to access the
+data through a program.  These various ways to access the data are
+represented as resource <em>components</em>.  Similar to the 
+<span class="Type reference">Resource</span> type</a>, a there is a
+<a href="#Component">common set of metadata for describing components</a>;
+these are captured as part of the <a href="#Component">generic
+<span class="Type reference">Component</span> type</a>.  The most
+common type of component is the
+<a href="#Datafile"><span class="Type reference">DataFile</span>
+type</a>, representing a downloadable file; one of its special
+properties is the <a href="#DataFile.downloadURL">
+<span class="property reference">downloadURL</span></a>, indicating
+the URL to use to download the file.  
+</p>
+

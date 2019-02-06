@@ -140,7 +140,7 @@ code {
     width: 10ch;
     position: absolute;
     z-index: 1;
-    top:  4em;
+    top:  6em;
     left: 1em;
 }
 
@@ -148,43 +148,60 @@ code {
     width: 18ch;
     position: absolute;
     z-index: 1;
-    top:  0.75em;
-    left: 25.9em;
+    top:  4em;
+    left: 33.3em;
 }
 
 #ex-array {
     width: 18ch;
     position: absolute;
     z-index: 1;
-    top:  3.75em;
-    left: 29.9em;
+    top:  6.5em;
+    left: 37.3em;
 }
 
 #ex-object {
     width: 16ch;
     position: absolute;
     z-index: 1;
-    top:  10em;
+    top:  12em;
     left: 0.25em;
 }
 
 #ex-propname-ptrs {
     position: absolute;
     z-index: 2;
-    top:  0.75em;
+    top:  2.3em;
     left: 6.9em;
 }
 
 #ex-simpletext-ptrs {
     position: absolute;
     z-index: 2;
-    top:  0.75em;
-    left: 19.1em;
+    top:  2.75em;
+    left: 25.6em;
 }
 
 #ex-object-ptrs {
     position: absolute;
     z-index: 2;
-    top:  7.2em;
+    top:  9.2em;
     left: 8.9em;
+}
+
+.figure {
+    border: 2px solid #eeeeee;
+}
+.figure-caption {
+    font-size: smaller;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+}
+.figure-caption li {
+    padding-bottom: 0.5em;
+}
+.figure-caption ol,ul {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
