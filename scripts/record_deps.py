@@ -16,7 +16,8 @@ from __future__ import print_function
 import os, sys, json, re
 from collections import OrderedDict
 
-prog = os.path.basename(sys.argv.pop(0))
+prog = os.path.basename(sys.argv[0])
+pkgdir = os.path.dirname(os.path.dirname(os.path.abspath(sys.argv.pop(0))))
 pkgname = os.environ.get('PACKAGE_NAME', 'oar-metadata')
 
 def usage():
@@ -27,11 +28,15 @@ def fail(msg, excode=1):
     sys.exit(excode)
 
 def jqdep():
-    import nistoar.jq as jq
+    try:
+        import nistoar.jq as jq
+        ver = jq.get_version()
+    except Exception as ex:
+        ver = "1.5?"
+        
     return OrderedDict([
         ("name", "jq"),
-        ("version", jq.get_version()),
-        ("comment", "Not used at build-time; runtime environment could differ"),
+        ("version", ver),
         ("dependencies", OrderedDict([
             ("libonig2", OrderedDict([
                 ("version", "(unknown)")
@@ -106,11 +111,18 @@ def pymongodep():
         ("version", pymongo.__version__)
     ])
 
-def pkgdep():
-    import nistoar.nerdm as nerdm
+def pkgdep(viapy=False):
+    if viapy:
+        import nistoar.nerdm as nerdm
+        ver = nerdm.__version__
+    else:
+        with open(os.path.join(pkgdir,"VERSION")) as fd:
+            ver = fd.readline()
+        ver = ver.split()[1]
+        
     return OrderedDict([
         ("name", pkgname),
-        ("version", nerdm.__version__)
+        ("version", ver)
     ])
 
 def make_deps(deps):
@@ -122,7 +134,7 @@ def make_deps(deps):
 
 def make_depdata(compname, pkgver):
     if compname == "pdr-nerdm":
-        deps = [ pkgdep(), pydep(), jqdep(), ejschemadep(),
+        deps = [ pkgdep(True), pydep(), jqdep(), ejschemadep(),
                  jmergedep(), jspecdep(), reqdep() ]
         try:
             pym = pymongodep()
