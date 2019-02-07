@@ -45,6 +45,7 @@ extension schema for describing data publications</a>.)
 <h3>What a NERDm record looks like</h3>
 
 <p>
+A NERDm record looks like JSON, because it is JSON(!).  
 Below is an annotated example of NERDm metadata describing a hypothetical data
 resource.  The metadata is in the form of a set of <em>properties</em>.  A
 <a href="#def:property" title="definition: property">property</a> is a
@@ -170,3 +171,84 @@ properties is the <a href="#DataFile.downloadURL">
 the URL to use to download the file.  
 </p>
 
+<div class="figure">
+<div style="position: relative;">
+<pre class="json" style="margin-top: 0px; margin-bottom: 0px">
+            {
+                "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the resource">@id</a>": "ark:/88434/pdr01893t",
+                "<a href="#Resource.@type" title="The resource types this resource qualifies as">@type</a>": [ "nrdp:<a href="#DataPublication" title="A data collection presented by one or more authors as a citable publication">DataPublication</a>", "nrdp:PublicDataResource" ],
+                "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>": "Moby Dick: an analysis",
+                "<a href="#Resource.doi" title="Digital Object Identifier (DOI)">doi</a>": "doi:10.18434/T488S8",
+                "<a href="#Resource.description" title="Human-readable description of the resource">description</a>": [
+                   "Moby-Dick is about a man and a whale",
+                   "It does not end well.",
+                   "We analyze the text for its appropriateness as a training set for AI-driven obsession."
+                ],
+                "<a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a>": { <span style="color: #cccccc;">...</span> },
+                "<a href="#Resource.components" title="a listing of the various component files, subcollections, tools, and other ways to interact with this resource.">components</a>": [
+                    {
+                        "<a href="#Component.@id" title="The NIST-assigned unique identifier for the component (relative to the resource ID)">@id</a>": "cmps/aggregates/wordfreq.csv",
+                        "<a href="#Component.@type" title="The component types this resource qualifies as">@type</a>": [ "nrdp:<a href="#DataFile" title="a downloadable file">DataFile</a>", "dcat:Distribution" ],
+                        "<a href="#Component.filepath" title="a name for the data file reflecting its hierarchical location in the resource data collection">filepath</a>": "cmps/aggregates/wordfreq.csv",
+                        "<a href="#DataFile.downloadURL" title="URL providing direct access to the downloadable data file">downloadURL</a>": "https://data.nist.gov/od/id/pdr01893t/aggregates/wordfreq.csv",
+                        "<a href="#Component.title" title="a descriptive title for the component">title</a>": "Word Frequency Data",
+                        "<a href="#DataFile.size" title="the size of the file in bytes">size</a>": "209531"
+                    },
+                    {
+                        "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the component (relative to the resource ID)">@id</a>": "cmps/aggregates",
+                        "<a href="#Component.@type" title="The component types this resource qualifies as">@type</a>": [ "nrdp:<a href="#Subcollection" title="A collection of files and other collections within the resource">Subcollection</a>" ],
+                        "<a href="#Component.filepath" title="a name for the subcollection reflecting its hierarchical location in the resource data collection">filepath</a>": "cmps/aggregates",
+                        "<a href="#Component.title" title="a descriptive title for the component">title</a>": "Aggregate data"
+                        "<a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a>": "This collection contains the computed aggregate data." 
+                    }
+                ]
+            }          
+</pre>
+<div class="tiptext" id="ex-id">
+1. NIST-internal persistent identifier
+</div>
+<div class="tiptext" id="ex-types">
+2. Resource types
+</div>
+<div class="tiptext" id="ex-doi">
+3. Externally citable identifier
+</div>
+<div class="tiptext" id="ex-rmd">
+4. Metadata description of the resource as a whole.
+</div>
+<div class="tiptext" id="ex-cmd">
+5. Metadata description of each component (file, subcollection, etc.) of the resource.
+</div>
+<svg id="ex-id-ptrs" height="65" width="40">
+  <line x1="0" y1="10" x2="40" y2="0" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="23" y1="65" x2="40" y2="46" style="stroke: #65ff60;stroke-width: 2" />
+</svg>
+<svg id="ex-types-ptrs" height="20" width="60">
+  <line x1="60" y1="20" x2="0" y2="0" style="stroke: #65ff60;stroke-width: 2" />
+  <line x1="30" y1="10" x2="40" y2="0" style="stroke: #65ff60;stroke-width: 2" />
+</svg>
+<svg id="ex-rmd-ptrs" height="146" width="30">
+  <line x1="30" y1="68" x2="10" y2="68" style="stroke: #65ff60;stroke-width: 2" />
+  <polyline points="0,1 10,1 10,145 0,145" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+</svg>
+<svg id="ex-cmd-ptrs" height="200" width="50">
+  <line x1="0" y1="100" x2="13" y2="100" style="stroke: #65ff60;stroke-width: 2" />
+  <polyline points="33,45 13,45 13,155 33,155" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+  <polyline points="43,1 33,1 33,91 43,91" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+  <polyline points="43,120 33,120 33,199 43,199" style="fill: none; stroke: #65ff60;stroke-width: 2" />
+</svg>
+
+<div class="figure-caption">
+Annotation notes for above example:
+<ol>
+  <li> <em>NIST-internal presistent identifier</em> -- Every resource available through the NIST Science Data Portal has its own unique identifier which starts with <code>ark:/88434/</code>.   </li>
+  <li> <em>Resource types</em> -- the <a href="#Resource.@type"><span class="property reference">@type</span></a> property indicates the type of resource this is.  This example is both <code>PublicDataResource</code> and a <a href="#DataPublication"><span class="type reference">DataPublication</span></a>.  </li>
+  <li> <em>Externally citable identifier</em> -- a DOI is an optional secondary identifier that can be assigned to a resource (although not all resources have one).  When one exists, this identifier can be used to cite the data in other publications. </li>
+  <li> <em>Metadata description of the resource as a whole</em> -- these metadata (and others not shown) describe the resource as a whole.  </li>
+  <li> <em>Metadata description of each component of the resource</em> -- the
+       <a href="#Resource.components">components</a> property contains a list of
+       component descriptions.  Each set of subproperties describes a different data file, subcollection, or other type of component.  </li>
+</ol>
+</div>
+</div>
+</div>

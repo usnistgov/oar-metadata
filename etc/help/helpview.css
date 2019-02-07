@@ -205,3 +205,72 @@ code {
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+
+#ex-id {
+    width: 10ch;
+    position: absolute;
+    z-index: 1;
+    top:  1em;
+    left: 0.3em;
+}
+
+#ex-doi {
+    width: 13ch;
+    position: absolute;
+    z-index: 1;
+    top:  6em;
+    left: 0.5em;
+}
+
+#ex-id-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  2.1em;
+    left: 6.3em;
+}
+
+#ex-types {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  4.6em;
+    left: 34.4em;
+}
+
+#ex-types-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  3.4em;
+    left: 25em;
+}
+
+#ex-rmd {
+    width: 22ch;
+    position: absolute;
+    z-index: 1;
+    top:  5.5em;
+    left: 50.4em;
+}
+
+#ex-rmd-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  1.5em;
+    left: 40.1em;
+}
+
+#ex-cmd {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  20em;
+    left: 1em;
+}
+
+#ex-cmd-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  12.7em;
+    left: 9.5em;
+}
+
