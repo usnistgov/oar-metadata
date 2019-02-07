@@ -22,12 +22,17 @@ assert os.path.exists(schemadir), schemadir
 
 loghdlr = None
 rootlog = None
+tmpfiles = None
 def setUpModule():
-    ensure_tmpdir()
+
+    global tmpfiles
+    tmpfiles = Tempfiles()
+    tmpfiles.track("test_wsgi.log")
     rootlog = logging.getLogger()
-    loghdlr = logging.FileHandler(os.path.join(tmpdir(),"test_wsgi.log"))
+    loghdlr = logging.FileHandler(os.path.join(tmpfiles.root, "test_wsgi.log"))
     loghdlr.setLevel(logging.INFO)
     rootlog.addHandler(loghdlr)
+    rootlog.setLevel(logging.INFO)
 
 def tearDownModule():
     global loghdlr
@@ -47,9 +52,11 @@ class TestRMMRecordIngestApp(test.TestCase):
             self.resp.append("{0}: {1}".format(head[0], head[1]))
 
     def setUp(self):
+        self.archdir = tmpfiles.mkdir("ingest_archive")
         self.config = {
             "db_url": dburl,
-            'nerdm_schema_dir': os.path.abspath(schemadir)
+            'nerdm_schema_dir': os.path.abspath(schemadir),
+            'archive_dir': self.archdir
         }
 
         try:
@@ -66,9 +73,14 @@ class TestRMMRecordIngestApp(test.TestCase):
         db = client.get_database()
         if "record" in db.collection_names():
             db.drop_collection("record")
+        tmpfiles.clean()
         
     def test_ctor(self):
         self.assertTrue(self.svc.dburl.startswith("mongodb://"))
+
+        del self.config['archive_dir']
+        with self.assertRaises(wsgi.ConfigurationException):
+            self.svc = wsgi.app(self.config)
 
     def test_get_types(self):
         req = {
@@ -104,6 +116,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("401", self.resp[0])
+        self.assertNotIn("WWW-Authenticate: Bearer", self.resp)
         self.assertEqual(body, [])
 
         # now configure the service to require a key
@@ -124,6 +137,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.resp = []
         body = self.svc(req, self.start)
         self.assertIn("401", self.resp[0])
+        self.assertNotIn("WWW-Authenticate: Bearer", self.resp)
         self.assertEqual(body, [])
 
         # test lack of auth key
@@ -133,6 +147,39 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertIn("401", self.resp[0])
         self.assertEqual(body, [])
 
+        # test header access key
+        cfg['auth_method'] = 'header'
+        self.svc = wsgi.app(cfg)
+
+        self.resp = []
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Bearer 9e73'
+        body = self.svc(req, self.start)
+        self.assertGreater(len(self.resp), 0)
+        self.assertIn("200", self.resp[0])
+        self.assertGreater(len(body), 0)
+        self.assertEqual(body[0], 'Service ready\n')
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Token 9e73'
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+
+        self.resp = []
+        req['HTTP_AUTHORIZATION'] = 'Bearer'
+        body = self.svc(req, self.start)
+        self.assertIn("401", self.resp[0])
+        self.assertIn("WWW-Authenticate: Bearer", self.resp)
+        self.assertEqual(body, [])
+        
+        
         
 
     def test_is_not_ready(self):
@@ -231,6 +278,9 @@ class TestRMMRecordIngestApp(test.TestCase):
 
             body = self.svc(req, self.start)
 
+        archfile = os.path.join(self.archdir, "sdp0fjspek351.json")
+        self.assertTrue(os.path.isfile(archfile))
+
         self.assertIn("200", self.resp[0])
         
         client = MongoClient(dburl)
@@ -244,7 +294,45 @@ class TestRMMRecordIngestApp(test.TestCase):
             self.assertIn("JANAF", recs[0]['title'])
         finally:
             client.close()
+
+class TestArchive(test.TestCase):
+
+    def setUp(self):
+        self.archdir = tmpfiles.mkdir("ingest_archive")
+        os.mkdir(os.path.join(self.archdir, "_cache"))
+        self.hdlr = wsgi.Handler(None, {"REQUEST_METHOD": "GET"}, None,
+                                 self.archdir)
+
+    def tearDown(self):
+        tmpfiles.clean()
         
+    def test_nerdm_archive_cache(self):
+        with open(janaffile) as fd:
+            rec = json.load(fd)
+        self.assertTrue(rec)
+
+        recid = self.hdlr.nerdm_archive_cache(rec)
+        self.assertEqual(recid, "ark:/88434/sdp0fjspek351")
+        cachefile = os.path.join(self.archdir, "_cache",
+                                 os.path.basename(recid)+".json")
+
+        self.assertTrue(os.path.isdir(os.path.dirname(cachefile)))
+        self.assertTrue(os.path.isfile(cachefile))
+
+        with open(cachefile) as fd:
+            self.assertEqual(json.load(fd), rec)
+
+        archfile = os.path.join(self.archdir, os.path.basename(recid)+".json")
+        self.assertFalse(os.path.exists(archfile))
+
+        self.hdlr.nerdm_archive_commit(recid)
+        self.assertTrue(os.path.isfile(archfile))
+        self.assertFalse(os.path.exists(cachefile))
+        
+        with open(archfile) as fd:
+            self.assertEqual(json.load(fd), rec)
+
+                                 
 
 if __name__ == '__main__':
     test.main()

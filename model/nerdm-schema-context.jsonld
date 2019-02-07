@@ -9,10 +9,12 @@
         "vcard": "http://www.w3.org/2006/vcard/ns#",
         "skos": "http://www.w3.org/2004/02/skos/core#",
         "deo": "http://purl.org/spar/deo/",
-        "org": "",
         "pod": "https://project-open-data.cio.gov/v1.1/schema#",
-        "nrd": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+        "nrd": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#",
         "sdpperson": "https://nist.org/od/dm/person/",
+        "npg:": "http://ns.nature.com/terms/",
+        "doi": "https://doi.org/",
+        "ark": "https://data.nist.gov/od/id/ark:",
 
         "title": "dc:title",
         "description": "dc:description",
@@ -24,6 +26,11 @@
             "@id": "dc:issued",
             "@type": "xs:date"
         },
+        "replaces": {
+            "@id": "dc:replaces",
+            "@container": "@set"
+        },
+        "isReplacedBy": "dc:isReplacedBy",
         "publisher": "dc:publisher",
         "accessLevel": "pod:accessLevel",
         "license": "dc:license",
@@ -37,10 +44,15 @@
         "name": "skos:prefLabel",
         "fn": "vcard:fn",
         "hasEmail": "vcard:email",
-        "proxyFor": "ore:proxyFor"
+        "proxyFor": "ore:proxyFor",
+
+        "authors": {
+            "@id": "schema:author",
+            "@container": "@list"
+        }
     }
 
-    "@id": "https://www.nist.gov/od/dm/nerdm-context.jsonld",
+    "@id": "https://data.nist.gov/od/dm/nerdm-context.jsonld",
     "title": "The core NIST Extended Resource Data model (NERDm) JSON-LD context",
     "description": "This is the base context definition for encoding core NERDm metadata in JSON-LD format"
 }

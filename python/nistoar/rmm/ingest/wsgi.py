@@ -24,8 +24,22 @@ class RMMRecordIngestApp(object):
         self.base_path = config.get('base_path', DEF_BASE_PATH)
         self.dburl = config.get('db_url')
         if not self.dburl:
-            self.log.error("Config param not set: db_url")
+            log.error("Config param not set: db_url")
             raise ConfigurationException("Config param not set: db_url")
+
+        self.archdir = config.get('archive_dir')
+        if not self.archdir:
+            log.error("Config param not set: archive_dir")
+            raise ConfigurationException("Config param not set: archive_dir")
+        if not os.path.exists(self.archdir):
+            raise RuntimeError("Requested archive directory, {0}, does not exist"
+                               .format(self.archdir))
+        cachedir = os.path.join(self.archdir, "_cache")
+        if not os.path.exists(cachedir):
+            try:
+                os.mkdir(cachedir)
+            except OSError as ex:
+                raise RuntimeError("Failed to init archive cache: " + str(ex))
 
         if 'db_authn' in config:
             acfg = config['db_authn']
@@ -56,12 +70,25 @@ class RMMRecordIngestApp(object):
 
         self._loaders = {}
         self._loaders['nerdm'] = NERDmLoader(self.dburl, self.schemadir,
-                                             onupdate='quiet')
+                                             onupdate='quiet', log=log)
+
+        authkey = config.get('auth_key')
+        authmeth= config.get('auth_method')
+        if authmeth != 'header':
+            authmeth = 'qparam'
+        self._auth = (authmeth, authkey)
+        if authkey:
+            if authmeth == 'header':
+                log.info("Authorization key is required of clients via HTTP Header")
+            else:
+                log.info("Authorization key is required of clients via query parameter")
+        else:
+            log.warn("No authorization key required of clients")
         
-        self._auth = config.get('auth_key')
 
     def handle_request(self, env, start_resp):
-        handler = Handler(self._loaders, env, start_resp, self._auth)
+        handler = Handler(self._loaders, env, start_resp,
+                          self.archdir, self._auth)
         return handler.handle()
 
     def __call__(self, env, start_resp):
@@ -71,14 +98,15 @@ app = RMMRecordIngestApp
 
 class Handler(object):
 
-    def __init__(self, loaders, wsgienv, start_resp, authkey=None):
+    def __init__(self, loaders, wsgienv, start_resp, archdir, auth=None):
         self._env = wsgienv
         self._start = start_resp
         self._meth = wsgienv.get('REQUEST_METHOD', 'GET')
         self._hdr = Headers([])
         self._code = 0
         self._msg = "unknown status"
-        self._auth = authkey
+        self._auth = auth
+        self._archdir = archdir
 
         self._loaders = loaders
 
@@ -102,9 +130,8 @@ class Handler(object):
         meth_handler = 'do_'+self._meth
 
         path = self._env.get('PATH_INFO', '/')[1:]
-        params = cgi.parse_qs(self._env.get('QUERY_STRING', ''))
-        if not self.authorize(params.get('auth',[])):
-            return self.send_error(401, "Not authorized")
+        if not self.authorize():
+            return self.send_unauthorized()
 
         if hasattr(self, meth_handler):
             return getattr(self, meth_handler)(path)
@@ -112,13 +139,39 @@ class Handler(object):
             return self.send_error(403, self._meth +
                                    " not supported on this resource")
 
-    def authorize(self, auths):
-        if self._auth:
+    def authorize(self):
+        if self._auth[0] == 'header':
+            return self.authorize_via_headertoken()
+        else:
+            return self.authorize_via_queryparam()
+
+    def authorize_via_queryparam(self):
+        params = cgi.parse_qs(self._env.get('QUERY_STRING', ''))
+        auths = params.get('auth',[])
+        if self._auth[1]:
             # match the last value provided
-            return len(auths) > 0 and self._auth == auths[-1]  
+            return len(auths) > 0 and self._auth[1] == auths[-1]  
         if len(auths) > 0:
             log.warn("Authorization key provided, but none has been configured")
         return len(auths) == 0
+
+    def authorize_via_headertoken(self):
+        authhdr = self._env.get('HTTP_AUTHORIZATION', "")
+        log.debug("Request HTTP_AUTHORIZATION: %s", authhdr)
+        parts = authhdr.split()
+        if self._auth[1]:
+            return len(parts) > 1 and parts[0] == "Bearer" and \
+                self._auth[1] == parts[1]
+        if authhdr:
+            log.warn("Authorization key provided, but none has been configured")
+        return authhdr == ""
+
+    def send_unauthorized(self):
+        self.set_response(401, "Not authorized")
+        if self._auth[0] == 'header':
+            self.add_header('WWW-Authenticate', 'Bearer')
+        self.end_headers()
+        return []
 
     def do_GET(self, path):
         path = path.strip('/')
@@ -155,6 +208,51 @@ class Handler(object):
         else:
             return self.send_error(404, "resource does not exist")
 
+    def nerdm_archive_cache(self, rec):
+        """
+        cache a NERDm record into a local disk archive.  The cache is for 
+        records that have been accepted but not ingested.  
+        """
+        try:
+            arkid = rec['@id']
+            outfile = os.path.join(self._archdir, '_cache',
+                                   os.path.basename(arkid)+".json")
+            with open(outfile, 'w') as fd:
+                json.dump(rec, fd, indent=2)
+
+            return arkid
+        
+        except KeyError as ex:
+            # this shouldn't happen if the record was already validated
+            raise RecordIngestError("submitted record is missing the @id "+
+                                    "property")
+        except ValueError as ex:
+            # this shouldn't happen if the record was already validated
+            raise RecordIngestError("submitted record is apparently invalid; "+
+                                    "unable to submit")
+        except OSError as ex:
+            raise RuntimeError("Failed to cache record ({0}): {1}"
+                               .format(arkid, str(ex)))
+
+    def nerdm_archive_commit(self, arkid):
+        """
+        commit a previously cached record to the local disk archive.  This
+        method is called after the record has been successfully ingested to
+        the RMM's database.
+        """
+        outfile = os.path.join(self._archdir, '_cache',
+                               os.path.basename(arkid)+".json")
+        if not os.path.exists(outfile):
+            raise RuntimeError("record to commit ({0}) not found in cache: {1}"
+                               .format(arkid, outfile))
+        try:
+            os.rename(outfile,
+                      os.path.join(self._archdir, os.path.basename(outfile)))
+        except OSError as ex:
+            raise RuntimeError("Failed to archvie record ({0}): {1}"
+                               .format(arkid, str(ex)))
+        
+
     def post_nerdm_record(self):
         """
         Accept a NERDm record for ingest into the RMM
@@ -183,6 +281,8 @@ class Handler(object):
                                    str(ex))
 
         try:
+            recid = self.nerdm_archive_cache(rec)
+            
             res = loader.load(rec, validate=True)
             if res.failure_count > 0:
                 res = res.failures()[0]
@@ -205,6 +305,11 @@ class Handler(object):
         except Exception, ex:
             log.exception("Loading error: "+str(ex))
             return self.send_error(500, "Load failure due to internal error")
+
+        try:
+            self.nerdm_archive_commit(recid)
+        except Exception as ex:
+            log.exception("Commit error: "+str(ex))
 
         log.info("Accepted record %s with @id=%s",
                  rec.get('ediid','?'), rec.get('@id','?'))

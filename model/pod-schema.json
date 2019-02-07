@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["http://mgi.nist.gov/mgi-json-schema/v0.1"],
-    "id": "http://www.nist.gov/dp/di/schema/pod-schema/v1.1#",
+    "id": "http://data.nist.gov/od/dm/pod-schema/v1.1#",
     "title": "US Project Open Data Schema as Extended JSON Schema",
     "description": "This JSON Schema expresses the POD schema (v1.1) so that instances can be validated via a JSON Schema validater",
     "definitions": {
@@ -24,17 +24,17 @@
             "oneOf": [
                 {
                     "description": "a reference to the official POD jsonld file",
-                    "$ref": "/definitions/PODonlyContext"
+                    "$ref": "#/definitions/PODonlyContext"
                 },
                 {
                     "description": "an array the gives both the standard POD context plus additional extension contexts",
                     "type": "array",
                     "items": [
-                        { "$ref": "/definitions/PODonlyContext" }
+                        { "$ref": "#/definitions/PODonlyContext" }
                     ],
                     "additionalItems": {
                         "oneOf": [
-                            { "$ref": "/definitions/URLContext" },
+                            { "$ref": "#/definitions/URLContext" },
                             { "type": "object" }
                         ]
                     }
@@ -96,7 +96,7 @@
                     "notes": [
                         "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
                     ],
-                    "$ref": "ISO8601DateRange",
+                    "$ref": "#/definitions/ISO8601DateRange",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Last Update",
@@ -109,7 +109,7 @@
                     "notes": [
                         "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
-                    "$ref": "/definitions/Organization",
+                    "$ref": "#/definitions/Organization",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Publisher",
@@ -122,7 +122,7 @@
                     "notes": [
                         "This is a container for two fields that together make up the contact information for the dataset. contactPoint should always contain both the person’s appropriately formatted full name (fn) and email (hasEmail)."
                     ],
-                    "$ref": "/definitions/ContactPoint",
+                    "$ref": "#/definitions/ContactPoint",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Contact Name and Email",
@@ -312,7 +312,7 @@
                         {
                             "type": "array",
                             "items": {
-                                "$ref": "distribution.json"
+                                "$ref": "#/definitions/Distribution"
                             },
                             "minItems": 1,
                             "uniqueItems": true
@@ -617,7 +617,7 @@
                 },
                 "subOrganizationOf": {
                     "description": "A parent organizational entity",
-                    "$ref": "/definitions/Organization",
+                    "$ref": "#/definitions/Organization",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "referenceProperty": "org:subOrganizationOf"

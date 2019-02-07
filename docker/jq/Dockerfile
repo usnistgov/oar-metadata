@@ -1,4 +1,4 @@
-From oarmeta/pymongo
+From oar-metadata/pymongo
 
 RUN apt-get update && \
     apt-get install -y curl 

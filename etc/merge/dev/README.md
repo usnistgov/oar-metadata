@@ -1,5 +1,5 @@
 This directory contains annotated schemas used to merge NERDm
-documents.  Specifically, contains schemas for the **dev** merge
+documents.  Specifically, it contains schemas for the **dev** merge
 conventions: representing a convention in development to be renamed
 later once put into use.
 

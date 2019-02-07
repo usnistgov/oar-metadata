@@ -24,7 +24,8 @@ class FieldLoader(Loader):
     database.
     """
 
-    def __init__(self, dburl, schemadir, onupdate='quiet', defschema=DEF_SCHEMA):
+    def __init__(self, dburl, schemadir, onupdate='quiet', log=None,
+                 defschema=DEF_SCHEMA):
         """
         create the loader.  
 
@@ -35,10 +36,13 @@ class FieldLoader(Loader):
         :param onupdate:    a string or function that controls reactions to 
                             the need to update an existing record; see 
                             documentation for load_data().
+        :param log logging.Logger:  a logging instance that messages can be 
+                              sent to.  If not provided, warnings might be 
+                              issued via the warnings module.  
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(FieldLoader, self).__init__(dburl, COLLECTION_NAME, schemadir)
+        super(FieldLoader, self).__init__(dburl, COLLECTION_NAME, schemadir, log)
         self._schema = defschema
         self.onupdate = onupdate
 

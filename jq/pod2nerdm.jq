@@ -17,22 +17,23 @@
 # Here, CATFILE is the POD catalog file.  (In this example, the output records
 # are all given a null identifier.)
 
+include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://www.nist.gov/od/dm/nerdm-schema/v0.1#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.2#";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_pub_schema:  "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#";
 
 # the NERDm context location
 #
-def nerdm_context: "https://www.nist.gov/od/dm/nerdm-pub-context.jsonld";
+def nerdm_context: "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld";
 
 # where the Datacite Document Reference types are defined
 #
-def dciteRefType: nerdm_schema + "/definitions/DCiteDocumentReference";
+def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
 
 # the resource identifier provided on the command line
 #
@@ -46,13 +47,111 @@ def urlpath:
     sub("^\\w+:(//\\w+\\.\\w+(\\.\\w+)*(:\\d+)?)?"; "")
 ;
 
+# trim whitespace from the beginning of a string
+#
+# Input: string
+# Output: string
+#
+def ltrimsp:
+    sub("^\\s+"; "")
+;
+
+# trim whitespace from the end of a string
+#
+# Input: string
+# Output: string
+#
+def rtrimsp:
+    sub("\\s+$"; "")
+;
+
+# trim whitespace from both ends of a string
+#
+# Input: string
+# Output: string
+#
+def trimsp:
+    ltrimsp | rtrimsp
+;
+
+# given a string that looks like a file path, return the path to the
+# file's parent directory
+#
+# Input: string
+# Output: string
+#
+def dirname:
+    sub("/$";"") | 
+    if contains("/") then
+        sub("/[^/]+$"; "")
+    else
+        ""
+    end
+;
+
+# given a string that looks like a file path, return the unqualified file
+# name.
+#
+# Input: string
+# Output: string
+#
+def basename:
+    sub("/$";"") | 
+    if contains("/") then
+        sub("^.*/"; "")
+    else
+        .
+    end
+;
+
+# remove the filename extension from the input
+#
+# Input: string
+# Output: string
+#
+def remove_extension:
+    if test("\\w\\.") then sub("\\.[^\\.]*$"; "") else . end
+;
+
+# assuming an input file name or path return the filename extension or
+# an empty string if none exists
+#
+# Input: string
+# Output: string
+#
+def extension:
+    if test("\\w\\.") then sub("^.*\\."; "") else "" end
+;
+
+# filter an array of strings, retaining only those that are not in another
+# given input array
+#
+# Input: array of strings
+# Output: array of strings
+# exclude: array of strings to remove from input array
+#
+def remove_elements(exclude):
+    map(. as $el | select( (exclude | index($el)) == null ))
+;
+
+# given a list of filepaths, return a unique array of ancestor collection
+# filepaths
+#
+# Input: array of strings
+# Output: array of strings
+#
+def ansc_coll_paths:
+    map(dirname) | map([while(length > 0; dirname)]) |
+    reduce .[] as $ary ([]; .+$ary) | unique
+;
+
 # conversion for a POD-to-NERDm reference node
 #
 # Input: a string containing the reference URL
 # Output: a DCiteDocumentReference object
 #
 def cvtref:  {
-    "@type": "deo:BibliographicReference",
+    "@type": ["deo:BibliographicReference"],
     "@id": ("#ref:" + (. | urlpath | sub("^/"; ""))),
     "refType": "IsReferencedBy",
     "location": .,
@@ -86,16 +185,24 @@ def filepath:
     if test("https?://s3.amazonaws.com/nist-srd/\\w+/") then
        sub("https?://s3.amazonaws.com/nist-srd/\\w+/"; "")
     else
-      if test("https?://s3.amazonaws.com/nist-\\w+/") then
-         sub("https?://s3.amazonaws.com/nist-\\w+/"; "")
+      if test("https?://s3.amazonaws.com/nist-\\w+/\\w+/") then
+         sub("https?://s3.amazonaws.com/nist-\\w+/\\w+/"; "")
       else
-        if test("https?://www.nist.gov/od/ds/\\w+/") then
-           sub("https?://www.nist.gov/od/ds/\\w+/"; "")
+        if test("https?://opendata.nist.gov/\\w+/") then
+           sub("https?://opendata.nist.gov/\\w+/"; "")
         else
-           sub(".*/"; "")
+          if test("https?://data.nist.gov/od/ds/\\w+/") then
+             sub("https?://data.nist.gov/od/ds/\\w+/"; "")
+          else
+            if test("https?://testdata.nist.gov/od/ds/\\w+/") then
+               sub("https?://testdata.nist.gov/od/ds/\\w+/"; "")
+            else
+               sub(".*/"; "")
+            end
+          end
         end
       end
-    end
+    end | url_decode_plus
 ;
 
 # conversion for a POD-to-NERDm distribution node.  A distribution with a
@@ -106,9 +213,26 @@ def filepath:
 #
 def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
-    .["@type"] = [ "nrdp:DataFile", "dcat:Distribution" ] |
+    .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/DataFile" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/DataFile" ] |
+    if .format then .format = { description: .format } else . end
+;
+
+# conversion for a POD-to-NERDm distribution node.  A distribution with a
+# downloadURL and a .sha256 extension gets converted to a ChecksumFile component
+#
+# Input: a Distribution object
+# Output: a Component object with a ChecksumFile type given as @type
+#
+def dist2checksum:
+    .["filepath"] = ( .downloadURL | filepath ) |
+    .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
+    .["@id"] = (. | componentID("cmps/")) |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/ChecksumFile" ] |
+    .["mediaType"] = "text/plain" |
+    .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
+    if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
     if .format then .format = { description: .format } else . end
 ;
 
@@ -145,7 +269,7 @@ def dist2inaccess:
 def dist2accesspage:
     .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("#")) |
-    .["_extensionSchemas"] = [ "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#/definitions/AccessPage" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/AccessPage" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -158,7 +282,11 @@ def dist2accesspage:
 #
 def dist2comp: 
     if .downloadURL then
-        dist2download
+        if (.downloadURL | endswith(".sha256")) then
+            dist2checksum
+        else
+            dist2download
+        end
     else if .accessURL then
         if (.accessURL | test("doi.org")) then
           dist2hidden
@@ -245,6 +373,33 @@ def select_obj_type(type):
 #
 def select_comp_type(type; within):
     select_obj_type(type) | select_comp_within(within)
+;
+
+# create a default Subcollection component for a given filepath
+#
+# Input: filepath string
+# Output: Component
+#
+def create_subcoll_for:
+    {
+        "@id": ("cmps/" + .),
+        "@type": [ "nrdp:Subcollection" ],
+        filepath: .,
+        "_extensionSchemas": [ nerdm_pub_schema + "/definitions/Subcollection" ]
+    }
+;
+
+# create Subcollection components for the filepaths found a given array of
+# components and insert them into the beginning of that array.
+#
+# Input: array of components
+# Output: (expanded) array of components
+#
+def insert_subcoll_comps:
+    (select_comp_type("nrdp:Subcollection";"") |
+     map(select(.filepath)|.filepath)) as $subcolls |
+    (map(select(.filepath)|.filepath) | ansc_coll_paths |
+     remove_elements($subcolls) | map(create_subcoll_for)) + .
 ;
 
 # create an array of TypeInventories summarizing the input set of Components
@@ -348,7 +503,7 @@ def podds2resource:
         ediid: .identifier,
         landingPage,
         
-        description: [ .description ],
+        description:  .description | split("\n\n") | map(trimsp|select(length>0)),
         keyword,
         theme,
         topic: [],
@@ -365,7 +520,7 @@ def podds2resource:
         programCode
     } |
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
-    if .components then .components = (.components | map(dist2comp)) else del(.components) end |
+    if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
     if .theme then . else del(.theme) end |
     if .issued then . else del(.issued) end |

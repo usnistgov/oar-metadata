@@ -1,3 +1,4 @@
 db_url: "mongodb://localhost/testdb"
 nerdm_schema_dir: /dev/oar-metadata/model
 logfile: /dev/oar-metadata/docker/_docker_ingest.log
+archive_dir: /dev/oar-metadata/docker/_docker_ingest_archive

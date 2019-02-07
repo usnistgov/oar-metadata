@@ -65,6 +65,35 @@ class TestPreferBase(unittest.TestCase):
         mrgd = merger.merge(None, [2, 1])
         self.assertEqual(mrgd, [2, 1])
 
+class TestPreferHead(unittest.TestCase):
+
+    def test_ctor(self):
+        strat = mrg.PreferHead()
+        self.assertIsNotNone(strat)
+        self.assertIsInstance(strat, Strategy)
+
+    def test_merge(self):
+        strat = mrg.PreferHead()
+        schema = {'mergeStrategy': 'preferHead'}
+        merger = jsonmerge.Merger(schema,
+                                  {'preferHead': strat},
+                                  'OrderedDict')
+
+        mrgd = merger.merge(None, {'a': 1})
+        self.assertEqual(mrgd, {'a': 1})
+        mrgd = merger.merge({'b': 2}, {'a': 1})
+        self.assertEqual(mrgd, {'a': 1})
+        mrgd = merger.merge("goof", {'a': 1})
+        self.assertEqual(mrgd, {'a': 1})
+        mrgd = merger.merge("goof", "head")
+        self.assertEqual(mrgd, "head")
+        mrgd = merger.merge(None, 2)
+        self.assertEqual(mrgd, 2)
+        mrgd = merger.merge(None, [2, 1])
+        self.assertEqual(mrgd, [2, 1])
+        mrgd = merger.merge([3, 4], [2, 1])
+        self.assertEqual(mrgd, [2, 1])
+
 class TestUniqueArray(unittest.TestCase):
 
     def test_ctor(self):

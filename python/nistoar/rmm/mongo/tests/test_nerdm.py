@@ -1,4 +1,4 @@
-import pdb, os, json, urlparse, warnings
+import pdb, os, json, urlparse, warnings, logging
 import unittest as test
 from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
@@ -17,6 +17,8 @@ if os.environ.get('MONGO_TESTDB_URL'):
     dburl = os.environ.get('MONGO_TESTDB_URL')
 
 assert os.path.exists(schemadir), schemadir
+
+# logger = logging.getLogger("test")
 
 @test.skipIf(not os.environ.get('MONGO_TESTDB_URL'),
              "test mongodb not available")
