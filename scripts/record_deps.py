@@ -121,13 +121,17 @@ def make_deps(deps):
     return out
 
 def make_depdata(compname, pkgver):
-    deps = [ pkgdep(), pydep(), jqdep(), ejschemadep(),
-             jmergedep(), jspecdep(), reqdep() ]
-    try:
-        pym = pymongodep()
-        deps.append(pym)
-    except ImportError:
-        pass
+    if compname == "pdr-nerdm":
+        deps = [ pkgdep(), pydep(), jqdep(), ejschemadep(),
+                 jmergedep(), jspecdep(), reqdep() ]
+        try:
+            pym = pymongodep()
+            deps.append(pym)
+        except ImportError:
+            pass
+
+    else:
+        deps = [ pkgdep(), jqdep(), ejschemadep(), jmergedep(), jspecdep() ]
 
     return OrderedDict([
         ("name", compname),

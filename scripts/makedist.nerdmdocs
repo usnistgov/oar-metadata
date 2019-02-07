@@ -13,7 +13,11 @@ SOURCE_DIR=$PACKAGE_DIR
 
 # Update this list with the names of the individual component names
 # 
-DISTNAMES=(pdr-nerdm)
+DISTNAME="nerdm-docs"
+
+helpdir=$PACKAGE_DIR/etc/help
+other_docfiles="$helpdir/helpview.css $helpdir/nerdm-guide.html"
+nerdm_html_body="$helpdir/nerdm-intro-body.html $helpdir/nerdm-reference-body.html $helpdir/nerdm-glossary-body.html"
 
 # handle command line options
 while [ "$1" != "" ]; do 
@@ -45,13 +49,10 @@ while [ "$1" != "" ]; do
         echo "$prog: unsupported option:" $1
         false
         ;;
-    pdr-nerdm)
-        # assuming just one distribution
-        true
-        ;;
     *)
-        echo "${prog}: ${1}: unrecognized distribution name"
-        false
+        echo "${prog}: Building NERDm docs with distribution name, ${1}"
+        DISTNAME=$1
+        true
         ;;
   esac
   shift
@@ -64,17 +65,24 @@ mkdir -p $BUILD_DIR $DIST_DIR
 # set the current version.  This will inject the version into the code, if 
 # needed.
 #
-set -x
+# set -x
+echo '+' scripts/setversion.sh
 scripts/setversion.sh
 [ -n "$PACKAGE_NAME" ] || PACKAGE_NAME=`cat VERSION | awk '{print $1}'`
 version=`cat VERSION | awk '{print $2}'`
 vers4fn=`echo $version | sed -re 's#[/\s]+#_#g'`
 
+echo '+' PACKAGE_NAME=$PACKAGE_NAME
+echo '+' version=$version
+
 # build the components
-installdir=$BUILD_DIR/pdr/nerdm
+installdir=$BUILD_DIR/docs/nerdm/
 set -x
 mkdir -p $installdir
-scripts/install.sh --install-dir=$installdir
+cat $nerdm_html_body > $installdir/nerdm-guide-body.html
+for file in $other_docfiles; do
+    cp $file $installdir
+done
 
 # ENTER COMMANDS for creating the dependency file(s)
 #
@@ -84,12 +92,12 @@ if [ -n "$PYTHONPATH" ]; then
 else
     export PYTHONPATH=$installdir/lib/python
 fi
-$execdir/record_deps.py ${DISTNAMES[0]} $version \
-                        > $DIST_DIR/${DISTNAMES[0]}-${vers4fn}_dep.json
+$execdir/record_deps.py ${DISTNAME} $version \
+                        > $DIST_DIR/${DISTNAME}-${vers4fn}_dep.json
 
 # Bundle the distribution
-(cd $BUILD_DIR && zip -qr $DIST_DIR/${DISTNAMES[0]}-${vers4fn}.zip pdr)
+(cd $BUILD_DIR && zip -qr $DIST_DIR/${DISTNAME}-${vers4fn}.zip pdr)
 
-# echo ${DISTNAMES[0]}-${vers4fn}.zip
+# echo ${DISTNAME}-${vers4fn}.zip
 
 
