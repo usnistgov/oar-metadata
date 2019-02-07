@@ -13,15 +13,31 @@ SOURCE_DIR=$PACKAGE_DIR
 
 # Update this list with the names of the individual component names
 # 
-DISTNAME="nerdm-docs"
+DISTNAMES="pdr-nerdm nerdm-docs"
 
-helpdir=$PACKAGE_DIR/etc/help
-other_docfiles="$helpdir/helpview.css $helpdir/nerdm-guide.html"
-nerdm_html_body="$helpdir/nerdm-intro-body.html $helpdir/nerdm-reference-body.html $helpdir/nerdm-glossary-body.html"
+# this is needed because realpath is not on macs
+function realpath {
+    if [ -d "$1" ]; then
+        (cd $1 && pwd)
+    elif [ -f "$1" ]; then
+        file=`basename $1`
+        parent=`dirname $1`
+        realdir=`(cd $parent && pwd)`
+        echo "$realdir/$file"
+    elif [[ $1 = /* ]]; then
+        echo $1
+    else
+        echo "$PWD/${1#./}"
+    fi
+}
 
 # handle command line options
 while [ "$1" != "" ]; do 
   case "$1" in
+    --list|-l)
+        echo "Available distributions: $DISTNAMES"
+        exit 0
+        ;;
     --dist-dir=*)
         DIST_DIR=`echo $1 | sed -e 's/[^=]*=//'`
         ;;
@@ -49,14 +65,20 @@ while [ "$1" != "" ]; do
         echo "$prog: unsupported option:" $1
         false
         ;;
-    *)
-        echo "${prog}: Building NERDm docs with distribution name, ${1}"
-        DISTNAME=$1
+    pdr-nerdm|nerdm-docs)
+        # assuming just two distributions
+        build_dist="$build_dist $1"
         true
+        ;;
+    *)
+        echo "${prog}: ${1}: unrecognized distribution name"
+        false
         ;;
   esac
   shift
 done
+[ -n "$build_dist" ] || build_dist=$DISTNAMES
+echo '#' Building $build_dist
 
 true ${DIST_DIR:=$SOURCE_DIR/dist}
 BUILD_DIR=$SOURCE_DIR/dist
@@ -75,29 +97,17 @@ vers4fn=`echo $version | sed -re 's#[/\s]+#_#g'`
 echo '+' PACKAGE_NAME=$PACKAGE_NAME
 echo '+' version=$version
 
-# build the components
-installdir=$BUILD_DIR/docs/nerdm/
-set -x
-mkdir -p $installdir
-cat $nerdm_html_body > $installdir/nerdm-guide-body.html
-for file in $other_docfiles; do
-    cp $file $installdir
-done
+args=
+[ -z "$CACHE_DIR" ] || args="$args --cache-dir=`realpath $CACHE_DIR`"
+[ -z "$DIST_DIR" ] || args="$args --dist-dir=`realpath $DIST_DIR`"
+[ -z "$SOURCE_DIR" ] || args="$args --source-dir=`realpath $SOURCE_DIR`"
 
-# ENTER COMMANDS for creating the dependency file(s)
-#
-# A dependency file should be called DISTNAME-${version}_dep.json
-if [ -n "$PYTHONPATH" ]; then
-    export PYTHONPATH=$installdir/lib/python:$PYTHONPATH
-else
-    export PYTHONPATH=$installdir/lib/python
+if (echo $build_dist | grep -qs pdr-nerdm); then
+    echo '+' $execdir/makedist.pdr $args pdr-nerdm
+    $execdir/makedist.pdr $args pdr-nerdm
 fi
-$execdir/record_deps.py ${DISTNAME} $version \
-                        > $DIST_DIR/${DISTNAME}-${vers4fn}_dep.json
-
-# Bundle the distribution
-(cd $BUILD_DIR && zip -qr $DIST_DIR/${DISTNAME}-${vers4fn}.zip docs)
-
-# echo ${DISTNAME}-${vers4fn}.zip
-
+if (echo $build_dist | grep -qs nerdm-docs); then
+    echo '+' $execdir/makedist.nerdmdocs $args nerdm-docs
+    $execdir/makedist.nerdmdocs $args nerdm-docs
+fi
 
