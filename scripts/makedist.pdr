@@ -69,7 +69,7 @@ echo '+' scripts/setversion.sh
 scripts/setversion.sh
 [ -n "$PACKAGE_NAME" ] || PACKAGE_NAME=`cat VERSION | awk '{print $1}'`
 version=`cat VERSION | awk '{print $2}'`
-vers4fn=`echo $version | sed -re 's#[/\s]+#_#g'`
+vers4fn=`echo $version | perl -pe 's#[/ \t]+#_#g'`
 
 echo '+' PACKAGE_NAME=$PACKAGE_NAME
 echo '+' version=$version
