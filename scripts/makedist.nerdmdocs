@@ -16,6 +16,7 @@ SOURCE_DIR=$PACKAGE_DIR
 DISTNAME="nerdm-docs"
 
 helpdir=$PACKAGE_DIR/etc/help
+modeldir=$PACKAGE_DIR/model
 other_docfiles="$helpdir/helpview.css $helpdir/nerdm-guide.html"
 nerdm_html_body="$helpdir/nerdm-intro-body.html $helpdir/nerdm-reference-body.html $helpdir/nerdm-glossary-body.html"
 
@@ -76,12 +77,32 @@ echo '+' PACKAGE_NAME=$PACKAGE_NAME
 echo '+' version=$version
 
 # build the components
-installdir=$BUILD_DIR/docs/nerdm/
+installdir=$BUILD_DIR/docs
 set -x
 mkdir -p $installdir
-cat $nerdm_html_body > $installdir/nerdm-guide-body.html
+
+# export schema files
+schemas="nerdm nerdm-pub"
+schema_versions="0.1 0.2"
+for sch in $schemas; do
+    for ver in $schema_versions; do
+        sfile="$modeldir/$sch-schema-$ver.json"
+        if [ -f "$sfile" ]; then
+            echo '+' $execdir/install_schema.sh $sfile $installdir
+            $execdir/install_schema.sh $sfile $installdir
+        fi
+    done
+done
+
+# export context files
+cp $modeldir/nerdm-schema-context.jsonld $installdir
+cp $modeldir/nerdm-pub-context.jsonld $installdir
+
+# export help schema documentation
+mkdir -p $installdir/nerdm
+cat $nerdm_html_body > $installdir/nerdm/nerdm-guide-body.html
 for file in $other_docfiles; do
-    cp $file $installdir
+    cp $file $installdir/nerdm
 done
 
 # ENTER COMMANDS for creating the dependency file(s)
@@ -98,7 +119,7 @@ $execdir/record_deps.py ${DISTNAME} $version \
                         > $DIST_DIR/${DISTNAME}-${vers4fn}_dep.json
 
 # Bundle the distribution
-(cd $BUILD_DIR && zip -qr $DIST_DIR/${DISTNAME}-${vers4fn}.zip docs)
+(cd $BUILD_DIR && tar czf $DIST_DIR/${DISTNAME}-${vers4fn}.tgz docs)
 
 # echo ${DISTNAME}-${vers4fn}.zip
 
