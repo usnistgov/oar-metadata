@@ -1,0 +1,2831 @@
+<a name="sec:namedtypes"></a>
+<h2> NERDm Reference: Named Types </h2>
+
+<h3> Index </h3>
+<ul>
+  <li> <a href="#sec:Resource">Resource Types</a> </li>
+  <ul>
+    <li> <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span> </li> 
+    <li> <span class="Type reference"><a href="#PublicDataResource" title="a resource that can/should have a record in NIST's public data listing (PDL)">PublicDataResource</a></span> </li> 
+    <li> <span class="Type reference"><a href="#DataPublication" title="Data presented by one or more authors as citable publication">DataPublication</a></span> </li>   </ul>  <li> <a href="#sec:Component">Component Types</a> </li>
+  <ul>
+    <li> <span class="Type reference"><a href="#Component" title="a component of a resource">Component</a></span> </li> 
+    <li> <span class="Type reference"><a href="#IncludedResource" title="A reference to another resource (which has its own record) that is a part of this resource">IncludedResource</a></span> </li> 
+    <li> <span class="Type reference"><a href="#DataFile" title="a downloadable, finite stream of data">DataFile</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Subcollection" title="A grouping of components within a named subcollection of the resource">Subcollection</a></span> </li> 
+    <li> <span class="Type reference"><a href="#AccessPage" title="a web page that provides indirect access to the resource">AccessPage</a></span> </li> 
+    <li> <span class="Type reference"><a href="#SearchPage" title="a web page that can be used to search the contents of the resource">SearchPage</a></span> </li> 
+    <li> <span class="Type reference"><a href="#API" title="an application programming interface to the resource">API</a></span> </li>   </ul>  <li> <a href="#sec:Other">Other Types</a> </li>
+  <ul>
+    <li> <span class="Type reference"><a href="#DocumentReference" title="descriptive reference to a document">DocumentReference</a></span> </li> 
+    <li> <span class="Type reference"><a href="#DCiteDocumentReference" title="a descriptive reference to a document with a controlled vocabulary for its reference type (refType)">DCiteDocumentReference</a></span> </li> 
+    <li> <span class="Type reference"><a href="#ResourceReference" title="a reference to another resource that may have an associated ID">ResourceReference</a></span> </li> 
+    <li> <span class="Type reference"><a href="#ISO8601DateRange" title="a single date-time, date-time range, or a periodic time interval">ISO8601DateRange</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Topic" title="a container for an identified concept term or proper thing">Topic</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Organization" title="a named organization that may be part of a larger organization">Organization</a></span> </li> 
+    <li> <span class="Type reference"><a href="#ContactInfo" title="Information describing various ways to contact an entity">ContactInfo</a></span> </li> 
+    <li> <span class="Type reference"><a href="#PostalAddress" title="a line-delimited listing of a postal address">PostalAddress</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Identifier" title="a complete description of an identifier, including the scheme that it adheres to">Identifier</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Checksum" title="a checksum with its algorithm noted">Checksum</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Format" title="a description of a file format that a file employs">Format</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Person" title="an identification a Person contributing to the publication of a resource">Person</a></span> </li> 
+    <li> <span class="Type reference"><a href="#ORCIDpath" title="the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base)">ORCIDpath</a></span> </li>   </ul>
+</ul>
+
+<a name="sec:Resource"></a>
+<h3>Resource Types</h3>
+
+<a name="Resource"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Resource</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application. </dd> <p>
+  <dd> There are different types of Resources; this <i>Named Type</i> represents a generic resource.  The other Resource types described later in this section add additional metadata to the base set shown here to describe more specific kinds of resources (like data publications, APIs, etc.) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#PublicDataResource">PublicDataResource</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Resource.title"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">title</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Human-readable, descriptive name of the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>"The NIST High Temperature Superconducting Materials Database"</code>, <br />
+       <code>"Organic Contaminants in Non-Fortified Human Milk"</code>
+</dl>
+</div> <!-- end property description -->
+
+<a name="Resource.description"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">description</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Human-readable description (e.g., an abstract) of the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> Each list element should be considered as a separate paragraph. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.keyword"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">keyword</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> Each value in the list represents a different keyword.  Keywords can be made up of multiple words </li>
+</ul>
+</div>
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>metals</code>, <br />
+       <code>quantum mechanics</code>
+</dl>
+</div> <!-- end property description -->
+
+<a name="Resource.topic"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">topic</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A tag or label taken from a pre-defined vocabulary for a thing or concept that this resource addresses or speaks to </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#Topic">Topic</a></span> objects </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.modified"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">modified</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Most recent date on which the dataset was changed, updated or modified. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#ISO8601DateRange">ISO8601DateRange</a></span> object </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> The value is usually a single formated date, like <code>2017-04-21</code>, or a data and time, like <code>2019-02-23T14:31:10.3</code> </li>
+  <li> A special format is used to indicate the resource is regularly update; e.g., <code>R/P1W</code> (for once a week); see <a href="#ISO8601DateRange"><span class="Type Reference">ISO8601DateRange</span></a> for details. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.issued"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">issued</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Date of formal issuance of the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> The value is usually a single formated date, like <code>2017-04-21</code> </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.publisher"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">publisher</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The publishing entity and optionally their parent organization(s). </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Organization">Organization</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.contactPoint"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">contactPoint</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Contact information for getting more information about this resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#ContactInfo">ContactInfo</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.accessLevel"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">accessLevel</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The degree to which this dataset could be made publicly-available, regardless of whether it has been made available </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+  <dt> <strong>Allowed Values:</strong>
+  <dd>
+       <dl>
+         <dt> <code>public</code> </dt>
+         <dd> Data asset is or could be made publicly available to all without restrictions </dd>
+         <dt> <code>restricted public</code> </dt>
+         <dd> Data asset is available under certain use restrictions </dd>
+         <dt> <code>non-public</code> </dt>
+         <dd> Data asset is not available to members of the public </dd>
+       </dl></dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.license"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">license</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.rights"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">rights</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> information regarding access or restrictions based on privacy, security, or other policies </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.components"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">components</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a listing of the various component resources, tools, and distributions of this resource.  A component usually represents data that is part of this resource that be retrieved or a way to interact with the data. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#Component">Component</a></span> objects </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> This list often includes the list of data files (represented as <span class="Type reference"><a href="#DataFile" title="a downloadable, finite stream of data">DataFile</a></span> components) that are available to download. </li>
+  <li> Data files can be organized into a hierarchy of subcollections (like file folders).  When this is the case, this list will also include <span class="Type reference"><a href="#Subcollection" title="A grouping of components within a named subcollection of the resource">Subcollection</a></span> components.  Both <span class="Type reference"><a href="#DataFile" title="a downloadable, finite stream of data">DataFile</a></span> and <span class="Type reference"><a href="#Subcollection" title="A grouping of components within a named subcollection of the resource">Subcollection</a></span> components included a <span class="Property reference"><a href="#DataFile.filepath" title="a name for the data file reflecting its hierarchical location in the data source collection">filepath</a></span> that indicates where it is located in the hierarchy. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.conformsTo"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">conformsTo</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> URI used to identify a standardized specification the resource conforms to </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> This identifier might refer to a file or dataset format, to database schema, or to a web API. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.isPartOf"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">isPartOf</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The collection of which the dataset is a subset </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#ResourceReference">ResourceReference</a></span> object </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> The resource being referenced normally is one that is also described by a NERDm record which is accessible via its identifier (given in the <a href="#ResourceReference.proxyFor" title="a local identifier representing this resource">proxyFor</a></span> property). </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.language"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">language</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The primary language used in the dataset </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.landingPage"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">landingPage</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.  This page represents the definitive location for accessing the resource. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.references"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">references</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Related documents such as literature articles, technical reports about a dataset, developer documentation, etc. that refer to or describe this resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#DocumentReference">DocumentReference</a></span> objects </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.theme"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">theme</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Main thematic category of the dataset. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> Values are taken from the Taxonomy of NIST Research Areas. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.@id"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">@id</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The NIST-assigned unique identifier for the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> This identifier takes a the form of a NIST-issued ARK identifier (and thus starts with <code>ark:/88434/</code>) </li>
+  <li> If the resource has been assigned a DOI, it will appear in the <a href="#Resource.doi" title="The Digital Object Identifier (DOI)">doi</a></span> </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="Resource.doi"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">doi</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A Digital Object Identifier (DOI) in non-resolving form. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>"doi:10.18434/T42S31"</code>
+</dl>
+</div> <!-- end property description -->
+
+<a name="Resource.ediid"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">ediid</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the NIST EDI identifier assigned to the resource.  This is the identifier assigned by the MIDAS system. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Resource.abbrev"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">abbrev</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> An abbreviated form of the resource's title.  This abbreviation can be used as a compact, human-readable reference to the resource. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>"SRD 13"</code>, <br />
+       <code>"JRes-NIST"</code>
+</dl>
+</div> <!-- end property description -->
+
+<a name="Resource.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The linked-data class types for this resource.  The labels given in this list indicate the kind of thing is being described by metadata. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> This property is a list because it is possible for a resource to be catorgorized as multiple types simultaneously </li>
+  <li> The first value in the list will be the most specific resource type that applies to the resource and should be considered, therefore, its primary type. </li>
+  <li> Often, the values refer to <i>Named Types</i> defined explicitly in the NERDm schema (e.g. <span class="Type reference"><a href="#DataPublication" title="Data presented by one or more authors as citable publication">DataPublication</a></span>); in this case, the resource metadata can include the extended metadata properties for that type. </li>
+  <li> Some values are just semantic labels that do not imply the existance of additional extended metadata. </li>
+  <li> These values are intended to be compliant with use of @type property in the JSON-LD format. </li>
+</ul>
+</div>
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>"nrdp:DataPublication"</code>, <br />
+       <code>"nrdp:SRD"</code>, <br />
+       <code>"dcat:Dataset"</code>
+</dl>
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="PublicDataResource"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">PublicDataResource</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a resource that can/should have a record in NIST's public data listing (PDL) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DataPublication">DataPublication</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Resource.title" title="Human-readable, descriptive name of the resource">title</a></span>,
+       <span class="Property reference"><a href="#Resource.description" title="Human-readable description (e.g., an abstract) of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Resource.keyword" title="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.">keyword</a></span>,
+       <span class="Property reference"><a href="#Resource.topic" title="Identified tags referring to things or concepts that this resource addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Resource.modified" title="Most recent date on which the dataset was changed, updated or modified.">modified</a></span>,
+       <span class="Property reference"><a href="#Resource.issued" title="Date of formal issuance of the resource">issued</a></span>,
+       <span class="Property reference"><a href="#Resource.publisher" title="The publishing entity and optionally their parent organization(s).">publisher</a></span>,
+       <span class="Property reference"><a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a></span>,
+       <span class="Property reference"><a href="#Resource.accessLevel" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available">accessLevel</a></span>,
+       <span class="Property reference"><a href="#Resource.license" title="A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published">license</a></span>,
+       <span class="Property reference"><a href="#Resource.rights" title="information regarding access or restrictions based on privacy, security, or other policies">rights</a></span>,
+       <span class="Property reference"><a href="#Resource.components" title="a listing of the various component resources, tools, and distributions of this resource">components</a></span>,
+       <span class="Property reference"><a href="#Resource.conformsTo" title="URI used to identify a standardized specification the resource conforms to">conformsTo</a></span>,
+       <span class="Property reference"><a href="#Resource.isPartOf" title="The collection of which the dataset is a subset">isPartOf</a></span>,
+       <span class="Property reference"><a href="#Resource.language" title="The primary language used in the dataset">language</a></span>,
+       <span class="Property reference"><a href="#Resource.landingPage" title="a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.">landingPage</a></span>,
+       <span class="Property reference"><a href="#Resource.references" title="Related documents such as technical information about a dataset, developer documentation, etc.">references</a></span>,
+       <span class="Property reference"><a href="#Resource.theme" title="Main thematic category of the dataset.">theme</a></span>,
+       <span class="Property reference"><a href="#Resource.@id" title="A (primary) unique identifier for the resource">@id</a></span>,
+       <span class="Property reference"><a href="#Resource.doi" title="A Digital Object Identifier (DOI) in non-resolving form.">doi</a></span>,
+       <span class="Property reference"><a href="#Resource.ediid" title="the NIST EDI identifier assigned to the resource">ediid</a></span>,
+       <span class="Property reference"><a href="#Resource.abbrev" title="an abbreviated form of the resource's title">abbrev</a></span>,
+       <span class="Property reference"><a href="#Resource.@type" title="the linked-data class types for this resource">@type</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="PublicDataResource.accrualPeriodicity"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">accrualPeriodicity</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Frequency with which dataset is published. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> fixed value: "irregular" or text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="PublicDataResource.bureauCode"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">bureauCode</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="PublicDataResource.programCode"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">programCode</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="PublicDataResource.dataQuality"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">dataQuality</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Whether the dataset meets the agency's Information Quality Guidelines </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> boolean </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="PublicDataResource.primaryITInvestmentUII"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">primaryITInvestmentUII</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The IT Unique Investment Identifier (UII) that is associated with this dataset </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="PublicDataResource.systemOfRecords"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#PublicDataResource">PublicDataResource</a> type</span> <br />
+<span class="Property heading">systemOfRecords</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974 </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="DataPublication"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">DataPublication</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Data presented by one or more authors as citable publication </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd>  </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Resource.title" title="Human-readable, descriptive name of the resource">title</a></span>,
+       <span class="Property reference"><a href="#Resource.description" title="Human-readable description (e.g., an abstract) of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Resource.keyword" title="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.">keyword</a></span>,
+       <span class="Property reference"><a href="#Resource.topic" title="Identified tags referring to things or concepts that this resource addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Resource.modified" title="Most recent date on which the dataset was changed, updated or modified.">modified</a></span>,
+       <span class="Property reference"><a href="#Resource.issued" title="Date of formal issuance of the resource">issued</a></span>,
+       <span class="Property reference"><a href="#Resource.publisher" title="The publishing entity and optionally their parent organization(s).">publisher</a></span>,
+       <span class="Property reference"><a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a></span>,
+       <span class="Property reference"><a href="#Resource.accessLevel" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available">accessLevel</a></span>,
+       <span class="Property reference"><a href="#Resource.license" title="A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published">license</a></span>,
+       <span class="Property reference"><a href="#Resource.rights" title="information regarding access or restrictions based on privacy, security, or other policies">rights</a></span>,
+       <span class="Property reference"><a href="#Resource.components" title="a listing of the various component resources, tools, and distributions of this resource">components</a></span>,
+       <span class="Property reference"><a href="#Resource.conformsTo" title="URI used to identify a standardized specification the resource conforms to">conformsTo</a></span>,
+       <span class="Property reference"><a href="#Resource.isPartOf" title="The collection of which the dataset is a subset">isPartOf</a></span>,
+       <span class="Property reference"><a href="#Resource.language" title="The primary language used in the dataset">language</a></span>,
+       <span class="Property reference"><a href="#Resource.landingPage" title="a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.">landingPage</a></span>,
+       <span class="Property reference"><a href="#Resource.references" title="Related documents such as technical information about a dataset, developer documentation, etc.">references</a></span>,
+       <span class="Property reference"><a href="#Resource.theme" title="Main thematic category of the dataset.">theme</a></span>,
+       <span class="Property reference"><a href="#Resource.@id" title="A (primary) unique identifier for the resource">@id</a></span>,
+       <span class="Property reference"><a href="#Resource.doi" title="A Digital Object Identifier (DOI) in non-resolving form.">doi</a></span>,
+       <span class="Property reference"><a href="#Resource.ediid" title="the NIST EDI identifier assigned to the resource">ediid</a></span>,
+       <span class="Property reference"><a href="#Resource.abbrev" title="an abbreviated form of the resource's title">abbrev</a></span>,
+       <span class="Property reference"><a href="#Resource.@type" title="the linked-data class types for this resource">@type</a></span>
+  </dd>
+</dl>
+</div>
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#PublicDataResource" title="a resource that can/should have a record in NIST's public data listing (PDL)">PublicDataResource</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#PublicDataResource.accrualPeriodicity" title="Frequency with which dataset is published.">accrualPeriodicity</a></span>,
+       <span class="Property reference"><a href="#PublicDataResource.bureauCode" title="an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency">bureauCode</a></span>,
+       <span class="Property reference"><a href="#PublicDataResource.programCode" title="an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset">programCode</a></span>,
+       <span class="Property reference"><a href="#PublicDataResource.dataQuality" title="Whether the dataset meets the agency's Information Quality Guidelines">dataQuality</a></span>,
+       <span class="Property reference"><a href="#PublicDataResource.primaryITInvestmentUII" title="The IT Unique Investment Identifier (UII) that is associated with this dataset">primaryITInvestmentUII</a></span>,
+       <span class="Property reference"><a href="#PublicDataResource.systemOfRecords" title="The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974">systemOfRecords</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="DataPublication.subtitle"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataPublication">DataPublication</a> type</span> <br />
+<span class="Property heading">subtitle</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a secondary or sub-title for the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataPublication.aka"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataPublication">DataPublication</a> type</span> <br />
+<span class="Property heading">aka</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> other (unofficial) titles that this resource is sometimes known as </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataPublication.authors"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataPublication">DataPublication</a> type</span> <br />
+<span class="Property heading">authors</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the ordered list of authors of this data publication </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#Person">Person</a></span> objects </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataPublication.recommendedCitation"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataPublication">DataPublication</a> type</span> <br />
+<span class="Property heading">recommendedCitation</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a recommended formatting of a citation to this data publication </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="sec:Component"></a>
+<h3>Component Types</h3>
+
+<a name="Component"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Component</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A description of one component of a resource.  A component can be a downloadable file, a subcollection of files, an API, or search page. </dd> <p>
+  <dd> This <i>Named Type</i> represents a generic component; other Component types described later in this section represent specific kinds of components. </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.components">components</a></span> list property of the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#IncludedResource">IncludedResource</a></span> </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DataFile">DataFile</a></span> </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#Subcollection">Subcollection</a></span> </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#AccessPage">AccessPage</a></span> </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#API">API</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Component.@id"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">@id</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a relative identifier for the distribution  It can be appended to its <a href="#Resource.@id">resource identifier</a> to get a globally unique version of the identifier. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Component.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the types of components that this component can be classified as </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> This property is a list because it is possible for a component to be catorgorized as multiple types simultaneously </li>
+  <li> An included value of <code>nrd:Hidden</code> indicates that the component is part of the NIST-internal management of the resource and is not expected to be useful to external users </li>
+  <li> These values are intended to be compliant with use of @type property in the JSON-LD format. </li>
+</ul>
+</div>
+<dl>  <dt> <strong>Example Values:</strong>
+  <dd> <code>"nrdp:DataFile"</code>, <br />
+       <code>"nrdp:Subcollection"</code>, <br />
+       <code>"nrd:Hidden"</code>, <br />
+       <code>"dcat:Distribution"</code>
+</dl>
+</div> <!-- end property description -->
+
+<a name="Component.title"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">title</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a descriptive title for the component </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Component.description"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">description</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a description of the nature and contents of the component, including the role it plays as part of the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Component.topic"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">topic</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A tag or label taken from a pre-defined vocabulary for a thing or concept that this component addresses or speaks to </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#Topic">Topic</a></span> objects </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Component.conformsTo"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Component">Component</a> type</span> <br />
+<span class="Property heading">conformsTo</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> URI used to identify a standardized specification the component conforms to </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="IncludedResource"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">IncludedResource</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A reference to another resource (which has its own record) that is a part of this resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.isPartOf">isPartOf</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Person.affiliation">affiliation</a></span> property in the <span class="Type reference"><a href="#Person">Person</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#ResourceReference" title="a reference to another resource that may have an associated ID">ResourceReference</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#ResourceReference.title" title="the name of the resource being referenced">title</a></span>,
+       <span class="Property reference"><a href="#ResourceReference.proxyFor" title="a local identifier representing this resource">proxyFor</a></span>,
+       <span class="Property reference"><a href="#ResourceReference.resourceType" title="the linked-data class types for the referenced resource">resourceType</a></span>
+  </dd>
+</dl>
+</div>
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="DataFile"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">DataFile</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a description of a downloadable, finite stream of data </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="DataFile.filepath"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">filepath</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a name for the data file reflecting its hierarchical location in the data source collection </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.downloadURL"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">downloadURL</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> URL providing direct access to the downloadable data file. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.mediaType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">mediaType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The machine-readable file format (IANA Media Type or MIME Type) of the file's downloadURL </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.format"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">format</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A human-readable description of the file format of a distribution </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Format">Format</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.describedBy"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">describedBy</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> URL to the data dictionary for the distribution found at the <span class="Property reference"><a href="#DataFile.downloadURL" title="URL for downloading a data file">downloadURL</a></span>. </dd> <p>
+  <dd> A data dictionary is usually associated with databases or data files that contain data values with specific labels or names.  For example, the data values may be stored in a data table file or spreadsheet; each column in the table will have a name indicating what the value is.  A data dictionary explains what each name or label means and provide other related information, such as units for the values.  A data dictionary can take a variety of format; if the format is standardized in someway, the <span class="Property reference"><a href="#DataFile.describedByType" title="The machine-readable file format of the file's describedBy URL">describedByType</a></span> will identify the format. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.describedByType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">describedByType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The machine-readable file format (IANA Media Type or MIME Type) of the file's <span class="Property reference"><a href="#DataFile.describedBy" title="URL to the data dictionary for the file found at the downloadURL">describedBy</a></span> URL </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.checksum"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">checksum</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a checksum for the file </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Checksum">Checksum</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DataFile.size"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DataFile">DataFile</a> type</span> <br />
+<span class="Property heading">size</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the size of the file in bytes </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> integer </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Subcollection"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Subcollection</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A grouping of components within a named subcollection of the resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="Subcollection.filepath"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Subcollection">Subcollection</a> type</span> <br />
+<span class="Property heading">filepath</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a name for the data file reflecting its hierarchical location in the data source collection </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Subcollection.contains"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Subcollection">Subcollection</a> type</span> <br />
+<span class="Property heading">contains</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a listing of resource components that are directly part of this subcollection </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Subcollection.hasParent"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Subcollection">Subcollection</a> type</span> <br />
+<span class="Property heading">hasParent</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The identifier for the parent collection that contains this subcollection </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="AccessPage"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">AccessPage</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a web page that provides indirect access to the resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#SearchPage">SearchPage</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="AccessPage.accessURL"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#AccessPage">AccessPage</a> type</span> <br />
+<span class="Property heading">accessURL</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the URL for accessing this indirect access to the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="AccessPage.format"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#AccessPage">AccessPage</a> type</span> <br />
+<span class="Property heading">format</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A human-readable description of the file format of a distribution </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Format">Format</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="SearchPage"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">SearchPage</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a web page that can be used to search the contents of the resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#AccessPage" title="a web page that provides indirect access to the resource">AccessPage</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#AccessPage.accessURL" title="the URL for accessing this indirect access to the resource">accessURL</a></span>,
+       <span class="Property reference"><a href="#AccessPage.format" title="A human-readable description of the file format of a distribution">format</a></span>
+  </dd>
+</dl>
+</div>
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="API"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">API</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> an application programming interface to the resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.components">components</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="API.accessURL"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#API">API</a> type</span> <br />
+<span class="Property heading">accessURL</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the base URL for accessing the API. </dd> <p>
+  <dd> This URL may or may not be resolvable (consult the documentation at the <span class="Property reference"><a href="#API.describedBy" title="URL to the data dictionary for the file found at the downloadURL">describedBy</a></span> URL).  With some APIs, this base URL will return information for accessing the full capabilities of the service. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="API.describedBy"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#API">API</a> type</span> <br />
+<span class="Property heading">describedBy</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> URL to a formal description or informal documentation of the API. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> Use <span class="Property reference"><a href="#API.describedByType" title="The machine-readable file format of the API's describedBy URL">describedByType</a></span> to help distinguish between formal and informal (i.e. human readable) descriptions: no <span class="Property reference"><a href="#API.describedByType" title="The machine-readable file format of the API's describedBy URL">describedByType</a></span> value should indicate a human-readable document. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+<a name="API.describedByType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#API">API</a> type</span> <br />
+<span class="Property heading">describedByType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The machine-readable file format (IANA Media Type or MIME Type) of the API's <span class="Property reference"><a href="#API.describedBy" title="URL to the data dictionary for the file found at the downloadURL">describedBy</a></span> URL. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+<div class="notes"><strong>Notes:</strong>
+<ul>
+  <li> If no value is given for this property, it can be assumed that the document given by the <span class="Property reference"><a href="#API.describedBy" title="URL to the data dictionary for the file found at the downloadURL">describedBy</a></span> URL is human-readable documentation for the API. </li>
+</ul>
+</div>
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="sec:Other"></a>
+<h3>Other Types</h3>
+
+<a name="DocumentReference"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">DocumentReference</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> descriptive reference to a document </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.references">references</a></span> list property of the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DCiteDocumentReference">DCiteDocumentReference</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="DocumentReference.@id"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">@id</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a (relative) identifier for the reference </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd>  </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.location"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">location</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the URL for accessing the document </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.label"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">label</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a recommended label or title to display as the text for a link to the document </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.citation"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">citation</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a full formated citation string for the reference, appropriate for inclusion in a bibliography </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.refid"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">refid</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> An persistent ID for the referenced document. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="DocumentReference.refType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DocumentReference">DocumentReference</a> type</span> <br />
+<span class="Property heading">refType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the type of relationship that this document has with the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="DCiteDocumentReference"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">DCiteDocumentReference</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a descriptive reference to a document with a controlled vocabulary for its reference type (refType) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.references">references</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#DocumentReference" title="descriptive reference to a document">DocumentReference</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#DocumentReference.@id" title="a (relative) identifier for the reference">@id</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.@type">@type</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.location" title="the URL for accessing the document">location</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.label" title="a recommended label or title to display as the text for a link to the document">label</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.citation" title="a full formated citation string for the reference, appropriate for inclusion in a bibliography">citation</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.refid" title="An persistent ID for the referenced document.">refid</a></span>,
+       <span class="Property reference"><a href="#DocumentReference.refType" title="the type of relationship that this document has with the resource">refType</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="DCiteDocumentReference.refType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DCiteDocumentReference">DCiteDocumentReference</a> type</span> <br />
+<span class="Property heading">refType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd>  </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+  <dt> <strong>Allowed Values:</strong>
+  <dd>
+       <dl>
+         <dt> <code>IsDocumentedBy</code> </dt>
+         <dd> The referenced document provides documentation of the resource. </dd>
+         <dt> <code>IsSupplementedBy</code> </dt>
+         <dd> The referenced document is a supplement to the resource. </dd>
+         <dt> <code>IsCitedBy</code> </dt>
+         <dd> The referenced document cites the resource in some way. </dd>
+         <dt> <code>Cites</code> </dt>
+         <dd> This resource cites the referenced document. </dd>
+         <dt> <code>IsReviewedBy</code> </dt>
+         <dd> The referenced document reviews this resource. </dd>
+         <dt> <code>IsReferencedBy</code> </dt>
+         <dd> The resource is used as a source of information by the referenced document. </dd>
+         <dt> <code>References</code> </dt>
+         <dd> The referenced document is used as a source of information by the resource. </dd>
+         <dt> <code>IsSourceOf</code> </dt>
+         <dd> The resource is the source of upon which the referenced document is based. </dd>
+         <dt> <code>IsDerivedFrom</code> </dt>
+         <dd> The referenced document is the source upon which the resource is based. </dd>
+       </dl></dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="ResourceReference"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">ResourceReference</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a reference to another resource that may have an associated ID </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.isPartOf">isPartOf</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#IncludedResource">IncludedResource</a></span> </dd>
+  <dd> as a value type for the <span class="Property reference"><a href="#Person.affiliation">affiliation</a></span> list property of the <span class="Type reference"><a href="#Person">Person</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="ResourceReference.title"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ResourceReference">ResourceReference</a> type</span> <br />
+<span class="Property heading">title</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the name of the resource being referenced </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ResourceReference.proxyFor"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ResourceReference">ResourceReference</a> type</span> <br />
+<span class="Property heading">proxyFor</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a local identifier representing this resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ResourceReference.resourceType"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ResourceReference">ResourceReference</a> type</span> <br />
+<span class="Property heading">resourceType</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the linked-data class types for the referenced resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of text values </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="ISO8601DateRange"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">ISO8601DateRange</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> text </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a single date-time, a date range, or a periodic time interval compliant with the <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 standard for date-times and intervals</a> </dd> <p>
+  <dd> The format of the value is restricted to 3 forms.  A single date has the form YYYY-MM-DDThh:mm:ss.sTZD, as in <code>"2017-03-24T03:45:33.1"</code>; note that any lowere precision version of this form is acceptable, such as <code>"2017-03-24"</code> or <code>"2017"</code>. </dd> <p>
+  <dd> A date range is expressed with two single dates in the above form separated by a forward slash (<code>/</code>)--as, in <code>"2016-01/2016-12"</code> </dd> <p>
+  <dd> The third form from indicates a periodic interval, used to indicate that a resource is updated on a regular basis.  Examples include <code>"R/P1D"</code> for daily, <code>"R5/P2W"</code> for 5 times, every 2 weeks.  Consult the <a href="https://en.wikipedia.org/wiki/ISO_8601">ISO 8601 standard</a> for the detailed syntax. </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.modified">modified</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl></div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Topic"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Topic</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a container for an identified concept term or proper thing </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.topic">topic</a></span> list property of the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as a value type for the <span class="Property reference"><a href="#Component.topic">topic</a></span> list property of the <span class="Type reference"><a href="#Component">Component</a></span> type </dd>
+  <dd> as a value type for the <span class="Property reference"><a href="#Checksum.algorithm">algorithm</a></span> property in the <span class="Type reference"><a href="#Checksum">Checksum</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Topic.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Topic">Topic</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a label indicating whether the value refers to a concept or a thing </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+  <dt> <strong>Allowed Values:</strong>
+  <dd>
+       <dl>
+         <dt> <code>Concept</code> </dt>
+         <dd> label indicating that the value refers to a concept (as in owl:Concept) </dd>
+         <dt> <code>Thing</code> </dt>
+         <dd> label indicating that the value refers to a named person, place, or thing (as in skos:Thing) </dd>
+       </dl></dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Topic.scheme"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Topic">Topic</a> type</span> <br />
+<span class="Property heading">scheme</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Topic.@id"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Topic">Topic</a> type</span> <br />
+<span class="Property heading">@id</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the unique identifier identifying the concept or thing </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Topic.tag"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Topic">Topic</a> type</span> <br />
+<span class="Property heading">tag</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a short, display-able token that locally represents the concept or thing </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Organization"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Organization</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a named organization that may be part of a larger organization </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.publisher">publisher</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  <dd> as a value type for the <span class="Property reference"><a href="#Organization.subOrganizationOf">subOrganizationOf</a></span> property in the <span class="Type reference"><a href="#Organization">Organization</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Organization.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Organization">Organization</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> IRI for the JSON-LD data type. This should be org:Organization for each publisher </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Organization.name"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Organization">Organization</a> type</span> <br />
+<span class="Property heading">name</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The plain-text name of the organization </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Organization.subOrganizationOf"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Organization">Organization</a> type</span> <br />
+<span class="Property heading">subOrganizationOf</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A parent organizational entity </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Organization">Organization</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="ContactInfo"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">ContactInfo</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Information describing various ways to contact an entity </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Resource.contactPoint">contactPoint</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="ContactInfo.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd>  </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.fn"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">fn</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> full name of the contact person, role, or organization </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.hasEmail"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">hasEmail</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The email address of the resource contact </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.postalAddress"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">postalAddress</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the contact mailing address </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#PostalAddress">PostalAddress</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.phoneNumber"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">phoneNumber</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the contact telephone number </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.timezone"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">timezone</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the time zone where the contact typically operates </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="ContactInfo.proxyFor"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#ContactInfo">ContactInfo</a> type</span> <br />
+<span class="Property heading">proxyFor</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a local identifier representing this person </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="PostalAddress"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">PostalAddress</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> list of text values </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a line-delimited listing of a postal address </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#ContactInfo.postalAddress">postalAddress</a></span> property in the <span class="Type reference"><a href="#ContactInfo">ContactInfo</a></span> type </dd>
+</dl></div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Identifier"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Identifier</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a complete description of an identifier, including the scheme that it adheres to </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd>  </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Identifier.scheme"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Identifier">Identifier</a> type</span> <br />
+<span class="Property heading">scheme</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a label indicating the system that the identifier adheres to </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Identifier.value"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Identifier">Identifier</a> type</span> <br />
+<span class="Property heading">value</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the value of the identifier </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Checksum"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Checksum</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a checksum with its algorithm noted </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#DataFile.checksum">checksum</a></span> property in the <span class="Type reference"><a href="#DataFile">DataFile</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Checksum.algorithm"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Checksum">Checksum</a> type</span> <br />
+<span class="Property heading">algorithm</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the algorithm used to produce the checksum hash </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#Topic">Topic</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Checksum.hash"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Checksum">Checksum</a> type</span> <br />
+<span class="Property heading">hash</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the checksum value </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Format"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Format</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a description of a file format that a file employs </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#DataFile.format">format</a></span> property in the <span class="Type reference"><a href="#DataFile">DataFile</a></span> type </dd>
+  <dd> as a value type for the <span class="Property reference"><a href="#AccessPage.format">format</a></span> property in the <span class="Type reference"><a href="#AccessPage">AccessPage</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Format.description"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Format">Format</a> type</span> <br />
+<span class="Property heading">description</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a human-readable description of the format </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Format.scheme"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Format">Format</a> type</span> <br />
+<span class="Property heading">scheme</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a URI that identifies the format type registry or identification system that the value is defined in. </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Format.@id"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Format">Format</a> type</span> <br />
+<span class="Property heading">@id</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the unique identifier for the format </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Format.tag"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Format">Format</a> type</span> <br />
+<span class="Property heading">tag</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a short, display-able token or abbreviation for the format </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="Person"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Person</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> an identification a Person contributing to the publication of a resource </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#DataPublication.authors">authors</a></span> list property of the <span class="Type reference"><a href="#DataPublication">DataPublication</a></span> type </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Person.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the class indicating that this is a Person </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.fn"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">fn</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the author's full name in the preferred format </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.givenName"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">givenName</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the author's given name </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.familyName"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">familyName</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the author's family name </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.middleName"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">middleName</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the author's middle names or initials </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.orcid"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">orcid</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the author's ORCID </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> <span class="Type reference"><a href="#ORCIDpath">ORCIDpath</a></span> object </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.affiliation"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">affiliation</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The institution the person was affiliated with at the time of publication </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of <span class="Type reference"><a href="#ResourceReference">ResourceReference</a></span> objects </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+<a name="Person.proxyFor"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Person">Person</a> type</span> <br />
+<span class="Property heading">proxyFor</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a local identifier representing this person </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text (URL) </dd>
+</dl>
+
+
+</div> <!-- end property description -->
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+<a name="ORCIDpath"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">ORCIDpath</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> text </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as a value type for the <span class="Property reference"><a href="#Person.orcid">orcid</a></span> property in the <span class="Type reference"><a href="#Person">Person</a></span> type </dd>
+</dl></div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<p>
+
+

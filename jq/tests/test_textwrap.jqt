@@ -1,0 +1,74 @@
+# Tests for the pod2nerdm library
+#
+# To run, execute:
+#
+#  jq -L $JQ_LIB --run-tests test_textwrap.jqt
+#
+
+#--------------
+# testing config()
+#
+# Note that in subsequent tests, we need to override the definition of resid
+# because --arg does not work with --run-tests and variables are lexically
+# scoped.  
+#
+include "textwrap"; def config: {}; config
+null
+{}
+
+#--------------
+# testing context()
+#
+include "textwrap"; context
+null
+{ "max_line_width": 78, "min_line_width": 30 }
+
+#--------------
+# testing isstring()
+#
+include "textwrap"; isstring
+"goober"
+true
+
+include "textwrap"; isstring
+3
+false
+
+include "textwrap"; isstring
+{ "goober": "gurn" }
+false
+
+include "textwrap"; isstring
+["goob"]
+false
+
+#--------------
+# testing wrap()
+#
+include "textwrap"; wrap(40)
+"The quick brown fox jumped over the lazy dogs."
+["The quick brown fox jumped over the", "lazy dogs."]
+
+#--------------
+# testing wrap()
+#
+include "textwrap"; fill
+"The quick brown fox jumped over the lazy dogs.  My mother told me that I was the very best boy."
+"The quick brown fox jumped over the lazy dogs.  My mother told me that I was\nthe very best boy."
+
+include "textwrap"; fill(40)
+"The quick brown fox jumped over the lazy dogs.  My mother told me that I was the very best boy."
+"The quick brown fox jumped over the\nlazy dogs.  My mother told me that I\nwas the very best boy."
+
+include "textwrap"; fill(40; 4)
+"The quick brown fox jumped over the lazy dogs.  My mother told me that I was the very best boy."
+"    The quick brown fox jumped over the\n    lazy dogs.  My mother told me that\n    I was the very best boy."
+
+include "textwrap"; fill(40; 4; 15)
+"The quick brown fox jumped over the lazy dogs.  My mother told me that I was the very best boy."
+"    The quick brown fox jumped over the\n    lazy dogs.  My mother told me that\n    I was the very best boy."
+
+include "textwrap"; fill(40; 4; 15)
+"Supercalifajulisticexpealodocious The quick brown fox jumped over the lazy dogs.  My mother told me that I was the very best boy."
+"    Supercalifajulisticexpealodocious\n    The quick brown fox jumped over the\n    lazy dogs.  My mother told me that\n    I was the very best boy."
+

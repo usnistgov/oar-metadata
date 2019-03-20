@@ -1,0 +1,73 @@
+<div id="sec:glossary">
+<a name="sec:glossary"></a>
+<h2>Glossary</h2>
+
+<dl id="glossary">
+
+  <dt id="def:JSON"> <a name="def:JSON">JSON</a> </dt>
+  <dd> a text-based, machine-readable data format (whose abbreviated
+       name stands for <a href="http://json.org/">Javascript Object
+       Notation</a>).  JSON is particulary well-suited for encoding
+       metadata because its central
+       <a href="#def:type" title="defintion: value type">data type</a>,
+       the <em>object</em>, collects data into a set of name-value
+       pairs (referred to as the object's
+       <a href="#def:property" title="definition: property">properties</a>).
+       </dd> <p />
+
+  <dt id="def:named_type"> <a name="def:named_type">named type</a>
+  <dd> The schema defines the
+       <a href="#def:type" title="defintion: value type">value type</a>
+       of each metadata <a href="#def:property">property</a>.  The
+       schema can customize
+       <a href="#def:type" title="defintion: value type">restrictions on
+       what values the property can have</a>.  The restrictions are
+       often defined as a custom type and given a name, making it a
+       <em>named type</em>.
+       <p>
+       As an example, a property providing contact information is
+       called <strong>contactPoint</strong>.  Its value is a set of
+       sub-properties that includes <strong>fn</strong> (full name),
+       <strong>hasEmail</strong> (an email address),
+       <strong>phoneNumber</strong>, etc.  The set of subproperties
+       that is collectively the contact information is a type called
+       <strong>ContactInfo</strong>.  </dd>
+       
+  <dt id="def:property"> <a name="def:property"></a> property </dt>
+  <dd> <strong>A property is a piece of metadata that has a
+       <em>name</em> and a <em>value</em>.</strong>  A value can take the form
+       of a simple value like text, a number, or true/false.  It can a also
+       be list of values of those simple types, or it can be a
+       set of "sub-" properties, each with their own name and value.  </dd>
+       <p />
+
+  <dt id="def:type"> <a name="def:type"></a> value type </dt> 
+  <dd> The value type of a property restricts the kind value it can have.
+       In general, a property can be defined to have one of the following
+       types of JSON values:
+       <ul>
+         <li> text (i.e. a <em>string</em>), </li>
+         <li> a number (e.g. <em>integer</em> or <em>decimal</em>), </li>
+         <li> a <em>boolean</em> (true or false), </li>
+         <li> a collection sub-properties (an <em>object</em>), or </li>
+         <li> a list (i.e. an <em>array</em>) of any of the above types.
+       </ul>
+
+       Further restrictions can be put on the values, such as,
+       <ul>
+         <li> a text value being restricted to one of a list of
+              allowed values, </li>
+         <li> a text value being restricted to a particular format,
+              like that of a URL, </li>
+         <li> a number value being restricted to a particular range, </li>
+         <li> an object with properties having specific names (and
+              value types). </li>
+       </ul>
+       
+       A special restriction on a value type are usually specified in
+       the schema and given a name; making it a
+       <em><a href="def:named_type">named type</a></em>. </dd>
+
+</dl>
+</div>
+
