@@ -1,0 +1,272 @@
+.preheading {
+    font-size: smaller;
+    font-style: italic;
+}
+.preheading a {
+    text-decoration: none
+}
+.preheading a:hover {
+    text-decoration: underline
+}
+.heading {
+    font-size: large;
+}
+
+.md_entry {
+    border: 3px solid;
+    margin-bottom: 4px;
+    margin-top: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.md_entry h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.md_entry h3,h5 {
+    color: black;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.md_entry h5 {
+    margin-left: 0px;
+}
+.md_entry hr {
+    margin-top: 2px;
+    margin-bottom: 10px;
+}
+.md_entry dl {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.md_type {
+    background: #e9da94;
+    border-color:  #998015;
+    border-radius: 8px;
+}
+.md_type hr {
+    border-color: #998015;
+}
+.md_prop {
+    background: #a9e1ac;
+    border-color:  #098111;
+    border-radius: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+.md_prop hr {
+    border-color: #098111;
+}
+.md_iprop {
+    border-color:  #098111;
+    border-radius: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+
+.type_body {
+    padding-left: 11px;
+    padding-right: 11px;
+}
+
+.notes ul {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.reference {
+    font-family: consolas, "Liberation Mono", courier, monospace;
+    background-color: #dcdce1;
+    padding: 0 2px 0 3px;
+    border-radius: 2px;
+}
+.reference a {
+    text-decoration: none;
+}
+.reference a:hover {
+    text-decoration: underline;
+}
+
+code {
+    font-size: larger;
+    background-color: #eeeeee;
+#    font-weight: bolder;
+}
+
+.json {
+    font-family: monospace;
+    background-color: #eeeeee;
+    padding: 10px;
+}
+.jc {
+    font-family: monospace;
+    background-color: #eeeeee;
+}
+
+.tiptext {
+  width: 30ch;
+  /* min-width: 15ch; */
+  background-color: #65ff60;
+  color: black;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 0;
+
+  /* Position the tooltip
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: 10ch; */
+  font-size: smaller;
+  font-family: Arial;
+  padding:  0.5em 1em 0.5em 1em;
+  line-height: 90%;
+  /* margin-left: -4em; */
+}
+
+#ex-propname {
+    width: 10ch;
+    position: absolute;
+    z-index: 1;
+    top:  6em;
+    left: 1em;
+}
+
+#ex-simpletext {
+    width: 18ch;
+    position: absolute;
+    z-index: 1;
+    top:  4em;
+    left: 33.3em;
+}
+
+#ex-array {
+    width: 18ch;
+    position: absolute;
+    z-index: 1;
+    top:  6.5em;
+    left: 37.3em;
+}
+
+#ex-object {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  12em;
+    left: 0.25em;
+}
+
+#ex-propname-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  2.3em;
+    left: 6.9em;
+}
+
+#ex-simpletext-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  2.75em;
+    left: 25.6em;
+}
+
+#ex-object-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  9.2em;
+    left: 8.9em;
+}
+
+.figure {
+    border: 2px solid #eeeeee;
+}
+.figure-caption {
+    font-size: smaller;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    margin-top: 0.5em;
+}
+.figure-caption li {
+    padding-bottom: 0.5em;
+}
+.figure-caption ol,ul {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+#ex-id {
+    width: 10ch;
+    position: absolute;
+    z-index: 1;
+    top:  1em;
+    left: 0.3em;
+}
+
+#ex-doi {
+    width: 13ch;
+    position: absolute;
+    z-index: 1;
+    top:  6em;
+    left: 0.5em;
+}
+
+#ex-id-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  2.1em;
+    left: 6.3em;
+}
+
+#ex-types {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  4.6em;
+    left: 34.4em;
+}
+
+#ex-types-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  3.4em;
+    left: 25em;
+}
+
+#ex-rmd {
+    width: 22ch;
+    position: absolute;
+    z-index: 1;
+    top:  5.5em;
+    left: 50.4em;
+}
+
+#ex-rmd-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  1.5em;
+    left: 40.1em;
+}
+
+#ex-cmd {
+    width: 16ch;
+    position: absolute;
+    z-index: 1;
+    top:  20em;
+    left: 1em;
+}
+
+#ex-cmd-ptrs {
+    position: absolute;
+    z-index: 2;
+    top:  12.7em;
+    left: 9.5em;
+}
+

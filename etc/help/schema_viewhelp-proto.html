@@ -1,0 +1,258 @@
+<html> <head>
+<title>NIST Extensible Resource Model (NERDm)</title>
+<style>
+body {
+   font-family: Helvetica Neue, Arial, sans-serif;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="helpview.css" />
+</head>
+
+<body>
+<h1>NIST Extensible Resource Model: <br />
+    a Reader's Guide to NERDm Metadata</h1>
+
+<h5>Table of Contents</h5>
+<ul>
+  <li> <a href="sec_intro">Introduction</a> </li>
+  <li> Resource Types
+       <ul>
+         <li> Resource </li>
+         <li> PublicDataResource </li>
+         <li> DataPublication </li>
+         <li> SRD </li>
+       </ul></li>
+  <li> Component Types
+       <ul>
+         <li> Component </li>
+         <li> DataFile </li>
+         <li> Subcolleciton </li>
+         <li> AccessPage </li>
+         <li> Distribution </li>
+       </ul>
+  <li> Other Types </li>
+</ul>
+
+<a name="sec_intro"></a>
+<h2>Introduction</h2>
+
+<div  class="schema_description">
+<p>
+The NERDm schema is used to encode metadata describing various kinds
+of <em>resources</em>--datasets, data collections, web portals,
+software, and tools--that are offered by NIST.  Resources are the main
+kind of "thing" that NERDm metadata is used to describe, and there are
+different types resources.
+</p>
+
+<p>
+NERDm metadata is typically encoded in JSON format, but this guide
+attempts to describe the metadata without relying on knowledge of that
+format.  In particular, we describe the metadata schema in terms of a
+few concepts:
+</p>
+
+<a name="concepts"></a>
+<dl id="concepts">
+
+  <dt id="def_property"> <a name="def_property"></a> property </dt>
+  <dd> Metadata describe things like resources in terms of a set of
+       properties.  <strong>A property is a piece of metadata that has a
+       <em>name</em> and a <em>value</em>.</strong>  A value can take the form
+       of a simple value like text, a number, or true/false.  It can a also
+       be list of values of those simple types, or it can be a
+       set of "sub-" properties, each with their own name and value.  </dd>
+       <p />
+
+  <dt id="def_type"> <a name="def_type"></a> value type </dt> 
+  <dd> The value type indicates what kind value it has, like text
+       (i.e. a <em>string</em>), a number (e.g. <em>integer</em> or
+       <em>decimal</em>), or a <em>boolean</em> (true or false).  The 
+       value type can refer to a set of specific sub-properties with
+       prescribed names.  We can give that set of prescribed
+       properties a name, making it a <em>Named Type</em>.  <p />
+
+       As an example, a property providing contact information is
+       called <strong>contactPoint</strong>.  Its value is a set of
+       sub-properties that includes <strong>fn</strong> (full name),
+       <strong>hasEmail</strong> (an email address),
+       <strong>phoneNumber</strong>, etc.  The set of subproperties
+       that is collectively the contact information is a type called
+       <strong>ContactInfo</strong>.  </dd>
+
+       
+</dl>
+</div>
+
+<h2>Resource Types</h2>
+
+<a name="Resource"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def_type">Named Type</a></span> <br />
+<span class="Type heading">Resource</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A dataset, collection, service, tool or other digital resource that enables
+       data-driven research.  </dd> <p />
+  <dt> <strong>How it is used:</strong> </dt>
+  <dd> <span class="Type reference">
+       <a href="#Reference"
+          title="A dataset, collection, service, tool or other digital resource that enables data-driven research.">Resource</a></span> 
+       is a type of metadata object that can occur as a value to an
+       <span class="Property reference">@type</span> property.  </dd>
+</dl> <p />
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<a name="Resource.title"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def_property">Property</a> of the 
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">title</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A human-readable, descriptive name of the resource </dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+  <dt> <strong>Example Values:</strong>
+  <dd> <code>"The NIST High Temperature Superconducting Materials Database", <br />
+       "Organic Contaminants in Non-Fortified Human Milk"</code></dd>
+</dl>
+</div>
+
+<a name="Resource.description"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def_property">Property</a> of the 
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">description</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> Human-readable description (e.g., an abstract) of the resource </dt>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+</div>
+
+<a name="Resource.accessLevel"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def_property">Property</a> of the 
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">accessLevel</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> The degree to which this dataset could be made publicly-available,
+       regardless of whether it has been made available </dt>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+  <dt> <strong>Allowed Values:</strong>
+  <dd>
+       <dl>
+         <dt> <code>public</code> </dt>
+         <dd> Data asset is or could be made publicly
+              available to all without restrictions </dd>
+         <dt> <code>restricted public</code> 
+         <dd> Data asset is available under
+              certain use restrictions </dd> 
+         <dt> <code>private</code>
+         <dd> Data asset is not available to members
+              of the public </dd>
+       </dl></dd> 
+</dl>
+</div>
+
+<a name="Resource.@type"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def_property">Property</a> of the 
+<a href="#Resource">Resource</a> type</span> <br />
+<span class="Property heading">@type</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a list of type names that indicate the kind of resource being described. </dt>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> list of type names </dd>
+  <dt> <strong>Example Values:</strong>
+  <dd> <code>"nrdp:DataPublication", "nrdp:SRD"</code> </dd>
+</dl>
+
+<div class="notes">
+<strong>Notes:</strong>
+<ul>
+  <li> A resource can be catagorized as being of several types
+       simultaneously </li>
+  <li> The first type listed is considered the primary type </li>
+</ul>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<h2>Glossary</h2>
+
+<dl>
+  <a name="def:property"></a>
+  <dt> property </dt>
+  <dd> a piece of metadata describing something composed of a name and
+       a value </dd> <p>
+
+  <a name="def:named_type"></a>
+  <dt> named type </dt>
+  <dd> a special <a href="#def:type">value type</a> that is given a
+       name.  <em>Named types</em> are most often a "complex
+       type"--sets of sub-properties, like
+       <span class="Type reference"><a href="#ContactInfo"
+             title="Information describing various ways to contact an entity">ContactInfo</a></span> or
+       <span class="Type reference"><a href="#Resource"
+             title="A dataset, collection, service, tool or other digital resource that enables data-driven research.">Resource</a></span>,
+       but sometimes they can refer a text value type that has a
+       specific format, like
+       <span class="Type reference"><a href="#ISO8601DateRange">ISO8601DateRange</a></span>.  </dd><p>
+
+  <a name="def:resource"></a>
+  <dt> resource </dt>
+  <dd> A digital object or tool--such as a dataset, data collection,
+       web portal, database, or software--that can enable data-driven
+       science. </dd> <p>
+
+  <a name="def:type"></a>
+  <dt> type (or value type) </dt>
+  <dd> a category of value that a metadata <a href="#def:property">property</a>
+       can have.  Different types include text, a number, a list of
+       values, or a set of properties.  </dd>
+</dl>
+
+
+<hr>
+<address></address>
+<!-- hhmts start -->
+Last modified: Fri Nov  3 08:46:54 2017
+<!-- hhmts end -->
+</body> </html>
