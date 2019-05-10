@@ -1,4 +1,4 @@
-from .common import DOIInfo, default_doi_resolver
+from .common import DOIInfo, default_doi_resolver, CT
 
 class DataciteDOIInfo(DOIInfo):
     """
@@ -17,7 +17,6 @@ class DataciteDOIInfo(DOIInfo):
         this case, Datacite.
         """
         if self._native is None:
-            self._native=self._get_data("application/vnd.datacite.datacite+json",
-                                        "json")
+            self._native=self._get_data(CT.Datacite_JSON, "json")
         return self._native
 

@@ -29,6 +29,44 @@ def set_client_info(project, version, projecturl, email):
     else:
         _client_info = (project, version, projecturl, email)
 
+def strip_DOI(doi, resolver=None):
+    """
+    strip off a legal prefixes from a given DOI so that it starts with the 
+    authority string (i.e. "10...")
+
+    :param str doi:       the DOI string to strip
+    :param str resolver:  a non-standard DOI resolver base URL to allow for.  It
+                          should include a trailing / or ? if these are relevent.
+    """
+    doi = doi.strip()
+    if doi.startswith("doi:"):
+        doi = doi[4:]
+    elif resolver and doi.startswith(resolver):
+        doi = doi[len(resolver):]
+    elif doi.startswith(default_doi_resolver):
+        doi = doi[len(default_doi_resolver):]
+    elif _url_server_re.match(doi):
+        doi = _url_server_re.sub('', doi)
+
+    return doi
+
+class CT(object):
+    """
+    an enumeration class for holding standard content type (MIME type) values
+    as static attributes.  Note that not all resolvers support all these 
+    defined types.
+
+    See https://citation.crosscite.org/docs.html#sec-4.
+    """
+    Citeproc_JSON     = "application/vnd.citationstyles.csl+json"
+    RDF_XML           = "application/rdf+xml"
+    RDF_Turtle        = "text/turtle"
+    citation_text     = "text/x-bibliography"
+    Crossref_XML      = "application/vnd.crossref.unixref+xml"
+    Datacite_XML      = "application/vnd.datacite.datacite+xml"
+    Datacite_JSON     = "application/vnd.datacite.datacite+json"
+    Schema_org_JSONLD = "application/vnd.schemaorg.ld+json"
+
 class DOIInfo(object):
     """
     a class that gives access to metadata and views associated with a DOI.
@@ -37,22 +75,13 @@ class DOIInfo(object):
     information is loaded from a REST call to a DOI resolver.  
     """
 
-    def __init__(self, doi, source="unknown", resolver=default_doi_resolver,
-                 logger=None):
+    def __init__(self, doi, source="unknown", resolver=None, logger=None):
+        if not resolver:
+            resolver = default_doi_resolver
         self.resolver = resolver.strip()
         self.log = logger
 
-        doi = doi.strip()
-        if doi.startswith("doi:"):
-            doi = doi[4:]
-        elif doi.startswith(self.resolver):
-            doi = doi[len(self.resolver):]
-        elif doi.startswith(default_doi_resolver):
-            doi = doi[len(default_doi_resolver):]
-        elif _url_server_re.match(doi):
-            doi = _url_server_re.sub('', doi)
-            
-        self.id = doi
+        self.id = strip_DOI(doi)
 
         self._src = source
         self._cite = None
@@ -73,7 +102,7 @@ class DOIInfo(object):
         registration agency.
         """
         if self._cite is None:
-            self._cite = self._get_data("text/x-bibliography", "text")
+            self._cite = self._get_data(CT.citation_text, "text")
         return self._cite
 
     @property
@@ -84,8 +113,7 @@ class DOIInfo(object):
         Crossref)
         """
         if self._data is None:
-            self._data = \
-                self._get_data("application/vnd.citationstyles.csl+json", "json")
+            self._data = self._get_data(CT.Citeproc_JSON, "json")
         return self._data
 
     @property
@@ -120,12 +148,18 @@ class DOIInfo(object):
             
         if resp.status_code >= 200 and resp.status_code < 300:
             if format == "json":
-                return resp.json()
+                if resp.status_code == 204:   # No Content
+                    return {}
+                try:
+                    return resp.json()
+                except ValueError as ex:
+                    raise DOIResolverError(self.id, self.resolver, cause=ex,
+                                   message="Response is not parseable: "+str(ex))
+
             return resp.text
         
         if resp.status_code == 406:
-            raise DOIUnsupportedContentType(self.cntntype, self.id,
-                                            self.resolver)
+            raise DOIUnsupportedContentType(cntntype, self.id, self.resolver)
 
         if resp.status_code == 404:
             raise DOIDoesNotExist(self.id, self.resolver)
@@ -202,7 +236,7 @@ class DOIResolverError(DOIResolutionException):
                                a default one will be set based on cause
         """
         if not message:
-            "Unexpected resolution response"
+            message = "Unexpected resolution response"
             if doi:
                 message += " for "+doi
             if reason:

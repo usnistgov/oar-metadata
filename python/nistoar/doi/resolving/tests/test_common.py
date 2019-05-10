@@ -7,7 +7,7 @@ import nistoar.doi.resolving.common as res
 
 dcdoi = "10.18434/m33x0v"
 
-class TestClienInfo(test.TestCase):
+class TestFuncs(test.TestCase):
 
     def test_set(self):
         self.assertIsNone(res._client_info)
@@ -18,6 +18,23 @@ class TestClienInfo(test.TestCase):
         self.assertEqual(res._client_info[3], "datasupport@nist.gov")
         res.set_client_info(None, None, None, None)
         self.assertIsNone(res._client_info)
+
+    def test_strip_DOI(self):
+        doi = res.strip_DOI(dcdoi)
+        self.assertEqual(doi, dcdoi)
+        
+        doi = res.strip_DOI("doi:"+dcdoi)
+        self.assertEqual(doi, dcdoi)
+        
+        doi = res.strip_DOI("http://goob.net/"+dcdoi)
+        self.assertEqual(doi, dcdoi)
+        
+        doi = res.strip_DOI("https://doi.org/"+dcdoi)
+        self.assertEqual(doi, dcdoi)
+        
+        doi = res.strip_DOI("dx.doi.org/"+dcdoi, "dx.doi.org/")
+        self.assertEqual(doi, dcdoi)
+        
 
 class TestDOIInfo(test.TestCase):
 
