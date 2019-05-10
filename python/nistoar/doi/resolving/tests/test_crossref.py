@@ -41,7 +41,8 @@ class TestCrossrefDOIInfo(test.TestCase):
         self.assertEqual(doi.client_info.application_version, "testing")
 
 
-
+    @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
+                 "kindly skipping doi service checks")
     def test_native(self):
         set_client_info(*cli)
 
@@ -52,7 +53,7 @@ class TestCrossrefDOIInfo(test.TestCase):
         self.assertIn('URL', doi.native)
         self.assertEqual(doi.native['DOI'], crdoi)
         
-        
+    
         
 
 

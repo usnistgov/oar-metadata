@@ -50,12 +50,16 @@ class TestDOIInfo(test.TestCase):
         self.assertEqual(doi.resolver, res.default_doi_resolver)
         self.assertIsNone(doi._data)
 
+    @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
+                 "kindly skipping doi service checks")
     def test_get_data(self):
         doi = res.DOIInfo(dcdoi)
         data = doi._get_data("text/turtle")
         self.assertGreater(len(data), 1)
         self.assertTrue(data.startswith("@prefix schema: "))
 
+    @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
+                 "kindly skipping doi service checks")
     def test_cite(self):
         doi = res.DOIInfo(dcdoi)
         self.assertIsNone(doi._cite)
@@ -63,6 +67,8 @@ class TestDOIInfo(test.TestCase):
         self.assertTrue(doi._cite.startswith("Conny, J., "))
         self.assertTrue(doi.citation_text.startswith("Conny, J., "))
 
+    @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
+                 "kindly skipping doi service checks")
     def test_data(self):
         doi = res.DOIInfo(dcdoi)
         self.assertIsNone(doi._data)

@@ -17,6 +17,8 @@ class TestDataciteDOIInfo(test.TestCase):
         self.assertIsNone(doi._cite)
         self.assertIsNone(doi._native)
 
+    @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
+                 "kindly skipping doi service checks")
     def test_native(self):
         doi = res.DataciteDOIInfo(dcdoi)
         self.assertIsNone(doi._native)
