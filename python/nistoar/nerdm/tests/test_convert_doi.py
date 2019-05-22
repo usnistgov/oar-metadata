@@ -239,10 +239,36 @@ class TestDOIResolver(unittest.TestCase):
 
     def test_ctor(self):
         rslvr = cvt.DOIResolver()
-        self.assertEqual(rslvr.resolver, "https://doi.org/")
+        self.assertIsNone(rslvr.resolver._client_info)
+        self.assertEqual(rslvr.resolver._resolver, "https://doi.org/")
         
-        rslvr = cvt.DOIResolver("https://goob.org/")
-        self.assertEqual(rslvr.resolver, "https://goob.org/")
+        rslvr = cvt.DOIResolver(resolver="https://goob.org/")
+        self.assertEqual(rslvr.resolver._resolver, "https://goob.org/")
+        
+        rslvr = cvt.DOIResolver(('a', 'b', 'c', 'd'), "https://goob.org/")
+        self.assertEqual(rslvr.resolver._client_info, ('a', 'b', 'c', 'd'))
+        self.assertEqual(rslvr.resolver._resolver, "https://goob.org/")
+
+    def test_from_config(self):
+        rslvr = cvt.DOIResolver.from_config({})
+        self.assertEqual(rslvr.resolver._resolver, "https://doi.org/")
+        self.assertIn("unspecified", rslvr.resolver._client_info[0])
+        self.assertEqual(rslvr.resolver._client_info[1], "unknown")
+        self.assertIn("oar-metadata", rslvr.resolver._client_info[2])
+        self.assertIn("datasupport", rslvr.resolver._client_info[3])
+
+        rslvr = cvt.DOIResolver.from_config({
+            "app_name": "Fred",
+            "resolver_url": "https://goob.org/",
+            "foo": "bar"
+        })
+        self.assertEqual(rslvr.resolver._resolver, "https://goob.org/")
+        self.assertEqual("Fred", rslvr.resolver._client_info[0])
+        self.assertEqual(rslvr.resolver._client_info[1], "unknown")
+        self.assertIn("oar-metadata", rslvr.resolver._client_info[2])
+        self.assertIn("datasupport", rslvr.resolver._client_info[3])
+
+        
                          
     @unittest.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                      "kindly skipping doi service checks")

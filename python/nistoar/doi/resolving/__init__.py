@@ -22,9 +22,10 @@ class Resolver(object):
 
         :param 4-tuple client_info:  the client/application information 
         """
-        if not client_info:
+        if not client_info and _comm._client_info:
             client_info = tuple(_comm._client_info)
-        if not isinstance(client_info, (list, tuple)) or len(client_info) != 4:
+        if client_info is not None and \
+           (not isinstance(client_info, (list, tuple)) or len(client_info) != 4):
             raise TypeError("client_info: Not a 4-tuple: "+str(client_info))
         self._client_info = client_info
 

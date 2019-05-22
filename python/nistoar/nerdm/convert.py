@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from .. import jq
 from ..doi import resolve
+from ..doi.resolving import Resolver
 from .constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI
 
 class PODds2Res(object):
@@ -162,14 +163,15 @@ class DOIResolver(object):
         """
         convert the given DOI to a NERDm reference description
         """
-        return _doiinfo2reference( self.resolver.resolve(doi), self.resolver )
+        return _doiinfo2reference( self.resolver.resolve(doi),
+                                   self.resolver._resolver )
     
     def to_authors(self, doi):
         """
         convert the given DOI to an array of NERDm Person descriptions 
         representing an ordered list of authors
         """
-        info = resolve(doi, resolver=self.resolver)
+        info = self.resolver.resolve(doi)
         out = []
 
         if info.source == "Datacite":
@@ -182,7 +184,7 @@ class DOIResolver(object):
         return out
 
     @classmethod
-    def from_config(cfg):
+    def from_config(cls, cfg):
         """
         construct a DOIResolver from a configuration dictionary.  The following
         properties are supported:
@@ -207,7 +209,7 @@ class DOIResolver(object):
             cfg.get('app_url', "https://github.com/usnistgov/oar-metadata"),
             cfg.get('email', "datasupport@nist.gov")
         )
-        return Resolver(ci, resolver)
+        return DOIResolver(ci, resolver)
             
 
 def _doiinfo2reference(info, resolver):
