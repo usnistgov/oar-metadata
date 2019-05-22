@@ -2,7 +2,8 @@ FROM oar-metadata/jq:latest
 
 RUN apt-get update && apt-get install -y python python-pip python-dev unzip \
                                          uwsgi uwsgi-plugin-python python-yaml
-RUN pip install json-spec jsonmerge==1.3.0 jsonschema requests pynoid pytest filelock 
+RUN pip install json-spec jsonmerge==1.3.0 jsonschema requests pynoid pytest \
+                filelock crossrefapi
 
 WORKDIR /root
 
