@@ -11,4 +11,4 @@ from .resolving.common import (set_client_info, CT, DOIInfo,
                                DOIResolverError, DOIClientException,
                                DOIDoesNotExist, DOIUnsupportedContentType)
 from .resolving import resolve
-
+from .utils import *
