@@ -30,6 +30,13 @@ datacite_auths = [
     {"name":"DataCite Metadata Working Group"}
 ]
 
+rescfg = {
+    "app_name": "NIST Open Access for Research: oar-metadata",
+    "app_version": "testing",
+    "app_url": "http://github.com/usnistgov/oar-metadata/",
+    "email": "datasupport@nist.gov"
+}
+
 class TestConvertAuthors(unittest.TestCase):
 
     def test_citeproc_author2nerdm_author(self):
@@ -273,7 +280,7 @@ class TestDOIResolver(unittest.TestCase):
     @unittest.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                      "kindly skipping doi service checks")
     def test_toReference(self):
-        rslvr = cvt.DOIResolver()
+        rslvr = cvt.DOIResolver.from_config(rescfg)
         ref = rslvr.to_reference("10.18434/m33x0v")
 
         self.assertEqual(ref['@type'], ['npg:Dataset'])
@@ -287,7 +294,7 @@ class TestDOIResolver(unittest.TestCase):
     @unittest.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                      "kindly skipping doi service checks")
     def test_to_authors(self):
-        rslvr = cvt.DOIResolver()
+        rslvr = cvt.DOIResolver.from_config(rescfg)
         auths = rslvr.to_authors("10.18434/m33x0v")
 
         self.assertEqual(len(auths), 2)
