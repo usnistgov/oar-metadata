@@ -239,6 +239,57 @@ class TestTopicArray(unittest.TestCase):
         ])
 
 
+class TestBaseArrayAsDefault(unittest.TestCase):
+
+    def test_ctor(self):
+        strat = mrg.BaseArrayAsDefault()
+        self.assertIsNotNone(strat)
+        self.assertIsInstance(strat, Strategy)
+
+    def test_merge_def(self):
+        strat = mrg.BaseArrayAsDefault()
+        schema = {'mergeStrategy': 'baseArrayAsDefault'}
+        merger = jsonmerge.Merger(schema,
+                                  {'baseArrayAsDefault': strat},
+                                  'OrderedDict')
+
+        base = [ { "@id": "goob", "foo": "bar", "blue": "blah" },
+                 { "@id": "hank", "foo": "bin" } ]
+        head = [ { "@id": "goob", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "foo": "bar", "gurn": "cranston", "blue": "blah" },
+            { "@id": "bob", "tells": "alice" },
+            { "@id": "hank", "foo": "bin" }
+        ])
+        
+    def test_merge_ignore(self):
+        strat = mrg.BaseArrayAsDefault()
+        schema = {'mergeStrategy': 'baseArrayAsDefault',
+                  'mergeOptions': {
+                      'ignoreId': "goob" 
+                  }}
+        merger = jsonmerge.Merger(schema,
+                                  {'baseArrayAsDefault': strat},
+                                  'OrderedDict')
+
+        base = [ { "@id": "goob", "foo": "bar", "blue": "blah" },
+                 { "@id": "hank", "foo": "bin" } ]
+        head = [ { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "foo": "bar", "gurn": "cranston" },
+            { "@id": "bob", "tells": "alice" },
+            { "@id": "hank", "foo": "bin" }
+        ])
+        
+
+
 class TestDirBaseMergerFactory(unittest.TestCase):
 
     def test_ctor(self):

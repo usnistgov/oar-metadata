@@ -281,6 +281,116 @@ class TopicArray(ArrayMergeByMultiId):
 
         return False
 
+
+class BaseArrayAsDefault(Strategy):
+    """
+    Treat the base array as default data for head array.
+
+    This is very similar to arrayMergeById and supports the same merge options
+    in which the two arrays are merged based on a designated identifier 
+    property.  It differs from arrayMergeById in terms of which array serves 
+    as the basis for the output array.  In this implementation, the base array 
+    is merged into head array (rather than the other way around for 
+    arrayMergeById).  This means that the order of the output elements will 
+    most closely match that of the head array, and any base array elements not 
+    in the head will be appended in order at the end.  When matching array 
+    elements are merged, however, the head array element will override the 
+    values of the base (just like with arrayMergeById).  
+
+    Thus, the output array will look more the head array with missing data 
+    coming from the base.  
+
+    One other difference is that in this strategy, the default refId is 
+    "@id".
+    """
+
+    # this implementation is based on the ArrayMergeById implementation
+    # (jsonmerge v1.6.1)
+
+    def get_key(self, walk, item, idRef):
+        return walk.resolver.resolve_fragment(item.val, idRef)
+
+    def iter_index_key_item(self, walk, jv, idRef):
+        for i, item in enumerate(jv):
+            try:
+                key = self.get_key(walk, item, idRef)
+            except jsonschema.RefResolutionError:
+                continue
+
+            yield i, key, item
+
+    def merge(self, walk, base, head, schema, meta, idRef="@id", ignoreId=None,
+              **kwargs):
+        if not walk.is_type(base, "array"):
+            raise BaseInstanceError("Base for an 'baseArrayAsDefault' merge "
+                                    "strategy is not an array", head)  # nopep8
+
+        if head.is_undef():
+            head = JSONValue([], head.ref)
+        else:
+            if not walk.is_type(head, "array"):
+                raise HeadInstanceError("Head for an 'baseArrayAsDefault' merge "
+                                        "strategy is not an array", base) #nopep8
+            head = JSONValue(list(head.val), head.ref)
+
+        subschema = schema.get('items')
+
+        if walk.is_type(subschema, "array"):
+            raise SchemaError("'baseArrayAsDefault' not supported when 'items' "
+                              "is an array", subschema)
+
+        if not idRef:
+            idRef = "@id"
+
+        # ensure that the entries in the base are uniquely identified
+        for i, key_1, item_1 in self.iter_index_key_item(walk, base, idRef):
+            for j, key_2, item_2 in self.iter_index_key_item(walk, base, idRef):
+                if j < i:
+                    if key_1 == key_2:
+                        raise BaseInstanceError("Id '%s' was not unique in base"
+                                                % (key_1,), item_1)
+                else:
+                    break
+
+        # merge base items into head array
+        for i, base_key, base_item in self.iter_index_key_item(walk,base, idRef):
+
+            if base_key == ignoreId:
+                continue
+
+            matching_j = []
+            for j, head_key, head_item in self.iter_index_key_item(walk, head,
+                                                                   idRef):
+                if head_key == base_key:
+                    matching_j.append(j)
+                    matched_item = head_item
+
+            if len(matching_j) == 1:
+                # If there was exactly one match, we replace it with a merged
+                # item
+                j = matching_j[0]
+                head.val[j] = walk.descend(subschema, base_item,
+                                           matched_item, meta).val
+
+            elif len(matching_j) == 0:
+                # If there wasn't a match, we append the default object
+                head.val.append(base_item.val)
+            else:
+                j = matching_j[1]
+                raise HeadInstanceError("Id '%s' was not unique in head" %
+                                        (head_key,), head[j])
+
+        return head
+
+    def get_schema(self, walk, schema, meta, **kwargs):
+        subschema = schema.get('items')
+        if not subschema.is_undef():
+            schema['items'] = walk.descend(subschema, meta)
+
+        return schema
+
+
+
     
 STRATEGIES = {
     "keepBase": KeepBase(),
@@ -288,7 +398,8 @@ STRATEGIES = {
     "preferHead": PreferHead(),
     "uniqueArray": UniqueArray(),
     "arrayMergeByMultiId": ArrayMergeByMultiId(),
-    "topicArray": TopicArray()
+    "topicArray": TopicArray(),
+    "baseArrayAsDefault": BaseArrayAsDefault()
 }
 
 class MergerFactoryBase(object):
