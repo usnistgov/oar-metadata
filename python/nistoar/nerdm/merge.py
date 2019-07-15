@@ -24,7 +24,7 @@ from abc import ABCMeta, abstractmethod
 
 import ejsonschema.schemaloader as ejsl
 import jsonschema
-from jsonmerge.strategies import Strategy
+from jsonmerge.strategies import Strategy, BaseInstanceError, HeadInstanceError
 from jsonmerge.jsonvalue import JSONValue
 from jsonmerge import Merger
 
@@ -321,7 +321,7 @@ class BaseArrayAsDefault(Strategy):
 
     def merge(self, walk, base, head, schema, meta, idRef="@id", ignoreId=None,
               **kwargs):
-        if not walk.is_type(base, "array"):
+        if not base.is_undef() and not walk.is_type(base, "array"):
             raise BaseInstanceError("Base for an 'baseArrayAsDefault' merge "
                                     "strategy is not an array", head)  # nopep8
 
@@ -332,6 +332,9 @@ class BaseArrayAsDefault(Strategy):
                 raise HeadInstanceError("Head for an 'baseArrayAsDefault' merge "
                                         "strategy is not an array", base) #nopep8
             head = JSONValue(list(head.val), head.ref)
+
+        if base.is_undef():
+            return head
 
         subschema = schema.get('items')
 

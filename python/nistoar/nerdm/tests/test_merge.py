@@ -265,6 +265,24 @@ class TestBaseArrayAsDefault(unittest.TestCase):
             { "@id": "bob", "tells": "alice" },
             { "@id": "hank", "foo": "bin" }
         ])
+
+    def test_merge_undef_base(self):
+        strat = mrg.BaseArrayAsDefault()
+        schema = {'mergeStrategy': 'baseArrayAsDefault'}
+        merger = jsonmerge.Merger(schema,
+                                  {'baseArrayAsDefault': strat},
+                                  'OrderedDict')
+
+        base = None
+        head = [ { "@id": "goob", "gurn": "cranston" },
+                 { "@id": "bob", "tells": "alice" } ]
+        mrgd = merger.merge(base, head)
+
+        self.assertIsInstance(mrgd, list)
+        self.assertEquals(mrgd, [
+            { "@id": "goob", "gurn": "cranston" },
+            { "@id": "bob", "tells": "alice" } 
+        ])
         
     def test_merge_ignore(self):
         strat = mrg.BaseArrayAsDefault()
