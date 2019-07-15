@@ -232,7 +232,7 @@
                     "description": "Related documents such as technical information about a dataset, developer documentation, etc.",
                     "type": "array",
                     "items": { "$ref": "#/definitions/DocumentReference" },
-                    "mergeStrategy": "arrayMergeById",
+                    "mergeStrategy": "baseArrayAsDefault",
                     "mergeOptions": { "idRef": "/@id" }
                 },
                 
