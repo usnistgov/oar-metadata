@@ -362,7 +362,7 @@ def _doiinfo2reference(info, resolver):
     if info.citation_text:
         out['citation'] = info.citation_text
 
-    out['_extensionSchemas'] = [ CORE_SCHEMA_URI + "#DCiteReference" ]
+    out['_extensionSchemas'] = [ CORE_SCHEMA_URI+"#/definitions/DCiteReference" ]
     return out
 
     
