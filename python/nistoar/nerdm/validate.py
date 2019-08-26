@@ -5,8 +5,6 @@ from collections import Mapping
 
 import ejsonschema as ejs
 
-from .constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI
-
 def get_mdval_flavor(data):
     """
     return the prefix used to identify meta-properties used for validation 
