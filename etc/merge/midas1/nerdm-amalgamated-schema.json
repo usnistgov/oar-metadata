@@ -704,7 +704,7 @@
                     "title": "Format",
                     "description": "A human-readable description of the file format of a distribution",
                     "$ref": "#/definitions/Format",
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
                 
                 "describedBy": {
