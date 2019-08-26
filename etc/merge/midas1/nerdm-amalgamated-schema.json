@@ -613,6 +613,15 @@
                 "Include a $extensionSchema property to validate this description against a Component sub-type"
             ],
             "properties": {
+                "@id": {
+                    "description": "a (relative) identifier for the distribution",
+                    "notes": [
+                        "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
+                        "A relative identifier requires that @base be set to the Resource identifier in the @context."
+                    ],
+                    "type": "string"
+                    "mergeStrategy": "keepBase"
+                },
                 "@type": {
                     "description": "the types of components that this component can be classified as",
                     "notes": [
@@ -632,12 +641,12 @@
                 "title": {
                     "description": "a descriptive title for the component",
                     "type": "string",
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
                 "description": {
                     "description": "a description of the nature and contents of the component, including the role it plays as part of the resource",
                     "type": "string",
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
@@ -657,7 +666,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
                 
                 "filepath": {
@@ -682,7 +691,7 @@
                         "prefLabel": "Download URL",
                         "referenceProperty": "dcat:downloadURL"
                     },
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "mediaType": {
@@ -697,7 +706,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
 
                 "format": {
@@ -719,7 +728,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
                 
                 "describedByType": {
@@ -734,7 +743,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "preferBase"
+                    "mergeStrategy": "preferHead"
                 },
 
                 "accessURL": {
