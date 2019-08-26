@@ -619,7 +619,7 @@
                         "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
                         "A relative identifier requires that @base be set to the Resource identifier in the @context."
                     ],
-                    "type": "string"
+                    "type": "string",
                     "mergeStrategy": "keepBase"
                 },
                 "@type": {
