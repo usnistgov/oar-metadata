@@ -63,6 +63,12 @@ class TestValidate(unittest.TestCase):
 
         self.assertEqual(vld8.validate(data, schemadir), [])
 
+        del data['title']
+        errs = vld8.validate(data, schemadir, strict=False)
+        self.assertGreater(len(errs), 0)
+
+        
+
 
 
 
