@@ -173,7 +173,89 @@ class PODds2Res(object):
                     refs[i].update(newref)
 
         return nerd
-            
+
+class Res2PODds(object):
+    """
+    a class for converting a NERDm Resource object to a POD Dataset object.
+
+    Currently, there are no configuration parameters supported.
+    """
+
+    _flavor = {
+        "midas": "resource2midaspodds",
+        "pdr":   "resource2midaspodds",
+    }
+
+    def __init__(self, jqlibdir, config=None, logger=None):
+        """
+        create the converter
+
+        :param jqlibdir str:   path to the directory containing the nerdm jq
+                               modules
+        :param config  dict:   a dictionary with conversion configuration data
+                               in it; currently, no paramters are supported.
+        :param logger Logger:  a logger object that can be used to write warning
+                               messages 
+        """
+        self.jqt = {
+            "midas": jq.Jq('nerdm::resource2midaspodds', jqlibdir,
+                           ["nerdm2pod:nerdm"])
+        }
+        if config is None:
+            config = {}
+        self.cfg = config
+        self._log = logger
+
+    def _jq4flavor(self, flavor):
+        if flavor in self.jqt:
+            return self.jqt[flavor]
+
+        if flavor in self._flavors:
+            flavor = self._flavors[flavor]
+        self.jqt[flavor] = jq.Jq('nerdm::'+flavor, jqlibdir, ["nerdm2pod:nerdm"])
+        return self.jqt[flavor]
+
+    def convert(self, nerdm, flavor="midas"):
+        """
+        convert JSON-encoded data to a resource object
+
+        :param nerdm str:   a string containing the JSON-formatted input NERDm
+                            Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform(nerdm)
+        return out
+
+    def convert_data(self, nerdm, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdm dict:  A dictionary containing a NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        return self.convert(json.dumps(nerdm))
+
+    def convert_file(self, nerdmfile, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdmfile str: the path to a file containing a JSON-encoded 
+                              NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform_file(nerdmfile)
+        return out
+
+    
+
 
 class ComponentCounter(object):
     """
