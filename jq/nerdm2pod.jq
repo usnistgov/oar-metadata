@@ -18,7 +18,10 @@ def join_para:
 # Output: ContactPoint node
 #
 def cleanContactPoint:
-   { "@type": .["@type"], fn, hasEmail }
+    { "@type": .["@type"], fn, hasEmail } |
+    if (.["@type"]|not) then
+        .["@type"] = "vcard:Contact"
+    else . end
 ;
 
 # return true if a given Component has 'dcat:Distribution' included amongst its
@@ -63,7 +66,7 @@ def comp2dist:
     if .downloadURL then
       .
     else
-      (del(.accessURL) |
+      (del(.downloadURL) |
        if .mediaType then . else del(.mediaType) end)
     end 
 ;
@@ -75,6 +78,40 @@ def comp2dist:
 #
 def comps2dist:
     [ .[] | select(isDistribution) | comp2dist ]
+;
+
+# Convert a DOI from identifier form to URL form
+#
+def doi2url:
+    if startswith("doi:") then
+        sub("doi:"; "https://doi.org/")
+    else . end
+;
+
+# Converts a DOI value to an access distribution using the MIDAS convention
+#
+# Input: a DOI value (in doi: form)
+# Output: a Distribution node
+#
+def doi2dist:
+    doi2url | {
+      "@type": "dcat:Distribution",
+      "accessURL": .,
+      "format": "text/html",
+      "title": "DOI Access"
+    }
+;
+
+# Given a list of POD distributions, find those matching a DOI access
+# distribution that follows the MIDAS convention
+#
+# Input:  array of Distribution nodes
+# Output: the matching Distribution node or null if not found
+# 
+def findDOIdist:
+    [ .[] | select(.accessURL) |
+      select(.accessURL|startswith("https://doi.org/")) ] |
+    if length > 0 then .[0] else null end
 ;
 
 # Converts a NERDm Resource to a POD Dataset
@@ -121,8 +158,24 @@ def resource2midaspodds:
     if .rights then . else del(.rights)                              end |
     if .theme  then . else del(.theme)                               end |
     if .issued then . else del(.issued)                              end |
-    if .distribution then .distribution = (.distribution|comps2dist)
-                     else del(.distribution)                         end |
+    if .distribution then
+        .distribution = (.distribution|comps2dist) 
+    else
+        .distribution = []
+    end |
+    if .doi and (.distribution | findDOIdist | not) then
+        .distribution = [.doi | doi2dist] + .distribution |
+        if .title then
+            .title as $title | 
+            .distribution[0] = (.distribution[0] |
+                                .title = .title + " for " + $title |
+                                .description = .title)
+        else . end
+    else . end |
+    if .distribution and (.distribution|length) > 0 then
+        . else del(.distribution)
+    end |
+    del(.doi) |
     .
 ;
 
