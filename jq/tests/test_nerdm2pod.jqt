@@ -80,3 +80,7 @@ include "nerdm2pod"; resource2midaspodds
 {"_schema": "...","_extensionSchemas":[],"title":"Test","@id":"ark:/88888/pdr0-11","ediid":"mds2-11","doi":"doi:12345/TES32843","description":["This is a test","Really."],"modified":"2019-08-25","issued":"2019-08-25","publisher":{"@type":"org:Organization","name":"NIST"},"contactPoint":{"fn":"E.E.Neuman","hasEmail":"e.e.neuman@wh.gov","phone":"555-555-5555"},"landingPage":"https:/dumb.com/","keyword":["goober"],"accessLevel":"private","components":[{"@type":["nrd:IncludedResource"],"title":"sub-genius"},{"@type":["nrdp:DataFile","dcat:Distribution"],"downloadURL":"https://data.nist.gov/od/ds/secret","mediaType":"data/secret"}]}
 {"@type":"dcat:Dataset","title":"Test","identifier":"mds2-11","description":"This is a test\n\nReally.","modified":"2019-08-25","issued":"2019-08-25","publisher":{"@type":"org:Organization","name":"NIST"},"contactPoint":{"@type":"vcard:Contact","fn":"E.E.Neuman","hasEmail":"e.e.neuman@wh.gov"},"landingPage":"https:/dumb.com/","keyword":["goober"],"accessLevel":"private","language":["en"],"bureauCode":["006:55"],"programCode":["006:045"],"distribution":[{"@type": "dcat:Distribution","accessURL": "https://doi.org/12345/TES32843","format": "text/html","title": "DOI Access for Test","description": "DOI Access for Test" },{"@type":"dcat:Distribution","downloadURL":"https://data.nist.gov/od/ds/secret","mediaType":"data/secret"}]}
 
+#--------------
+# testing resource2midaspodds
+#
+# more testing handled by test_resource2midaspodds.py

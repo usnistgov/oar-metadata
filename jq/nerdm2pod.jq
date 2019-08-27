@@ -56,13 +56,13 @@ def comp2dist:
       format,
       mediaType
     } |
-    if .title then . else del(.title) end |
-    if .description then . else del(.description) end |
-    if .conformsTo then . else del(.conformsTo) end |
-    if .describedBy then . else del(.describedBy) end |
-    if .describedByType then . else del(.describedByType) end |
-    if .format then . else del(.format) end |
-    if .accessURL then . else del(.accessURL) end |
+    if .title           then . else del(.title)            end |
+    if .description     then . else del(.description)      end |
+    if .conformsTo      then . else del(.conformsTo)       end |
+    if .describedBy     then . else del(.describedBy)      end |
+    if .describedByType then . else del(.describedByType)  end |
+    if .format          then . else del(.format)           end |
+    if .accessURL       then . else del(.accessURL)        end |
     if .downloadURL then
       .
     else
@@ -139,9 +139,14 @@ def resource2midaspodds:
         license,
         accessLevel,
         rights,
+        conformsTo,
         language,
+        dataQuality,
+        accrualPeriodicity,
         bureauCode,
         programCode,
+        systemOfRecords,
+        primaryITInvestmentUII,
         distribution: .components
     } |
     if (.identifier|not) then .identifier = .["@id"] else . end | del(.["@id"]) |
@@ -152,12 +157,19 @@ def resource2midaspodds:
     if .references then .references = [ .references[] | select(.location) |
                                         .location ]
                    else del(.references)                             end |
-    if (.bureauCode|not) then .bureauCode = ["006:55"]    else .     end |
+    if (.bureauCode|not)  then .bureauCode  = ["006:55"]  else .     end |
     if (.programCode|not) then .programCode = ["006:045"] else .     end |
+    if (.language|not)    then .language    = ["en"]      else .     end |
     if (.accessLevel|not) then .accessLevel = "public"    else .     end |
-    if .rights then . else del(.rights)                              end |
-    if .theme  then . else del(.theme)                               end |
-    if .issued then . else del(.issued)                              end |
+    if .systemOfRecords  then . else del(.systemOfRecords)           end |
+    if .accrualPeriodicity  then . else del(.accrualPeriodicity)     end |
+    if .dataQuality  then . else del(.dataQuality)                   end |
+    if .primaryITInvestmentUII  then . else del(.primaryITInvestmentUII) end |
+    if .rights       then . else del(.rights)                        end |
+    if .license      then . else del(.license)                       end |
+    if .theme        then . else del(.theme)                         end |
+    if .issued       then . else del(.issued)                        end |
+    if .conformsTo   then . else del(.conformsTo)                    end |
     if .distribution then
         .distribution = (.distribution|comps2dist) 
     else
