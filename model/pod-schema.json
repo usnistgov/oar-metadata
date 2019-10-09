@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["http://mgi.nist.gov/mgi-json-schema/v0.1"],
-    "id": "http://data.nist.gov/od/dm/pod-schema/v1.1#",
+    "id": "https://data.nist.gov/od/dm/pod-schema/v1.1#",
     "title": "US Project Open Data Schema as Extended JSON Schema",
     "description": "This JSON Schema expresses the POD schema (v1.1) so that instances can be validated via a JSON Schema validater",
     "definitions": {
