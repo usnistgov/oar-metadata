@@ -10,6 +10,8 @@
         "dpr": "https://nist.org/dp/dpr/",
         "vcard": "http://www.w3.org/2006/vcard/ns#",
         "bibo": "http://purl.org/ontology/bibo/",
+        "schema": "http://schema.org/",
+        "npg":  "http://ns.nature.com/terms/",
         "skos": "http://www.w3.org/2004/02/skos/core#",
         "pod": "https://project-open-data.cio.gov/v1.1/schema#",
         "rmmperson": "https://nist.org/od/dm/person/",
