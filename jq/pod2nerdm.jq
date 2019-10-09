@@ -191,14 +191,14 @@ def filepath:
         if test("https?://opendata.nist.gov/\\w+/") then
            sub("https?://opendata.nist.gov/\\w+/"; "")
         else
-          if test("https?://data.nist.gov/od/ds/\\w+/") then
-             sub("https?://data.nist.gov/od/ds/\\w+/"; "")
+          if test("https?://(test)?data.nist.gov/od/ds/") then
+             sub("https?://(test)?data.nist.gov/od/ds/"; "") |
+             if test("ark:/\\w+/") then
+                sub("ark:/\\w+/"; "")
+             else . end |
+             sub("^[\\w+-]+/"; "") 
           else
-            if test("https?://testdata.nist.gov/od/ds/\\w+/") then
-               sub("https?://testdata.nist.gov/od/ds/\\w+/"; "")
-            else
-               sub(".*/"; "")
-            end
+            sub(".*/"; "")
           end
         end
       end
