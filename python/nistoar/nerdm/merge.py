@@ -273,7 +273,8 @@ class TopicArray(ArrayMergeByMultiId):
         altkey2 = self._altkey(key2)
 
         # if everything is None, respond with False
-        if all([v is None for v in altkey1.values() + altkey2.values()]):
+        if all([v is None for v in
+                list(altkey1.values()) + list(altkey2.values())]):
             return False
         
         if altkey1 == altkey2:
@@ -405,13 +406,12 @@ STRATEGIES = {
     "baseArrayAsDefault": BaseArrayAsDefault()
 }
 
-class MergerFactoryBase(object):
+class MergerFactoryBase(object, metaclass=ABCMeta):
     """
     a class for creating Merger objects.  The factory is responsible
     for locating and loading the necessary schema as well as
     configuring the strategies available.  
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, logger=None):
         """
@@ -458,7 +458,7 @@ class DirBasedMergerFactory(MergerFactoryBase):
         super(DirBasedMergerFactory, self).__init__(logger)
         if not rootdir:
             raise ValueError("DirBasedMergerFactory: rootdir not provided")
-        if not isinstance(rootdir, (str, unicode)):
+        if not isinstance(rootdir, str):
             raise TypeError("DirBasedMergerFactory: rootdir not a str: {0}".
                             format(str(rootdir)))
         if not os.path.exists(rootdir):
@@ -496,7 +496,7 @@ class DirBasedMergerFactory(MergerFactoryBase):
             schema = json.load(fd)
 
         out = Merger(schema, self.strategies, 'OrderedDict')
-        for schema in cache.schemas().values():
+        for schema in list(cache.schemas().values()):
             out.cache_schema(schema)
 
         return out

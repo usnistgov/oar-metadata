@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 from .common import DOIInfo, default_doi_resolver
 from . import common as _comm
 

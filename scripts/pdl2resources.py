@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 #
 # Usage: pdl2resources [-d DIR] [-i START] [-c COUNT] PDLFILE
 #
@@ -6,7 +6,7 @@
 # NERDm Resource records, and write them out into individual files.  New ARK
 # identifiers will be assigned to each one.  
 #
-from __future__ import print_function
+
 import os, sys, errno, json, re
 from argparse import ArgumentParser
 from collections import OrderedDict
@@ -35,7 +35,7 @@ if not os.path.exists(jqlib):
 sys.path.extend(oarpypath.split(os.pathsep))
 try:
     import nistoar
-except ImportError, e:
+except ImportError as e:
     nistoardir = os.path.join(basedir, "python")
     sys.path.append(nistoardir)
     import nistoar
@@ -91,13 +91,13 @@ def main(args):
     try:
         with open(opts.pdlfile) as fd:
             pdldata = json.load(fd)
-    except IOError, e:
+    except IOError as e:
         raise RuntimeError("Unable to read PDL file ({0}): {1}".
                            format(opts.pdlfile, str(e)))
-    except ValueError, e:
+    except ValueError as e:
         raise RuntimeError("JSON Syntax error: "+str(e))
 
-    if not pdldata.has_key('dataset'):
+    if 'dataset' not in pdldata:
         raise RuntimeError("PDL catalog document is missing its 'dataset' property")
     dss = pdldata['dataset']
 
@@ -194,7 +194,7 @@ if __name__ == '__main__':
         if count > 0:
             print("Wrote {0} files".format(count))
         sys.exit(0)
-    except RuntimeError, e:
+    except RuntimeError as e:
         print("Error: ", str(e), file=sys.stderr)
         sys.exit(1)
 

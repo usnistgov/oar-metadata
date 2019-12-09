@@ -1,5 +1,5 @@
-import pdb, os, json, urlparse, warnings, logging
-from cStringIO import StringIO
+import pdb, os, json, urllib.parse, warnings, logging
+from io import StringIO
 from copy import deepcopy
 import unittest as test
 from ejsonschema import ExtValidator, SchemaValidator
@@ -61,7 +61,7 @@ class TestRMMRecordIngestApp(test.TestCase):
 
         try:
             self.svc = wsgi.app(self.config)
-        except Exception, e:
+        except Exception as e:
             self.tearDown()
             raise
         self.resp = []

@@ -7,7 +7,7 @@ a framework-based implementation if any further capabilities are needed.
 """
 
 import os, sys, logging, json, cgi, re
-from urlparse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
@@ -124,7 +124,7 @@ class Handler(object):
 
     def end_headers(self):
         status = "{0} {1}".format(str(self._code), self._msg)
-        self._start(status, self._hdr.items())
+        self._start(status, list(self._hdr.items()))
 
     def handle(self):
         meth_handler = 'do_'+self._meth
@@ -177,8 +177,8 @@ class Handler(object):
         path = path.strip('/')
         if not path:
             try:
-                out = json.dumps(self._loaders.keys()) + '\n'
-            except Exception, ex:
+                out = json.dumps(list(self._loaders.keys())) + '\n'
+            except Exception as ex:
                 log.exception("Internal error: "+str(ex))
                 return self.send_error(500, "Internal error")
 
@@ -261,10 +261,10 @@ class Handler(object):
 
         try:
             clen = int(self._env['CONTENT_LENGTH'])
-        except KeyError, ex:
+        except KeyError as ex:
             log.exception("Content-Length not provided for input record")
             return self.send_error(411, "Content-Length is required")
-        except ValueError, ex:
+        except ValueError as ex:
             log.exception("Failed to parse input JSON record: "+str(e))
             return self.send_error(400, "Content-Length is not an integer")
 
@@ -272,7 +272,7 @@ class Handler(object):
             bodyin = self._env['wsgi.input']
             doc = bodyin.read(clen)
             rec = json.loads(doc)
-        except Exception, ex:
+        except Exception as ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
             log.warn("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
                      .format(doc[:75], doc[-20:], len(doc), clen))
@@ -295,14 +295,14 @@ class Handler(object):
                 self.end_headers()
                 return [ json.dumps([str(e) for e in res.errs]) + '\n' ]
 
-        except RecordIngestError, ex:
+        except RecordIngestError as ex:
             log.exception("Failed to load posted record: "+str(ex))
             self.set_response(400, "Input record is not valid (missing @id)")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
             return [ json.dumps([ "Record is missing @id property" ]) + '\n' ]
 
-        except Exception, ex:
+        except Exception as ex:
             log.exception("Loading error: "+str(ex))
             return self.send_error(500, "Load failure due to internal error")
 
@@ -334,7 +334,7 @@ def _get_oar_home():
         if not os.path.exists(os.path.join(home, "etc")):
             home = os.path.dirname(home)
         return home
-    except OSError, ex:
+    except OSError as ex:
         log.exception("OSError while looking for OAR_HOME: "+str(e))
         return None
 

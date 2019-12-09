@@ -1,4 +1,4 @@
-import pdb, os, json, urlparse, warnings
+import pdb, os, json, urllib.parse, warnings
 import unittest as test
 from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
@@ -48,7 +48,7 @@ class TestTaxonomyLoader(test.TestCase):
             db.drop_collection("taxonomy")
         
     def test_ctor(self):
-        self.assertEquals(self.ldr.coll, "taxonomy")
+        self.assertEqual(self.ldr.coll, "taxonomy")
 
     def test_connect(self):
         self.assertIsNone(self.ldr._client)
@@ -173,7 +173,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertTrue(res.succeeded(key))
         c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         
     def test_load_wrapped_array(self):
         data = {
@@ -190,7 +190,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertTrue(res.succeeded(key))
         c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         
     def test_load(self):
         data = {
@@ -207,7 +207,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertTrue(res.succeeded(key))
         c = self.ldr._client.get_database().taxonomy.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         self.assertEqual(c[0]['parent'], 'goob')
         self.assertEqual(c[0]['level'], 2)
 

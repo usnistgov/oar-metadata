@@ -71,7 +71,7 @@ class TaxonomyLoader(Loader):
                 termdata['parent'] = ""
             try:
                 key = { "term": termdata['term'], "parent": termdata['parent'] }
-            except KeyError, ex:
+            except KeyError as ex:
                 if id is None:
                     id = str({'term': '?'})
                 return results.add(id,
@@ -94,7 +94,7 @@ class TaxonomyLoader(Loader):
 
             try:
                 self.load_data(termdata, key, self.onupdate)
-            except Exception, ex:
+            except Exception as ex:
                 errs = [ex]
             return results.add(id, errs)
 
@@ -129,7 +129,7 @@ class TaxonomyLoader(Loader):
         with open(filepath) as fd:
             try:
                 data = json.load(fd)
-            except ValueError, ex:
+            except ValueError as ex:
                 if not results:
                     results = self._mkloadlog()
                 return results.add(filepath, [ JSONEncodingError(ex) ])

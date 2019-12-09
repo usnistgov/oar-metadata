@@ -6,12 +6,11 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 
 from .version import __version__
 
-class SystemInfoMixin(object):
+class SystemInfoMixin(object, metaclass=ABCMeta):
     """
     a mixin for getting information about the current system that a class is 
     a part of.  
     """
-    __metaclass__ = ABCMeta
 
     @property
     def system_name(self):

@@ -1,4 +1,4 @@
-import pdb, os, sys, json, urlparse #, warnings
+import pdb, os, sys, json, urllib.parse #, warnings
 from nistoar.rmm.mongo.tests import warnings
 sys.modules['warnings'] = warnings
 import unittest as test
@@ -50,7 +50,7 @@ class TestFieldLoader(test.TestCase):
             db.drop_collection("fields")
         
     def test_ctor(self):
-        self.assertEquals(self.ldr.coll, "fields")
+        self.assertEqual(self.ldr.coll, "fields")
 
     def test_connect(self):
         self.assertIsNone(self.ldr._client)
@@ -148,7 +148,7 @@ class TestFieldLoader(test.TestCase):
         self.assertTrue(res.succeeded({'name': "title"}))
         c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         
     def test_load_wrapped_array(self):
         data = {
@@ -163,7 +163,7 @@ class TestFieldLoader(test.TestCase):
         self.assertTrue(res.succeeded({'name': "title"}))
         c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         
     def test_load(self):
         data = {
@@ -178,7 +178,7 @@ class TestFieldLoader(test.TestCase):
         self.assertTrue(res.succeeded({'name': "title"}))
         c = self.ldr._client.get_database().fields.find()
         self.assertEqual(c.count(), 2)
-        self.assertEquals(len(res.failures()), 1)
+        self.assertEqual(len(res.failures()), 1)
         self.assertEqual(c[0]['type'], 'string')
 
         data = data['fields'][:2]

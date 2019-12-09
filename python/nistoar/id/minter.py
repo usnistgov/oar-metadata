@@ -7,11 +7,10 @@ This module is expected to be replaced with a Java implementation.
 import os, abc
 import pynoid as noid
 
-class IDMinter(object):
+class IDMinter(object, metaclass=abc.ABCMeta):
     """
     An abstract class for creating of identifier strings.  
     """
-    __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
     def mint(self, data=None):

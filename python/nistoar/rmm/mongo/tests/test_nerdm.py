@@ -1,4 +1,4 @@
-import pdb, os, json, urlparse, warnings, logging
+import pdb, os, json, urllib.parse, warnings, logging
 import unittest as test
 from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
@@ -36,7 +36,7 @@ class TestNERDmLoader(test.TestCase):
             db.drop_collection("record")
         
     def test_ctor(self):
-        self.assertEquals(self.ldr.coll, "record")
+        self.assertEqual(self.ldr.coll, "record")
 
     def test_validate(self):
         with open(janaffile) as fd:
