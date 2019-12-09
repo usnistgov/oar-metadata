@@ -52,7 +52,7 @@ class NERDmLoader(Loader):
 
         try:
             key = { "@id": resrec['@id'] }
-        except KeyError, ex:
+        except KeyError as ex:
             if id is None:
                 id = str({'@id': '?'})
             return results.add(id,
@@ -72,7 +72,7 @@ class NERDmLoader(Loader):
 
         try:
             self.load_data(resrec, key, self.onupdate)
-        except Exception, ex:
+        except Exception as ex:
             errs = [ex]
         return results.add(key, errs)
 
@@ -86,7 +86,7 @@ class NERDmLoader(Loader):
         with open(filepath) as fd:
             try:
                 data = json.load(fd)
-            except ValueError, ex:
+            except ValueError as ex:
                 raise JSONEncodingError(ex)
         return self.load(data, validate=validate, results=results, id=filepath)
 

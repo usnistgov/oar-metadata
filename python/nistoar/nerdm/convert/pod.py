@@ -617,7 +617,7 @@ def citeproc_author2nerdm_author(author):
         out['affiliation'] = []
         for affil in author['affiliation']:
             outa = OrderedDict()
-            if isinstance(affil, (str, unicode)):
+            if isinstance(affil, str):
                 outa['title'] = affil
             elif 'name' in affil:
                 outa['title'] = affil['name']

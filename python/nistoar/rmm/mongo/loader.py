@@ -12,11 +12,10 @@ from ..exceptions import DatabaseStateError
 
 _dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
-class Loader(object):
+class Loader(object, metaclass=ABCMeta):
     """
     an abstract base class for loading data
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, dburl, collname=None, schemadir=None, log=None):
         """
@@ -156,9 +155,9 @@ class Loader(object):
             result = coll.insert_one(data)
             return 1
 
-        except RecordIngestError, ex:
+        except RecordIngestError as ex:
             raise
-        except Exception, ex:
+        except Exception as ex:
             if self.log:
                 self.log.exception("Unexpected loading error: "+str(ex))
                 raise RuntimeError("Unexpected loading error: "+str(ex))

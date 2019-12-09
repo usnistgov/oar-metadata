@@ -112,7 +112,7 @@ class TestUniqueArray(unittest.TestCase):
         head = [ "b", "i", "z", "a" ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [ "a", "e", "i", "b", "z" ])
+        self.assertEqual(mrgd, [ "a", "e", "i", "b", "z" ])
 
     def test_incompat(self):
         strat = mrg.UniqueArray()
@@ -129,7 +129,7 @@ class TestUniqueArray(unittest.TestCase):
         head = [ "b", "i", 4, 5, "z" ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [ "c", "b", "i", 4, 5, "z" ])
+        self.assertEqual(mrgd, [ "c", "b", "i", 4, 5, "z" ])
 
 class TestArrayMergeByMultiId(unittest.TestCase):
 
@@ -151,7 +151,7 @@ class TestArrayMergeByMultiId(unittest.TestCase):
                  { "@id": "bob", "tells": "alice" } ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "foo": "bar", "gurn": "cranston" },
             { "@id": "hank", "foo": "bin" },
             { "@id": "bob", "tells": "alice" }
@@ -174,7 +174,7 @@ class TestArrayMergeByMultiId(unittest.TestCase):
                  { "@id": "bob", "tells": "alice" } ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "foo": "bar", "gurn": "cranston" },
             { "@id": "goob", "foo": "bin" },
             { "@id": "goob", "gurn": "cranston" },
@@ -198,7 +198,7 @@ class TestArrayMergeByMultiId(unittest.TestCase):
                  { "@id": "bob", "tells": "alice" } ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "foo": "bar", "gurn": "cranston" },
             { "@id": "goob", "foo": "bin" },
             { "@id": "bob", "tells": "alice" }
@@ -232,7 +232,7 @@ class TestTopicArray(unittest.TestCase):
 
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "tag": "Physics" },
             { "@id": "gurn", "scheme": "hsr", "tag": "physics", "lab": "MML" }, 
             { "scheme": "hsr", "tag": "biology" }
@@ -260,7 +260,7 @@ class TestBaseArrayAsDefault(unittest.TestCase):
         mrgd = merger.merge(base, head)
 
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "foo": "bar", "gurn": "cranston", "blue": "blah" },
             { "@id": "bob", "tells": "alice" },
             { "@id": "hank", "foo": "bin" }
@@ -279,7 +279,7 @@ class TestBaseArrayAsDefault(unittest.TestCase):
         mrgd = merger.merge(base, head)
 
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "gurn": "cranston" },
             { "@id": "bob", "tells": "alice" } 
         ])
@@ -300,7 +300,7 @@ class TestBaseArrayAsDefault(unittest.TestCase):
                  { "@id": "bob", "tells": "alice" } ]
         mrgd = merger.merge(base, head)
         self.assertIsInstance(mrgd, list)
-        self.assertEquals(mrgd, [
+        self.assertEqual(mrgd, [
             { "@id": "goob", "foo": "bar", "gurn": "cranston" },
             { "@id": "bob", "tells": "alice" },
             { "@id": "hank", "foo": "bin" }
@@ -346,18 +346,18 @@ class TestDirBaseMergerFactory(unittest.TestCase):
 
         self.assertNotIn("postalAddress", orig["contactPoint"])
         self.assertIn("postalAddress", merged["contactPoint"])
-        self.assertEquals(len(orig['description']), 1)
-        self.assertEquals(len(annot['description']), 1)
-        self.assertEquals(len(merged['description']), 2)
+        self.assertEqual(len(orig['description']), 1)
+        self.assertEqual(len(annot['description']), 1)
+        self.assertEqual(len(merged['description']), 2)
         self.assertNotIn("abbrev", orig)
         self.assertIn("abbrev", merged)
         self.assertNotIn("authors", orig)
         self.assertIn("authors", merged)
         self.assertNotEqual(orig["ediid"], annot["ediid"])
         self.assertEqual(orig["ediid"], merged["ediid"])
-        self.assertEquals(len(orig['references']), 1)
-        self.assertEquals(len(annot['references']), 2)
-        self.assertEquals(len(merged['references']), 3)
+        self.assertEqual(len(orig['references']), 1)
+        self.assertEqual(len(annot['references']), 2)
+        self.assertEqual(len(merged['references']), 3)
         comp = [c for c in merged['components']
                 if c['@id'] == "#cmp/cryolite/srd13_Al-053.json"][0]
         self.assertIn("title", comp)

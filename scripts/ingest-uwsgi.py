@@ -1,7 +1,7 @@
 """
 The uWSGI script for launching the preservation service
 """
-from __future__ import print_function
+
 import os, sys, yaml, json, logging
 try:
     import uwsgi
@@ -96,7 +96,7 @@ if cfg.get('db_authn') and \
         acfg['user'] = rmmcfg['oar.mongodb.readwrite.user']
         acfg['pass'] = rmmcfg['oar.mongodb.readwrite.password']
 
-    except Exception, ex:
+    except Exception as ex:
         raise ConfigurationException("Failed to retrieve Mongo authentication "+
                                      "info: "+str(ex), cause=ex)
 

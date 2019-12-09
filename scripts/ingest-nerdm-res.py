@@ -1,10 +1,9 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 #
 # Usage: ingest-field-info.py [-i START] [-c COUNT] [-V] FIELDDATAFILE
 #
 # Load the field information from a file into the MongoDB 'fields' collections.
 #
-from __future__ import print_function
 import os, sys, errno, json, re, warnings
 from argparse import ArgumentParser
 
@@ -26,7 +25,7 @@ if 'OAR_PYTHONPATH' in os.environ:
 sys.path.extend(oarpypath.split(os.pathsep))
 try:
     import nistoar
-except ImportError, e:
+except ImportError as e:
     nistoardir = os.path.join(basedir, "python")
     sys.path.append(nistoardir)
     import nistoar

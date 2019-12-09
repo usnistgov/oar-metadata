@@ -88,7 +88,7 @@ class FieldLoader(Loader):
 
             try:
                 key = { "name": fielddata['name'] }
-            except KeyError, ex:
+            except KeyError as ex:
                 if id is None:
                     id = str({'name': '?'})
                 return results.add(id,
@@ -108,7 +108,7 @@ class FieldLoader(Loader):
 
             try:
                 self.load_data(fielddata, key, self.onupdate)
-            except Exception, ex:
+            except Exception as ex:
                 errs = [ex]
             return results.add(id, errs)
 
@@ -130,7 +130,7 @@ class FieldLoader(Loader):
         with open(filepath) as fd:
             try:
                 data = json.load(fd)
-            except ValueError, ex:
+            except ValueError as ex:
                 if not results:
                     results = self._mkloadlog()
                 return results.add(filepath, [ JSONEncodingError(ex) ])

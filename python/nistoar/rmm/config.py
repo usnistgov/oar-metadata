@@ -1,9 +1,8 @@
 """
 Utilities for obtaining a configuration for RMM services
 """
-from __future__ import print_function
 import os, sys, logging, json, yaml, re, collections, time
-from urlparse import urlparse, urlunparse
+from urllib.parse import urlparse, urlunparse
 import requests
 
 from .exceptions import ConfigurationException
@@ -43,7 +42,7 @@ def resolve_configuration(location, baseurl=None):
     :param baseurl  str:  a base URL to combine with location to form the 
                           absolute location of the configuration data.  
     """
-    if not isinstance(location, (str, unicode)):
+    if not isinstance(location, str):
         raise TypeError("resolve_configuration(): location is not a string")
     if not location:
         raise ValueError("resolve_configuration(): location not provided")
@@ -51,7 +50,7 @@ def resolve_configuration(location, baseurl=None):
     locurl = urlparse(location)
     if not locurl.scheme:
         if baseurl:
-            if not isinstance(baseurl, (str, unicode)):
+            if not isinstance(baseurl, str):
               raise TypeError("resolve_configuration(): baseurl is not a string")
             baseurl = list(urlparse(baseurl))
         else:
@@ -123,10 +122,10 @@ def load_from_url(configurl):
             
         return out
             
-    except ValueError, ex:
+    except ValueError as ex:
         raise ConfigurationException("Failed to parse %s data from URL".
                                      format(fmt), cause=ex)
-    except requests.RequestException, ex:
+    except requests.RequestException as ex:
         raise ConfigurationException("Failed to pull configuration from URL: " +
                                      str(ex), cause=ex)
 
@@ -320,7 +319,7 @@ class ConfigService(object):
 
     @classmethod
     def _deep_update(cls, defdict, upddict):
-        for k, v in upddict.iteritems():
+        for k, v in upddict.items():
             if isinstance(v, collections.Mapping):
                 defdict[k] = cls._deep_update(defdict.get(k, v.__class__()), v)
             else:
@@ -351,7 +350,7 @@ class ConfigService(object):
         if not isinstance(md, collections.Mapping):
             return md
         
-        keys = md.keys()
+        keys = list(md.keys())
         m = [cls._idxre.match(k) for k in keys]
         if all(m):
             ary = [( int(m[i].group(1)), md[keys[i]] ) for i in range(len(m))]
@@ -372,7 +371,7 @@ class ConfigService(object):
         try:
             name = rawdata.get('name') or comp 
             vers = rawdata['propertySources']
-        except KeyError, ex:
+        except KeyError as ex:
             raise ConfigurationException("Missing config param for label="+name+
                                          ": "+str(ex))
         if not isinstance(vers, list):

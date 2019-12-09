@@ -1,7 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
-from __future__ import print_function
-
 import os, pdb, sys, shutil, json
 import unittest as test
 import ejsonschema as ejs
@@ -41,7 +39,7 @@ class TestConvert(test.TestCase):
     
     def test_convert(self):
         script = "python {0} -d {1} -T {2}".format(cvtscript, outdir, pdlfile)
-        self.assertEquals(os.system(script), 0)
+        self.assertEqual(os.system(script), 0)
 
         files = [f for f in os.listdir(outdir) if f.endswith(".json")]
         failed = []
@@ -69,7 +67,7 @@ class TestConvert(test.TestCase):
                 self.assertTrue(all([':' in t for t in nerd['theme']]))
 
         sys.stderr.write("\nValidated {0} files".format(str(passed)))
-        self.assertEquals(len(failed), 0,
+        self.assertEqual(len(failed), 0,
              "{0} converted file(s) failed validation".format(str(len(failed))))
 
         

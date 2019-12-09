@@ -55,7 +55,7 @@ class TestConfig(test.TestCase):
         names = "oar.mongodb.port oar.mongodb.host oar.mongodb.database.name stuff.filter stuff.mode name".split()
         for name in names:
             self.assertIn(name, cfg)
-        self.assertEqual(len(cfg.keys()), len(names))
+        self.assertEqual(len(list(cfg.keys())), len(names))
         self.assertEqual(cfg['oar.mongodb.database.name'], "TestDB")
         self.assertEqual(cfg['oar.mongodb.port'], "3333")
         self.assertEqual(cfg['name'], "Hank")

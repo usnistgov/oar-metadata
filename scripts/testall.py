@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 import os, sys, unittest, pdb
 from nistoar.rmm.mongo.tests import warnings
@@ -16,35 +16,35 @@ pdltest = os.path.join(basedir, "scripts", "test_pdl2resources.py")
 extest = os.path.join(basedir, "model", "tests", "test_examples.py")
 pydir = os.path.join(basedir, "python")
 
-print "Executing all tests..."
+print("Executing all tests...")
 
-print "Executing jq translation library tests..."
+print("Executing jq translation library tests...")
 
 status = 0
 notok = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[0]))
 notok2 = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[1]))
 notok3 = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[2]))
 if notok or notok2 or notok3:
-    print "**ERROR: some or all jq tests have failed"
+    print("**ERROR: some or all jq tests have failed")
     status += 1
 
-print "Executing validation tests..."
+print("Executing validation tests...")
 
 notok  = os.system("python {0}".format(nerdmtest[0]))
 notok2 = os.system("python {0}".format(nerdmtest[1]))
 if notok or notok2:
-    print "**ERROR: some or all basic validation tests have failed"
+    print("**ERROR: some or all basic validation tests have failed")
     status += 2
 notok = os.system("python {0}".format(extest))
 if notok:
-    print "**ERROR: some or all example files have failed validation"
+    print("**ERROR: some or all example files have failed validation")
     status += 4
 notok = os.system("python {0}".format(pdltest))
 if notok:
-    print "**ERROR: some or all pdl2resources output files have failed validation"
+    print("**ERROR: some or all pdl2resources output files have failed validation")
     status += 8
 
-print "Executing nistoar python tests..."
+print("Executing nistoar python tests...")
 
 ldr = unittest.TestLoader()
 suite = ldr.discover(pydir, "test_*.py")

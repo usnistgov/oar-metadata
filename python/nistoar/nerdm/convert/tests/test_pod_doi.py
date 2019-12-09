@@ -6,16 +6,16 @@ from nistoar.doi.resolving import DOIInfo
 from nistoar.nerdm.constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI, BIB_SCHEMA_URI
 
 citeproc_auths = [
-    {u'affiliation': [], u'given': u'Carmen', u'family':
-     u'Galen Acedo', u'sequence': u'first'},
-    {u'authenticated-orcid': False, u'given': u'Victor',
-     u'family': u'Arroyo', u'sequence': u'additional',
-     u'affiliation': ["The Institute"],
-     u'ORCID': u'http://orcid.org/0000-0002-0858-0324'},
-    {u'affiliation': [], u'given': u'Ellen', u'family': u'Andresen',
-     u'sequence': u'additional'},
-    {u'affiliation': [], u'given': u'Ricard', u'family': u'Arasa-Gisbert',
-     u'sequence': u'additional'}
+    {'affiliation': [], 'given': 'Carmen', 'family':
+     'Galen Acedo', 'sequence': 'first'},
+    {'authenticated-orcid': False, 'given': 'Victor',
+     'family': 'Arroyo', 'sequence': 'additional',
+     'affiliation': ["The Institute"],
+     'ORCID': 'http://orcid.org/0000-0002-0858-0324'},
+    {'affiliation': [], 'given': 'Ellen', 'family': 'Andresen',
+     'sequence': 'additional'},
+    {'affiliation': [], 'given': 'Ricard', 'family': 'Arasa-Gisbert',
+     'sequence': 'additional'}
 ]
 
 datacite_auths = [
@@ -171,7 +171,7 @@ class TestConvertAuthors(unittest.TestCase):
         self.assertNotIn('affiliation', authors[2])
 
 crossref = {
-  "title": "Ecological traits of the world\u2019s primates", 
+  "title": "Ecological traits of the world\\u2019s primates", 
   "URL": "http://dx.doi.org/10.1038/s41597-019-0059-9", 
   "publisher": "Springer Science and Business Media LLC", 
   "issued": {
@@ -242,7 +242,7 @@ class TestConvertReferences(unittest.TestCase):
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
         self.assertEqual(ref['refType'], 'IsCitedBy')
         self.assertEqual(ref['title'],
-                         "Ecological traits of the world\u2019s primates")
+                         "Ecological traits of the world\\u2019s primates")
         self.assertEqual(ref['location'], "https://goober.org/10.10/XXX")
         self.assertEqual(ref['issued'], '2019-05-13')
         self.assertEqual(ref['citation'], 'ibid')

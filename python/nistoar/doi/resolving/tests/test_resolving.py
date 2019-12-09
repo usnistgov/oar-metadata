@@ -63,19 +63,19 @@ class TestResolver(test.TestCase):
 
     def test_ctor(self):
         rslvr = res.Resolver(resolver="ftp:/goober.com/")
-        self.assertEquals(rslvr._resolver, "ftp:/goober.com/")
-        self.assertEquals(rslvr._client_info[1], "testing")
+        self.assertEqual(rslvr._resolver, "ftp:/goober.com/")
+        self.assertEqual(rslvr._client_info[1], "testing")
 
         ci = (comm._client_info[0], "testing2", comm._client_info[2],
               comm._client_info[3])
         
         rslvr = res.Resolver(ci)
-        self.assertEquals(rslvr._resolver, "https://doi.org/")
-        self.assertEquals(rslvr._client_info[1], "testing2")
+        self.assertEqual(rslvr._resolver, "https://doi.org/")
+        self.assertEqual(rslvr._client_info[1], "testing2")
         
         rslvr = res.Resolver()
-        self.assertEquals(rslvr._resolver, "https://doi.org/")
-        self.assertEquals(rslvr._client_info[1], "testing")
+        self.assertEqual(rslvr._resolver, "https://doi.org/")
+        self.assertEqual(rslvr._client_info[1], "testing")
 
 
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
