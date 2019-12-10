@@ -185,12 +185,12 @@ class Handler(object):
             self.set_response(200, "Supported Record Types")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return [out]
+            return [out.encode('utf-8')]
         elif path in self._loaders:
             self.set_response(200, "Service is ready")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return ["Service ready\n"]
+            return ["Service ready\n".encode('utf-8')]
         else:
             return self.send_error(404, "resource does not exist")
             
@@ -271,7 +271,7 @@ class Handler(object):
         try:
             bodyin = self._env['wsgi.input']
             doc = bodyin.read(clen)
-            rec = json.loads(doc)
+            rec = json.loads(doc.decode('utf-8'))
         except Exception as ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
             log.warn("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
@@ -293,14 +293,14 @@ class Handler(object):
                 self.set_response(400, "Input record is not valid")
                 self.add_header('Content-Type', 'application/json')
                 self.end_headers()
-                return [ json.dumps([str(e) for e in res.errs]) + '\n' ]
+                return [ (json.dumps([str(e) for e in res.errs]) + '\n').encode('utf-8') ]
 
         except RecordIngestError as ex:
             log.exception("Failed to load posted record: "+str(ex))
             self.set_response(400, "Input record is not valid (missing @id)")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return [ json.dumps([ "Record is missing @id property" ]) + '\n' ]
+            return [ (json.dumps([ "Record is missing @id property" ]) + '\n').encode('utf-8') ]
 
         except Exception as ex:
             log.exception("Loading error: "+str(ex))
