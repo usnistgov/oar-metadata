@@ -37,7 +37,7 @@ class JqCommand(object):
         verre = re.compile(r'^jq[^-]*-')
         cmd = [ self.jqexe, "--version" ]
         try:
-            vers = subproc.check_output(cmd)
+            vers = subproc.check_output(cmd, universal_newlines=True)
             if verre.match(vers):
                 vers = verre.sub('', vers).strip()
             return vers
@@ -69,7 +69,7 @@ class JqCommand(object):
 
         cmd = self.form_cmd(jqfilter, args)
         proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE,
-                             stdin=subproc.PIPE)
+                             stdin=subproc.PIPE, universal_newlines=True)
         (out, err) = proc.communicate(datastr)
 
         if proc.returncode != 0:
@@ -90,7 +90,8 @@ class JqCommand(object):
         argopts = self.form_argopts(args)
 
         cmd = self.form_cmd(jqfilter, args, filepath)
-        proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE)
+        proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE,
+                             universal_newlines=True)
         (out, err) = proc.communicate()
 
         if proc.returncode != 0:

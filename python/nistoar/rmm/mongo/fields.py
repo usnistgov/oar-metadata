@@ -59,7 +59,7 @@ class FieldLoader(Loader):
                       if not provided, the extracted key will be used as 
                       applicable.  
         """
-        if hasattr(fielddata, 'iteritems'):
+        if hasattr(fielddata, 'items'):
             # JSON object
             return self.load_obj(fielddata, validate, results, id)
         elif hasattr(fielddata, '__getitem__'):

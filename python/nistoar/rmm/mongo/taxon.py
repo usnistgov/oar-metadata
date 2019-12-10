@@ -112,7 +112,7 @@ class TaxonomyLoader(Loader):
                       if not provided, the extracted key will be used as 
                       applicable.  
         """
-        if hasattr(termdata, 'iteritems'):
+        if hasattr(termdata, 'items'):
             # JSON object
             return self.load_obj(termdata, validate, results, id)
         elif hasattr(termdata, '__getitem__'):
