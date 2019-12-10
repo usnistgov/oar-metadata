@@ -47,7 +47,7 @@ def get_confservice():
 # determine where the configuration is coming from.  Check first to see
 # files were provided via the uwsgi command line.
 cfg = None
-confsrc = uwsgi.opt.get("oar_config_file")
+confsrc = uwsgi.opt.get("oar_config_file").decode("utf-8")
 if confsrc:
     cfg = config.resolve_configuration("file:" + confsrc)
 
