@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 import os, unittest, json, subprocess as subproc, types, pdb
+from collections import OrderedDict
 import ejsonschema as ejs
 
 nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
@@ -21,35 +22,35 @@ class TestJanaf(unittest.TestCase):  #
         self.out = send_file_thru_jq('nerdm::podds2resource', janaffile,
                                      {"id": "ark:ID"})
 
-    def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
-    def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_id(self): self.assertEqual(self.out['@id'], "ark:ID")
+    def test_al(self): self.assertEqual(self.out['accessLevel'], "public")
     def test_context(self):
-        self.assertEquals(self.out['@context'],
+        self.assertEqual(self.out['@context'],
                         [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
                           {"@base": "ark:ID"} ])
                           
     def test_schema(self):
-        self.assertEquals(self.out['_schema'],
+        self.assertEqual(self.out['_schema'],
                           "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
-        self.assertEquals(len(exts), 1)
+        self.assertEqual(len(exts), 1)
         self.assertIn(nerdmpub+"/definitions/PublicDataResource", exts)
 
     def test_restypes(self):
         types = self.out['@type']
         self.assertIsInstance(types, list)
-        self.assertEquals(len(types), 3)
-        self.assertEquals(types[0], "nrd:SRD")
-        self.assertEquals(types[1], "nrdp:PublicDataResource")
-        self.assertEquals(types[2], "dcat:Dataset")
+        self.assertEqual(len(types), 3)
+        self.assertEqual(types[0], "nrd:SRD")
+        self.assertEqual(types[1], "nrdp:PublicDataResource")
+        self.assertEqual(types[2], "dcat:Dataset")
 
     def test_arestr(self):
         props = "title modified ediid landingPage license".split()
         for prop in props:
             self.assertIn(prop, self.out, "Property not found: " + prop)
-            self.assertIsInstance(self.out[prop], types.StringTypes,
+            self.assertIsInstance(self.out[prop], (str,),
                 "Property '{0}' not a string: {1}".format(prop, self.out[prop]))
 
     def test_arearrays(self):
@@ -64,7 +65,7 @@ class TestJanaf(unittest.TestCase):  #
         self.assertEqual(len(self.out['description']), 1)
 
     def test_ediid(self):
-        self.assertEquals(self.out['ediid'],
+        self.assertEqual(self.out['ediid'],
                           "ECBCC1C1301D2ED9E04306570681B10735")
 
     def test_components(self):
@@ -77,18 +78,18 @@ class TestJanaf(unittest.TestCase):  #
         props = "title describedBy downloadURL mediaType filepath".split()
         for prop in props:
             self.assertIn(prop, comps[0], "Property not found: " + prop)
-            self.assertIsInstance(comps[0][prop], types.StringTypes,
+            self.assertIsInstance(comps[0][prop], (str,),
                 "Property '{0}' not a string: {1}".format(prop, comps[0][prop]))
 
         exts = comps[0]['_extensionSchemas']
-        self.assertEquals(len(exts), 1)
+        self.assertEqual(len(exts), 1)
         self.assertIn(nerdmpub+"/definitions/DataFile", exts)
 
         typs = comps[0]['@type']
-        self.assertEquals(len(typs), 3)
-        self.assertEquals(typs[0], "nrdp:DataFile")
-        self.assertEquals(typs[1], "nrdp:DownloadableFile")
-        self.assertEquals(typs[2], "dcat:Distribution")
+        self.assertEqual(len(typs), 3)
+        self.assertEqual(typs[0], "nrdp:DataFile")
+        self.assertEqual(typs[1], "nrdp:DownloadableFile")
+        self.assertEqual(typs[2], "dcat:Distribution")
 
         props = "describedBy downloadURL".split()
         for prop in props:
@@ -97,17 +98,17 @@ class TestJanaf(unittest.TestCase):  #
 
     def test_references(self):
         refs =self.out['references']
-        self.assertEquals(len(refs), 1)
+        self.assertEqual(len(refs), 1)
 
         self.assertIsInstance(refs[0]['@type'], list)
-        self.assertIsInstance(refs[0]['@type'][0], types.StringTypes)
-        self.assertEquals(refs[0]['@type'], ["deo:BibliographicReference"])
-        self.assertEquals(refs[0]['refType'], "IsSupplementTo")
-        self.assertEquals(refs[0]['location'],
+        self.assertIsInstance(refs[0]['@type'][0], (str,))
+        self.assertEqual(refs[0]['@type'], ["deo:BibliographicReference"])
+        self.assertEqual(refs[0]['refType'], "IsSupplementTo")
+        self.assertEqual(refs[0]['location'],
                           "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf")
 
         exts = refs[0]['_extensionSchemas']
-        self.assertEquals(len(exts), 1)
+        self.assertEqual(len(exts), 1)
         self.assertIn(nerdmbib+"/definitions/DCiteReference", exts)
 
     def test_hierarchy(self):
@@ -134,34 +135,34 @@ class TestCORR(unittest.TestCase):  #
         self.out = send_file_thru_jq('nerdm::podds2resource', corrfile,
                                      {"id": "ark:ID"})
 
-    def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
-    def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_id(self): self.assertEqual(self.out['@id'], "ark:ID")
+    def test_al(self): self.assertEqual(self.out['accessLevel'], "public")
     def test_context(self):
-        self.assertEquals(self.out['@context'],
+        self.assertEqual(self.out['@context'],
                         [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
                           {"@base": "ark:ID"} ])
                           
     def test_schema(self):
-        self.assertEquals(self.out['_schema'],
+        self.assertEqual(self.out['_schema'],
                           "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
-        self.assertEquals(len(exts), 1)
+        self.assertEqual(len(exts), 1)
         self.assertIn(nerdmpub+"/definitions/PublicDataResource", exts)
 
     def test_restypes(self):
         types = self.out['@type']
         self.assertIsInstance(types, list)
-        self.assertEquals(len(types), 2)
-        self.assertEquals(types[0], "nrdp:PublicDataResource")
-        self.assertEquals(types[1], "dcat:Dataset")
+        self.assertEqual(len(types), 2)
+        self.assertEqual(types[0], "nrdp:PublicDataResource")
+        self.assertEqual(types[1], "dcat:Dataset")
 
     def test_arestr(self):
         props = "title modified ediid landingPage license".split()
         for prop in props:
             self.assertIn(prop, self.out, "Property not found: " + prop)
-            self.assertIsInstance(self.out[prop], types.StringTypes,
+            self.assertIsInstance(self.out[prop], (str,),
                 "Property '{0}' not a string: {1}".format(prop, self.out[prop]))
 
     def test_arearrays(self):
@@ -176,7 +177,7 @@ class TestCORR(unittest.TestCase):  #
         self.assertEqual(len(self.out['description']), 3)
 
     def test_ediid(self):
-        self.assertEquals(self.out['ediid'],
+        self.assertEqual(self.out['ediid'],
                           "54AE54FB37AC022DE0531A570681D4291851")
 
     def test_components(self):
@@ -189,18 +190,18 @@ class TestCORR(unittest.TestCase):  #
         props = "downloadURL mediaType filepath".split()
         for prop in props:
             self.assertIn(prop, comps[3], "Property not found: " + prop)
-            self.assertIsInstance(comps[3][prop], types.StringTypes,
+            self.assertIsInstance(comps[3][prop], (str,),
                 "Property '{0}' not a string: {1}".format(prop, comps[3][prop]))
 
         exts = comps[3]['_extensionSchemas']
-        self.assertEquals(len(exts), 1)
+        self.assertEqual(len(exts), 1)
         self.assertIn(nerdmpub+"/definitions/DataFile", exts)
 
         typs = comps[3]['@type']
-        self.assertEquals(len(typs), 3)
-        self.assertEquals(typs[0], "nrdp:DataFile")
-        self.assertEquals(typs[1], "nrdp:DownloadableFile")
-        self.assertEquals(typs[2], "dcat:Distribution")
+        self.assertEqual(len(typs), 3)
+        self.assertEqual(typs[0], "nrdp:DataFile")
+        self.assertEqual(typs[1], "nrdp:DownloadableFile")
+        self.assertEqual(typs[2], "dcat:Distribution")
 
         props = "downloadURL".split()
         for prop in props:
@@ -310,7 +311,7 @@ def send_jsonstr_thru_jq(jqfilter, datastr, args=None):
     cmd.append(impnerdm(jqfilter))
     
     proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE,
-                         stdin=subproc.PIPE)
+                         stdin=subproc.PIPE, universal_newlines=True)
     (out, err) = proc.communicate(datastr)
 
     if proc.returncode != 0:
@@ -331,7 +332,7 @@ def send_file_thru_jq(jqfilter, filepath, args=None):
     
     with open(filepath):
         pass
-    if not isinstance(jqfilter, types.StringTypes):
+    if not isinstance(jqfilter, (str,)):
         raise ValueError("jqfilter parameter not a string: " + str(jqfilter))
 
     cmd = "jq -L {0}".format(jqlib).split() + argopts
@@ -341,7 +342,8 @@ def send_file_thru_jq(jqfilter, filepath, args=None):
 
     cmd.extend([impnerdm(jqfilter), filepath])
 
-    proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE)
+    proc = subproc.Popen(cmd, stdout=subproc.PIPE, stderr=subproc.PIPE,
+                         universal_newlines=True)
     (out, err) = proc.communicate()
 
     if proc.returncode != 0:
@@ -364,7 +366,7 @@ def formatcmd(cmd):
 class TestSelf(unittest.TestCase):
 
     def test_format_argopts(self):
-        opts = format_argopts({"id": "ark:ID", "goober": [ 1, 2 ]})
+        opts = format_argopts(OrderedDict([("id", "ark:ID"), ("goober", [ 1, 2 ])]))
         self.assertEqual(opts,
             ['--argjson', 'id', '"ark:ID"', '--argjson', 'goober', '[1, 2]'])
 
@@ -383,17 +385,17 @@ class TestSelf(unittest.TestCase):
     def test_formatcmd(self):
         cmd = ['jq', '-L', 'jqlib', 'import "pod2nerdm" as nerdm; .accessLevel',
                'janaf_pod.json']
-        self.assertEquals(formatcmd(cmd),
+        self.assertEqual(formatcmd(cmd),
      "jq -L jqlib 'import \"pod2nerdm\" as nerdm; .accessLevel' janaf_pod.json")
         
     def test_send_file(self):
         out = send_file_thru_jq(".accessLevel", janaffile)
-        self.assertEquals(out, 'public')
+        self.assertEqual(out, 'public')
         
     def test_send_file_w_args(self):
         out = send_file_thru_jq(".accessLevel", janaffile,
                                 {"id": "ID", "goob": "gurn"})
-        self.assertEquals(out, 'public')
+        self.assertEqual(out, 'public')
         
 
 if __name__ == '__main__':

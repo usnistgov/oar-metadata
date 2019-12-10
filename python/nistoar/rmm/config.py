@@ -90,7 +90,7 @@ def load_from_file(configfile):
             return json.load(fd)
         else:
             # YAML format
-            return yaml.load(fd)
+            return yaml.safe_load(fd)
 
 def load_from_url(configurl):
     """
@@ -109,7 +109,7 @@ def load_from_url(configurl):
         if '/yaml' in ct:
             # it's in YAML format
             fmt = 'YAML'
-            data = yaml.loads(resp.text)
+            data = yaml.safe_loads(resp.text)
         elif ct or '/json' in ct:
             # response is in JSON format by default
             fmt = 'JSON'

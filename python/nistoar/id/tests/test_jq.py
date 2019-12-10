@@ -1,4 +1,5 @@
 import unittest, pdb, os, json
+from collections import OrderedDict
 
 import nistoar.jq as jq
 
@@ -23,7 +24,8 @@ class TestJqCommand(unittest.TestCase):
         self.assertEqual(self.jqc.library, jqlibdir)
 
     def test_form_argopts(self):
-        opts = self.jqc.form_argopts({"id": "ark:ID", "goober": [ 1, 2 ]})
+        opts = self.jqc.form_argopts(
+            OrderedDict([("id", "ark:ID"), ("goober", [ 1, 2 ])]))
         self.assertEqual(opts,
             ['--argjson', 'id', '"ark:ID"', '--argjson', 'goober', '[1, 2]'])
 
@@ -36,12 +38,12 @@ class TestJqCommand(unittest.TestCase):
                           ['jq', '.goober | [.]'])
         self.jqc.library = jqlibdir
         self.assertEqual(self.jqc.form_cmd(".goober | [.]",
-                                          {"id": "ark:ID", "goober": [ 1, 2 ]}),
+                          OrderedDict([("id", "ark:ID"), ("goober", [ 1, 2 ])])),
                           ['jq', '-L'+jqlibdir,
                            '--argjson', 'id', '"ark:ID"', '--argjson', 'goober',
                            '[1, 2]', '.goober | [.]'])
         self.assertEqual(self.jqc.form_cmd(".goober | [.]",
-                                          {"id": "ark:ID", "goober": [ 1, 2 ]},
+                          OrderedDict([("id", "ark:ID"), ("goober", [ 1, 2 ])]),
                                               'data.json'),
                           ['jq', '-L'+jqlibdir,
                            '--argjson', 'id', '"ark:ID"', '--argjson', 'goober',

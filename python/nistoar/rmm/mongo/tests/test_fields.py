@@ -1,6 +1,6 @@
-import pdb, os, sys, json, urllib.parse #, warnings
-from nistoar.rmm.mongo.tests import warnings
-sys.modules['warnings'] = warnings
+import pdb, os, sys, json, urllib.parse, warnings
+# from nistoar.rmm.mongo.tests import warnings
+# sys.modules['warnings'] = warnings
 import unittest as test
 from pymongo import MongoClient
 from ejsonschema import ExtValidator, SchemaValidator
@@ -93,7 +93,7 @@ class TestFieldLoader(test.TestCase):
         self.assertEqual(c[0]['type'], 'string')
 
         data = { "name": "title", "type": "array" }
-        with warnings.catch_warnings(record=True, reset=True) as w:
+        with warnings.catch_warnings(record=True) as w:
             self.assertEqual(self.ldr.load_data(data, key, 'warn'), 1)
             self.assertEqual(len(w), 1)
             self.assertTrue(issubclass(w[-1].category, fields.UpdateWarning))
