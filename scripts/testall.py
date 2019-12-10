@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
 import os, sys, unittest, pdb
-from nistoar.rmm.mongo.tests import warnings
-sys.modules['warnings'] = warnings
+# from nistoar.rmm.mongo.tests import warnings
+# sys.modules['warnings'] = warnings
 
 basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 jqlib = os.path.join(basedir, "jq")
@@ -25,15 +25,15 @@ if notok:
 
 print("Executing validation tests...")
 
-notok = os.system("python {0}".format(nerdmtest))
+notok = os.system("python3 {0}".format(nerdmtest))
 if notok:
     print("**ERROR: some or all basic validation tests have failed")
     status += 2
-notok = os.system("python {0}".format(extest))
+notok = os.system("python3 {0}".format(extest))
 if notok:
     print("**ERROR: some or all example files have failed validation")
     status += 4
-notok = os.system("python {0}".format(pdltest))
+notok = os.system("python3 {0}".format(pdltest))
 if notok:
     print("**ERROR: some or all pdl2resources output files have failed validation")
     status += 8

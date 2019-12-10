@@ -6,7 +6,6 @@
 # NERDm Resource records, and write them out into individual files.  New ARK
 # identifiers will be assigned to each one.  
 #
-
 import os, sys, errno, json, re
 from argparse import ArgumentParser
 from collections import OrderedDict
