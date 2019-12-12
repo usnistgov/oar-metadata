@@ -184,24 +184,18 @@ def componentID(prefix):
 def filepath:
     if test("https?://s3.amazonaws.com/nist-srd/\\w+/") then
        sub("https?://s3.amazonaws.com/nist-srd/\\w+/"; "")
+    elif test("https?://s3.amazonaws.com/nist-\\w+/\\w+/") then
+       sub("https?://s3.amazonaws.com/nist-\\w+/\\w+/"; "")
+    elif test("https?://opendata.nist.gov/\\w+/") then
+       sub("https?://opendata.nist.gov/\\w+/"; "")
+    elif test("https?://(test)?data.nist.gov/od/ds/") then
+       sub("https?://(test)?data.nist.gov/od/ds/"; "") |
+       if test("ark:/\\w+/") then
+          sub("ark:/\\w+/"; "")
+       else . end |
+       sub("^[\\w+-]+/"; "") 
     else
-      if test("https?://s3.amazonaws.com/nist-\\w+/\\w+/") then
-         sub("https?://s3.amazonaws.com/nist-\\w+/\\w+/"; "")
-      else
-        if test("https?://opendata.nist.gov/\\w+/") then
-           sub("https?://opendata.nist.gov/\\w+/"; "")
-        else
-          if test("https?://data.nist.gov/od/ds/\\w+/") then
-             sub("https?://data.nist.gov/od/ds/\\w+/"; "")
-          else
-            if test("https?://testdata.nist.gov/od/ds/\\w+/") then
-               sub("https?://testdata.nist.gov/od/ds/\\w+/"; "")
-            else
-               sub(".*/"; "")
-            end
-          end
-        end
-      end
+       sub(".*/"; "")
     end | url_decode_plus
 ;
 
