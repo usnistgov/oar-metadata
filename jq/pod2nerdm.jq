@@ -188,8 +188,8 @@ def filepath:
        sub("https?://s3.amazonaws.com/nist-\\w+/\\w+/"; "")
     elif test("https?://opendata.nist.gov/\\w+/") then
        sub("https?://opendata.nist.gov/\\w+/"; "")
-    elif test("https?://(test)?data.nist.gov/od/ds/") then
-       sub("https?://(test)?data.nist.gov/od/ds/"; "") |
+    elif test("https?://[\\w\\.:]+/od/ds/") then
+       sub("https?://[\\w\\.:]+/od/ds/"; "") |
        if test("ark:/\\w+/") then
           sub("ark:/\\w+/"; "")
        else . end |
