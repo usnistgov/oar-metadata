@@ -1,6 +1,6 @@
 {
     "_schema": "https://www.nist.gov/od/dm/simple-taxonomy/v1.0",
-    "@id": "https://www.nist.gov/od/dm/nist-themes/v1.0",
+    "@id": "https://www.nist.gov/od/dm/nist-themes/v1.1",
     "title": "The NIST Research Theme Taxonomy",
     "version": "1.1",
     "description": "terms for tagging resources with research themes",
@@ -583,7 +583,7 @@
             "term": "Internet of Things",
             "level": 2,
             "deprecatedSince": "1.1",
-            "deprecatedBy": "Information Technology: Internet of Things"
+            "deprecatedBy": "Information Technology: Internet of Things (IoT)"
         },
         {
             "parent": "Information Technology",
