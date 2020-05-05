@@ -17,23 +17,44 @@ class TestPODds2Res(unittest.TestCase):
         cvtr = cvt.PODds2Res(jqlibdir)
         self.assertFalse(cvtr.fetch_authors)
         self.assertFalse(cvtr.enrich_refs)
-        self.assertFalse(cvtr.should_massage)
+        self.assertFalse(cvtr.enrich_refs)
+        self.assertTrue(cvtr.fix_themes)
+        self.assertTrue(cvtr.should_massage)
+        self.assertIsNotNone(cvtr.taxon)
 
         cvtr = cvt.PODds2Res(jqlibdir, {'enrich_refs': True})
         self.assertFalse(cvtr.fetch_authors)
         self.assertTrue(cvtr.enrich_refs)
+        self.assertTrue(cvtr.fix_themes)
         self.assertTrue(cvtr.should_massage)
+
+        cvtr = cvt.PODds2Res(jqlibdir, {'fix_themes': False})
+        self.assertFalse(cvtr.fetch_authors)
+        self.assertFalse(cvtr.enrich_refs)
+        self.assertFalse(cvtr.fix_themes)
+        self.assertFalse(cvtr.should_massage)
+
+        cvtr = cvt.PODds2Res(jqlibdir, schemadir="/tmp/schemas")
+        self.assertIsNone(cvtr.taxon)
+        self.assertFalse(cvtr.fetch_authors)
+        self.assertFalse(cvtr.enrich_refs)
+        self.assertFalse(cvtr.fix_themes)
+        self.assertFalse(cvtr.should_massage)
+        cvtr.fix_themes = False
+        with self.assertRaises(RuntimeError):
+            cvtr.fix_themes = True
 
         cvtr = cvt.PODds2Res(jqlibdir, {'fetch_authors': True})
         self.assertTrue(cvtr.fetch_authors)
         self.assertFalse(cvtr.enrich_refs)
+        self.assertTrue(cvtr.fix_themes)
         self.assertTrue(cvtr.should_massage)
 
     def test_convert_file(self):
         cvtr = cvt.PODds2Res(jqlibdir)
         res = cvtr.convert_file(janaffile, "ark:ID")
-        self.assertEquals(res["@id"], "ark:ID")
-        self.assertEquals(res["accessLevel"], "public")
+        self.assertEqual(res["@id"], "ark:ID")
+        self.assertEqual(res["accessLevel"], "public")
 
     def test_convert(self):
         cvtr = cvt.PODds2Res(jqlibdir)
@@ -51,13 +72,100 @@ class TestPODds2Res(unittest.TestCase):
 
         with open(janaffile) as fd:
             data = json.load(fd)
-            
+        data['theme'] = ['optical physics']
+
         res = cvtr.convert_data(data, "ark:ID")
         self.assertEquals(res["@id"], "ark:ID")
         self.assertEquals(res["accessLevel"], "public")
 
         self.assertEqual(len(res['references']), 1)
         self.assertNotIn('citation', res["references"][0])
+
+        self.assertIn('topic', res)
+        self.assertEqual(len(res['topic']), len(res['theme']))
+        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics")
+        self.assertEqual(res['theme'][0], "Physics: Optical physics")
+        
+        cvtr.fix_themes = False
+        res = cvtr.convert_data(data, "ark:ID")
+        self.assertIn('topic', res)
+        self.assertEqual(len(res['topic']), len(res['theme']))
+        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics")
+        self.assertEqual(res['theme'][0], "optical physics")
+
+    def test_themes2topics(self):
+        cvtr = cvt.PODds2Res(jqlibdir)
+
+        with open(simplefile) as fd:
+            data = json.load(fd)
+        self.assertEqual(data['theme'][0], "Optical physics")
+
+        data['theme'].append("Goober and the Peas")
+        data['theme'].append("Bioscience")
+        data['theme'].append("chemistry")
+
+        data['topic'] = cvtr.themes2topics(data['theme'])
+        self.assertEqual(len(data['topic']), len(data['theme']))
+        self.assertEqual(data['theme'][0], "Optical physics")
+        self.assertEqual(data['topic'][0]['tag'], "Physics: Optical physics")
+        self.assertTrue(data['topic'][0].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+
+        self.assertEqual(data['topic'][1]['tag'], "Goober and the Peas")
+        self.assertFalse(data['topic'][1].get('scheme'))
+
+        self.assertEqual(data['topic'][2]['tag'], "Bioscience")
+        self.assertTrue(data['topic'][2].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+        self.assertEqual(data['topic'][3]['tag'], "Chemistry")
+        self.assertTrue(data['topic'][3].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+        
+    def test_topics2themes(self):
+        cvtr = cvt.PODds2Res(jqlibdir)
+
+        with open(simplefile) as fd:
+            data = json.load(fd)
+        self.assertEqual(data['theme'][0], "Optical physics")
+
+        data['theme'].append("Goober and the Peas")
+        data['theme'].append("Bioscience")
+        data['theme'].append("chemistry")
+
+        data['topic'] = cvtr.themes2topics(data['theme'])
+        themes = cvtr.topics2themes(data['topic'])
+
+        self.assertEqual(len(themes), len(data['topic']))
+        self.assertEqual(themes[0], "Physics: Optical physics")
+        self.assertEqual(themes[1], "Goober and the Peas")
+        self.assertEqual(themes[2], "Bioscience")
+        self.assertEqual(themes[3], "Chemistry")
+        
+        themes = cvtr.topics2themes(data['topic'], False)
+
+        self.assertEqual(len(themes), len(data['topic'])-1)
+        self.assertEqual(themes[0], "Physics: Optical physics")
+        self.assertEqual(themes[1], "Bioscience")
+        self.assertEqual(themes[2], "Chemistry")
+        
+
+    def test_massage_themes(self):
+        cvtr = cvt.PODds2Res(jqlibdir)
+
+        with open(simplefile) as fd:
+            data = json.load(fd)
+        self.assertEqual(data['theme'][0], "Optical physics")
+        data['theme'].append("Goober and the Peas")
+        data['theme'].append("Bioscience")
+        data['theme'].append("chemistry")
+
+        data['topic'] = cvtr.themes2topics(data['theme'])
+        cvtr.massage_themes(data)
+
+        self.assertEqual(len(data['theme']), len(data['topic']))
+        self.assertEqual(data['theme'][0], "Physics: Optical physics")
+        self.assertEqual(data['theme'][1], "Goober and the Peas")
+        self.assertEqual(data['theme'][2], "Bioscience")
+        self.assertEqual(data['theme'][3], "Chemistry")
+        
+        
 
     @unittest.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                      "kindly skipping doi service checks")
