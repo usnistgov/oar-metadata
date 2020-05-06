@@ -70,7 +70,7 @@ class TestResearchTopicsTaxonomy(unittest.TestCase):
         term = self.tax.match_theme("Biomaterials", False)
         topic = term.as_topic()
         self.assertEqual(topic['@type'], "Concept")
-        self.assertEqual(topic['scheme'], "https://www.nist.gov/od/dm/nist-themes/v1.1")
+        self.assertEqual(topic['scheme'], "https://data.nist.gov/od/dm/nist-themes/v1.1")
         self.assertEqual(topic['tag'], "Bioscience: Biomaterials")
         
         
