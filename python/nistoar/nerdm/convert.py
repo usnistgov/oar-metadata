@@ -267,13 +267,25 @@ class PODds2Res(object):
                              from the NIST taxonomy (based on the 'scheme' 
                              property).  
         """
-        out = []
-        for topic in topics:
-            if incl_unrec or ('scheme' in topic and 'tag' in topic and \
-                              topic['scheme'].startswith(TAXONOMY_VOCAB_BASE_URI)):
-                out.append(topic['tag'])
+        return topics2themes(topics, incl_unrec);
 
-        return out
+
+def topics2themes(topics, incl_unrec=True):
+    """
+    convert an array of NERDm topic nodes to a list of themes (as given in 
+    NIST POD files).
+    :param list topics:  a list of NIST topic nodes
+    :param boolean incl_unrec:  if False and a topic is not marked as being
+                         from the NIST taxonomy (based on the 'scheme' 
+                         property).  
+    """
+    out = []
+    for topic in topics:
+        if incl_unrec or ('scheme' in topic and 'tag' in topic and \
+                          topic['scheme'].startswith(TAXONOMY_VOCAB_BASE_URI)):
+            out.append(topic['tag'])
+
+    return out
 
 
 class Res2PODds(object):
