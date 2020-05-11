@@ -2,7 +2,7 @@
 #
 from __future__ import print_function
 
-import os, pdb, sys, shutil
+import os, pdb, sys, shutil, json
 import unittest as test
 import ejsonschema as ejs
 
@@ -57,6 +57,16 @@ class TestConvert(test.TestCase):
             else:
                 sys.stderr.write(".")
                 passed += 1
+
+            with open(nf) as fd:
+                nerd = json.load(fd)
+            if 'theme' in nerd:
+                self.assertEqual(len(nerd['topic']), len(nerd['theme']))
+            if nerd['ediid'] == 'EBC9DB05EDEE5B0EE043065706812DF85':
+                self.assertIn('theme', nerd)
+                self.assertEqual(nerd['theme'][0], "Physics: Spectroscopy")
+                self.assertEqual(nerd['topic'][0]['tag'], "Physics: Spectroscopy")
+                self.assertTrue(all([':' in t for t in nerd['theme']]))
 
         sys.stderr.write("\nValidated {0} files".format(str(passed)))
         self.assertEquals(len(failed), 0,

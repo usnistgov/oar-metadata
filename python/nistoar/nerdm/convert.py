@@ -7,7 +7,9 @@ from collections import OrderedDict
 from .. import jq
 from ..doi import resolve, is_DOI
 from ..doi.resolving import Resolver
-from .constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI
+from .constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
+                        TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
+from .taxonomy import ResearchTopicsTaxonomy
 
 class PODds2Res(object):
     """
@@ -31,16 +33,18 @@ class PODds2Res(object):
                                doi_resolver.client_info be set.  
     """
 
-    def __init__(self, jqlibdir, config=None, logger=None):
+    def __init__(self, jqlibdir, config=None, logger=None, schemadir=None):
         """
         create the converter
 
-        :param jqlibdir str:   path to the directory containing the nerdm jq
+        :param jqlibdir  str:  path to the directory containing the nerdm jq
                                modules
-        :param config  dict:   a dictionary with conversion configuration data
+        :param config   dict:  a dictionary with conversion configuration data
                                in it (see class documentation)
         :param logger Logger:  a logger object that can be used to write warning
                                messages 
+        :param schemadir str:  path to the directory containing the taxonomy
+                               definitions
         """
         self.jqt = jq.Jq('nerdm::podds2resource', jqlibdir, ["pod2nerdm:nerdm"])
         if config is None:
@@ -48,6 +52,21 @@ class PODds2Res(object):
         self.cfg = config
         self._log = logger
         self._doires = DOIResolver.from_config(self.cfg.get('doi_resolver', {}))
+
+        self.taxon = None
+        if not schemadir:
+            schemadir = self.cfg.get('schema_dir')
+            if not schemadir:
+                schemadir = os.path.join(jqlibdir, "..", "model")
+                if not os.path.exists(schemadir):
+                    schemadir = os.path.join(jqlibdir, "..", "..", "etc", "schemas")
+        if os.path.exists(schemadir):
+            self.taxon = ResearchTopicsTaxonomy.from_schema_dir(schemadir)
+        elif self._log:
+            self._log.warning("PODds2Res: taxonomy definition data not available")
+            if schemadir:
+                self._log.warning("PODds2Res: schema directory not found: %s",
+                                  schemadir)
 
     def convert(self, podds, id):
         """
@@ -58,6 +77,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform(podds, {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['themes'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -71,6 +92,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform(json.dumps(podds), {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -84,6 +107,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform_file(poddsfile, {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['themes'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -94,7 +119,8 @@ class PODds2Res(object):
         True if either enrich_refs or fetch_authors is set to True
         """
         return self.cfg.get('enrich_refs', False) or \
-               self.cfg.get('fetch_authors', False)
+               self.cfg.get('fetch_authors', False) or \
+               (self.taxon and self.cfg.get('fix_themes', True))
 
     @property
     def enrich_refs(self):
@@ -110,7 +136,8 @@ class PODds2Res(object):
 
     @enrich_refs.deleter
     def enrich_refs(self):
-        del self.cfg['enrich_refs']
+        if 'enrich_refs' in self.cfg:
+            del self.cfg['enrich_refs']
 
     @property
     def fetch_authors(self):
@@ -127,7 +154,30 @@ class PODds2Res(object):
 
     @fetch_authors.deleter
     def fetch_authors(self):
-        del self.cfg['fetch_authors']
+        if 'fetch_authors' in self.cfg:
+            del self.cfg['fetch_authors']
+
+    @property
+    def fix_themes(self):
+        """
+        True if the themes array should be fixed to properly match the latest
+        terms from the NIST taxonomy.
+        """
+        return self.taxon and self.cfg.get('fix_themes', True)
+
+    @fix_themes.setter
+    def fix_themes(self, tf):
+        if tf:
+            self._check_taxon_enabled()
+        self.cfg['fix_themes'] = bool(tf)
+    @fix_themes.deleter
+    def fix_themes(self):
+        if 'fix_themes' in self.cfg:
+            del self.cfg['fix_themes']
+
+    def _check_taxon_enabled(self):
+        if not self.taxon:
+            raise RuntimeError("Taxonomy data unavailable (schema dir unknown?)")
 
     def massage(self, nerd):
         """
@@ -137,8 +187,10 @@ class PODds2Res(object):
         If enrich_refs is True, massage_refs will be called.  The given NERDm
         record will be updated in-situ
 
-        @param nerd   the NERDm record to update
+        :param dict nerd:   the NERDm record to update
         """
+        if self.fix_themes:
+            self.massage_themes(nerd)
         if self.fetch_authors:
             self.massage_authors(nerd)
         if self.enrich_refs:
@@ -173,7 +225,56 @@ class PODds2Res(object):
                     refs[i].update(newref)
 
         return nerd
-            
+
+    def massage_themes(self, nerd):
+        """
+        update the themes value to properly reflect the latest NIST taxonomy
+        """
+        if nerd.get('topic'):
+            nerd['theme'] = self.topics2themes(nerd['topic'])
+
+    def themes2topics(self, themes, latest=True, incl_unrec=True):
+        """
+        Convert the given theme terms to NERDm topic nodes referencing the 
+        NIST Research Taxonomy.  The input terms can be approximate matches 
+        to the NIST taxonomy--i.e. have missing or misspelled words, 
+        incorrect capitalization, or missing parent componets; this function 
+        will match them to proper values in the taxonomy
+        :param list themes:      an array of theme terms
+        :param boolean latest:   if True and a theme matches a deprecated theme,
+                                 an attempt is made to 
+        :param boolean incl_unrec: if True and a theme cannot be matched to a 
+                                 term in the NIST taxonomy, do not include it in 
+                                 the output.
+        """
+        self._check_taxon_enabled()
+        out = []
+        for theme in themes:
+            term = self.taxon.match_theme(theme, latest)
+            if term:
+                out.append(term.as_topic())
+            elif incl_unrec:
+                out.append(OrderedDict([("@type", "Concept"), ("tag", theme)]))
+
+        return out
+
+    def topics2themes(self, topics, incl_unrec=True):
+        """
+        convert an array of NERDm topic nodes to a list of themes (as given in 
+        NIST POD files).
+        :param list topics:  a list of NIST topic nodes
+        :param boolean incl_unrec:  if False and a topic is not marked as being
+                             from the NIST taxonomy (based on the 'scheme' 
+                             property).  
+        """
+        out = []
+        for topic in topics:
+            if incl_unrec or ('scheme' in topic and 'tag' in topic and \
+                              topic['scheme'].startswith(TAXONOMY_VOCAB_BASE_URI)):
+                out.append(topic['tag'])
+
+        return out
+
 
 class ComponentCounter(object):
     """
@@ -492,8 +593,5 @@ def citeproc_ref2nerdm_ref(data):
     convert a reference description in CiteProc format to a reference 
     description in NERDm format.
     """
-    
+    raise NotImplementedError()
 
-        
-                                
-    
