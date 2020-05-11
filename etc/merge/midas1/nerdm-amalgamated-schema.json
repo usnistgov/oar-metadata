@@ -255,7 +255,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepBase"
+                    "mergeStrategy": "preferHead"
                 },
 
                 "@id": {
