@@ -1,8 +1,8 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v1.0",
-    "@id": "https://data.nist.gov/od/dm/nist-themes/v1.1",
+    "_schema": "https://www.nist.gov/od/dm/simple-taxonomy/v1.0",
+    "@id": "https://www.nist.gov/od/dm/nist-themes/v1.0",
     "title": "The NIST Research Theme Taxonomy",
-    "version": "1.1",
+    "version": "1.0",
     "description": "terms for tagging resources with research themes",
     "vocab": [
         {
@@ -35,12 +35,6 @@
         },
         {
             "parent": "Bioscience",
-            "term": "Biomolecular Characterization",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Bioscience",
             "term": "Bioprocessing",
             "level": 2
         },
@@ -56,26 +50,17 @@
         },
         {
             "parent": "Bioscience",
-            "term": "Genomics",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Bioscience",
             "term": "Genomic measurements",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Bioscience: Genomics"
-        },
-        {
-            "parent": "Bioscience",
-            "term": "Lipidomics",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "level": 2
         },
         {
             "parent": "Bioscience",
             "term": "Glycomics",
+            "level": 2
+        },
+        {
+            "parent": "Bioscience",
+            "term": "Lipidomics",
             "level": 2
         },
         {
@@ -94,16 +79,8 @@
         },
         {
             "parent": "Buildings and Construction",
-            "term": "Heating, ventilation, and air conditioning equipment",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Buildings and Construction",
-            "term": "Air conditioning equipment and heating",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Buildings and Construction: Heating, ventilation, and air conditioning equipment"
+            "term": "Air conditioning and heating equipment",
+            "level": 2
         },
         {
             "parent": "Buildings and Construction",
@@ -137,18 +114,7 @@
         },
         {
             "parent": "Buildings and Construction",
-            "term": "Resilient buildings",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Buildings and Construction",
             "term": "Structural engineering",
-            "level": 2
-        },
-        {
-            "parent": "Buildings and Construction",
-            "term": "Sustainable buildings",
             "level": 2
         },
         {
@@ -193,12 +159,6 @@
             "parent": "Electronics",
             "term": "Electromagnetics",
             "level": 2
-        },
-        {
-            "parent": "Electronics",
-            "term": "Flexible electronics",
-            "level": 2,
-            "since": "1.1"
         },
         {
             "parent": "Electronics",
@@ -353,16 +313,8 @@
         },
         {
             "parent": "Forensics",
-            "term": "Digital evidence",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Forensics",
             "term": "Digital and multimedia evidence",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Forensics: Digital evidence"
+            "level": 2
         },
         {
             "parent": "Forensics",
@@ -376,16 +328,8 @@
         },
         {
             "parent": "Forensics",
-            "term": "Fingerprints and pattern evidence",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Forensics",
             "term": "Pattern evidence",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Forensics: Fingerprints and pattern evidence"
+            "level": 2
         },
         {
             "parent": "Forensics",
@@ -399,8 +343,7 @@
         {
             "parent": "Health",
             "term": "Cell therapies",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "level": 2
         },
         {
             "parent": "Health",
@@ -435,23 +378,11 @@
         {
             "parent": "Health",
             "term": "Radiation therapies",
-            "level": 2,
-            "deprecatedSince": "1.1"
-        },
-        {
-            "parent": "Health",
-            "term": "Regenerative medicine",
-            "level": 2,
-            "since": "1.1"
+            "level": 2
         },
         {
             "term": "Information Technology",
             "level": 1
-        },
-        {
-            "parent": "Information Technology",
-            "term": "Artificial Intelligence",
-            "level": 2
         },
         {
             "parent": "Information Technology",
@@ -496,9 +427,7 @@
         {
             "parent": "Information Technology: Cybersecurity",
             "term": "Access control",
-            "level": 3,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Information Technology: Cybersecurity: Identity and access management"
+            "level": 3
         },
         {
             "parent": "Information Technology: Cybersecurity",
@@ -538,9 +467,7 @@
         {
             "parent": "Information Technology: Data and informatics",
             "term": "Video analytics",
-            "level": 3,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Information Technology: Video analytics"
+            "level": 3
         },
         {
             "parent": "Information Technology",
@@ -550,40 +477,17 @@
         {
             "parent": "Information Technology",
             "term": "Healthcare IT",
-            "level": 2,
-            "deprecatedSince": "1.1"
-        },
-        {
-            "parent": "Information Technology",
-            "term": "Health IT",
-            "level": 2,
-            "since": "1.1"
-        },
-        {
-            "parent": "Information Technology",
-            "term": "Identity and access management",
-            "level": 2,
-            "since": "1.1"
+            "level": 2
         },
         {
             "parent": "Information Technology",
             "term": "Identity management",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Information Technology: Identity and access management"
-        },
-        {
-            "parent": "Information Technology",
-            "term": "Internet of Things (IoT)",
-            "level": 2,
-            "since": "1.1"
+            "level": 2
         },
         {
             "parent": "Information Technology",
             "term": "Internet of Things",
-            "level": 2,
-            "deprecatedSince": "1.1",
-            "deprecatedBy": "Information Technology: Internet of Things (IoT)"
+            "level": 2
         },
         {
             "parent": "Information Technology",
@@ -602,64 +506,13 @@
         },
         {
             "parent": "Information Technology: Networking",
-            "term": "Mobile and Wireless Networking",
-            "level": 3,
-            "since": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Network Management and Monitoring",
+            "term": "Network modeling",
             "level": 3
         },
         {
             "parent": "Information Technology: Networking",
-            "term": "Network Modeling and Analysis",
-            "level": 3,
-            "since": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Network modeling",
-            "level": 3,
-            "deprecatedSince": "1.0",
-            "deprecatedBy": "Information Technology: Networking: Network Modeling and Analysis"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Network Security and Robustness",
-            "level": 3,
-            "since": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Network Test and Measurement",
-            "level": 3,
-            "since": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Next Generation Networks",
-            "level": 3,
-            "deprecatedSince": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
             "term": "Next generation internet",
-            "level": 3,
-            "deprecatedSince": "1.0",
-            "deprecatedBy": "Information Technology: Networking: Next Generation Networks"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Protocol Design and Standardization",
-            "level": 3,
-            "deprecatedSince": "1.0"
-        },
-        {
-            "parent": "Information Technology: Networking",
-            "term": "Software Defined and Virtual networks",
-            "level": 3,
-            "deprecatedSince": "1.0"
+            "level": 3
         },
         {
             "parent": "Information Technology",
@@ -698,11 +551,6 @@
         },
         {
             "parent": "Information Technology",
-            "term": "Video analytics",
-            "level": 2
-        },
-        {
-            "parent": "Information Technology",
             "term": "Visualization research",
             "level": 2
         },
@@ -732,8 +580,7 @@
         {
             "parent": "Manufacturing",
             "term": "Exports",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "level": 2
         },
         {
             "parent": "Manufacturing",
@@ -753,8 +600,7 @@
         {
             "parent": "Manufacturing",
             "term": "Lean manufacturing",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "level": 2
         },
         {
             "parent": "Manufacturing",
@@ -764,11 +610,6 @@
         {
             "parent": "Manufacturing",
             "term": "Manufacturing systems design and analysis",
-            "level": 2
-        },
-        {
-            "parent": "Manufacturing",
-            "term": "Monitoring, diagnostics and prognostics",
             "level": 2
         },
         {
@@ -798,38 +639,37 @@
         },
         {
             "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Collaborative Robots",
+            "level": 3
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Desterous Grasping",
+            "level": 3
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Industrial Autonomous Vehicles",
+            "level": 3
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Mobile Manipulators",
+            "level": 3
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
             "term": "Agility and adaptability",
             "level": 3
         },
         {
             "parent": "Manufacturing: Robotics in manufacturing",
-            "term": "Collaborative robots",
-            "level": 3
-        },
-        {
-            "parent": "Manufacturing: Robotics in manufacturing",
-            "term": "Dexterous grasping",
-            "level": 3,
-            "since": "1.1"
-        },
-        {
-            "parent": "Manufacturing: Robotics in manufacturing",
-            "term": "Industrial autonomous vehicles",
-            "level": 3
-        },
-        {
-            "parent": "Manufacturing: Robotics in manufacturing",
-            "term": "Mobile manipulators",
+            "term": "Sensing and perception",
             "level": 3
         },
         {
             "parent": "Manufacturing: Robotics in manufacturing",
             "term": "Navigation / actuation / control",
-            "level": 3
-        },
-        {
-            "parent": "Manufacturing: Robotics in manufacturing",
-            "term": "Sensing and perception",
             "level": 3
         },
         {
@@ -860,8 +700,7 @@
         {
             "parent": "Manufacturing",
             "term": "Work force",
-            "level": 2,
-            "deprecatedSince": "1.0"
+            "level": 2
         },
         {
             "term": "Materials",
@@ -993,8 +832,7 @@
         {
             "parent": "Metrology",
             "term": "Environmental metrology",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "level": 2
         },
         {
             "parent": "Metrology",
@@ -1288,15 +1126,12 @@
         {
             "parent": "Resilience",
             "term": "Disaster and failure studies",
-            "level": 2,
-            "since": "1.0"
+            "level": 2
         },
         {
             "parent": "Resilience",
             "term": "Disaster resilience",
-            "level": 2,
-            "deprecatedSince": "1.0",
-            "deprecatedBy": "Resilience: Disaster and failure studies"
+            "level": 2
         },
         {
             "parent": "Resilience",
@@ -1334,14 +1169,13 @@
         },
         {
             "parent": "Standards",
-            "term": "Conformity assessment",
+            "term": "Commercial standards",
             "level": 2
         },
         {
             "parent": "Standards",
-            "term": "Commercial standards",
-            "level": 2,
-            "deprecatedSince": "1.1"
+            "term": "Conformity assessment",
+            "level": 2
         },
         {
             "parent": "Standards",
