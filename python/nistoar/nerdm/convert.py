@@ -11,6 +11,11 @@ from .constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
                         TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
 from .taxonomy import ResearchTopicsTaxonomy
 
+# a taxonony URI with www.nist.gov instead of data.nist.gov got out into
+# the wild
+TAXONOMY_VOCAB_BASE_URI_RE = re.compile('^'+re.sub(r'/data\.', '/(www|data).',
+                                                   TAXONOMY_VOCAB_BASE_URI))
+
 class PODds2Res(object):
     """
     a transformation engine for converting POD Dataset records to NERDm
@@ -282,7 +287,7 @@ def topics2themes(topics, incl_unrec=True):
     out = []
     for topic in topics:
         if incl_unrec or ('scheme' in topic and 'tag' in topic and \
-                          topic['scheme'].startswith(TAXONOMY_VOCAB_BASE_URI)):
+                          TAXONOMY_VOCAB_BASE_URI_RE.search(topic['scheme'])):
             out.append(topic['tag'])
 
     return out

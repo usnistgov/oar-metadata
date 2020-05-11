@@ -1,4 +1,4 @@
-import unittest, pdb, os, json
+import unittest, pdb, os, json, re
 from collections import OrderedDict
 
 import nistoar.nerdm.convert as cvt
@@ -146,6 +146,12 @@ class TestPODds2Res(unittest.TestCase):
         self.assertEqual(themes[0], "Physics: Optical physics")
         self.assertEqual(themes[1], "Bioscience")
         self.assertEqual(themes[2], "Chemistry")
+
+        # test old URI
+        data['topic'][0]['scheme'] = re.sub('data', 'www', data['topic'][0]['scheme'])
+        themes = cvt.topics2themes(data['topic'], False) # as a module function
+        self.assertEqual(len(themes), len(data['topic'])-1)
+        self.assertEqual(themes[0], "Physics: Optical physics")
         
 
     def test_massage_themes(self):
