@@ -516,7 +516,8 @@ def podds2resource:
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
     if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
-    if .theme then . else del(.theme) end |
+    if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
+    if .topic then . else del(.topic) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
     if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |
