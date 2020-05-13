@@ -33,6 +33,10 @@ class TestSamples(unittest.TestCase):
         self.assertEqual(pod['contactPoint']['hasEmail'],
                          'mailto:thomas.allison@nist.gov')
 
+        self.assertEqual(len(pod['theme']), 2)
+        self.assertEqual(pod['theme'][0], "Chemistry-> Thermochemical properties")
+        self.assertEqual(pod['theme'][1], "Standards-> Reference data")
+
     def test_hitsc(self):
         pod = self.convert("hitsc.json")
         val.validate(pod, schemauri=podds)

@@ -167,7 +167,7 @@ def resource2midaspodds:
     if .primaryITInvestmentUII  then . else del(.primaryITInvestmentUII) end |
     if .rights       then . else del(.rights)                        end |
     if .license      then . else del(.license)                       end |
-    if .theme then .theme = [.theme|.[]|gsub(":","->")] else del(.theme) end |
+    if .theme then .theme = [.theme|.[]|gsub(":"; "->")] else del(.theme) end |
     if .issued       then . else del(.issued)                        end |
     if .conformsTo   then . else del(.conformsTo)                    end |
     if .distribution then

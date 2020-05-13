@@ -470,13 +470,19 @@ def isPDR:
     "nrdp:PublicDataResource"
 ;
 
+# Return the "dcat:Dataset" resource type value if the input POD
+# record appears to be such.  This is almost always the case.
+def isDCatDS:
+    "dcat:Dataset"
+;
+
 # Return a list of resource types that an input POD Dataset matches
 #
 # Input: POD Dataset
 # Output: an array of strings
 #
 def resourceTypes:
-    [ isSRD, isPDR ]
+    [ isSRD, isPDR, isDCatDS ]
 ;
 
 # Converts an entire POD Dataset node to a NERDm Resource node

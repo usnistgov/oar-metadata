@@ -1939,5 +1939,6 @@
     "references": [
         "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf"
     ],
-    "title": "NIST-JANAF Thermochemical Tables - SRD 13"
+    "title": "NIST-JANAF Thermochemical Tables - SRD 13",
+    "theme": [ "thermochemical properties", "Standards-> Reference data"  ]
 }
