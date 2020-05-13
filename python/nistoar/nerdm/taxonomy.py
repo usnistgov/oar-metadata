@@ -107,6 +107,31 @@ class ResearchTopicsTaxonomy(object):
             out = self.TaxonomyTerm(out, self.data)
         return out
 
+    def themes2topics(self, themes, latest=True, incl_unrec=True):
+        """
+        Convert the given theme terms to NERDm topic nodes referencing the 
+        NIST Research Taxonomy.  The input terms can be approximate matches 
+        to the NIST taxonomy--i.e. have missing or misspelled words, 
+        incorrect capitalization, or missing parent componets; this function 
+        will match them to proper values in the taxonomy
+        :param list themes:      an array of theme terms
+        :param boolean latest:   if True and a theme matches a deprecated theme,
+                                 an attempt is made to 
+        :param boolean incl_unrec: if True and a theme cannot be matched to a 
+                                 term in the NIST taxonomy, do not include it in 
+                                 the output.
+        """
+        out = []
+        for theme in themes:
+            term = self.match_theme(theme, latest)
+            if term:
+                out.append(term.as_topic())
+            elif incl_unrec:
+                out.append(OrderedDict([("@type", "Concept"), ("tag", theme)]))
+
+        return out
+
+
     class TaxonomyTerm(object):
         """
         a vocabulary term from the taxonomy

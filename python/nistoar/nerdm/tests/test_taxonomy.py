@@ -66,6 +66,25 @@ class TestResearchTopicsTaxonomy(unittest.TestCase):
         term = self.tax.match_theme("Biological Nuclear Explosives", False)
         self.assertEqual(term.defn['term'], "Chemical/Biological/Radiological/Nuclear/Explosives (CBRNE)")
 
+    def test_themes2topics(self):
+        themes = [
+            "Optical physics", "Goober and the Peas", "Bioscience", "chemistry"
+        ]
+        topics = self.tax.themes2topics(themes)
+        
+        self.assertEqual(len(topics), len(themes))
+        self.assertEqual(topics[0]['tag'], "Physics: Optical physics")
+        self.assertTrue(topics[0].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+
+        self.assertEqual(topics[1]['tag'], "Goober and the Peas")
+        self.assertFalse(topics[1].get('scheme'))
+
+        self.assertEqual(topics[2]['tag'], "Bioscience")
+        self.assertTrue(topics[2].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+        self.assertEqual(topics[3]['tag'], "Chemistry")
+        self.assertTrue(topics[3].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
+        
+
     def test_as_topic(self):
         term = self.tax.match_theme("Biomaterials", False)
         topic = term.as_topic()

@@ -253,15 +253,7 @@ class PODds2Res(object):
                                  the output.
         """
         self._check_taxon_enabled()
-        out = []
-        for theme in themes:
-            term = self.taxon.match_theme(theme, latest)
-            if term:
-                out.append(term.as_topic())
-            elif incl_unrec:
-                out.append(OrderedDict([("@type", "Concept"), ("tag", theme)]))
-
-        return out
+        return self.taxon.themes2topics(themes, latest, incl_unrec)
 
     def topics2themes(self, topics, incl_unrec=True):
         """
