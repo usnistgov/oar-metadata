@@ -83,7 +83,7 @@ class PODds2Res(object):
         """
         out = self.jqt.transform(podds, {"id": id})
         if 'theme' in out:
-            out['topic'] = self.themes2topics(out['themes'])
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -113,7 +113,7 @@ class PODds2Res(object):
         """
         out = self.jqt.transform_file(poddsfile, {"id": id})
         if 'theme' in out:
-            out['topic'] = self.themes2topics(out['themes'])
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
