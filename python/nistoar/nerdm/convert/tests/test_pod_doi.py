@@ -283,7 +283,6 @@ class TestDOIResolver(unittest.TestCase):
     @unittest.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                      "kindly skipping doi service checks")
     def test_toReference(self):
-        pdb.set_trace()
         rslvr = cvt.DOIResolver.from_config(rescfg)
         ref = rslvr.to_reference("10.18434/m33x0v")
 
