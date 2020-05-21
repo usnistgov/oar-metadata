@@ -4,12 +4,12 @@ Classes and functions for converting from and to the NERDm schema
 import os, json, re
 from collections import OrderedDict
 
-from .. import jq
-from ..doi import resolve, is_DOI
-from ..doi.resolving import Resolver
-from .constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
-                        TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
-from .taxonomy import ResearchTopicsTaxonomy
+from ... import jq
+from ...doi import resolve, is_DOI
+from ...doi.resolving import Resolver
+from ..constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
+                         TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
+from ..taxonomy import ResearchTopicsTaxonomy
 
 # a taxonony URI with www.nist.gov instead of data.nist.gov got out into
 # the wild
