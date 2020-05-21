@@ -19,7 +19,7 @@ citeproc_auths = [
 
 datacite_auths = [
     {"name":"Fenner, Martin", "nameType":"Personal", "givenName":"Martin",
-     "familyName":"Fenner","affiliation":"DataCite",
+     "familyName":"Fenner","affiliation":[{"name": "DataCite"}],
      "contributorType":"Editor",
      "nameIdentifiers":[
          {"nameIdentifier":"https://orcid.org/0000-0001-6528-2027",
@@ -218,7 +218,7 @@ class TestConvertReferences(unittest.TestCase):
         info._cite = "ibid"
 
         ref = cvt._doiinfo2reference(info, "https://goober.org/")
-        self.assertEqual(ref['@type'], ['npg:Article'])
+        self.assertEqual(ref['@type'], ['schema:Article'])
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
         self.assertEqual(ref['refType'], 'IsCitedBy')
         self.assertEqual(ref['title'],
@@ -233,7 +233,7 @@ class TestConvertReferences(unittest.TestCase):
         info._cite = "ibid"
 
         ref = cvt._doiinfo2reference(info, "https://goober.org/")
-        self.assertEqual(ref['@type'], ['npg:Dataset'])
+        self.assertEqual(ref['@type'], ['schema:Dataset'])
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
         self.assertEqual(ref['refType'], 'References')
         self.assertEqual(ref['title'],
@@ -286,7 +286,7 @@ class TestDOIResolver(unittest.TestCase):
         rslvr = cvt.DOIResolver.from_config(rescfg)
         ref = rslvr.to_reference("10.18434/m33x0v")
 
-        self.assertEqual(ref['@type'], ['npg:Dataset'])
+        self.assertEqual(ref['@type'], ['schema:Dataset'])
         self.assertEqual(ref['@id'], 'doi:10.18434/m33x0v')
         self.assertEqual(ref['refType'], 'References')
         self.assertTrue(ref['title'].startswith("Effect of Heterogeneity"))
