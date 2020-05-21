@@ -2,7 +2,7 @@
 Classes and functions for converting from and to the NERDm schema
 """
 import os, json, re
-from collections import OrderedDict
+from collections import OrderedDict, Mapping
 
 from ... import jq
 from ...doi import resolve, is_DOI
@@ -486,7 +486,7 @@ class DOIResolver(object):
         info = self.resolver.resolve(doi)
         out = []
 
-        if info.source == "Datacite":
+        if info.source == "Crosscite" or info.source == "Datacite":
             out = datacite_creators2nerdm_authors(info.native.get('creators'))
         elif info.source == "Crossref":
             out = crossref_authors2nerdm_authors(info.native.get('author'))
@@ -528,12 +528,27 @@ def _doiinfo2reference(info, resolver):
     out = OrderedDict( [('@id', "doi:"+info.id)] )
 
     # what type of reference
-    if info.source == "Datacite":
-        out['@type'] = ['npg:Dataset']
+    tp = info.data.get('type')
+    if not tp:
+        if info.source == "Datacite":
+            tp = 'dataset'
+        elif info.source == "Crossref":
+            tp = 'article'
+        else:
+            tp = 'document'
+
+    if tp == 'dataset':
+        out['@type'] = ['schema:Dataset']
         out['refType'] = "References"
-    elif info.source == "Crossref":
-        out['@type'] = ['npg:Article']
+    elif tp.startswith('article'):
+        out['@type'] = ['schema:Article']
         out['refType'] = "IsCitedBy"
+    elif tp == 'book':
+        out['@type'] = ['schema:Book']
+        out['refType'] = "References"
+    elif tp == 'thesis':
+        out['@type'] = ['schema:Thesis']
+        out['refType'] = "References"
     else:
         out['@type'] = ['npg:Document']
         out['refType'] = "References"
@@ -663,8 +678,20 @@ def datacite_creator2nerdm_author(creator):
 
     # affiliation
     if creator.get('affiliation'):
-        out['affiliation'] = [ OrderedDict( [("@type", "schema:affiliation")] ) ]
-        out['affiliation'][0]['title'] = creator['affiliation']
+        out['affiliation'] = []
+        if isinstance(creator.get('affiliation'), (str, unicode)):
+            out['affiliation'].append(
+                OrderedDict( [("@type", "schema:affiliation"),
+                              ('title', creator.get('affiliation'))] )
+            )
+        else:
+            for caffil in creator.get('affiliation',[]):
+                affil = OrderedDict( [("@type", "schema:affiliation")] )
+                if isinstance(caffil, Mapping):
+                    affil['title'] = caffil.get('name','')
+                else:
+                    affil['title'] = caffil
+                out['affiliation'].append(affil)
 
     return out
 
