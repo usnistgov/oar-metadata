@@ -207,8 +207,8 @@ class TestFieldLoader(test.TestCase):
 
     def test_load_from_file(self):
         res = self.ldr.load_from_file(flddatafile)
-        self.assertEqual(res.attempt_count, 32)
-        self.assertEqual(res.success_count, 32)
+        self.assertEqual(res.attempt_count, 28)
+        self.assertEqual(res.success_count, 28)
         self.assertEqual(res.failure_count, 0)
         
         self.assertTrue(res.succeeded({'name': "title"}))
