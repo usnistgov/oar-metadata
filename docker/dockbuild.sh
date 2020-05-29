@@ -18,7 +18,7 @@ set -e
 ## containers to be built.  List them in dependency order (where a latter one
 ## depends the former ones).  
 #
-DOCKER_IMAGE_DIRS="pymongo jq ejsonschema mdtests"
+DOCKER_IMAGE_DIRS="pymongo jqfromsrc ejsonschema mdtests"
 
 . $codedir/oar-build/_dockbuild.sh
 
