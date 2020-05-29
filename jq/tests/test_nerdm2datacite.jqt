@@ -1,0 +1,335 @@
+# Tests for the nerdm2datacite library
+#
+# To run, execute:
+#
+#  jq --run-tests test_nerdm2datacite.jqt
+#
+
+#--------------
+# testing stripDOI
+#
+include "nerdm2datacite"; [ .[] | is_DOI ]
+["10.88434/goober", "doi:10.88434/goober", "https://doi.org/10.88434/goober", "http://dx.doi.org/10.88434/goober", "http://ex.com/10.88434/goober", "ark:/88434/goober"]
+[false, true, true, true, false, false]
+
+#--------------
+# testing stripDOI
+#
+include "nerdm2datacite"; [ .[] | stripDOI ]
+["10.88434/goober", "doi:10.88434/goober", "https://doi.org/10.88434/goober", "http://dx.doi.org/10.88434/goober", "http://ex.com/10.88434/goober", "ark:/88434/goober"]
+["10.88434/goober", "10.88434/goober", "10.88434/goober", "10.88434/goober", "http://ex.com/10.88434/goober", "ark:/88434/goober"]
+
+#--------------
+# testing todoiurl
+#
+include "nerdm2datacite"; [ .[] | todoiurl ]
+["10.88434/goober", "doi:10.88434/goober", "https://doi.org/10.88434/goober", "http://dx.doi.org/10.88434/goober", "http://ex.com/10.88434/goober", "ark:/88434/goober"]
+["10.88434/goober", "https://doi.org/10.88434/goober", "https://doi.org/10.88434/goober", "https://doi.org/10.88434/goober", "http://ex.com/10.88434/goober", "ark:/88434/goober"]
+
+#--------------
+# testing stripMidnight
+#
+include "nerdm2datacite"; [ .[] | stripMidnight ]
+[ "2002", "2020:10:45 15:32:22", "2020:10:45 00:00:00", "2020:10:45T00:00:00", "2020:10:45 00:00:00.00" ]
+[ "2002", "2020:10:45 15:32:22", "2020:10:45", "2020:10:45", "2020:10:45" ]
+
+#--------------
+# testing is_datafile
+#
+include "nerdm2datacite"; is_datafile
+{ "@type": [ "nrdm:DataFile", "dcat:Distribution" ], "filepath": "x" }
+true
+
+#--------------
+# testing is_datafile
+#
+include "nerdm2datacite"; is_datafile
+{ "@type": [ "nrd:Hidden", "nrdm:DataFile", "dcat:Distribution" ], "filepath": "x" }
+true
+
+#--------------
+# testing is_datafile
+#
+include "nerdm2datacite"; is_datafile
+{ "@type": [ "nrd:Hidden", "nrdm:ChecksumFile", "dcat:Distribution" ], "filepath": "x" }
+false
+
+#--------------
+# testing is_datafile
+#
+include "nerdm2datacite"; is_datafile
+{ "@type": [ "dcat:Distribution" ], "filepath": "x" }
+false
+
+#--------------
+# testing contact_type
+#
+include "nerdm2datacite"; contact_type
+{ "fn": "Neils Bohr", "hasEmail": "mailto:neils.bohr@nist.gov" }
+"Personal"
+
+#--------------
+# testing contact_type
+#
+include "nerdm2datacite"; contact_type
+{ "fn": "Neils Bohr", "hasEmail": "neils.bohr@nist.gov" }
+"Personal"
+
+#--------------
+# testing contact_type
+#
+include "nerdm2datacite"; contact_type
+{ "fn": "Atom Modeling Group", "hasEmail": "mailto:atommod@nist.gov" }
+"Organizational"
+
+#--------------
+# testing contact_type
+#
+include "nerdm2datacite"; contact_type
+{ "fn": "Atom Modeling Group", "hasEmail": "mailto:atommod@nist.gov" }
+"Organizational"
+
+#--------------
+# testing contactPoint2creators
+#
+include "nerdm2datacite"; contactPoint2creators
+{ "fn": "Atom Modeling Group", "hasEmail": "mailto:atommod@nist.gov" }
+[{ "name": "Atom Modeling Group", "nameType": "Organizational" }]
+
+#--------------
+# testing contactPoint2contributor
+#
+include "nerdm2datacite"; contactPoint2contributor
+{ "fn": "Atom Modeling Group", "hasEmail": "mailto:atommod@nist.gov" }
+{ "name": "Atom Modeling Group", "nameType": "Organizational", "contributorType": "ContactPerson" }
+
+#--------------
+# testing orcid2nameid
+#
+include "nerdm2datacite"; orcid2nameid
+"0000-0000-0000-0000"
+{ "nameIdentifier": "https://orcid.org/0000-0000-0000-0000", "nameIdentifierScheme": "ORCID", "schemeURI": "https://orcid.org" }
+
+#--------------
+# testing affil2simpleaffil
+#
+include "nerdm2datacite"; affil2simpleaffil
+{ "title": "NIST" }
+"NIST"
+
+#--------------
+# testing affil2simpleaffil
+#
+include "nerdm2datacite"; affil2simpleaffil
+{ "title": "NIST", "subunits": ["MML", "ODI"] }
+"NIST, MML, ODI"
+
+#--------------
+# testing affil2simpleaffil
+#
+include "nerdm2datacite"; affil2simpleaffil
+{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }
+"NIST, MML"
+
+#--------------
+# testing affil2affil
+#
+include "nerdm2datacite"; affil2affil 
+{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }
+{ "affiliation": "NIST, MML", "affiliationIdentifier": "grid:NIST", "affiliationIdentifierScheme": "GRID" }
+
+#--------------
+# testing affil2affil
+#
+include "nerdm2datacite"; affil2affil
+{ "title": "NIST", "subunits": ["MML"], "@id": "sdorg:NIST" }
+{ "affiliation": "NIST, MML" }
+
+#--------------
+# testing affil2affil
+#
+include "nerdm2datacite"; affil2affil
+{ "title": "NIST" }
+{ "affiliation": "NIST" }
+
+#--------------
+# testing affils2affils
+#
+include "nerdm2datacite"; affils2affils
+[{ "title": "NIST" }]
+[{ "affiliation": "NIST" }]
+
+#--------------
+# testing affils2affils
+#
+include "nerdm2datacite"; affils2affils
+[{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }, { "title": "NIST", "subunits": ["MML"], "@id": "sdorg:NIST" }, { "title": "NIST" }]
+[{ "affiliation": "NIST, MML", "affiliationIdentifier": "grid:NIST", "affiliationIdentifierScheme": "GRID" }, { "affiliation": "NIST, MML" }, { "affiliation": "NIST" }]
+
+#--------------
+# testing author2creator
+#
+include "nerdm2datacite"; author2creator
+{ "fn": "M.W. Chase, Jr.", "givenName": "M.", "middleName": "W.", "familyName": "Chase", "affiliation": [{ "@type": [ "org:Organization" ], "title": "National Institute of Standards and Technology (NIST)", "@id": "sdporg:NIST" }], "proxyFor": "sdpperson:Chase-MW" }
+{ "name": "Chase, M. W.", "nameType": "Personal", "givenName": "M. W.", "familyName": "Chase", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST)", "affiliationIdentifier": "https://ror.org/05xpvk416", affiliationIdentifierScheme: "ROR" }]}
+
+#--------------
+# testing author2creator
+#
+include "nerdm2datacite"; author2creator
+{ "fn": "C.A. Davies", "givenName": "C.", "middleName": "A.", "familyName": "Davies", "affiliation": [{ "@type": [ "org:Organization" ], "title": "National Institute of Standards and Technology (NIST)", "@id": "grid:NIST", "subunits": ["PML"], "proxyFor": "sdpperson:Davies-CA" }]}
+{ "name": "Davies, C. A.", "nameType": "Personal", "givenName": "C. A.", "familyName": "Davies", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST), PML", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR" }]}
+
+#--------------
+# testing author2creator
+#
+include "nerdm2datacite"; author2creator
+{ "fn": "C.A. Davies", "givenName": "C.", "middleName": "A.", "affiliation": [{ "@type": [ "org:Organization" ], "title": "National Institute of Standards and Technology (NIST)", "@id": "grid:NIST", "subunits": ["PML"], "proxyFor": "sdpperson:Davies-CA" }]}
+{ "name": "C.A. Davies", "nameType": "Personal", "givenName": "C. A.", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST), PML", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR" }]}
+
+#--------------
+# testing make_titles
+#
+include "nerdm2datacite"; make_titles
+{ "title": "Star Wars" }
+[{"title": "Star Wars"} ]
+
+#--------------
+# testing make_titles
+#
+include "nerdm2datacite"; make_titles
+{ "title": "Star Wars", "subtitle": "A New Hope", "aka": "Episode IV" }
+[{"title": "Star Wars"}, {"title": "A New Hope", "titleType": "Subtitle"}, { "title": "Episode IV", "titleType": "Other"} ]
+
+#--------------
+# testing make_titles
+#
+include "nerdm2datacite"; make_titles
+{ "title": "Star Wars", "subtitle": "A New Hope" }
+[{"title": "Star Wars"}, {"title": "A New Hope", "titleType": "Subtitle"} ]
+
+#--------------
+# testing make_titles
+#
+include "nerdm2datacite"; make_titles
+{ "title": "Star Wars", "subtitle": "A New Hope", "aka": "Episode IV" }
+[{"title": "Star Wars"}, {"title": "A New Hope", "titleType": "Subtitle"}, { "title": "Episode IV", "titleType": "Other"} ]
+
+#--------------
+# testing make_titles
+#
+include "nerdm2datacite"; make_titles
+{ "title": "Star Wars", "aka": "Episode IV" }
+[{"title": "Star Wars"}, {"title": "Episode IV", "titleType": "Other"} ]
+
+#--------------
+# testing make_dates
+#
+include "nerdm2datacite"; make_dates
+{ "issued": "2002:11:23", "modified": "2020:01:04T00:00:00.0" }
+[{ "date": "2002:11:23", "dateType": "Issued" }, { "date": "2020:01:04", "dateType": "Updated" }]
+
+#--------------
+# testing make_dates
+#
+include "nerdm2datacite"; map(format_size)
+[ 64, 512, 1024, 5478, 101549, 24621984, 4417848292, 2408394136882100, 0, -1000 ]
+[ "64 bytes", "512 bytes", "1.02 kB", "5.48 kB", "101.5 kB", "24.6 MB", "4.42 GB", "2408.4 TB", "0 bytes", "-1000 bytes" ]
+
+#--------------
+# testing total_size
+#
+include "nerdm2datacite"; total_size
+[{"@type": ["nrd:DataFile"], "size": 4214}, {"@type": ["nrd:ChecksumFile"], "size": 16}, {"@type": ["nrd:DataFile"], "size": 10000}]
+"14.2 kB"
+
+#--------------
+# testing total_size:  should return an empty result
+#
+include "nerdm2datacite"; total_size
+[{"@type": ["nrd:AccessPage"]}, {"@type": ["nrd:ChecksumFile"], "size": 16}, {"@type": ["nrd:Hidden"], "size": 10000}]
+
+# Line above must be empty
+
+#--------------
+# testing count_files
+#
+include "nerdm2datacite"; count_files
+[{"@type": ["nrd:DataFile"], "size": 4214}, {"@type": ["nrd:ChecksumFile"], "size": 16}, {"@type": ["nrd:DataFile"], "size": 10000}]
+"2 files"
+
+#--------------
+# testing count_files:  should return an empty result
+#
+include "nerdm2datacite"; count_files
+[{"@type": ["nrd:AccessPage"]}, {"@type": ["nrd:ChecksumFile"], "size": 16}, {"@type": ["nrd:Hidden"], "size": 10000}]
+
+# Line above must be empty
+
+#--------------
+# testing make_formats
+#
+include "nerdm2datacite"; make_formats
+[{"@type": ["nrd:DataFile"], "mediaType": "app/json"}, {"@type": ["nrd:ChecksumFile"], "mediaType": "text/plain"}, {"@type": ["nrd:DataFile"], "mediaType": "app/json"}, {"@type": ["nrd:DataFile"], "mediaType": "text/xml"}]
+["app/json", "text/xml"]
+
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "@id": "doi:10.18434/spd0fjpek351", "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "@id": "http://doi.org/10.18434/spd0fjpek351", "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "@id": "ark:/88434/jres0-1", "location": "http://jres.nist.gov/10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "http://jres.nist.gov/10.18434/spd0fjpek351", "relatedIdentifierType": "URL", "relationType": "isPartOf" }
+
+#--------------
+# testing make_ispartof_rel:  should return an empty result
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "@id": "ark:/88434/jres0-1", "title": "Hello!"}
+
+# Line above must be empty
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ref_rel
+{ "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "http://dx.doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "References" }
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ref_rel
+{ "pid": "doi:10.18434/spd0fjpek351", "title": "Hello!"}
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "References" }
+
+#--------------
+# testing make_ispartof_rel
+#
+include "nerdm2datacite"; make_ref_rel
+{ "location": "https://doi.org/10.18434/spd0fjpek351", "title": "Hello!", "refType": "isSupplementTo" }
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isSupplementTo" }
+
+
+
