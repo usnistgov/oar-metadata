@@ -694,7 +694,7 @@
                     "description": "The institution the person was affiliated with at the time of publication",
                     "type": "array",
                     "items": {
-                        "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/Affiliation"
+                        "$ref": "#/definitions/Affiliation"
                     },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
@@ -729,13 +729,10 @@
         "Affiliation": {
             "description":  "a description of an organization that a person is a member of",
             "allOf": [
-                { "$ref": "#/definitions/ResourceReference" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/ResourceReference" },
                 {
                     "properties": {
-                        "@type": {
-                            "enum": [ "org:Organization" ]
-                        },
-                        "subunits": [
+                        "subunits": { 
                             "description": "sub-units of the main organization the that the person is a member of",
                             "notes": [
                                 "The order of the array elements should be treated as significant.  Typically (though not required), each element will reflect a more specific unit contained in unit nameed in the previous element."
@@ -747,7 +744,7 @@
                                 "prefLabel": "Sub-unit",
                                 "referenceProperty": "org:OrganizationalUnit"
                             }
-                        ]
+                        }
                     },
                     "required": [ "@type" ]
                 }
