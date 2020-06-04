@@ -4,9 +4,7 @@ Common functions and entry points for resolving a DOI to metadata
 import re, logging
 import requests
 
-default_doi_resolver = "https://doi.org/"
-
-_url_server_re = re.compile(r'^https?://[^/]+/')
+from ..utils import strip_DOI, default_doi_resolver
 
 _client_info = None
 def set_client_info(project, version, projecturl, email):
@@ -28,27 +26,6 @@ def set_client_info(project, version, projecturl, email):
         _client_info = None
     else:
         _client_info = (project, version, projecturl, email)
-
-def strip_DOI(doi, resolver=None):
-    """
-    strip off a legal prefixes from a given DOI so that it starts with the 
-    authority string (i.e. "10...")
-
-    :param str doi:       the DOI string to strip
-    :param str resolver:  a non-standard DOI resolver base URL to allow for.  It
-                          should include a trailing / or ? if these are relevent.
-    """
-    doi = doi.strip()
-    if doi.startswith("doi:"):
-        doi = doi[4:]
-    elif resolver and doi.startswith(resolver):
-        doi = doi[len(resolver):]
-    elif doi.startswith(default_doi_resolver):
-        doi = doi[len(default_doi_resolver):]
-    elif _url_server_re.match(doi):
-        doi = _url_server_re.sub('', doi)
-
-    return doi
 
 class CT(object):
     """
@@ -173,7 +150,7 @@ class DOIResolutionException(Exception):
     metadata
     """
 
-    def __init__(self, message, doi=None, resolver=None, cause=None):
+    def __init__(self, message, doi=None, resolver=None, cause=None, errdata=[]):
         """
         initialize the exception
 
@@ -182,11 +159,16 @@ class DOIResolutionException(Exception):
         :param Exception cause:  the underlying cause for the exception
         :param str resolver: the resolving service being accessed (usually)
                                in the form of a base URL
+        :param list errdata: an array of objects or strings providing more 
+                               detailed error data.  An example would be the 
+                               error objects return from a JSON-API interface
+                               (as used by the DataCite API).
         """
         super(DOIResolutionException, self).__init__(message)
         self.doi = doi
         self.resolver = resolver
         self.cause = cause
+        self.errdata = errdata
 
 class DOICommunicationError(DOIResolutionException):
     """
@@ -221,7 +203,7 @@ class DOIResolverError(DOIResolutionException):
     """
 
     def __init__(self, doi=None, resolver=None, status=0, reason=None,
-                 cause=None, message=None):
+                 cause=None, message=None, errdata=[]):
         """
         initialize the exception
 
@@ -234,6 +216,10 @@ class DOIResolverError(DOIResolutionException):
         :param Exception cause:  the underlying cause for the exception
         :param str message:  a message explaining the failure; if not provided
                                a default one will be set based on cause
+        :param list errdata: an array of objects or strings providing more 
+                               detailed error data.  An example would be the 
+                               error objects return from a JSON-API interface
+                               (as used by the DataCite API).
         """
         if not message:
             message = "Unexpected resolution response"
@@ -244,7 +230,7 @@ class DOIResolverError(DOIResolutionException):
             elif cause:
                 message += ": " + str(cause)
         
-        super(DOIResolverError, self).__init__(message, doi, resolver, cause)
+        super(DOIResolverError, self).__init__(message, doi, resolver, cause, errdata)
         self.status_code = status
         self.reason = reason
 
@@ -252,7 +238,7 @@ class DOIClientException(DOIResolutionException):
     """
     An exception during DOI resolution traceable to client input
     """
-    def __init__(self, doi, resolver=None, message=None):
+    def __init__(self, doi, resolver=None, message=None, errdata=[]):
         """
         initialize the exception
 
@@ -261,17 +247,21 @@ class DOIClientException(DOIResolutionException):
                                in the form of a base URL
         :param str message:  a message explaining the failure; if not provided
                                a default one will be set based on cause
+        :param list errdata: an array of objects or strings providing more 
+                               detailed error data.  An example would be the 
+                               error objects return from a JSON-API interface
+                               (as used by the DataCite API).
         """
         if not message:
             message = "Unknown client error during DOI resolution of " + doi
-        super(DOIClientException, self).__init__(message, doi, resolver)
+        super(DOIClientException, self).__init__(message, doi, resolver, errdata)
 
 
 class DOIDoesNotExist(DOIClientException):
     """
     An error indicating that a given DOI is unknown to the resolver
     """
-    def __init__(self, doi, resolver=None, message=None):
+    def __init__(self, doi, resolver=None, message=None, errdata=[]):
         """
         initialize the exception
 
@@ -280,16 +270,20 @@ class DOIDoesNotExist(DOIClientException):
                                in the form of a base URL
         :param str message:  a message explaining the failure; if not provided
                                a default one will be set based on cause
+        :param list errdata: an array of objects or strings providing more 
+                               detailed error data.  An example would be the 
+                               error objects return from a JSON-API interface
+                               (as used by the DataCite API).
         """
         if not message:
             message = "DOI not found: " + doi
-        super(DOIDoesNotExist, self).__init__(doi, resolver, message)
+        super(DOIDoesNotExist, self).__init__(doi, resolver, message, errdata)
 
 class DOIUnsupportedContentType(DOIClientException):
     """
     An error indicating that a given DOI is unknown to the resolver
     """
-    def __init__(self, contenttype, doi=None, resolver=None, message=None):
+    def __init__(self, contenttype, doi=None, resolver=None, message=None, errdata=[]):
         """
         initialize the exception
 
@@ -298,12 +292,16 @@ class DOIUnsupportedContentType(DOIClientException):
                                in the form of a base URL
         :param str message:  a message explaining the failure; if not provided
                                a default one will be set based on cause
+        :param list errdata: an array of objects or strings providing more 
+                               detailed error data.  An example would be the 
+                               error objects return from a JSON-API interface
+                               (as used by the DataCite API).
         """
         if not message:
             message = "Unsupported content type, " + contenttype
             if doi:
                 message += ", for doi "+doi
-        super(DOIUnsupportedContentType, self).__init__(doi, resolver, message)
+        super(DOIUnsupportedContentType, self).__init__(doi, resolver, message, errdata)
         self.content_type = contenttype
 
 

@@ -71,9 +71,9 @@ class TestDOIInfo(test.TestCase):
                  "kindly skipping doi service checks")
     def test_get_data(self):
         doi = res.DOIInfo(dcdoi)
-        data = doi._get_data("text/turtle")
+        data = doi._get_data("application/x-bibtex")
         self.assertGreater(len(data), 1)
-        self.assertTrue(data.startswith("@prefix schema: "))
+        self.assertTrue(data.startswith("@misc{https://doi.org/"))
 
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                  "kindly skipping doi service checks")
@@ -92,7 +92,7 @@ class TestDOIInfo(test.TestCase):
         self.assertTrue(isinstance(doi.data, Mapping))
         self.assertTrue(isinstance(doi._data, Mapping))
         self.assertIn('type', doi.data)
-        self.assertEqual(doi.data['DOI'], dcdoi)
+        self.assertEqual(doi.data['DOI'].upper(), dcdoi.upper())
         
     def test_native(self):
         doi = res.DOIInfo(dcdoi)
