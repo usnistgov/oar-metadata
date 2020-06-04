@@ -93,7 +93,7 @@ class TestDataCiteDOIClient(test.TestCase):
         data = self.cli.reserve("goober")
         self.assertEqual(data['data']['id'], "10.88434/goober")
         self.assertEqual(data['data']['attributes']['doi'], "10.88434/goober")
-        self.assertEqual(data['data']['attributes']['status'], "draft")
+        self.assertEqual(data['data']['attributes']['state'], "draft")
         self.assertEquals(self.cli.doi_state("10.88434/goober"), "draft")
         self.assertTrue(self.cli.doi_exists("10.88434/goober"))
         self.assertTrue(self.cli.doi_exists("goober", "10.88434"))
@@ -130,7 +130,7 @@ class TestDataCiteDOIClient(test.TestCase):
         self.assertEqual(data['data']['attributes']['doi'], "20.88434/goober")
         self.assertEqual(data['data']['attributes']['publicationYear'], 2020)
         self.assertEqual(data['data']['attributes']['titles'], [{"title":"Junk"}])
-        self.assertEqual(data['data']['attributes']['status'], "draft")
+        self.assertEqual(data['data']['attributes']['state'], "draft")
         
         self.cli.delete_reservation("goober", "20.88434")
         self.assertTrue(not self.cli.doi_exists("20.88434/goober"))
@@ -157,7 +157,7 @@ class TestDataCiteDOIClient(test.TestCase):
         self.assertEqual(data['data']['attributes']['doi'], "10.88434/goob")
         self.assertEqual(data['data']['attributes']['publicationYear'], 2020)
         self.assertEqual(data['data']['attributes']['titles'], [{"title":"Junk"}])
-        self.assertEqual(data['data']['attributes']['status'], "draft")
+        self.assertEqual(data['data']['attributes']['state'], "draft")
 
         # attempt to publish it with insufficient metadata
         atts = {
@@ -165,7 +165,7 @@ class TestDataCiteDOIClient(test.TestCase):
             "types": {}
         }
         data = self.cli.publish("goob", atts)
-        self.assertEqual(data['data']['attributes']['status'], "draft")
+        self.assertEqual(data['data']['attributes']['state'], "draft")
 
         # provided all necessary metadata and publish
         atts = {
@@ -177,11 +177,11 @@ class TestDataCiteDOIClient(test.TestCase):
             "types": { "resourceType": "Dataset", "schemaOrg": "Dataset"}
         }
         data = self.cli.publish("goob", atts)
-        self.assertEqual(data['data']['attributes']['status'], "findable")
+        self.assertEqual(data['data']['attributes']['state'], "findable")
 
         # update the metadata after publication
         data = self.cli.update({ "publicationYear": 2021 }, "goob")
-        self.assertEqual(data['data']['attributes']['status'], "findable")
+        self.assertEqual(data['data']['attributes']['state'], "findable")
         self.assertEqual(data['data']['attributes']['publicationYear'], 2021)
 
         # attempt to DELETE a published DOI

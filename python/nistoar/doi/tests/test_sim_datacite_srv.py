@@ -34,7 +34,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.add_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, hello")
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertFalse("author" in saved)
 
         self.assertTrue(id in self.repo.ids)
@@ -42,7 +42,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.describe(id)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, hello")
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertFalse("author" in saved)
 
         data["author"] = "Gurn Cranston"
@@ -63,7 +63,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.add_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, hello")
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertFalse("author" in saved)
 
         self.assertTrue(id in self.repo.ids)
@@ -77,7 +77,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.update_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, okay")
-        self.assertEqual(saved['status'], "registered")
+        self.assertEqual(saved['state'], "registered")
         self.assertTrue("author" in saved)
         self.assertEqual(saved['author'], "Gurn Cranston")
 
@@ -88,7 +88,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.update_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, okay")
-        self.assertEqual(saved['status'], "findable")
+        self.assertEqual(saved['state'], "findable")
         self.assertEqual(saved['author'], "Gurn Cranston")
 
     def test_delete(self):
@@ -101,7 +101,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.add_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, hello")
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertIn(id, self.repo.ids)
 
         self.repo.delete(id)
@@ -111,7 +111,7 @@ class TestSimIDRepo(test.TestCase):
         saved = self.repo.add_id(id, data)
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['title'], "Oh, hello")
-        self.assertEqual(saved['status'], "findable")
+        self.assertEqual(saved['state'], "findable")
         self.assertIn(id, self.repo.ids)
 
         with self.assertRaises(ValueError):
@@ -391,7 +391,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         
         req = {
             'REQUEST_METHOD': 'GET',
@@ -454,7 +454,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertEqual(saved['title'], "Peter Rabbit")
         self.assertEqual(saved['author'], "Stowe, H. B.")
 
@@ -478,7 +478,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
         self.assertEqual(saved['title'], "Peter Rabbit")
         self.assertEqual(saved['author'], "Potter, Beatrix")
         self.assertNotIn('publicationYear', saved)
@@ -506,7 +506,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "findable")
+        self.assertEqual(saved['state'], "findable")
         self.assertEqual(saved['title'], "Peter Rabbit")
         self.assertEqual(saved['titles'], [{"title": "Peter Rabbit"}])
         self.assertEqual(saved['author'], "Potter, Beatrix")
@@ -529,7 +529,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "findable")
+        self.assertEqual(saved['state'], "findable")
         self.assertEqual(saved['title'], "Peter Rabbit")
         self.assertEqual(saved['publicationYear'], 1902)
         self.assertEqual(saved['size'], "modest")
@@ -574,7 +574,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
 
         # delete successfully
         req = {
@@ -613,7 +613,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "draft")
+        self.assertEqual(saved['state'], "draft")
 
         # provide sufficient metadata
         inp['data']['attributes'].update({
@@ -635,7 +635,7 @@ class TestSimIDService(test.TestCase):
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
-        self.assertEqual(saved['status'], "findable")
+        self.assertEqual(saved['state'], "findable")
 
 
         # fail to delete published record

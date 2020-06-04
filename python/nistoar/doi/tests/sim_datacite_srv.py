@@ -31,11 +31,11 @@ class SimIDRepo(object):
 
         ev = md.get('event', 'draft')
         if ev == 'draft':
-            md['status'] = "draft"
+            md['state'] = "draft"
         elif ev == "publish":
-            md['status'] = "findable"
+            md['state'] = "findable"
         elif ev == "register" or ev == "hide":
-            md['status'] = "registered"
+            md['state'] = "registered"
         if 'event' in md:
             del md['event']
 
@@ -49,9 +49,9 @@ class SimIDRepo(object):
 
         if 'event' in md:
             if md['event'] == "publish":
-                md['status'] = "findable"
+                md['state'] = "findable"
             elif md['event'] == "register" or md['event'] == "hide":
-                md['status'] = "registered"
+                md['state'] = "registered"
             del md['event']
 
         self.ids[id].update(md)
@@ -63,8 +63,8 @@ class SimIDRepo(object):
 
         out = deepcopy(self.ids[id])
         out['doi'] = id
-        if 'status' not in out:
-            out['status'] = "draft"
+        if 'state' not in out:
+            out['state'] = "draft"
 
         return out
 
@@ -72,7 +72,7 @@ class SimIDRepo(object):
         if id not in self.ids:
             raise ValueError("ID not found: "+id)
 
-        if 'status' in self.ids[id] and self.ids[id]['status'] != "draft":
+        if 'state' in self.ids[id] and self.ids[id]['state'] != "draft":
             raise ValueError("Record not in draft state")
 
         del self.ids[id]
@@ -105,7 +105,7 @@ class SimHandler(object):
 
         self._hdr = Headers([])
         self._code = 0
-        self._msg = "unknown status"
+        self._msg = "unknown state"
 
     def send_error(self, code, message, errtitle=None, errdesc={}):
         edata = None
@@ -259,17 +259,17 @@ class SimHandler(object):
         except KeyError as ex:
             return self.send_error(400, "Bad Input: Missing property",
                                    {"detail": str(ex)})
-        status = "draft"
+        state = "draft"
         errors = None
         if doi in self.repo.ids:
-            status = self.repo.ids[doi]['status']
+            state = self.repo.ids[doi]['state']
             out = self.repo.update_id(doi, doc['data']['attributes'])
             resp = {"code": 200, "message": "Updated"}
         else:
             out = self.repo.add_id(doi, doc['data']['attributes'])
             resp = {"code": 201, "message": "Created"}
 
-        if event == "publish" and status != "findable":
+        if event == "publish" and state != "findable":
             missing = []
             for prop in "url titles publisher publicationYear creators types".split():
                 if prop not in out or not out[prop]:
@@ -277,8 +277,8 @@ class SimHandler(object):
                 elif prop.endswith('s') and len(out[prop]) < 1:
                     missing.append(prop)
             if missing:
-                self.repo.ids[doi]['status'] = status
-                out['status'] = status
+                self.repo.ids[doi]['state'] = state
+                out['state'] = state
                 errors = [{ "error": {
                     "title": "Cannot publish due to missing metadata",
                     "detail": "Missing properties: "+str(missing)
@@ -332,7 +332,7 @@ class SimHandler(object):
         doi = path
         errors = None
         try:
-            status = self.repo.ids[doi].get('status','draft')
+            state = self.repo.ids[doi].get('state','draft')
             attrs = doc['data']['attributes']
             event = attrs.get('event')
             out = self.repo.update_id(path, attrs)
@@ -342,7 +342,7 @@ class SimHandler(object):
         except ValueError as ex:
             return self.send_error(404, "ID not found", errdesc={"detail": path})
 
-        if event == "publish" and status != "findable":
+        if event == "publish" and state != "findable":
             missing = []
             for prop in "url titles publisher publicationYear creators types".split():
                 if prop not in out or not out[prop]:
@@ -350,8 +350,8 @@ class SimHandler(object):
                 elif prop.endswith('s') and len(out[prop]) < 1:
                     missing.append(prop)
             if missing:
-                self.repo.ids[doi]['status'] = status
-                out['status'] = status
+                self.repo.ids[doi]['state'] = state
+                out['state'] = state
                 errors = [{ "error": {
                     "title": "Cannot publish due to missing metadata",
                     "detail": "Missing properties: "+str(missing)

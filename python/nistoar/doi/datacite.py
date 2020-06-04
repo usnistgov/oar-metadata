@@ -129,7 +129,7 @@ class DataCiteDOIClient(object):
         """
         try:
             desc = self.describe(doipath, prefix)
-            return desc['data']['attributes']['status']
+            return desc['data']['attributes']['state']
         except DOIDoesNotExist as ex:
             return STATE_NONEXISTENT
         except KeyError as ex:
@@ -255,10 +255,10 @@ class DataCiteDOIClient(object):
             raise ValueError("delete_reservation(): Not a recognized prefix: "+prefix)
 
         doipath = "/".join([prefix, doipath])
-        status = self.doi_state(doipath)
-        if status == STATE_NONEXISTENT:
+        state = self.doi_state(doipath)
+        if state == STATE_NONEXISTENT:
             raise DOIDoesNotExist(doipath, self.ep)
-        elif status != STATE_DRAFT:
+        elif state != STATE_DRAFT:
             raise DOIClientException(doipath, self.ep, "DOI not in draft state")
 
         try: 
@@ -305,11 +305,11 @@ class DataCiteDOIClient(object):
         prefix = self._ensure_prefix(prefix)
         if doipath:
             doi = prefix+'/'+doipath
-            status = self.doi_state(doipath, prefix)
-            if status == STATE_NONEXISTENT:
+            state = self.doi_state(doipath, prefix)
+            if state == STATE_NONEXISTENT:
                 meth = "POST"
                 url = self.ep
-            elif status != STATE_DRAFT:
+            elif state != STATE_DRAFT:
                 raise DOIClientException(doi,  message=doi+": not in draft state")
             else:
                 meth = "PUT"
