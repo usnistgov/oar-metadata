@@ -9,6 +9,7 @@ DataCite services.
 import re
 from collections import OrderedDict, Mapping
 from copy import deepcopy
+from StringIO import StringIO
 import requests
 
 from .utils import strip_DOI, is_DOI
@@ -23,15 +24,16 @@ DOI_STATE = [ STATE_NONEXISTENT, STATE_DRAFT, STATE_REGISTERED, STATE_FINDABLE ]
 
 _doi_pfx = re.compile("\d+\.\d+/")
 
+_pub_doi_resolver_re = re.compile('^https?://(\w+\.)*doi\.org/')
+_doi_re = re.compile('^\d{2,}\.\d+/')
+JSONAPI_MT = "application/vnd.api+json"
+
 class DataCiteDOIClient(object):
     """
-    a client interface to the DataCite DOI services.  With this client, users 
-    can request to reserve, create, and update DOIs.
+    a client to the DataCite DOI REST service for managing DOIs
     """
 
-    _env = OrderedDict([("data", OrderedDict([("type", "dois")]))])
-
-    def __init__(self, endpoint, credentials, prefixes=[]):
+    def __init__(self, endpoint, credentials, prefixes=[], resdata={}):
         """
         initialize the client.  
         :param str endpoint:    the base URL for the datacite service
@@ -48,15 +50,25 @@ class DataCiteDOIClient(object):
                                   is thrown.  If no prefixes are provided here, requests
                                   must include a prefix (no client-side prefix 
                                   verification, of course, is done in this case).  
+        :param dict resdata:    an object attributes that should be submitted by 
+                                  default when reserving a DOI
         """
-        self.ep = endpoint
-        if not self.ep.endswith('/'):
-            self.ep += '/'
+        self._ep = endpoint
+        if not self._ep.endswith('/'):
+            self._ep += '/'
         self.creds = credentials
 
         self.prefs = []
         if prefixes is not None and isinstance(prefixes, (list, tuple)):
             self.prefs = list(prefixes)
+
+        self._resdata = {}
+        if resdata:
+            self._resdata = deepcopy(resdata)
+        for prop in ['doi', 'event']:
+            if prop in self._resdata:
+                del self._resdata[prop]
+        
 
     def supports_prefix(self, prefix):
         """
@@ -78,7 +90,7 @@ class DataCiteDOIClient(object):
         else:
             return None
 
-    def doi_exists(self, doipath, prefix=None):
+    def exists(self, doipath, prefix=None):
         """
         return True if the given DOI path exists as a registered (or reserved)
         DOI.  
@@ -96,28 +108,74 @@ class DataCiteDOIClient(object):
         if prefix:
             doipath = "/".join([prefix, doipath])
 
-        try: 
-            resp = requests.head(self.ep+'/'+doipath, auth=self.creds)
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(doipath, self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(doipath, self.ep, cause=ex)
-        
+        resp = self._request("HEAD", self._ep+'/'+doipath, doipath)
+
         if resp.status_code >= 200 and resp.status_code < 300:
             return True
         elif resp.status_code >= 400 and resp.status_code < 500:
             return False
         else:
-            edata = self._getedata(resp)
-            raise DOIResolverError(doipath, self.ep, resp.status_code,
-                                   "Unexpected resolve response: " +
-                                   self._mkemsg(resp, edata), edata)
+            self._unexpected_resolver_err(doipath, resp)
 
-    def doi_state(self, doipath, prefix=None):
+    def _request(self, meth, url, doipath=None, data=None):
+        hdrs={"Accept": JSONAPI_MT}
+        if data:
+            hdrs["Content-type"] = JSONAPI_MT
+
+        try: 
+            resp = requests.request(meth, url, headers=hdrs, auth=self.creds, json=data)
+        except (requests.ConnectionError, requests.HTTPError, requests.Timeout) as ex:
+            raise DOICommunicationError(doipath, self._ep, ex)
+        except requests.RequestException as ex:
+            raise DOIResolverError(doipath, self._ep, cause=ex)
+
+        if resp.status_code == 401:
+            self._bad_credentials(doipath, resp)
+
+        return resp
+
+    def _to_json(self, resp, doi=None):
+        try:
+            return resp.json()   # Use OrderedDict?
+        except ValueError as ex:
+            raise DOIResolverError(doi, self._ep, resp.status_code,
+                                   message="Error parsing response as JSON: "+str(ex))
+        
+    def _unexpected_resolver_err(self, doipath, resp, resj=None,
+                                 title="Unexpected resolver error"):
+        if resj is None:
+            try:
+                resj = resp.json()
+            except ValueError as ex:
+                resj = {'errors': [{'title': resp.reason, 'detail': resp.status_code}]}
+
+        errdata = JAErr(resj.get('errors', []), title)._()
+        raise DOIResolverError(doipath, self._ep, resp.status_code, **errdata)
+    
+    def _unexpected_client_err(self, doipath, resp, resj=None,
+                               title="Unexpected client error"):
+        if resj is None:
+            try:
+                resj = resp.json()
+            except ValueError as ex:
+                resj = {'errors': [{'title': resp.reason, 'detail': resp.status_code}]}
+
+        errdata = JAErr(resj.get('errors', []), title)._()
+        raise DOIClientException(doipath, self._ep, **errdata)
+    
+    def _bad_credentials(self, doipath, resp, resj=None):
+        if resj is None:
+            try:
+                resj = resp.json()
+            except ValueError as ex:
+                resj = {}
+
+        errdata = JAErr(resj['errors'], "Bad Credentials")._()
+        raise DOIClientException(doipath, self._ep, **errdata)
+    
+    def lookup(self, doipath, prefix=None, relax=False):
         """
-        return True if the given DOI path exists as a registered (or reserved)
-        DOI.  
+        retrieve the information describing the given DOI
         :param str doipath:  the DOI to look for, which can include the prefix 
                              or be just the value appearing (after the slash)
                              after the prefix.  
@@ -126,348 +184,479 @@ class DataCiteDOIClient(object):
                              prefix will be assumed.  No client-side checks 
                              are made to ensure the prefix is from the authorized
                              list.  
+        :param bool relax:   if False (default), an exception is raised if the 
+                             server claims the DOI does not exist; otherwise,
+                             this fact will be ignored, and an "empty" DataCiteDOI 
+                             instance representing the DOI will be returned
+        :rtype DataCiteDOI:  an object for updating (or publishing) the DOI
         """
-        try:
-            desc = self.describe(doipath, prefix)
-            return desc['data']['attributes']['state']
-        except DOIDoesNotExist as ex:
-            return STATE_NONEXISTENT
-        except KeyError as ex:
-            raise DOIResolverExcption(doipath, self.ep,
-                              message="Unexpected response: missing property: "+str(ex))
-
-    def _ensure_prefix(self, prefix):
-        if self.prefs:
-            if not prefix:
+        if not prefix:
+            indoi = _doi_pfx.search(doipath)
+            if indoi:
+                prefix = indoi.group(0).strip('/')
+                doipath = doipath[len(indoi.group(0)):]
+            else:
                 prefix = self.default_prefix
-            elif prefix not in self.prefs:
-                raise ValueError("reserve(): Not a recognized prefix: "+prefix)
-        else:
-            raise ValueError("reserve(): missing prefix; no default defined")
+        doipath = prefix + '/' + doipath
+        ro = prefix not in self.prefs
 
-        return prefix
+        resp = self._request("GET", self._ep+'/'+doipath, doipath)
+        resj = self._to_json(resp, doipath)
+
+        if resp.status_code == 404:
+            # does not exist yet
+            if relax:
+                # prep an empty record
+                resj = OrderedDict([
+                    ('data', OrderedDict([
+                        ('id', doipath),
+                        ('attributes', OrderedDict([
+                            ('prefix', prefix),
+                            ('doi', doipath),
+                            ('state', '')
+                        ]))
+                    ]))
+                ])
+            else:
+                raise DOIDoesNotExist(doipath, self._ep)
+
+        if resp.status_code == 200 or resp.status_code == 404:
+            try:
+                return DataCiteDOI(doipath, self, resj['data'], ro)
+            except KeyError as ex:
+                self._unexected_resolver_err(doipath, resp, resj,
+                                 "Unexpected JSON data: missing %s property" % str(ex))
+
+        elif resp.status_code >= 400 and resp.status_code < 404:
+            self._unexpected_client_err(doipath, resp, resj)
+
+        else:
+            self._unexected_resolver_err(doipath, resp, resj)
+            
+
+    _envelope = OrderedDict([("data", OrderedDict([("type", "dois")]))])
 
     def _new_req(self, data=None):
-        out = deepcopy(self._env)
+        out = deepcopy(self._envelope)
         if data is not None:
             out['data']['attributes'] = data
         return out
 
-    def _headers(self, withct=False):
-        hdrs = { "Accept": "application/vnd.api+json" }
-        if withct:
-            hdrs['Content-type'] = "application/vnd.api+json" 
-        return hdrs
+    def create(self, prefix=None):
+        """
+        create a new draft DOI with a random path chosen by DataCite
+        :param str  prefix:  the prefix to create the DOI under.  If 
+                              not provided, the default will be assumed.  If provided,
+                              it will be check to ensure it is among those registered
+                              as allowed at construction time of this client.
+        """
+        if not prefix:
+            prefix = self.default_prefix
+        elif self.prefs and prefix not in self.prefs:
+            raise ValueError("Not a recognized prefix: "+prefix)
 
-    def _getedata(self, resp):
+        resj = self._create_doi({'prefix': prefix})
+
         try:
-            return resp.json()
-        except Exception as ex:
-            return [{"error": {
-                "title":  resp.reason,
-                "detail": "(Note: Bad JSON-API error response)"
-            }}]
-        
-    def _mkemsg(self, resp, edata=None):
-        if edata is None:
-            edata = self._getdata(resp)
-        out = StringIO()
-        if len(edata) == 0:
-            out.write(resp.reason)
-        else:
-            out.write(edata[0]['title'])
-            if 'detail' in edata[0] and edata[0]['detail']:
-                out.write(": ")
-                out.write(edata[0]['detail'])
-        if len(edata) > 1:
-            out.write(" (plus other errors)")
-            
+            return DataCiteDOI(resj['data']['attributes']['doi'], self, resj['data'])
+        except KeyError as ex:
+            self._unexected_resolver_err(doipath, resp, resj,
+                        "Unexpected JSON data returned: missing %s property" % str(ex))
+
+    def _create_doi(self, data):
+        dta = deepcopy(self._resdata)
+        dta.update(data)
+        req = self._new_req(dta)
+
+        resp = self._request("POST", self._ep, dta.get('doi', dta.get('prefix')), req)
+
+        if resp.status_code == 409:
+            raise DOIStateError(dta.get('doi', '??'), self._ep,
+      message="Unable to create doi:{0}: already exists: ".format(dta.get('doi', '??')))
+
+        resj = self._to_json(resp, dta.get('doi', dta.get('prefix')))
+
+        if resp.status_code >= 400 and resp.status_code < 500:
+            self._unexpected_client_err(dta.get('doi','??'), resp, resj)
+
+        elif resp.status_code < 200 or resp.status_code >= 300:
+            self._unexpected_resolver_err(dta.get('doi','??'), resp, resj)
+
+        return resj
 
     def reserve(self, doipath, prefix=None, relax=False):
         """
         create a reservation for a DOI with a given path.
-        :param str doipath:    the suffix part of the DOI desired to be reserved.  Set
-                                to None to request that the service pick the suffix.
-        :param str  prefix:    the prefix part of the DOI desired to be reserved.  If 
-                                not provided, the default will be assumed.  If provided,
-                                it will be check to ensure it is among those registered
-                                as allowed at construction time of this client.
-        :param bool  relax:    if False (default), an exception is raised if the 
-                                server claims the DOI already exists; otherwise,
-                                this fact will be ignored.  
-        :raise Exception:  if the requested path already exists or is already reserved
-        """
-        prefix = self._ensure_prefix(prefix)
-        if doipath:
-            data = {"doi": prefix+'/'+doipath}
-
-            if self.doi_exists(data['doi']):
-                if not relax:
-                    raise DOIClientException(data['doi'],
-                                             message="DOI already exists: "+data['doi'])
-                return
-        else:
-            data = {"prefix": prefix}
-
-        req = self._new_req(data)
-        try:
-            resp = requests.post(self.ep, auth=self.creds, 
-                                 headers=self._headers(True), json=req)
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(data['doi'], self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(data['doi'], self.ep, cause=ex)
-        
-        if resp.status_code == 409:
-            raise DOIClientException(data['doi'], "Unable to reserve %s: already exists"
-                                     % data['doi'])
-        elif resp.status_code < 200 or resp.status_code >= 300:
-            edata = self._getedata(resp)
-            raise DOIResolverError(data['doi'], self.ep, resp.status_code,
-                                   "Unexpected reserve response: " +
-                                   self._mkemsg(resp,edata))
-
-        try:
-            return resp.json()
-        except (ValueError, TypeError) as ex:
-            raise DOIResolverError(data['doi'], self.ep, resp.status_code,resp.reason,ex,
-                                   "reserve(): response not parseable as JSON: "+str(ex))
-
-    def delete_reservation(self, doipath, prefix=None):
-        """
-        return True if the given DOI path exists as a registered (or reserved)
-        DOI.  
         :param str doipath:  the DOI to look for, which can include the prefix 
-                             or be just the value appearing (after the slash)
-                             after the prefix.  
-        :param str prefix:   the prefix part of the DOI.  If not provided--
-                             either here or as part of doipath--the default
-                             prefix will be assumed.  
+                              or be just the value appearing (after the slash)
+                              after the prefix.  
+        :param str  prefix:  the prefix part of the DOI desired to be reserved.  If 
+                              not provided, the default will be assumed.  If provided,
+                              it will be check to ensure it is among those registered
+                              as allowed at construction time of this client.
+        :param bool  relax:  if False (default), an exception is raised if the 
+                              server claims the DOI already exists; otherwise,
+                              this fact will be ignored.  
+        :raise Exception:  if the requested path already exists or is already reserved
+        :rtype DataCiteDOI:  an object for updating and publishing the reserved DOI
         """
-        m = _doi_pfx.search(doipath)
-        if m:
-            prefix = m.group().strip('/')
-            doipath = doipath[len(prefix)+1:]
-        if not prefix:
-            prefix = self.default_prefix
-        if self.prefs and prefix not in self.prefs:
-            raise ValueError("delete_reservation(): Not a recognized prefix: "+prefix)
+        if prefix:
+            doipath = prefix+'/'+doipath
+        else:
+            indoi = _doi_pfx.search(doipath)
+            if indoi:
+                prefix = indoi.group(0).strip('/')
+                doipath = doipath[len(indoi.group(0)):]
+            else:
+                prefix = self.default_prefix
 
-        doipath = "/".join([prefix, doipath])
-        state = self.doi_state(doipath)
-        if state == STATE_NONEXISTENT:
-            raise DOIDoesNotExist(doipath, self.ep)
-        elif state != STATE_DRAFT:
-            raise DOIClientException(doipath, self.ep, "DOI not in draft state")
+        if prefix not in self.prefs:
+            raise ValueError("Not a recognized prefix: "+prefix)
 
-        try: 
-            resp = requests.delete(self.ep+'/'+doipath, auth=self.creds)
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(doipath, self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(doipath, self.ep, cause=ex)
+        out = self.lookup(doipath, relax=True)
+        if out.exists:
+            if not relax:
+                msg = "doi:%s already registered/published" 
+                if out.state == STATE_DRAFT:
+                    msg = "doi:%s already reserved"
+                raise DOIStateException(doipath, self._ep, out.state, msg % doipath)
+
+        else:
+            out.reserve()
+
+        return out
+
+        
+
+class DOIStateError(DOIClientException):
+    """
+    An exception indicating that that a DOI is not in the correct state for the 
+    requested operation.  
+    """
+    def __init__(self, doi, resolver=None, state=None, message=None, errdata=None):
+        if not message:
+            message = "doi:%s is not in correct state for operation" % doi
+        super(DOIStateError, self).__init__(doi, resolver, message, errdata)
+        self.state = state
+
+class JSONAPIError(object):
+    """
+    a container for error data returned from a JSONAPI-compliant service
+    """
+    def __init__(self, edata, defmsg=None, code=0):
+        if edata is not None and not isinstance(edata, list):
+            raise TypeError("error data is not a list: "+str(type(edata)))
+        self.edata = edata
+        self.defmsg = defmsg
+        self.code = code
+        if not edata:
+            if defmsg:
+                self.edata = [ { "title": defmsg } ]
+            else:
+                self.edata = [ { "title": "Unknown error" } ]
+
+    def message(self):
+        out = self._format_error(self.edata[0])
+        if len(self.edata) > 1:
+            out += " (plus other errors)"
+        return out
+
+    def _format_error(self, error):
+        out = StringIO()
+        if 'title' in error:
+            out.write(error['title'])
+        else:
+            out.write(error.get('source','(data)'))
+        if 'detail' in error and error['detail']:
+            out.write(": ")
+            out.write(error['detail'])
+        return out.getvalue()
+
+    def explain(self):
+        out = StringIO()
+        out.write("DOI service error")
+        if self.defmsg:
+            out.write(": ")
+            out.write(self.defmsg)
+            code = self.edata[0].get('status', self.code)
+            if code:
+                out.write(" ({0})".format(code))
+        if len(self.edata) > 1:
+            out.write("\nDetails:")
+        for err in self.edata:
+            out.write("\n  ")
+            out.write(self._format_error(err))
+        return out.getvalue()
+
+    def _(self):
+        return {
+            'message': self.message(),
+            'errdata': self
+        }
+
+JAErr = JSONAPIError
+
+
+class DataCiteDOI(object):
+    """
+    a description of a DataCite DOI and its registration status.  
+    """
+
+    def __init__(self, doi, reslvr, data=None, readonly=False, init=False):
+        """
+        initialize the instance.  
+        :param str    doi:  the DOI being described.  
+        :param str    reslvr:  the service client instance to use to update this DOI's 
+                                 metadata with DataCite 
+        :param dict     data:  the data object that provides metadata describing this 
+                                 DOI; if None, default data will be used (see also
+                                 init parameter)
+        :param bool readonly:  if True, a call to update() and publish() will 
+                                 raise an exception
+        :param bool     init:  if True, retrieve an updated description from the DataCite
+                                 service.  This would typically be used when data=None
+                                 to initialize the data.  
+        """
+        self._doi = _pub_doi_resolver_re.sub('', doi)
+        if not _doi_re.search(self._doi):
+            raise ValueError("Not a DOI: "+self._doi)
+        self._reslvr = reslvr
+        self._data = data
+        self._ro = readonly
+                          
+        if init:
+            self.refresh()
+
+    def refresh(self):
+        doid = self._reslvr.lookup(self.doi)
+        self._data = doid._data
+
+    @property
+    def doi(self):
+        """
+        the DOI string (i.e. the prefix and suffix concatonated but without the
+        resolution URL base)
+        """
+        return self._doi
+
+    @property
+    def prefix(self):
+        """the prefix for this DOI"""
+        return self.doi.split('/', 1)[0]
+            
+    @property
+    def state(self):
+        """
+        the current state in the DataCite database
+        """
+        return self.attrs.get('state', '')
+
+    @property
+    def exists(self):
+        """
+        True if the DOI has been reserved or published in the DataCite server.
+        """
+        return bool(self.state)
+
+    @property
+    def is_readonly(self):
+        """True if this DOI cannot be updated (via this object)"""
+        return self._ro
+
+    def _get_prop(self, prop):
+        if not self._data:
+            self.refresh()
+        return self._data.get(prop, {})
+
+    @property
+    def attrs(self):
+        """
+        the current attributes object (since the last refresh()) describing 
+        the object identified by the DOI.
+        """
+        return self._get_prop('attributes')
+
+    @property
+    def links(self):
+        return self._get_prop('links')
+
+    @property
+    def relationships(self):
+        """
+        the current links object (since the last refresh()) for accessing
+        related information
+        """
+        return self._get_prop('relationships')
+
+    @property
+    def meta(self):
+        return self._get_prop('meta')
+
+    def reserve(self, attrs=None):
+        """
+        create this DOI in a draft state.
+        :param dict attrs:   an initial set of DOI attributes to intialize the record
+                             with.  If provided, it will be merged with the default
+                             attribute data set in the service client
+        """
+        if self.state:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                "doi:%s already exists" % self.doi)
+        if self.attrs.get('prefix','') not in self._reslvr.prefs:
+            raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
+                                "%s: No authority to reserve with this prefix" %
+                                self.attrs.get('prefix','(prefix)'))
+        if self.is_readonly:
+            raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
+                                "doi:%s read-only; cannot reserve" % self.doi)
+
+        if attrs is None:
+            attrs = {}
+        else:
+            attrs = deepcopy(attrs)
+        if 'event' in attrs:
+            del attrs[prop]
+        attrs['doi'] = self.doi
+
+        resj = self._reslvr._create_doi(attrs)
+        try:
+            self._data = resj['data']
+        except KeyError as ex:
+            self._unexected_resolver_err(doipath, resp, resj,
+                        "Unexpected JSON data returned: missing %s property" % str(ex))
+
+    def update(self, attrs):
+        """
+        update the attributes that describe the object described by this identifier.
+        :param dict attrs:  a dictionary with properties from a DataCite (dois) 
+                                attributes object. This object should not include
+                                the doi or event properties (if included, they will
+                                be filtered out).
+        """
+        if not self.state:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                "doi:%s has not been created yet" % self.doi)
+        if self.is_readonly:
+            raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
+                                "doi:%s read-only; cannot update" % self.doi)
+
+        attrs = deepcopy(attrs)
+        for prop in ['doi', 'event']:
+            if prop in attrs:
+                del attrs[prop]
+
+        req = self._reslvr._new_req(attrs)
+        resp = self._reslvr._request("PUT", self._reslvr._ep+'/'+self.doi, self.doi, req)
+        resj = self._reslvr._to_json(resp, self.doi)
+
+        if resp.status_code >= 400 and resp.status_code < 500:
+            self._unexpected_client_err(self.doi, resp, resj)
+
+        elif resp.status_code < 200 or resp.status_code >= 300:
+            self._unexpected_resolver_err(self.doi, resp, resj)
+
+        try:
+            self._data = resj['data']
+        except KeyError as ex:
+            self._unexected_resolver_err(doipath, resp, resj,
+                        "Unexpected JSON data returned: missing %s property" % str(ex))
+
+    def publish(self, attrs=None):
+        """
+        create this DOI in a draft state.
+        :param dict attrs:   an initial set of DOI attributes to intialize the record
+                             with.  If not provided, the attributes will not be changed.
+        :raises DOIStateError: if the DOI cannot be published for any of the following
+                             reasons: the DOI is already published, the object is 
+                             readonly, or their is not sufficient metadata set yet.
+        """
+        if self.state == STATE_FINDABLE:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                "doi:%s has already been published" % self.doi)
+        if self.is_readonly:
+            raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
+                                "doi:%s read-only; cannot update" % self.doi)
+
+        if self.state == STATE_NONEXISTENT:
+            defattrs = deepcopy(self._reslvr._resdata)
+            if attrs:
+                defattrs.update(attrs)
+            attrs = defattrs
+        elif attrs:
+            attrs = deepcopy(attrs)
+        else:
+            attrs = OrderedDict()
+
+        attrs['event'] = "publish"
+        if self.state == STATE_NONEXISTENT:
+            attrs['doi'] = self.doi
+        elif 'doi' in self.doi:
+            del attrs['doi']
+
+        # make sure we have all the metadata we need to publish
+        full = deepcopy(self.attrs)
+        full.update(attrs)
+        missing = []
+        for prop in "url titles publisher publicationYear creators types".split():
+            if prop not in full:
+                missing.append(prop)
+            elif prop.endswith('s') and len(full[prop]) < 1:
+                missing.append(prop)
+        if missing:
+            raise DOIStateError(self.doi, self._reslvr._ep,
+                   message="Insufficient metadata to publish: missing "+str(missing))
+
+        # now send request to server
+        req = self._reslvr._new_req(attrs)
+        if self.state == STATE_DRAFT:
+            # publishing draft (or registered) DOI
+            resp = self._reslvr._request("PUT", self._reslvr._ep+'/'+self.doi,
+                                         self.doi, req)
+        else:
+            # creating direct to published state
+            resp = self._reslvr._request("POST", self._reslvr._ep, self.doi, req)
+        resj = self._reslvr._to_json(resp, self.doi)
+
+        if resp.status_code == 429:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                JAErr(resp.get('errors',[]),
+                                      "Insufficient metadata to publish")._())
+        elif resp.status_code >= 400 and resp.status_code < 500:
+            self._unexpected_client_err(self.doi, resp, resj)
+
+        elif resp.status_code < 200 or resp.status_code >= 300:
+            self._unexpected_resolver_err(self.doi, resp, resj)
+
+        try:
+            self._data = resj['data']
+        except KeyError as ex:
+            self._unexected_resolver_err(doipath, resp, resj,
+                        "Unexpected JSON data returned: missing %s property" % str(ex))
+
+    def delete(self, relax=False):
+        if not self.state:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                "doi:%s has not been reserved yet." % self.doi)
+        if self.state != STATE_DRAFT:
+            raise DOIStateError(self.doi, self._reslvr._ep, self.state,
+                                "doi:%s is not in draft state." % self.doi)
+        if self.is_readonly:
+            raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
+                                "doi:%s read-only; cannot delete" % self.doi)
+                                    
+        resp = self._reslvr._request("DELETE", self._reslvr._ep+'/'+self.doi, self.doi)
 
         if resp.status_code == 404:
-            raise DOIDoesNotExist(doipath, self.ep)
-        elif resp.status_code == 403:
-            raise DOIClientException(doipath, self.ep, "DOI not in draft state")
-        elif resp.status_code < 200 or resp.status_code >= 300:
-            edata = self._getedata(resp)
-            raise DOIResolverError(doipath, self.ep, resp.status_code, resp.reason,
-                                   message="Unexpected delete result: " +
-                                           self._mkemsg(resp, edata), errdata=edata)
-            
-    def publish(self, doipath, attributes=None, prefix=None, nocreate=False):
-        """
-        publish a previously reserved DOI or create and publish new one.  If the 
-        DOI has not been previously provided, attributes must be provided and those 
-        attributes must include at the minimumally required metadata, including the 
-        'url' property.  
-        The service will pick an unclaimed, random doipath if neither the doipath 
-        parameter is set nor one is given in the input attributes.  
-        :param str doipath: the doipath to publish.  When given, this will override 
-               a path specified in the attributes data.  This can include optionally
-               include the requested prefix.  If nocreate=True, this 
-               must refer to an existing draft DOI.  
-        :param dict attributes:  the DOI metadata as an attributes node of a DOI 
-               request.  This is optional if the DOI was previously reserved and 
-               its metadata was fully set.  If the DOI was previously reserved,
-               the attributes will be used to update the metadata.  
-        :param str prefix:  the prefix to publish this DOI under.  If not provided
-               (either here or as part of doipath), the default prefix will be 
-               assumed.  
-        :param bool nocreate:  If True, require that the DOI has been previously 
-               reserved; otherwise (the default), creating a new DOI is allowed.  
-        :raise Exception:  if ...
-        """
-        prefix = self._ensure_prefix(prefix)
-        if doipath:
-            doi = prefix+'/'+doipath
-            state = self.doi_state(doipath, prefix)
-            if state == STATE_NONEXISTENT:
-                meth = "POST"
-                url = self.ep
-            elif state != STATE_DRAFT:
-                raise DOIClientException(doi,  message=doi+": not in draft state")
-            else:
-                meth = "PUT"
-                url = self.ep+'/'+doi
+            # does not exist yet/anymore
+            self.attrs['state'] = STATE_NONEXISTENT
+            if not relax:
+                raise DOIDoesNotExist(self.doi, self._reslvr._ep, "")
+
+        elif resp.status_code >= 200 and resp.status_code <= 204:
+            self.attrs['state'] = STATE_NONEXISTENT
+
+        elif resp.status_code >= 400 and resp.status_code < 404:
+            self._reslvr._unexpected_client_err(self.doi, resp)
         else:
-            doi = prefix+'/'
-            meth = "POST"
-            url = self.ep
-
-        if meth == "POST":
-            if nocreate:
-                raise DOIClientException(doi, message=doi+": not reserved yet")
-            if not attributes:
-                raise ValueError("new DOI requested without attributes")
-            missing = []
-            for prop in "url titles publisher publicationYear creators types".split():
-                if prop not in attributes:
-                    missing.append(prop)
-                elif prop.endswith('s') and len(attributes[prop]) < 1:
-                    missing.append(prop)
-                    
-            if missing:
-                raise ValueError("properties missing from attributes: " +
-                                 ", ".join(missing))
-        if attributes:
-            attributes = deepcopy(attributes)
-        else:
-            attributes = OrderedDict()
-        attributes['event'] = "publish"
-
-        req = self._new_req(attributes)
-        try:
-            resp = requests.request(meth, url, headers=self._headers(True),
-                                    auth=self.creds, json=req)
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(doi, self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(doi, self.ep, cause=ex)
-        
-        if resp.status_code == 409:
-            raise DOIClientException(data['doi'], "Unable to reserve %s: already exists"
-                                     % data['doi'])
-        elif resp.status_code < 200 or resp.status_code >= 300:
-            edata = self._getedata(resp)
-            raise DOIResolverError(data['doi'], self.ep, resp.status_code,
-                                   "Unexpected reserve response: " +
-                                   self._mkemsg(resp,edata))
-
-        try:
-            return resp.json()
-        except (ValueError, TypeError) as ex:
-            raise DOIResolverError(data['doi'], self.ep, resp.status_code,resp.reason,ex,
-                                   "reserve(): response not parseable as JSON: "+str(ex))
-
-    def update(self, attributes, doipath, prefix=None):
-        """
-        update an existing DOI with updated metadata
-        :param dict attributes:  the DOI metadata to update, given as an attributes 
-               node of a DOI request
-        :param str doipath: the doipath to request.  When given, this will override 
-               a path specified in the attributes data.
-        """
-        if not attributes or not isinstance(attributes, Mapping):
-            raise TypeError("update(): attributes not an dict: "+str(type(attributes)))
-
-        m = _doi_pfx.search(doipath)
-        if m:
-            prefix = m.group().strip('/')
-            doipath = doipath[len(prefix)+1:]
-        if not prefix:
-            prefix = self.default_prefix
-        if self.prefs and prefix not in self.prefs:
-            raise ValueError("delete_reservation(): Not a recognized prefix: "+prefix)
-
-        doipath = "/".join([prefix, doipath])
-        req = self._new_req(attributes)
-        for prop in ['doi', 'event']:
-            if prop in req['data']['attributes']:
-                del req['data']['attributes'][prop]
-
-        try:
-            resp = requests.put(self.ep+'/'+doipath, auth=self.creds,
-                                headers=self._headers(True), json=req)
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(doipath, self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(doipath, self.ep, cause=ex)
-
-        if resp.status_code >= 204:
-            return {"data":{"attributes":{}}}
-        elif resp.status_code >= 200 and \
-             (resp.status_code < 300 or resp.status_code >= 400):
-            try:
-                rec = resp.json()
-            except (ValueError, KeyError) as ex:
-                raise DOIResolverError(data['doi'], self.ep, resp.status_code,
-                                       resp.reason, ex,
-                            "update_id: response not parseable as JSON: "+str(ex))
-
-            if resp.status_code >= 200 and resp.status_code < 300:
-                return rec
-            elif resp.status_code >= 500:
-                raise DOIResolverError(data['doi'], self.ep, resp.status_code,
-                                       resp.reason,
-                                       message="Server errror: "+self._mkemsg(resp, rec),
-                                       errdata=rec)
-            else:
-                raise DOIResolverError(data['doi'], self.ep, resp.status_code,
-                                       resp.reason,
-                                       message="Unexpected response: "+
-                                               self._mkemsg(resp, rec),
-                                       errdata=rec)
-
-    def describe(self, doipath, prefix=None):
-        """
-        retrieve the metadata associated with the given DOI path
-        :param str doipath:  the DOI to look for, which can include the prefix 
-                             or be just the value appearing (after the slash)
-                             after the prefix.  
-        :param str prefix:   the prefix part of the DOI.  If not provided--
-                             either here or as part of doipath--the default
-                             prefix will be assumed.  No client-side checks 
-                             are made to ensure the prefix is from the authorized
-                             list.  
-        """
-        if not prefix and not _doi_pfx.search(doipath):
-            prefix = self.default_prefix
-        if prefix:
-            doipath = "/".join([prefix, doipath])
-
-        try: 
-            resp = requests.get(self.ep+'/'+doipath, auth=self.creds,
-                                headers=self._headers())
-        except (requests.ConnectionError, requests.HTTPError,
-                requests.connecttimeout) as ex:
-            raise DOICommunicationError(doipath, self.ep, ex)
-        except requests.RequestException as ex:
-            raise DOIResolverError(doipath, self.ep, cause=ex)
-        
-        if resp.status_code == 200:
-            try: 
-                return resp.json()
-            except (ValueError, TypeError) as ex:
-                raise DOIResolverError(doipath, self.ep, resp.status_code, resp.reason,
-                                       ex, "Response not parseable as JSON: " + str(ex))
-        elif resp.status_code == 404:
-            raise DOIDoesNotExist(doipath, self.ep)
-        elif resp.status_code >= 400 and resp.status < 404:
-            edata = self._getedata(resp)
-            raise DOIClientException(doipath, self.ep,
-                                     "Unexpected Client Exception: {0} ({1})"+
-                                     self._mkemsg(resp, edata), edata)
-        else:
-            raise DOIResolverError(doipath, self.ep, resp.status_code, resp.reason,
-                                   message="Unexpected resolver response: " +
-                                           self._mkemsg(resp, edata), errdata=edata)
-
-
+            self._reslvr._unexpected_resolver_err(self.doi, resp)
 

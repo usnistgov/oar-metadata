@@ -150,7 +150,7 @@ class DOIResolutionException(Exception):
     metadata
     """
 
-    def __init__(self, message, doi=None, resolver=None, cause=None, errdata=[]):
+    def __init__(self, message, doi=None, resolver=None, cause=None, errdata=None):
         """
         initialize the exception
 
@@ -203,7 +203,7 @@ class DOIResolverError(DOIResolutionException):
     """
 
     def __init__(self, doi=None, resolver=None, status=0, reason=None,
-                 cause=None, message=None, errdata=[]):
+                 cause=None, message=None, errdata=None):
         """
         initialize the exception
 
@@ -238,7 +238,7 @@ class DOIClientException(DOIResolutionException):
     """
     An exception during DOI resolution traceable to client input
     """
-    def __init__(self, doi, resolver=None, message=None, errdata=[]):
+    def __init__(self, doi, resolver=None, message=None, errdata=None):
         """
         initialize the exception
 
@@ -261,7 +261,7 @@ class DOIDoesNotExist(DOIClientException):
     """
     An error indicating that a given DOI is unknown to the resolver
     """
-    def __init__(self, doi, resolver=None, message=None, errdata=[]):
+    def __init__(self, doi, resolver=None, message=None, errdata=None):
         """
         initialize the exception
 
@@ -283,7 +283,7 @@ class DOIUnsupportedContentType(DOIClientException):
     """
     An error indicating that a given DOI is unknown to the resolver
     """
-    def __init__(self, contenttype, doi=None, resolver=None, message=None, errdata=[]):
+    def __init__(self, contenttype, doi=None, resolver=None, message=None, errdata=None):
         """
         initialize the exception
 

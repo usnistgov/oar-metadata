@@ -1,5 +1,5 @@
 from __future__ import absolute_import, print_function
-import json, os, cgi, sys, re, hashlib, json, logging
+import json, os, cgi, sys, re, hashlib, json, logging, random
 from datetime import datetime
 from wsgiref.headers import Headers
 from collections import OrderedDict, Mapping
@@ -63,6 +63,7 @@ class SimIDRepo(object):
 
         out = deepcopy(self.ids[id])
         out['doi'] = id
+        out['prefix'] = id.split('/', 1)[0]
         if 'state' not in out:
             out['state'] = "draft"
 
@@ -124,7 +125,7 @@ class SimHandler(object):
         self._start(status, self._hdr.items(), sys.exc_info())
 
         if edata:
-            return [ json.dumps(edata) ]
+            return [ edata ]
         return []
 
     def add_header(self, name, value):
@@ -214,7 +215,7 @@ class SimHandler(object):
         if 'CONTENT_TYPE' in self._env and self._env['CONTENT_TYPE'] != JSONAPI_MT:
             return self.send_error(415, "Wrong Input Type",
                                    "Unsupported input content type",
-                                   {"detail": self._env['HTTP_ACCEPT']})
+                                   {"detail": self._env['CONTENT_TYPE']})
 
         try:
             bodyin = self._env['wsgi.input']
@@ -269,7 +270,8 @@ class SimHandler(object):
             out = self.repo.add_id(doi, doc['data']['attributes'])
             resp = {"code": 201, "message": "Created"}
 
-        if event == "publish" and state != "findable":
+        if (event == "publish" and state != "findable") or \
+           (event == "register" and state != "registered"):
             missing = []
             for prop in "url titles publisher publicationYear creators types".split():
                 if prop not in out or not out[prop]:
@@ -279,10 +281,11 @@ class SimHandler(object):
             if missing:
                 self.repo.ids[doi]['state'] = state
                 out['state'] = state
-                errors = [{ "error": {
+                errors = [{ 
                     "title": "Cannot publish due to missing metadata",
                     "detail": "Missing properties: "+str(missing)
-                }}]
+                }]
+                resp = {"code": 422, "message": "Unprocessable Entity"}
 
         try:
             out = self._new_resp(doi, out)
@@ -342,6 +345,7 @@ class SimHandler(object):
         except ValueError as ex:
             return self.send_error(404, "ID not found", errdesc={"detail": path})
 
+        resp = {"code": 201, "message": "Updated"}
         if event == "publish" and state != "findable":
             missing = []
             for prop in "url titles publisher publicationYear creators types".split():
@@ -352,17 +356,18 @@ class SimHandler(object):
             if missing:
                 self.repo.ids[doi]['state'] = state
                 out['state'] = state
-                errors = [{ "error": {
+                errors = [{ 
                     "title": "Cannot publish due to missing metadata",
                     "detail": "Missing properties: "+str(missing)
-                }}]
+                }]
+                resp = {"code": 422, "message": "Unprocessable Entity"}
 
         try:
             out = self._new_resp(doi, out)
             if errors:
                 out['errors'] = errors
             out = json.dumps(out)
-            self.set_response(201, "Updated")
+            self.set_response(**resp)
             self.add_header("Content-type", JSONAPI_MT)
             self.add_header("Content-length", len(out))
             self.end_headers()
@@ -384,7 +389,7 @@ class SimHandler(object):
         except ValueError as ex:
             return self.send_error(403, str(ex), errdesc={"detail": path})
 
-        return self.send_error(200, "Deleted")
+        return self.send_error(204, "Deleted")
 
 
 prefixes = re.split(r'\s*,\s*', uwsgi.opt.get("prefixes", ""))

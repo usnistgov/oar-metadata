@@ -473,7 +473,7 @@ class TestSimIDService(test.TestCase):
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
-        self.assertIn("201", self.resp[0])
+        self.assertIn("422", self.resp[0])
 
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
@@ -584,7 +584,7 @@ class TestSimIDService(test.TestCase):
         self.resp = []
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
-        self.assertIn("200", self.resp[0])
+        self.assertIn("204", self.resp[0])
         self.assertEqual(body, [])
         
         # record has been deleted
@@ -608,7 +608,7 @@ class TestSimIDService(test.TestCase):
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
-        self.assertIn("201", self.resp[0])
+        self.assertIn("422", self.resp[0])
 
         doc = json.loads("\n".join(body))
         saved = doc['data']['attributes']
