@@ -108,7 +108,7 @@ class DataCiteDOIClient(object):
         if prefix:
             doipath = "/".join([prefix, doipath])
 
-        resp = self._request("HEAD", self._ep+'/'+doipath, doipath)
+        resp = self._request("HEAD", self._ep+doipath, doipath)
 
         if resp.status_code >= 200 and resp.status_code < 300:
             return True
@@ -200,7 +200,7 @@ class DataCiteDOIClient(object):
         doipath = prefix + '/' + doipath
         ro = prefix not in self.prefs
 
-        resp = self._request("GET", self._ep+'/'+doipath, doipath)
+        resp = self._request("GET", self._ep+doipath, doipath)
         resj = self._to_json(resp, doipath)
 
         if resp.status_code == 404:
@@ -313,7 +313,7 @@ class DataCiteDOIClient(object):
         if prefix not in self.prefs:
             raise ValueError("Not a recognized prefix: "+prefix)
 
-        out = self.lookup(doipath, relax=True)
+        out = self.lookup(doipath, prefix, relax=True)
         if out.exists:
             if not relax:
                 msg = "doi:%s already registered/published" 
@@ -546,7 +546,7 @@ class DataCiteDOI(object):
                 del attrs[prop]
 
         req = self._reslvr._new_req(attrs)
-        resp = self._reslvr._request("PUT", self._reslvr._ep+'/'+self.doi, self.doi, req)
+        resp = self._reslvr._request("PUT", self._reslvr._ep+self.doi, self.doi, req)
         resj = self._reslvr._to_json(resp, self.doi)
 
         if resp.status_code >= 400 and resp.status_code < 500:
@@ -610,7 +610,7 @@ class DataCiteDOI(object):
         req = self._reslvr._new_req(attrs)
         if self.state == STATE_DRAFT:
             # publishing draft (or registered) DOI
-            resp = self._reslvr._request("PUT", self._reslvr._ep+'/'+self.doi,
+            resp = self._reslvr._request("PUT", self._reslvr._ep+self.doi,
                                          self.doi, req)
         else:
             # creating direct to published state
@@ -644,7 +644,7 @@ class DataCiteDOI(object):
             raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
                                 "doi:%s read-only; cannot delete" % self.doi)
                                     
-        resp = self._reslvr._request("DELETE", self._reslvr._ep+'/'+self.doi, self.doi)
+        resp = self._reslvr._request("DELETE", self._reslvr._ep+self.doi, self.doi)
 
         if resp.status_code == 404:
             # does not exist yet/anymore
