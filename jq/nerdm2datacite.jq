@@ -381,7 +381,7 @@ def make_ref_rel:
 # Input:  resource object
 # Output: datacite attributes object
 #
-def resource2datacite_attributes:
+def resource2datacite:
     {
       doi,
       titles: make_titles,
@@ -424,17 +424,4 @@ def resource2datacite_attributes:
     else del(.relatedIdentifiers) end 
 ;
 
-# Converts a NERDm Resource to a DataCite JSON object
-#
-def resource2datacite:
-    {
-        id: .doi,
-        type: "dois",
-        attributes: resource2datacite_attributes
-    } |
-    if .id then .id = (.id|stripDOI) else del(.id) end |
-    {
-        data: .
-    }
-;
 
