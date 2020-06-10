@@ -131,7 +131,10 @@ def affil2affil:
             else null end
         ),
     } |
-    if (.affiliationIdentifer == "grid.94225.38" or
+    if (.affiliationIdentifier|startswith("ror:") then
+        (.affiliationIdentifier = (.affiliationIdentifier|sub("ror:";"https://ror.org/")|
+         .affiliationIdentifierScheme = "ROR")
+    elif (.affiliationIdentifer == "grid.94225.38" or
         (.affiliation | contains("National Institute of Standards and Technology"))) then
         (.affiliationIdentifier = "https://ror.org/05xpvk416" |
          .affiliationIdentifierScheme = "ROR")
