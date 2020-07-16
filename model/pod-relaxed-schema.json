@@ -261,7 +261,7 @@
                     ],
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -437,7 +437,7 @@
                     "description": "The collection of which the dataset is a subset",
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         }
                     ]
                 },
@@ -545,7 +545,7 @@
                     "description": "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974",
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -563,7 +563,7 @@
                         {
                             "type": "array",
                             "items": {
-                                "type": "string",
+                                "type": "string"
                             },
                             "uniqueItems": true
                         },
@@ -770,7 +770,7 @@
                     "description": "Human-readable description of the distribution",
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -801,7 +801,7 @@
                     "description": "A human-readable description of the file format of a distribution",
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         },
                         {
                             "type": "null"
@@ -838,7 +838,7 @@
                     "description": "Human-readable name of the distribution",
                     "anyOf": [
                         {
-                            "type": "string",
+                            "type": "string"
                         },
                         {
                             "type": "null"
