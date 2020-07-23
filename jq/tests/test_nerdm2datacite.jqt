@@ -134,44 +134,65 @@ include "nerdm2datacite"; affil2simpleaffil
 #--------------
 # testing affil2affil
 #
-include "nerdm2datacite"; affil2affil 
-{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }
-{ "affiliation": "NIST, MML", "affiliationIdentifier": "grid:NIST", "affiliationIdentifierScheme": "GRID" }
+include "nerdm2datacite"; affil2affil
+{ "title": "MML", "subunits": ["ODI"], "@id": "sdorg:NIST" }
+{ "affiliation": "MML, ODI" }
 
 #--------------
 # testing affil2affil
 #
 include "nerdm2datacite"; affil2affil
-{ "title": "NIST", "subunits": ["MML"], "@id": "sdorg:NIST" }
-{ "affiliation": "NIST, MML" }
+{ "title": "NIST/NBS" }
+{ "affiliation": "NIST/NBS" }
+
+#--------------
+# testing affil2affil
+#
+include "nerdm2datacite"; affil2affil
+{ "title": "NREL", "@id": "grid:99999.22" }
+{ "affiliation": "NREL", "affiliationIdentifier": "grid:99999.22", "affiliationIdentifierScheme": "GRID" }
 
 #--------------
 # testing affil2affil
 #
 include "nerdm2datacite"; affil2affil
 { "title": "NIST" }
-{ "affiliation": "NIST" }
+{ "affiliation": "NIST", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR"  }
+
+#--------------
+# testing affil2affil
+#
+include "nerdm2datacite"; affil2affil
+{ "title": "NIST/NBS", "@id": "grid:NIST" }
+{ "affiliation": "NIST/NBS", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR"  }
 
 #--------------
 # testing affils2affils
 #
 include "nerdm2datacite"; affils2affils
-[{ "title": "NIST" }]
-[{ "affiliation": "NIST" }]
+[{ "title": "NREL" }]
+[{ "affiliation": "NREL" }]
 
 #--------------
 # testing affils2affils
 #
 include "nerdm2datacite"; affils2affils
-[{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }, { "title": "NIST", "subunits": ["MML"], "@id": "sdorg:NIST" }, { "title": "NIST" }]
-[{ "affiliation": "NIST, MML", "affiliationIdentifier": "grid:NIST", "affiliationIdentifierScheme": "GRID" }, { "affiliation": "NIST, MML" }, { "affiliation": "NIST" }]
+[{ "title": "NIST", "subunits": ["MML"], "@id": "grid:NIST" }, { "title": "NIST/NBS", "subunits": ["MML"], "@id": "sdorg:NIST" }, { "title": "NIST", "@id": "grid.9999.33" }]
+[{ "affiliation": "NIST, MML", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR" }, { "affiliation": "NIST/NBS, MML" }, { "affiliation": "NIST", "affiliationIdentifier": "grid.9999.33", "affiliationIdentifierScheme": "GRID" }]
 
 #--------------
 # testing author2creator
 #
 include "nerdm2datacite"; author2creator
 { "fn": "M.W. Chase, Jr.", "givenName": "M.", "middleName": "W.", "familyName": "Chase", "affiliation": [{ "@type": [ "org:Organization" ], "title": "National Institute of Standards and Technology (NIST)", "@id": "sdporg:NIST" }], "proxyFor": "sdpperson:Chase-MW" }
-{ "name": "Chase, M. W.", "nameType": "Personal", "givenName": "M. W.", "familyName": "Chase", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST)", "affiliationIdentifier": "https://ror.org/05xpvk416", affiliationIdentifierScheme: "ROR" }]}
+{ "name": "Chase, M. W.", "nameType": "Personal", "givenName": "M. W.", "familyName": "Chase", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST)", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR" }]}
+
+#--------------
+# testing author2creator
+#
+include "nerdm2datacite"; author2creator
+{ "fn": "M.W. Chase, Jr.", "givenName": "M.", "middleName": "W.", "familyName": "Chase", "affiliation": [{ "@type": [ "org:Organization" ], "title": "National Institute of Standards and Technology (NIST)", "@id": "sdporg:NIST" }], "proxyFor": "sdpperson:Chase-MW" }
+{ "name": "Chase, M. W.", "nameType": "Personal", "givenName": "M. W.", "familyName": "Chase", "affiliation": [{ "affiliation": "National Institute of Standards and Technology (NIST)", "affiliationIdentifier": "https://ror.org/05xpvk416", "affiliationIdentifierScheme": "ROR" }]}
 
 #--------------
 # testing author2creator

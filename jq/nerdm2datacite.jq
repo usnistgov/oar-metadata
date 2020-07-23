@@ -125,22 +125,26 @@ def affil2simpleaffil:
 def affil2affil:
     {
         affiliation: affil2simpleaffil,
-        affiliationIdentifier: .["@id"],
-        affiliationIdentifierScheme:  (
-            if (.["@id"] and (.["@id"] | test("^grid:"))) then "GRID"
-            else null end
+        affiliationIdentifier: (
+            if (.["@id"]|not) and .title == "NIST" then "grid:NIST" else .["@id"] end
         ),
+        affiliationIdentifierScheme:  (
+            if (.["@id"] and ((.["@id"] | test("^grid:")) or (.["@id"] | test("^grid\\."))))
+            then "GRID" else null end
+        )
     } |
-    if (.affiliationIdentifier|startswith("ror:") then
-        (.affiliationIdentifier = (.affiliationIdentifier|sub("ror:";"https://ror.org/")|
+    if .affiliationIdentifier and (.affiliationIdentifier|startswith("ror:")) then
+        (.affiliationIdentifier = (.affiliationIdentifier|sub("ror:";"https://ror.org/"))|
          .affiliationIdentifierScheme = "ROR")
     elif (.affiliationIdentifer == "grid.94225.38" or
-        (.affiliation | contains("National Institute of Standards and Technology"))) then
+          (.affiliation | contains("National Institute of Standards and Technology")) or
+          (.affiliationIdentifier == "grid:NIST"))
+    then
         (.affiliationIdentifier = "https://ror.org/05xpvk416" |
          .affiliationIdentifierScheme = "ROR")
     else . end | 
-    if .affiliationIdentifierScheme then .
-    else (del(.affiliationIdentifier) | del(.affiliationIdentifierScheme)) end
+    if (.affiliationIdentifierScheme|not)
+    then (del(.affiliationIdentifier) | del(.affiliationIdentifierScheme)) else . end
 ;
 
 # Convert a NERDm affiliation object to a datacite affliation object
