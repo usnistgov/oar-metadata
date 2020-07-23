@@ -224,14 +224,14 @@ class DataCiteDOIClient(object):
             try:
                 return DataCiteDOI(doipath, self, resj['data'], ro)
             except KeyError as ex:
-                self._unexected_resolver_err(doipath, resp, resj,
+                self._unexpected_resolver_err(doipath, resp, resj,
                                  "Unexpected JSON data: missing %s property" % str(ex))
 
         elif resp.status_code >= 400 and resp.status_code < 404:
             self._unexpected_client_err(doipath, resp, resj)
 
         else:
-            self._unexected_resolver_err(doipath, resp, resj)
+            self._unexpected_resolver_err(doipath, resp, resj)
             
 
     _envelope = OrderedDict([("data", OrderedDict([("type", "dois")]))])
@@ -260,7 +260,7 @@ class DataCiteDOIClient(object):
         try:
             return DataCiteDOI(resj['data']['attributes']['doi'], self, resj['data'])
         except KeyError as ex:
-            self._unexected_resolver_err(doipath, resp, resj,
+            self._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def _create_doi(self, data):
@@ -522,7 +522,7 @@ class DataCiteDOI(object):
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexected_resolver_err(doipath, resp, resj,
+            self._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def update(self, attrs):
@@ -558,14 +558,16 @@ class DataCiteDOI(object):
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexected_resolver_err(doipath, resp, resj,
+            self._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def publish(self, attrs=None):
         """
-        create this DOI in a draft state.
-        :param dict attrs:   an initial set of DOI attributes to intialize the record
-                             with.  If not provided, the attributes will not be changed.
+        create or update this DOI to a published state.
+        :param dict attrs:   the set of DOI attributes to associate with the record.
+                             If not provided, the attributes will not be changed.  The
+                             DOI must be given or already have set the minimum required
+                             metadata.
         :raises DOIStateError: if the DOI cannot be published for any of the following
                              reasons: the DOI is already published, the object is 
                              readonly, or their is not sufficient metadata set yet.
@@ -630,7 +632,7 @@ class DataCiteDOI(object):
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexected_resolver_err(doipath, resp, resj,
+            self._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def delete(self, relax=False):
