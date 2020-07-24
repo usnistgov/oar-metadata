@@ -4,7 +4,7 @@ tools for validating NERDm metadata
 from collections import Mapping
 
 import ejsonschema as ejs
-from ejsonschema import ValidationError
+from ejsonschema import ValidationError, RefResolutionError
 
 def get_mdval_flavor(data):
     """
