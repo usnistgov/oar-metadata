@@ -295,7 +295,7 @@ def format_size:
     (if (. > 0) then (log10 | floor) else 0 end) as $ordr | 
     ($ordr / 3 | floor | if (. > 4) then 4 else . end) as $sc |
     (
-      . / ($sc * 3 | pow10) |
+      . / pow(10; $sc * 3) |
       if (. < 10) then
          (. * 100 | round / 100)
       else

@@ -8,7 +8,8 @@ basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 jqlib = os.path.join(basedir, "jq")
 testdir = os.path.join(jqlib, "tests")
 jqtest = [os.path.join(testdir, "test_pod2nerdm.jqt"),
-          os.path.join(testdir, "test_nerdm2pod.jqt")]
+          os.path.join(testdir, "test_nerdm2pod.jqt"),
+          os.path.join(testdir, "test_nerdm2datacite.jqt")]
 nerdmtest = [os.path.join(testdir, "test_podds2resource.py"),
              os.path.join(testdir, "test_resource2midaspodds.py")]
 pdltest = os.path.join(basedir, "scripts", "test_pdl2resources.py")
@@ -22,7 +23,8 @@ print "Executing jq translation library tests..."
 status = 0
 notok = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[0]))
 notok2 = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[1]))
-if notok or notok2:
+notok3 = os.system("jq -L {0} --run-tests {1}".format(jqlib, jqtest[2]))
+if notok or notok2 or notok3:
     print "**ERROR: some or all jq tests have failed"
     status += 1
 
