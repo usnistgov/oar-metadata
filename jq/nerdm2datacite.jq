@@ -389,6 +389,9 @@ def make_ref_rel:
 # Output: datacite attributes object
 #
 def resource2datacite:
+    if (.contactPoint.hasEmail|not) then
+      error("jq:resource2datacite: missing contactPoint prop")
+    else . end |
     {
       doi,
       titles: make_titles,
@@ -407,8 +410,16 @@ def resource2datacite:
       version,
       dates: make_dates,
       subjects: .themes,
-      sizes: [ .components | (count_files, total_size) ],
-      formats: .components | make_formats,
+      sizes: (
+         if .components and (.components|length > 0) then
+           [ .components | (count_files, total_size) ]
+         else . end
+      ),
+      formats: (
+         if .components and (.components|length > 0) then
+           .components | make_formats
+         else . end
+      ),
       alternateIdentifiers: [
         {
           alternateIdentifier: .ediid,
@@ -430,5 +441,4 @@ def resource2datacite:
     if ((.relatedIdentifiers | length) > 0) then .
     else del(.relatedIdentifiers) end 
 ;
-
 

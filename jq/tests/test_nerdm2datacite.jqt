@@ -332,25 +332,54 @@ include "nerdm2datacite"; make_ispartof_rel
 # Line above must be empty
 
 #--------------
-# testing make_ispartof_rel
+# testing make_ref_rel
 #
 include "nerdm2datacite"; make_ref_rel
 { "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
 { "relatedIdentifier": "http://dx.doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "References" }
 
 #--------------
-# testing make_ispartof_rel
+# testing make_ref_rel
 #
 include "nerdm2datacite"; make_ref_rel
 { "pid": "doi:10.18434/spd0fjpek351", "title": "Hello!"}
 { "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "References" }
 
 #--------------
-# testing make_ispartof_rel
+# testing make_ref_rel
 #
 include "nerdm2datacite"; make_ref_rel
 { "location": "https://doi.org/10.18434/spd0fjpek351", "title": "Hello!", "refType": "isSupplementTo" }
 { "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isSupplementTo" }
+
+#--------------
+# testing resource2datacite
+#
+# require minimal information
+#
+include "nerdm2datacite"; try resource2datacite catch .
+{}
+"jq:resource2datacite: missing contactPoint prop"
+
+#--------------
+# testing resource2datacite
+#
+# require minimal information
+#
+include "nerdm2datacite"; try resource2datacite catch .
+{ "contactPoint": {} }
+"jq:resource2datacite: missing contactPoint prop"
+
+#--------------
+# testing resource2datacite
+#
+# this just tests that an object gets spit out with the minimal input
+#
+include "nerdm2datacite"; resource2datacite | .titles
+{ "contactPoint": {"hasEmail": "u@d.com" }}
+[]
+
+
 
 
 
