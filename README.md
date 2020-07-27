@@ -28,6 +28,7 @@ Record translation, validation, and loading require a few third-party tools:
 
 * Python 2.7.X
 * Python library: jsonschema 2.5.x or later
+* Python library: ejsonschema (available via github.com)
 * Python library: json-spec 0.9.16
 * Python library: jsonmerge 1.3.0
 * Python library: requests

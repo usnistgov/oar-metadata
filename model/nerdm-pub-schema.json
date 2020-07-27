@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
     "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#",
-    "rev": "wd1",
+    "rev": "wd2",
     "title": "The NERDm extension metadata for Public Data",
     "description": "These classes extend the based NERDm schema to different types of published data",
     "definitions": {
@@ -694,7 +694,7 @@
                     "description": "The institution the person was affiliated with at the time of publication",
                     "type": "array",
                     "items": {
-                        "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/ResourceReference"
+                        "$ref": "#/definitions/Affiliation"
                     },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
@@ -724,6 +724,31 @@
             "description": "the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base)",
             "type": "string",
             "pattern": "^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$"
+        },
+
+        "Affiliation": {
+            "description":  "a description of an organization that a person is a member of",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/ResourceReference" },
+                {
+                    "properties": {
+                        "subunits": { 
+                            "description": "sub-units of the main organization the that the person is a member of",
+                            "notes": [
+                                "The order of the array elements should be treated as significant.  Typically (though not required), each element will reflect a more specific unit contained in unit nameed in the previous element."
+                            ],
+                            "type": "array",
+                            "items": { "type": "string" },
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Sub-unit",
+                                "referenceProperty": "org:OrganizationalUnit"
+                            }
+                        }
+                    },
+                    "required": [ "@type" ]
+                }
+            ]
         }
         
     }

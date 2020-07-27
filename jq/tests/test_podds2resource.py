@@ -38,9 +38,10 @@ class TestJanaf(unittest.TestCase):  #
     def test_restypes(self):
         types = self.out['@type']
         self.assertIsInstance(types, list)
-        self.assertEquals(len(types), 2)
+        self.assertEquals(len(types), 3)
         self.assertEquals(types[0], "nrd:SRD")
         self.assertEquals(types[1], "nrdp:PublicDataResource")
+        self.assertEquals(types[2], "dcat:Dataset")
 
     def test_arestr(self):
         props = "title modified ediid landingPage license".split()
@@ -114,6 +115,14 @@ class TestJanaf(unittest.TestCase):  #
         self.assertEqual(len(hier), 318)
         self.assertIn('filepath', hier[0])
         self.assertIn('filepath', hier[-1])
+
+    def test_theme(self):
+        self.assertIn("theme", self.out,
+                      "record is missing 'theme' property")
+        theme = self.out['theme']
+        self.assertEqual(len(theme), 2)
+        self.assertEqual(theme[0], "thermochemical properties")
+        self.assertEqual(theme[1], "Standards: Reference data")
         
 
 class TestCORR(unittest.TestCase):  # 
@@ -142,8 +151,9 @@ class TestCORR(unittest.TestCase):  #
     def test_restypes(self):
         types = self.out['@type']
         self.assertIsInstance(types, list)
-        self.assertEquals(len(types), 1)
+        self.assertEquals(len(types), 2)
         self.assertEquals(types[0], "nrdp:PublicDataResource")
+        self.assertEquals(types[1], "dcat:Dataset")
 
     def test_arestr(self):
         props = "title modified ediid landingPage license".split()
@@ -210,6 +220,14 @@ class TestCORR(unittest.TestCase):  #
         self.assertEqual(len(hier), 2)
         self.assertIn('filepath', hier[0])
         self.assertIn('filepath', hier[-1])
+        
+    def test_theme(self):
+        self.assertIn("theme", self.out,
+                      "record is missing 'theme' property")
+        theme = self.out['theme']
+        self.assertEqual(len(theme), 2)
+        self.assertEqual(theme[0], "Metals")
+        self.assertEqual(theme[1], "Materials characterization")
         
 
 class TestValidateNerdm(unittest.TestCase):

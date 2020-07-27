@@ -429,16 +429,20 @@ include "pod2nerdm"; isSRD
 { "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
 "nrd:SRD"
 
+include "pod2nerdm"; isDCatDS
+{ "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
+"dcat:Dataset"
+
 include "pod2nerdm"; isSRD
 { "@type": "dcat:Dataset", "title": "NIST Interatomic Potentials Repository" }
 
 include "pod2nerdm"; resourceTypes
 { "@type": "dcat:Dataset", "title": "NIST Interatomic Potentials Repository" }
-[ "nrdp:PublicDataResource" ]
+[ "nrdp:PublicDataResource", "dcat:Dataset" ]
 
 include "pod2nerdm"; resourceTypes
 { "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
-[ "nrd:SRD", "nrdp:PublicDataResource" ]
+[ "nrd:SRD", "nrdp:PublicDataResource", "dcat:Dataset" ]
 
 # testing podds2resoure:
 #

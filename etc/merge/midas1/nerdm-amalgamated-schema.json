@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
-    "rev": "wd2",
+    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+    "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
     "definitions": {
@@ -18,65 +18,7 @@
                         "Acronyms should be avoided"
                     ],
                     "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Title",
-                        "referenceProperty": "dc:title"
-                    }
-                },
-
-                "version": {
-                    "title": "Version",
-                    "description": "a string indicating the version of the release of this resource",
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Version",
-                        "referenceProperty": "schema:version"
-                    }
-                },
-
-                "versionHistory": {
-                    "title": "History",
-                    "description": "a list describing the release of different versions of this resource",
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/VersionRelease" }
-                },
-
-                "replaces": {
-                    "title": "Replaces",
-                    "description": "a listing of other existing resources that are deprecated by this resource",
-                    "type": "array",
-                    "items": {
-                        "allOf": [
-                            { "$ref": "#/definitions/RelatedResource" },
-                            { "required": [ "@id", "proxyFor", "label", "issued" ] }
-                        ]
-                    },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Replaces",
-                        "referenceProperty": "dc:replaces"
-                    }
-                },
-
-                "isReplacedBy": {
-                    "title": "Replaced by",
-                    "description": "another existing resources that should be considered a replacement for this resource",
-                    "notes": [
-                        "This typically refers to a newer version of this resource",
-                        "In the PDR system, this value is automatically generated given the overall state of the PDR's catalog"
-                    ],
-                    "allOf": [
-                        { "$ref": "#/definitions/RelatedResource" },
-                        { "required": [ "@id", "proxyFor", "label", "issued" ] }
-                    ],
-                    
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Is replaced by",
-                        "referenceProperty": "dc:isReplacedBy"
-                    }
+                    "mergeStrategy": "preferHead"
                 },
 
                 "description": {
@@ -88,11 +30,7 @@
                     "type": "array",
                     "items": { "type": "string" },
                     "minItems": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Description",
-                        "referenceProperty": "dc:description"
-                    }
+                    "mergeStrategy": "preferHead"
                 },
 
                 "keyword": {
@@ -103,22 +41,14 @@
                     ],
                     "type": "array",
                     "items": { "type": "string", "minLength": 1 },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Tags",
-                        "referenceProperty": "dcat:keyword"
-                    }
+                    "mergeStrategy": "preferHead"
                 },
 
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this resource addresses or speaks to",
                     "type": "array",
                     "items": { "$ref": "#/definitions/Topic" },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Topic",
-                        "referenceProperty": "foaf:topic"
-                    }
+                    "mergeStrategy": "topicArray"
                 },
 
                 "modified": {
@@ -127,23 +57,22 @@
                         "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
                     ],
                     "$ref": "#/definitions/ISO8601DateRange",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Last Update",
-                        "referenceProperty": "dc:modified"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "issued": {
                     "title": "Release Date",
                     "description": "Date of formal issuance of the resource",
-                    "$ref": "#/definitions/FlexibleDate",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "referenceProperty": "dc:issued",
-                        "range": "xsd:date"
-                    }
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "publisher": {
@@ -152,11 +81,7 @@
                         "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
                     "$ref": "#/definitions/Organization",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Publisher",
-                        "referenceProperty": "dc:publisher"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
 
                 "contactPoint": {
@@ -166,11 +91,7 @@
                         "The information can reflect either a person or a group (such as a help desk)"
                     ],
                     "$ref": "#/definitions/ContactInfo",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Information",
-                        "referenceProperty": "dcat:contactPoint"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
                 
                 "accessLevel": {
@@ -191,11 +112,7 @@
                             "description": "Data asset is not available to members of the public"
                         }
                     },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Public Access Level",
-                        "referenceProperty": "pod:accessLevel"
-                    }
+                    "mergeStrategy": "preferBase"
                 },
 
                 "license": {
@@ -215,11 +132,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "License",
-                        "referenceProperty": "dc:license"
-                    }
+                    "mergeStrategy": "preferBase"
                 },
 
                 "rights": { 
@@ -239,19 +152,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Rights",
-                        "referenceProperty": "dc:rights"
-                    }
-                },
-
-                "inventory": {
-                    "description": "a summary of the components that are associated with this resource",
-                    "notes": [
-                        "This property is an aid for processing resources with a large number of components.  This summary allows the actual components content to be missing or incomplete in a trasmitted version of the record."
-                    ],
-                    "$ref": "#/definitions/Inventory"
+                    "mergeStrategy": "preferBase"
                 },
 
                 "components": {
@@ -265,7 +166,9 @@
                     "type": "array",
                     "items": { "$ref": "#/definitions/Component" },
                     "minLength": 1,
-                    "uniqueItems": true
+                    "uniqueItems": true,
+                    "mergeStrategy": "arrayMergeById",
+                    "mergeOptions": { "idRef": "/@id" }
                 },
 
                 "conformsTo": {
@@ -280,23 +183,14 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Data Standard",
-                        "referenceProperty": "dc:conformsTo",
-                        "owl:range": "xsd:anyURI"
-                    }
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "isPartOf": {
                     "title": "Collection",
                     "description": "The collection of which the dataset is a subset",
                     "$ref": "#/definitions/ResourceReference",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Collection",
-                        "referenceProperty": "dc:isPartOf"
-                    }
+                    "mergeStrategy": "objectMerge"
                 },
                 
                 "language": {
@@ -314,11 +208,7 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Language",
-                        "referenceProperty": "dc:language"
-                    }
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "landingPage": {
@@ -333,23 +223,16 @@
                             "type": "null"
                         }
                     ],
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Homepage URL",
-                        "referenceProperty": "dcat:landingPage"
-                    }
+                    "mergeStrategy": "preferBase"
                 },
                 
                 "references": {
-                    "title": "Related Resources",
+                    "title": "Related Documents",
                     "description": "Related documents such as technical information about a dataset, developer documentation, etc.",
                     "type": "array",
-                    "items": { "$ref": "#/definitions/BibliographicReference" },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "References",
-                        "referenceProperty": "dc:references"
-                    }
+                    "items": { "$ref": "#/definitions/DocumentReference" },
+                    "mergeStrategy": "baseArrayAsDefault",
+                    "mergeOptions": { "idRef": "/@id" }
                 },
                 
                 "theme": {
@@ -371,7 +254,8 @@
                         {
                             "type": "null"
                         }
-                    ]
+                    ],
+                    "mergeStrategy": "preferHead"
                 },
 
                 "@id": {
@@ -382,11 +266,7 @@
                     ],
                     "type": "string",
                     "minLength": 5,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Unique Identifier",
-                        "referenceProperty": "dc:identifier"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "doi": {
@@ -398,22 +278,13 @@
                     "type": "string",
                     "pattern": "^doi:[0-9]+\\.[0-9]+/.*$",
                     "minLength": 5,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Unique Identifier",
-                        "referenceProperty": "dc:identifier"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
 
                 "ediid": {
                     "description": "the NIST EDI identifier assigned to the resource",
                     "type": "string",
-                    "minLength": 5,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "EDI Identifier",
-                        "referenceProperty": "dc:identifier"
-                    }
+                    "mergeStrategy": "keepBase"
                 },
                 
                 "abbrev": {
@@ -425,7 +296,8 @@
                     "items": {
                         "type": "string",
                         "maxLength": 24
-                    }
+                    },
+                    "mergeStrategy": "preferHead"
                 },
 
                 "@type": {
@@ -437,9 +309,121 @@
                         
                     ],
                     "type": "array",
-                    "items": { "type": "string" } 
-                }
+                    "items": { "type": "string" } ,
+                    "mergeStrategy": "preferHead"
+                },
 
+                "accrualPeriodicity": {
+                    "title": "Frequency",
+                    "description": "Frequency with which dataset is published.",
+                    "anyOf": [
+                        {
+                            "enum": [
+                                "irregular"
+                            ],
+                            "valueDocumentation": {
+                                "irregular": {
+                                    "description": "the data is updated or republished on an irregular schedule"
+                                }
+                            }
+                        },
+                        {
+                            "type": "string",
+                            "pattern": "^R\\/P(?:\\d+(?:\\.\\d+)?Y)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?W)?(?:\\d+(?:\\.\\d+)?D)?(?:T(?:\\d+(?:\\.\\d+)?H)?(?:\\d+(?:\\.\\d+)?M)?(?:\\d+(?:\\.\\d+)?S)?)?$"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "bureauCode": {
+                    "title": "Bureau Code",
+                    "description": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
+                    "notes": [
+                        "OMB Circular A-11, Appendix C is available via http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
+                        "A machine-readable listing of the defined codes is available via https://project-open-data.cio.gov/data/omb_bureau_codes.csv",
+                        "Codes have the format of 015:01"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[0-9]{3}:[0-9]{2}$"
+                    },
+                    "uniqueItems": true,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Bureau Code",
+                        "referenceProperty": "pod:bureauCode"
+                    },
+                    "mergeStrategy": "keepBase"
+                },
+
+                "programCode": {
+                    "title": "Program Code",
+                    "description": "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset",
+                    "notes": [
+                        "A machine-readable listing of the defined codes is available via https://www.performance.gov/sites/default/files/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
+                        "Codes have the format of 015:001"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "pattern": "^[0-9]{3}:[0-9]{3}$"
+                    },
+                    "uniqueItems": true,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Program Code",
+                        "referenceProperty": "pod:programCode"
+                    },
+                    "mergeStrategy": "keepBase"
+                },
+
+                "dataQuality": {
+                    "title": "Data Quality",
+                    "description": "Whether the dataset meets the agency's Information Quality Guidelines",
+                    "anyOf": [
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                },
+                
+                "primaryITInvestmentUII": {
+                    "title": "Primary IT Investment UII",
+                    "description": "The IT Unique Investment Identifier (UII) that is associated with this dataset",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "pattern": "[0-9]{3}-[0-9]{9}"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "keepBase"
+                },
+
+                "systemOfRecords": {
+                    "title": "System of Records",
+                    "description": "The URL to the System of Records Notice related to this dataset if is so designated under the Privacy Act of 1974",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "keepBase"
+                }
             },
 
             "required": [
@@ -448,81 +432,20 @@
             ]
         },
 
-        "FlexibleDate": {
-            "description": "a flexible format for a resource-related date",
-            "anyOf": [
-                {
-                    "type": "string",
-                    "pattern": "^([\\+-]?\\d{4}(?!\\d{2}\\b))((-?)((0[1-9]|1[0-2])(\\3([12]\\d|0[1-9]|3[01]))?|W([0-4]\\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\\d|[12]\\d{2}|3([0-5]\\d|6[1-6])))([T\\s]((([01]\\d|2[0-3])((:?)[0-5]\\d)?|24\\:?00)([\\.,]\\d+(?!:))?)?(\\17[0-5]\\d([\\.,]\\d+)?)?([zZ]|([\\+-])([01]\\d|2[0-3]):?([0-5]\\d)?)?)?)?$"
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
-
-        "RelatedResource": {
-            "description": "a resource that is related in some way to this resource",
-            "notes": [
-                "This serves as a base type for various kinds of references."
-            ],
+        "DocumentReference": {
+            "description": "descriptive reference to a document",
             "type": "object",
-
             "properties": {
-                "@id": {
-                    "description": "an identifier for the reference",
-                    "notes": [
-                        "The most well-known PID used to identify the resource (see also notes for proxyFor",
-                        "This identifier can be a relative URL which can be used in special cases (See the notes for BibliographicReference:@type for when this ID should not refer to the referenced work).",
-                        "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
-                        "A relative identifier requires that @base be set to the Resource identifier in the @context."
-                    ],
-                    "type": "string"
-                },
                 "@type": {
-                    "anyOf": [
-                        {
-                            "type": "string",
-                            "enum": [
-                                "deo:BibliographicReference",
-                                "org:Organization"
-                            ]
-                        },
-                        {
-                            "type": "array",
-                            "items": { "type": "string"  }
-                        }
-                    ],
-                    "notes": [
-                        "The single string value option is provided for backward compatibility (and may be removed in future versions; see BibliographicReference).  When this is used, the node represents a reference and not the thing being referenced; the @id contains a relative URI, representing this reference"
-                    ]
+                    "type": "string",
+                    "enum": [ "deo:BibliographicReference" ]
                 },
 
-                
-                "title": {
-                    "description": "the name of the resource being referenced",
-                    "notes": [
-                        "This value is intended for display.",
-                        "This can be, but is not required to be, the same title given in the metadata record describing the resource"
-                    ],
-                    "type": "string",
-                    "minLength": 1
-                },
-                "proxyFor": {
-                    "description": "a local identifier representing this resource",
-                    "notes": [
-                        "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
-                    ],
-                    "type": "string",
-                    "format": "uri",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
-                    }
-                },
                 "location": {
-                    "description": "the URL for accessing the resource",
+                    "description": "the URL for accessing the document",
+                    "notes": [
+                        "It is assumed that the document can be viewed via a web browser (e.g. HTML, PDF, etc.)"
+                    ],
                     "type": "string",
                     "format": "uri"
                 },
@@ -530,144 +453,64 @@
                 "label": {
                     "description": "a recommended label or title to display as the text for a link to the document",
                     "notes": [
-                        "This is intended to be briefer than a citation.  It should be short enough to use as tag to an entry in reference list as inserted into a document's text"
+                        "This is intended to be briefer than a citation."
                     ],
                     "type": "string"
                 },
 
-                "issued": {
-                    "description": "The date the referenced resource was issued",
+                "citation": {
+                    "description": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
+                    "type": "string"
+                },
+
+                "refid": {
+                    "description": "An persistent ID for the referenced document.",
                     "notes": [
-                        "This is intended for determining relative newness--i.e. being newer or older than the referring resource."
+                        "The ID should be given in a form (e.g. with a scheme prefix) such that its type is obvious.  Use 'doi:' for Cross-ref or Datacite IDs.",
+                        "location may use the URL form of the ID."
                     ],
-                    "$ref": "#/definitions/FlexibleDate"
+                    "type": "string"
                 },
 
-                "description": {
-                    "description": "a brief, human-readable description of what this reference refers to and/or why it is being referenced.",
+                "refType": {
+                    "description": "the type of relationship that this document has with the resource",
+                    "notes": [
+                        "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
+                        "The DCiteDocumentReference type sets DataCite terms as controlled vocabulary"
+                    ],
                     "type": "string"
                 }
-
             },
-
-            "dependencies": {
-                "proxyFor": {
-                    "required": [ "@type" ]
-                }
-            }            
+            "required": [ "@type", "location" ]
         },
 
-        "ResourceReference": {
-            "description":  "a reference to another resource that may have an associated ID",
+        "DCiteDocumentReference": {
+            "description": "a descriptive reference to a document with a controlled vocabulary for its reference type (refType)",
             "notes": [
-                "While providing a resType property is recommended, it is required if the proxyFor ID is given."
-            ],
-            "allOf": [
-                { "$ref": "#/definitions/RelatedResource" },
-                {
-                    "required": [ "title" ]
-                }
-            ]
-        },
-
-        "VersionRelease": {
-            "description": "notes about a versioned release of the resource",
-            "allOf": [
-                { "$ref": "#/definitions/RelatedResource" },
-                {
-                    "properties": {
-                        "version": {
-                            "title": "Version",
-                            "description": "a string indicating a version of the release of this resource",
-                            "notes": [
-                                "label could contain the same value"
-                            ],
-                            "type": "string",
-                            "asOntology": {
-                                "@context": "profile-schema-onto.json",
-                                "prefLabel": "Version",
-                                "referenceProperty": "schema:version"
-                            }
-                        }
-                    },
-                    "required": [ "version", "issued" ]
-                }
-            ]
-        },
-
-        "BibliographicReference": {
-            "description": "a reference to a creative work that provides information or data that is important to this resource.",
-            "notes": [
-                "Recognized @type list values include:",
-                "npg:Document -- a work that is primarily meant to be human readable and could appropriately be identified with a CrossRef DOI",
-                "npg:Dataset -- a reference that could appropriately be identified with a DataCite DOI",
-                "npg:Article -- a work that is published in a book, journal, or other periodical",
-                "schema:Book -- a book, typically physically-bound.",
-                "deo:BibliographicReference -- a generic citable reference.  This is considered a superclass of all reference types and the default type when the specific type cannot be determined.",
-                "npg:Document and npg:Dataset should be considered mutually exclusive and should not appear in the same list.  npg:Article and schema:Book should be considered subclasses of npg:document"
-            ],
-            "allOf": [
-                { "$ref": "#/definitions/RelatedResource" },
-                {
-                    "properties": {
-                        "citation": {
-                            "description": "a full formated citation string for the reference, appropriate for inclusion in a bibliography",
-                            "type": "string",
-                            "asOntology": {
-                                "@conxtext": "profile-schema-onto.json",
-                                "prefLabel": "Cite as",
-                                "referenceProperty": "dc:bibliographicCitation"
-                            }
-                        },
-                        "refType": {
-                            "description": "the type of relationship that this document has with the resource",
-                            "notes": [
-                                "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
-                                "The DCiteReference type sets DataCite terms as controlled vocabulary"
-                            ],
-                            "type": "string"
-                        }
-                    },
-                    "required": [ "@type", "location" ]
-                }
-            ]
-        },
-
-        "DCiteReference": {
-            "description": "a bibliographical reference with a controlled vocabulary for its reference type (refType)",
-            "notes": [
-                "Note that some refType values are specifically for references of type npg:Document:  'isDocumentedBy', 'isReviewedBy'",
+                "This object is intended to point to human-readable documents",
                 "Use 'isDocumentedBy' to indicate documents that provide the most comprehensive explanation of the contents of the resource.  List these documents in order of importance (as the first one will be exported as the 'describedBy' document when converted to the POD schema).",
                 "Use 'isSourceOf' if the document provides analysis and interpretation of the resource.  In particular, journal articles that are co-published with this resource should be listed with this type.  It is recommended that these documents be listed either in order of publication date or importance.",
                 "Documents may be listed more than once having different types, namely both 'isDocumentedBy' and 'isSourceOf'; however, it is recommended that such multiple classifications should be minimized."
             ],
             "allOf": [
-                { "$ref": "#/definitions/BibliographicReference" },
+                { "$ref": "#/definitions/DocumentReference" },
                 {
                     "properties": {
                         "refType": {
-                            "description": "a term indicating the nature of the relationship between this resource and the one being referenced",
-                            "notes": [
-                                "Note that with this term, the subject of relationship is the resource described by this NERDm record and the object is the referenced resource given by the @id property in this node.  Although this violates the JSON-LD semantics that properties in this node should describe what's given with the local @id--the referenced resource, in this case--it is more consistant with their use in the DataCite schema."
-                            ],
                             "type": "string",
-                            "enum": [ "IsDocumentedBy", "IsSupplementedTo",
+                            "enum": [ "IsDocumentedBy", "IsSupplementedBy",
                                       "IsCitedBy", "Cites", "IsReviewedBy",
                                       "IsReferencedBy", "References",
-                                      "IsSourceOf", "IsDerivedFrom",
-                                      "IsNewVersionOf", "IsPreviousVersionOf" ],
+                                      "IsSourceOf", "IsDerivedFrom"   ],
                             "valueDocumentation": {
                                 "IsDocumentedBy": {
-                                    "description": "The referenced document provides documentation of this resource.",
+                                    "description": "The referenced document provides documentation of the resource.",
                                     "notes": [
-                                        "This type should be applied to the reference that provides the best, most complete, or otherwise most preferred description of how the data in this resource was created.",
-                                        "This resource is expected to be or include a human-readable document."
                                     ]
                                 },
-                                "IsSupplementedTo": {
-                                    "description": "The referenced document is a supplement to this resource.",
+                                "IsSupplementedBy": {
+                                    "description": "The referenced document is a supplement to the resource.",
                                     "notes": [
-                                        "a supplement typically refers to data (often small) that appears closely attached to a journal article."
                                     ]
                                 },
                                 "IsCitedBy": {
@@ -679,8 +522,7 @@
                                 "Cites": {
                                     "description": "This resource cites the referenced document.",
                                     "notes": [
-                                        "Human readable descriptions can refer to this type of resource via its label, e.g. '...previous research [Smith98; Jones10]...'",
-                                        "Like IsCitedBy, the relationship indicated is lighter than References: this resource makes reference to the referenced resource in discussion without necessarily drawing on and using data or information from that resource."
+                                        "Like IsCitedBy, this relationship indicates is lighter than References: the referenced document may discuss this resource without drawing on and using data or information from this resource."
                                     ]
                                 },
                                 "IsReviewedBy": {
@@ -700,35 +542,15 @@
                                     ]
                                 },
                                 "IsSourceOf": {
-                                    "description": "The resource is the source of upon which the referenced resource is based.",
+                                    "description": "The resource is the source of upon which the referenced document is based.",
                                     "notes": [
-                                        "In other words, the referenced document is derived from the resource.",
-                                        "This is a stronger relationship than 'References'"
+                                        "In other words, the referenced document is derived from the resource."
                                     ]
                                 },
                                 "IsDerivedFrom": {
                                     "description": "The referenced document is the source upon which the resource is based.",
                                     "notes": [
-                                        "In other words, the resource is derived from the referenced document.",
-                                        "This is a stronger relationship than 'IsReferencedBy'"
-                                    ]
-                                },
-                                "IsNewVersionOf": {
-                                    "description": "The referenced resource is a previous version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource is deprecated by this one."
-                                    ]
-                                },
-                                "IsPreviousVersionOf": {
-                                    "description": "The referenced resource is a newer version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource deprecates this one."
-                                    ]
-                                },
-                                "IsVariantOf": {
-                                    "description": "The referenced resource contains the content of this resource in a different form.",
-                                    "notes": [
-                                        "As an example, the referenced resource may be based on the same raw data but calibrated differently."
+                                        "In other words, the resource is derived from the referenced document."
                                     ]
                                 }
                             }
@@ -739,82 +561,49 @@
             ]
         },
 
-        "Inventory": {
-            "description": "an inventory summary of the components that are part of a Resource",
-            "type": "array",
-            "minItems": 1,
-            "items": { "$ref": "#/definitions/CollectionInventory" }
-        },
-
-        "TypeInventory": {
-            "description": "a count of the number of components of a given type",
+        "ResourceReference": {
+            "description":  "a reference to another resource that may have an associated ID",
             "notes": [
-                "This type is intended for use in the context of a (named) collection of components wihtin a hierarchy of components.  In the property documentation, the 'current collection' refers to that context."
+                "While providing a resType property is recommended, it is required if the proxyFor ID is given."
             ],
             "type": "object",
             "properties": {
-                "forType": {
-                    "description": "the type of component",
+                "title": {
+                    "description": "the name of the resource being referenced",
                     "notes": [
-                        "This should be an abbreviated URI as used for @type values"
+                        "This value is intended for display.",
+                        "This can be, but is not required to be, the same title given in the metadata record describing the resource"
                     ],
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
-                "childCount": {
-                    "description": "the number of components of this type that are a direct child of the current collection",
-                    "type": "integer"
-                },
-                "descCount": {
-                    "description": "the number of components of this type that are anywhere below the current collection",
-                    "type": "integer"
-                },
-                "label": {
-                    "description": "a recommended label for the type and count",
-                    "type": "string"
-                }
-            },
-            "required": [ "forType", "descCount" ]
-        },
-
-        "CollectionInventory": {
-            "description": "an inventory that breaks down numbers by the hierarchical collection, where this type describes a node in the hierarchy",
-            "notes": [
-                "The idea here is to provide numbers for each subdirectory"
-            ],
-            "type": "object",
-            "properties": {
-                "forCollection": {
-                    "description": "the name of the collection that this inventory applies to",
+                "proxyFor": {
+                    "description": "a local identifier representing this resource",
                     "notes": [
-                        "This is intended to be a /-delimited name that reflects the position of the subcollection in the hierarchy, as given in the Subcollection filepath field of the collection component.",
-                        "The root collection should be refered to with an empty string"
+                        "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
                     ],
-                    "type": "string"
+                    "type": "string",
+                    "format": "uri"
                 },
-                "childCount": {
-                    "description": "the number of relevent components that are a direct child of the collection",
-                    "type": "integer"
-                },
-                "descCount": {
-                    "description": "the number of relevent components that are anywhere below the collection",
-                    "type": "integer"
-                },
-                "byType": {
-                    "description": "a breakdown of the inventory of components in this collection by type",
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/TypeInventory" }
-                },
-                "childCollections": {
-                    "description": "an array listing the names of the subcollections that are direct children of the collection",
+                "resourceType": {
+                    "description":  "the linked-data class types for the referenced resource",
                     "notes": [
-                        "Each name should be the full filepath value that refleces the position of the subcollection in the hierarchy, relative to the root, as given in the Subcollection filepath field of the collection component.  This makes it possible to select the subcollection's inventory (via forCollection) or its Subcollection component (via filepath)",
-                        "The order of the listing should be considered significant"
+                        "The value must always be given as an array, even when only one type is provided.",
+                        "Multiple values indicate that the Resource can be considered of multiple types; it is recommended that the primary type (usually the most specific) should be given first.",
+                        "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
+                        
                     ],
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": { "type": "string" } 
+                    
                 }
             },
-            "required": [ "forCollection" ]
+            "required": [ "title" ],
+            "dependencies": {
+                "proxyFor": {
+                    "required": [ "resType" ]
+                }
+            }
         },
 
         "Component": {
@@ -830,7 +619,8 @@
                         "Though not required by this schema, providing an identifier for a component is critical for merging information from different sources.",
                         "A relative identifier requires that @base be set to the Resource identifier in the @context."
                     ],
-                    "type": "string"
+                    "type": "string",
+                    "mergeStrategy": "keepBase"
                 },
                 "@type": {
                     "description": "the types of components that this component can be classified as",
@@ -838,25 +628,31 @@
                         "the first value should be considered its primary type.  This is usually a subtype of Component."
                     ],
                     "type": "array",
-                    "items": { "type": "string" }
+                    "items": { "type": "string" },
+                    "mergeStrategy": "uniqueArray",
+                    "mergeOptions": {
+                        "incompatible": [
+                            [ "nrdp:DataFile", "nrdp:Subcollection",
+                              "nrd:Hidden", "nrdp:AccessPage",
+                              "nrdp:SearchPage" ]
+                        ]
+                    }
                 },
                 "title": {
                     "description": "a descriptive title for the component",
-                    "type": "string"
+                    "type": "string",
+                    "mergeStrategy": "preferHead"
                 },
                 "description": {
                     "description": "a description of the nature and contents of the component, including the role it plays as part of the resource",
-                    "type": "string"
+                    "type": "string",
+                    "mergeStrategy": "preferHead"
                 },
                 "topic": {
                     "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
                     "type": "array",
                     "items": { "$ref": "#/definitions/Topic" },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Topic",
-                        "referenceProperty": "foaf:topic"
-                    }
+                    "mergeStrategy": "topicArray"
                 },
                 "conformsTo": {
                     "title": "Standard",
@@ -870,13 +666,130 @@
                             "type": "null"
                         }
                     ],
+                    "mergeStrategy": "preferHead"
+                },
+                
+                "filepath": {
+                    "description": "a name for the data file reflecting its hierarchical location in the data source collection",
+                    "notes": [
+                        "Forward slashes delimit the hierarchical names in the path",
+                        "If there are no slashes in this value, this file is assumed to be at the top of the file hierarchy",
+                        "The base name of this value (i.e. the last field in the path) can be used as the default filename to give to the file if downloaded.",
+                        "The component title may have the same value."
+                    ],
+                    "type": "string",
+                    "mergeStrategy": "overwrite"
+                },
+                
+                "downloadURL": {
+                    "title": "Download URL",
+                    "description": "URL providing direct access to a downloadable file of a dataset",
+                    "type": "string",
+                    "format": "uri",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
-                        "prefLabel": "Data Standard",
-                        "referenceProperty": "dc:conformsTo"
-                    }
-                }
+                        "prefLabel": "Download URL",
+                        "referenceProperty": "dcat:downloadURL"
+                    },
+                    "mergeStrategy": "keepBase"
+                },
                 
+                "mediaType": {
+                    "title": "Media Type",
+                    "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s downloadURL",
+                    "anyOf": [
+                        {
+                            "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferHead"
+                },
+
+                "format": {
+                    "title": "Format",
+                    "description": "A human-readable description of the file format of a distribution",
+                    "$ref": "#/definitions/Format",
+                    "mergeStrategy": "preferHead"
+                },
+                
+                "describedBy": {
+                    "title": "Data Dictionary",
+                    "description": "URL to the data dictionary for the distribution found at the downloadURL",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferHead"
+                },
+                
+                "describedByType": {
+                    "title": "Data Dictionary Type",
+                    "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s describedBy URL",
+                    "anyOf": [
+                        {
+                            "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferHead"
+                },
+
+                "accessURL": {
+                    "description": "the URL for accessing this indirect access to the resource",
+                    "type": "string",
+                    "format": "uri",
+                    "mergeStrategy": "preferBase"
+                }
+
+                
+            }
+        },
+
+        "Format": {
+            "description": "a description of a file format that a file employs",
+            "type": "object",
+            "properties": {
+                "description": {
+                    "description": "a human-readable description of the format",
+                    "type": "string"
+                },
+                
+                "scheme": {
+                    "description": "a URI that identifies the format type registry or identification system that the value is defined in.",
+                    "type": "string",
+                    "format": "uri",
+                    "asOnotology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Schema",
+                        "referenceProperty": "vold:vocabulary"
+                    }
+                },
+
+                "@id": {
+                    "description": "the unique identifier for the format",
+                    "type": "string",
+                    "format": "uri"
+                },
+
+                "tag": {
+                    "description": "a short, display-able token or abbreviation for the format",
+                    "notes": [
+                        "As a token, it is intended that applications can search for this value and find all files having the same format.  Thus, regardless of whether the @id field is provided, all references to the same format should use the same tag value."
+                    ],
+                    "type": "string"
+                }
             }
         },
 
@@ -888,29 +801,7 @@
             ],
             "allOf": [
                 { "$ref": "#/definitions/Component" },
-                { "$ref": "#/definitions/ResourceReference" },
-                {
-                    "properties": {
-                        "@id": {
-                            "description": "a relative identifier for this component",
-                            "notes": [
-                                "@id should be the ID for the included resource as a component of this resource; use the required proxyFor property to give the native ID of the included resource."
-                            ]
-                        },
-                        "resourceType": {
-                            "description":  "the linked-data class types for the included resource",
-                            "notes": [
-                                "The @type should contain values that are subclasses of Component; resourceType is provided to list the Resource types for the included resource.",
-                                "Just like a Resource:@type, the value must always be given as an array, even when only one type is provided.",
-                                "Multiple values indicate that the Resource can be considered of multiple types",
-                                "If this resource is not to be considered a subtype of the nrd:Resource, its value should be 'nrd:Resource'."
-                            ],
-                            "type": "array",
-                            "items": { "type": "string" } 
-                        }
-                    },
-                    "required": [ "proxyFor", "resourceType" ]
-                }
+                { "$ref": "#/definitions/ResourceReference" }
             ]
         },
 
@@ -997,19 +888,7 @@
                     "title": "Publisher Name",
                     "description": "The plain-text name of the organization",
                     "type": "string",
-                    "minLength": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "referenceProperty": "skos:prefLabel"
-                    }
-                },
-                "subOrganizationOf": {
-                    "description": "A parent organizational entity",
-                    "$ref": "#/definitions/Organization",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "referenceProperty": "org:subOrganizationOf"
-                    }
+                    "minLength": 1
                 }
             },
             "required": [ "name" ]
@@ -1028,58 +907,33 @@
                     "title": "Contact Name",
                     "description": "full name of the contact person, role, or organization",
                     "type": "string",
-                    "minLength": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Name",
-                        "referenceProperty": "vcard:fn"
-                    }
+                    "minLength": 1
                 },
             
                 "hasEmail": {
                     "title": "Email",
                     "description": "The email address of the resource contact",
                     "type": "string",
-                    "pattern": "^[\\w\\_\\~\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\:.-]+@[\\w.-]+\\.[\\w.-]+?$",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Email",
-                        "referenceProperty": "vcard:hasEmail"
-                    }
+                    "pattern": "^[\\w\\_\\~\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\:.-]+@[\\w.-]+\\.[\\w.-]+?$"
                 },
 
                 "postalAddress": {
                     "description": "the contact mailing address",
                     "notes": [
                     ],
-                    "$ref": "#/definitions/PostalAddress",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Address",
-                        "referenceProperty": "vcard:hasAddress"
-                    }
+                    "$ref": "#/definitions/PostalAddress"
                 },
                 
                 "phoneNumber": {
                     "description": "the contact telephone number",
                     "notes": [ "Complete international dialing codes should be given, e.g. '+1-410-338-1234'" ],
-                    "type" : "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Phone Number",
-                        "referenceProperty": "vcard:hasTelephone"
-                    }
+                    "type" : "string"
                 },
                 
                 "timezone": {
                     "description": "the time zone where the contact typically operates",
                     "type" : "string",
-                    "pattern": "^[-+][0-9]{4}$",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Contact Address",
-                        "referenceProperty": "transit:timezone"
-                    }
+                    "pattern": "^[-+][0-9]{4}$"
                 },
                 
                 "proxyFor": {
@@ -1088,21 +942,9 @@
                         "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
                     ],
                     "type": "string",
-                    "format": "uri",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
-                    }
+                    "format": "uri"
                 }
                 
-            },
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "@id": "pod:ContactPerson",
-                "@type": "owl:Class",
-                "prefLabel": "Contact Information",
-                "referenceClass": "vcard:Contact"
             }
 
         },
@@ -1110,11 +952,7 @@
         "PostalAddress": {
             "description": "a line-delimited listing of a postal address",
             "type": "array",
-            "items": { "type": "string", "minLength": 1 },
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "referenceProperty": "vcard:hasAddress"
-            }
+            "item": { "type": "string", "minLength": 1 }
         },
 
         "Identifier": {
@@ -1126,12 +964,7 @@
                     "notes": [
                         "this label may imply a particular resolver to use"
                     ],
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Identifier System",
-                        "referenceProperty": "mads:idScheme"
-                    }
+                    "type": "string"
                 },
 
                 "value": {
@@ -1139,23 +972,11 @@
                     "notes": [
                         "if no scheme is provided, a URI form of the identifier should be given"
                     ],
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Identifier System",
-                        "referenceProperty": "mads:idValue"
-                    }
+                    "type": "string"
                 }
 
             },
-            "required": [ "value" ],
-            "asOntology": {
-                "@context": "profile-schema-onto.json",
-                "@id": "mads:Identifier",
-                "@type": "owl:Class",
-                "prefLabel": "Identifier information",
-                "referenceClass": "mads:Identifier"
-            }
+            "required": [ "value" ]
         }
     },
 
