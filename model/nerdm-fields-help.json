@@ -3,7 +3,7 @@
         "name": "@type",
         "type": "array",
         "item_type": "string",
-        "label": "resource type",
+        "label": "Resource type",
         "tags": [ "searchable" ],
         "tips": {
             "search": "the type of resource"
@@ -34,7 +34,7 @@
     {
         "name": "@id",
         "type": "string",
-        "label": "repository identifier",
+        "label": "Repository identifier",
         "tags": [ "id" ],
         "tips": {
             "search": ""
@@ -61,7 +61,7 @@
     {
         "name": "contactPoint.hasEmail",
         "type": "object",
-        "label": "contact email address",
+        "label": "Email address to contact",
         "tags": [ "searchable" ],
         "tips": {
             "search": "the contact's email address"
@@ -79,7 +79,7 @@
     {
         "name": "modified",
         "type": "date",
-        "label": "date of last modification",
+        "label": "Date of last updates",
         "tags": [ ],
         "tips": {
             "search": "The date that this resource was last updated"
@@ -88,7 +88,7 @@
     {
         "name": "issued",
         "type": "date",
-        "label": "date of first release",
+        "label": "First Release date",
         "tags": [ ],
         "tips": {
             "search": "The date that this resource was first released"
@@ -215,30 +215,22 @@
             "search": "The persistent Digital Object Identifier (for reference purposes)"
         }
     },
-    {
-        "name": "abbrev",
-        "type": "string",
-        "label": "abbreviated name",
-        "tags": [ "searchable", "smalldisplay" ],
-        "tips": {
-            "search": ""
-        }
-    },
+    
     {
         "name": "components",
         "type": "array",
         "item_type": "object",
-        "label": "resource component",
+        "label": "Resource component",
         "tags": [ "" ],
         "tips": {
             "search": "a part of a resource (like a downloadable file or an API)"
         }
     },
     {
-        "name": "component.@type",
+        "name": "components.@type",
         "type": "array",
         "item_type": "string",
-        "label": "component type",
+        "label": "Type of the dataset/file",
         "tags": [ "" ],
         "tips": {
             "search": "a name identifying the type of component"
@@ -246,11 +238,11 @@
         "values": [
             {
                 "value": "nrdp:DataFile",
-                "label": "downloadable data file"
+                "label": "Downloadable data file"
             },
             {
                 "value": "nrdp:IncludedResource",
-                "label": "included resource",
+                "label": "Included resource",
                 "desription": "another resource that is part of this one"
             },
             {
@@ -271,25 +263,25 @@
         ]
     },
     {
-        "name": "component.title",
+        "name": "components.title",
         "type": "string",
-        "label": "title",
+        "label": "Title of dataset item/file",
         "tags": [ "searchable" ],
         "tips": {
             "search": ""
         }
     },
     {
-        "name": "component.description",
+        "name": "components.description",
         "type": "string",
-        "label": "title",
+        "label": "Description of data file/collection",
         "tags": [ "searchable" ],
         "tips": {
             "search": ""
         }
     },
     {
-        "name": "component.topic",
+        "name": "components.topic",
         "type": "object",
         "label": "Research Topic",
         "tags": [ "" ],
@@ -298,34 +290,16 @@
         }
     },
     {
-        "name": "component.topic.tag",
-        "type": "str",
-        "label": "research topic",
-        "tags": [ "searchable", "filterable" ],
-        "tips": {
-            "search": "vocabulary terms that describe what this part is about"
-        }
-    },
-    {
-        "name": "component.@id",
+        "name": "components.filepath",
         "type": "string",
-        "label": "component identifier",
-        "tags": [ "" ],
-        "tips": {
-            "search": ""
-        }
-    },
-    {
-        "name": "component.filepath",
-        "type": "string",
-        "label": "full data file or collection name",
+        "label": "Full data file or collection path",
         "tags": [ "searchable" ],
         "tips": {
             "search": ""
         }
     },
     {
-        "name": "component.mediaType",
+        "name": "components.mediaType",
         "type": "string",
         "label": "File's download content type",
         "tags": [ "" ],
@@ -334,28 +308,19 @@
         }
     },
     {
-        "name": "component.format",
+        "name": "components.format",
         "type": "object",
-        "label": "File's format information",
+        "label": "Data File's format information",
         "tags": [ "" ],
         "tips": {
             "search": ""
         }
     },
     {
-        "name": "component.format.tag",
-        "type": "object",
-        "label": "File's format type",
-        "tags": [ "searchable" ],
-        "tips": {
-            "search": ""
-        }
-    },
-    {
-        "name": "component.describedBy",
+        "name": "components.describedBy",
         "type": "string",
         "item_type": "string",
-        "label": "About this file",
+        "label": "Data file description",
         "tags": [ "" ],
         "tips": {
             "search": "" 
