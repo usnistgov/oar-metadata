@@ -1,4 +1,4 @@
-FROM mongo:3.2.9
+FROM mongo:4.2
 # VOLUME /data
 MAINTAINER Ray Plante <raymond.plante@nist.gov>
 COPY mongod.conf /etc/mongod.conf

@@ -470,13 +470,19 @@ def isPDR:
     "nrdp:PublicDataResource"
 ;
 
+# Return the "dcat:Dataset" resource type value if the input POD
+# record appears to be such.  This is almost always the case.
+def isDCatDS:
+    "dcat:Dataset"
+;
+
 # Return a list of resource types that an input POD Dataset matches
 #
 # Input: POD Dataset
 # Output: an array of strings
 #
 def resourceTypes:
-    [ isSRD, isPDR ]
+    [ isSRD, isPDR, isDCatDS ]
 ;
 
 # Converts an entire POD Dataset node to a NERDm Resource node
@@ -516,7 +522,8 @@ def podds2resource:
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
     if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
-    if .theme then . else del(.theme) end |
+    if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
+    if .topic then . else del(.topic) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
     if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |

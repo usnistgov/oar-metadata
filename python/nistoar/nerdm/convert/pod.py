@@ -2,14 +2,19 @@
 Classes and functions for converting from and to the NERDm schema
 """
 import os, json, re
-from collections import OrderedDict
+from collections import OrderedDict, Mapping
 
-from .. import jq
-from ..doi import resolve, is_DOI
-from ..doi.resolving import Resolver
-from .constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
-                        TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
-from .taxonomy import ResearchTopicsTaxonomy
+from ... import jq
+from ...doi import resolve, is_DOI
+from ...doi.resolving import Resolver
+from ..constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
+                         TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
+from ..taxonomy import ResearchTopicsTaxonomy
+
+# a taxonony URI with www.nist.gov instead of data.nist.gov got out into
+# the wild
+TAXONOMY_VOCAB_BASE_URI_RE = re.compile('^'+re.sub(r'/data\.', '/(www|data).',
+                                                   TAXONOMY_VOCAB_BASE_URI))
 
 class PODds2Res(object):
     """
@@ -78,7 +83,7 @@ class PODds2Res(object):
         """
         out = self.jqt.transform(podds, {"id": id})
         if 'theme' in out:
-            out['topic'] = self.themes2topics(out['themes'])
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -108,7 +113,7 @@ class PODds2Res(object):
         """
         out = self.jqt.transform_file(poddsfile, {"id": id})
         if 'theme' in out:
-            out['topic'] = self.themes2topics(out['themes'])
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -248,15 +253,7 @@ class PODds2Res(object):
                                  the output.
         """
         self._check_taxon_enabled()
-        out = []
-        for theme in themes:
-            term = self.taxon.match_theme(theme, latest)
-            if term:
-                out.append(term.as_topic())
-            elif incl_unrec:
-                out.append(OrderedDict([("@type", "Concept"), ("tag", theme)]))
-
-        return out
+        return self.taxon.themes2topics(themes, latest, incl_unrec)
 
     def topics2themes(self, topics, incl_unrec=True):
         """
@@ -267,12 +264,105 @@ class PODds2Res(object):
                              from the NIST taxonomy (based on the 'scheme' 
                              property).  
         """
-        out = []
-        for topic in topics:
-            if incl_unrec or ('scheme' in topic and 'tag' in topic and \
-                              topic['scheme'].startswith(TAXONOMY_VOCAB_BASE_URI)):
-                out.append(topic['tag'])
+        return topics2themes(topics, incl_unrec);
 
+
+def topics2themes(topics, incl_unrec=True):
+    """
+    convert an array of NERDm topic nodes to a list of themes (as given in 
+    NIST POD files).
+    :param list topics:  a list of NIST topic nodes
+    :param boolean incl_unrec:  if False and a topic is not marked as being
+                         from the NIST taxonomy (based on the 'scheme' 
+                         property).  
+    """
+    out = []
+    for topic in topics:
+        if incl_unrec or ('scheme' in topic and 'tag' in topic and \
+                          TAXONOMY_VOCAB_BASE_URI_RE.search(topic['scheme'])):
+            out.append(topic['tag'])
+
+    return out
+
+
+class Res2PODds(object):
+    """
+    a class for converting a NERDm Resource object to a POD Dataset object.
+
+    Currently, there are no configuration parameters supported.
+    """
+
+    _flavor = {
+        "midas": "resource2midaspodds",
+        "pdr":   "resource2midaspodds",
+    }
+
+    def __init__(self, jqlibdir, config=None, logger=None):
+        """
+        create the converter
+
+        :param jqlibdir str:   path to the directory containing the nerdm jq
+                               modules
+        :param config  dict:   a dictionary with conversion configuration data
+                               in it; currently, no paramters are supported.
+        :param logger Logger:  a logger object that can be used to write warning
+                               messages 
+        """
+        self.jqt = {
+            "midas": jq.Jq('nerdm::resource2midaspodds', jqlibdir,
+                           ["nerdm2pod:nerdm"])
+        }
+        if config is None:
+            config = {}
+        self.cfg = config
+        self._log = logger
+
+    def _jq4flavor(self, flavor):
+        if flavor in self.jqt:
+            return self.jqt[flavor]
+
+        if flavor in self._flavors:
+            flavor = self._flavors[flavor]
+        self.jqt[flavor] = jq.Jq('nerdm::'+flavor, jqlibdir, ["nerdm2pod:nerdm"])
+        return self.jqt[flavor]
+
+    def convert(self, nerdm, flavor="midas"):
+        """
+        convert JSON-encoded data to a resource object
+
+        :param nerdm str:   a string containing the JSON-formatted input NERDm
+                            Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform(nerdm)
+        return out
+
+    def convert_data(self, nerdm, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdm dict:  A dictionary containing a NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        return self.convert(json.dumps(nerdm))
+
+    def convert_file(self, nerdmfile, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdmfile str: the path to a file containing a JSON-encoded 
+                              NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform_file(nerdmfile)
         return out
 
 
@@ -396,7 +486,7 @@ class DOIResolver(object):
         info = self.resolver.resolve(doi)
         out = []
 
-        if info.source == "Datacite":
+        if info.source == "Crosscite" or info.source == "Datacite":
             out = datacite_creators2nerdm_authors(info.native.get('creators'))
         elif info.source == "Crossref":
             out = crossref_authors2nerdm_authors(info.native.get('author'))
@@ -438,12 +528,27 @@ def _doiinfo2reference(info, resolver):
     out = OrderedDict( [('@id', "doi:"+info.id)] )
 
     # what type of reference
-    if info.source == "Datacite":
-        out['@type'] = ['npg:Dataset']
+    tp = info.data.get('type')
+    if not tp:
+        if info.source == "Datacite":
+            tp = 'dataset'
+        elif info.source == "Crossref":
+            tp = 'article'
+        else:
+            tp = 'document'
+
+    if tp == 'dataset':
+        out['@type'] = ['schema:Dataset']
         out['refType'] = "References"
-    elif info.source == "Crossref":
-        out['@type'] = ['npg:Article']
+    elif tp.startswith('article'):
+        out['@type'] = ['schema:Article']
         out['refType'] = "IsCitedBy"
+    elif tp == 'book':
+        out['@type'] = ['schema:Book']
+        out['refType'] = "References"
+    elif tp == 'thesis':
+        out['@type'] = ['schema:Thesis']
+        out['refType'] = "References"
     else:
         out['@type'] = ['npg:Document']
         out['refType'] = "References"
@@ -573,8 +678,20 @@ def datacite_creator2nerdm_author(creator):
 
     # affiliation
     if creator.get('affiliation'):
-        out['affiliation'] = [ OrderedDict( [("@type", "schema:affiliation")] ) ]
-        out['affiliation'][0]['title'] = creator['affiliation']
+        out['affiliation'] = []
+        if isinstance(creator.get('affiliation'), (str, unicode)):
+            out['affiliation'].append(
+                OrderedDict( [("@type", "schema:affiliation"),
+                              ('title', creator.get('affiliation'))] )
+            )
+        else:
+            for caffil in creator.get('affiliation',[]):
+                affil = OrderedDict( [("@type", "schema:affiliation")] )
+                if isinstance(caffil, Mapping):
+                    affil['title'] = caffil.get('name','')
+                else:
+                    affil['title'] = caffil
+                out['affiliation'].append(affil)
 
     return out
 
