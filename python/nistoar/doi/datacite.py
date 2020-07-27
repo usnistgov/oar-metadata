@@ -300,9 +300,7 @@ class DataCiteDOIClient(object):
         :raise Exception:  if the requested path already exists or is already reserved
         :rtype DataCiteDOI:  an object for updating and publishing the reserved DOI
         """
-        if prefix:
-            doipath = prefix+'/'+doipath
-        else:
+        if not prefix:
             indoi = _doi_pfx.search(doipath)
             if indoi:
                 prefix = indoi.group(0).strip('/')
