@@ -452,6 +452,13 @@ class DataCiteDOI(object):
         return self.attrs.get('state', '')
 
     @property
+    def url(self):
+        """
+        the current state in the DataCite database
+        """
+        return self.attrs.get('url', '')
+
+    @property
     def exists(self):
         """
         True if the DOI has been reserved or published in the DataCite server.
@@ -577,7 +584,7 @@ class DataCiteDOI(object):
                                 "doi:%s has already been published" % self.doi)
         if self.is_readonly:
             raise DOIStateError(self.doi, self._reslvr._ep, "readonly",
-                                "doi:%s read-only; cannot update" % self.doi)
+                                "doi:%s read-only; cannot publish" % self.doi)
 
         if self.state == STATE_NONEXISTENT:
             defattrs = deepcopy(self._reslvr._resdata)
