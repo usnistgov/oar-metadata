@@ -522,7 +522,25 @@ class DOIResolver(object):
             cfg.get('email', "datasupport@nist.gov")
         )
         return DOIResolver(ci, resolver)
-            
+
+def _date_parts2date(parts):
+    if not parts:
+        return None
+    
+    if not isinstance(parts[0], int) or parts[0] < 1000 or parts[0] > 3000:
+        return None
+    out = str(parts[0])
+
+    if len(parts) > 1:
+        if not isinstance(parts[1], int) or parts[1] < 1 or parts[1] > 12:
+            return out
+        out += "-{0:0>2}".format(parts[1])
+
+    if len(parts) > 2 and \
+       isinstance(parts[2], int) and parts[2] > 0 and parts[2] < 32:
+        out += "-{0:0>2}".format(parts[2])
+
+    return out
 
 def _doiinfo2reference(info, resolver):
     out = OrderedDict( [('@id', "doi:"+info.id)] )
@@ -555,12 +573,13 @@ def _doiinfo2reference(info, resolver):
 
     if info.data.get('title'):
         out['title'] = info.data['title']
-    if info.data.get('issued') and 'date-parts' in info.data['issued']:
-        parts = info.data['issued']['date-parts'][0]
-        if len(parts) > 0: out['issued'] = str(parts[0])
-        if len(parts) > 1: out['issued'] += "-{0:0>2}".format(parts[1])
-        if len(parts) > 2: out['issued'] += "-{0:0>2}".format(parts[2])
 
+    if info.data.get('issued') and 'date-parts' in info.data['issued'] and \
+       len(info.data['issued']['date-parts']) > 0:
+        issued = _date_parts2date(info.data['issued']['date-parts'][0])
+        if issued:
+            out['issued'] = issued
+            
     if 'location' not in out:
         out['location'] = resolver + info.id
 

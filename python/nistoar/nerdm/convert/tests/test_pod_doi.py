@@ -212,6 +212,25 @@ datacite = {
         
 class TestConvertReferences(unittest.TestCase):
 
+    def test_date_parts2date(self):
+        self.assertIsNone(cvt._date_parts2date([]))
+        self.assertIsNone(cvt._date_parts2date([None]))
+        self.assertIsNone(cvt._date_parts2date(["2020"]))
+        self.assertIsNone(cvt._date_parts2date([837]))
+        self.assertIsNone(cvt._date_parts2date([3030]))
+        self.assertEqual(cvt._date_parts2date([1786]), "1786")
+        self.assertEqual(cvt._date_parts2date([2020]), "2020")
+        self.assertEqual(cvt._date_parts2date([2020, None]), "2020")
+        self.assertEqual(cvt._date_parts2date([2020, 53]), "2020")
+        self.assertEqual(cvt._date_parts2date([1966, 3]), "1966-03")
+        self.assertEqual(cvt._date_parts2date([1866, 11]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 35]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, "1"]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, None]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 4]), "1866-11-04")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 4, 8]), "1866-11-04")
+        
+
     def test_crossref_doiinfo2reference(self):
         info = DOIInfo("10.10/XXX", source="Crossref")
         info._data = crossref
