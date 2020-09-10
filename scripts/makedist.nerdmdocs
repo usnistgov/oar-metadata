@@ -83,7 +83,7 @@ mkdir -p $installdir
 
 # export schema files
 schemas="nerdm nerdm-pub"
-schema_versions="0.1 0.2"
+schema_versions="0.1 0.2 0.3"
 for sch in $schemas; do
     for ver in $schema_versions; do
         sfile="$modeldir/$sch-schema-$ver.json"
