@@ -1,0 +1,25 @@
+{
+    "@type": "dcat:Dataset",
+    "title": "A Minimal Record",
+    "identifier": "EBC9DB05EDF05B0EE043065706812DF87",
+    "contactPoint": {
+        "@type": "vcard:Contact",
+        "fn": "Bob",
+        "hasEmail": "mailto:bob@nist.gov"
+    },
+    "description": "This is a minimal description.",
+    "keyword": [ "testing" ],
+    "landingPage": null,
+    "modified": "2014-03-05",
+    "accessLevel": "public",
+    "bureauCode": [
+        "006:55"
+    ],
+    "programCode": [
+        "006:052"
+    ],
+    "publisher": {
+        "@type": "org:Organization",
+        "name": "National Institute of Standards and Technology"
+    }
+}

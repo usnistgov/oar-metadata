@@ -39,6 +39,27 @@ def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
 #
 def resid:  if $id then $id else null end;
 
+# the base URL for the PDR-generated landing page
+#
+def pdrLandingPageBaseURL: "https://data.nist.gov/od/id/";
+
+# extract the local identifier from the EDI-ID.  If the input is an ARK identifier, the scheme and 
+# prefix are dropped
+# 
+# Input: string
+# Output: string
+def ediid2localid:
+    if test("^ark:/\\d+/") then
+        sub("ark:/\\d+/"; "")
+    else . end
+;
+
+# the full URL for PDR-generated landing page, given the EDI-ID
+#
+# Input: string
+# Output: string
+def pdrLandingPageURL:  ediid2localid | (pdrLandingPageBaseURL + .);
+
 # extract the path component from a URI
 #
 # Input: string
@@ -522,6 +543,7 @@ def podds2resource:
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
     if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
+    if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
     if .topic then . else del(.topic) end |
     if .issued then . else del(.issued) end |

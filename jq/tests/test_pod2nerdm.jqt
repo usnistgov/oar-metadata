@@ -45,6 +45,48 @@ null
 "ID"
 
 #--------------
+# testing pdrLandingPageBaseURL()
+#
+include "pod2nerdm"; pdrLandingPageBaseURL
+null
+"https://data.nist.gov/od/id/"
+
+#--------------
+# testing ediid2localid()
+#
+include "pod2nerdm"; ediid2localid
+"3A1EE2F169DD3B8CE0531A570681DB5D1491"
+"3A1EE2F169DD3B8CE0531A570681DB5D1491"
+
+#--------------
+# testing ediid2localid()
+#
+include "pod2nerdm"; ediid2localid
+"mds2-1491"
+"mds2-1491"
+
+#--------------
+# testing ediid2localid()
+#
+include "pod2nerdm"; ediid2localid
+"ark:/88844/pdr2-1491"
+"pdr2-1491"
+
+#--------------
+# testing pdrLandingPageURL()
+#
+include "pod2nerdm"; pdrLandingPageURL
+"sdi2487gha1/v1"
+"https://data.nist.gov/od/id/sdi2487gha1/v1"
+
+#--------------
+# testing pdrLandingPageURL()
+#
+include "pod2nerdm"; pdrLandingPageURL
+"ark:/88444/pdr0-sdi2487gha1"
+"https://data.nist.gov/od/id/pdr0-sdi2487gha1"
+
+#--------------
 # testing cvtref()
 #
 include "pod2nerdm"; map(cvtref)
