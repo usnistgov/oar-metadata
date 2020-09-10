@@ -262,7 +262,7 @@ class TestConvertReferences(unittest.TestCase):
         self.assertEqual(ref['citation'], 'ibid')
         self.assertIn('_extensionSchemas', ref)
         self.assertTrue(isinstance(ref['_extensionSchemas'], list))
-        self.assertTrue(ref['_extensionSchemas'][0].startswith("https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/"), msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
+        self.assertTrue(ref['_extensionSchemas'][0].startswith("https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/"), msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
 
 class TestDOIResolver(unittest.TestCase):
 

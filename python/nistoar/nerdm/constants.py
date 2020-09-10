@@ -4,7 +4,7 @@ data to make them available from Python.
 """
 core_schema_base = "https://data.nist.gov/od/dm/nerdm-schema/"
 
-schema_versions = ["v0.2", "v0.1"]
+schema_versions = ["v0.3", "v0.2", "v0.1"]
 
 def core_schema_uri_for(version):
     """
