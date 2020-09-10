@@ -87,3 +87,11 @@ class StateException(RMMException):
     """
     pass
 
+class DatabaseStateError(StateException):
+    """
+    a class indicating that the RMM database is in 
+    an uncorrectable state preventing proper processing.  An example 
+    would be detecting multiple records with the same unique key value. 
+    """
+    pass
+
