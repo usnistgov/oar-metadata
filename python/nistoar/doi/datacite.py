@@ -527,7 +527,7 @@ class DataCiteDOI(object):
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexpected_resolver_err(doipath, resp, resj,
+            self._reslvr._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def update(self, attrs):
@@ -555,15 +555,15 @@ class DataCiteDOI(object):
         resj = self._reslvr._to_json(resp, self.doi)
 
         if resp.status_code >= 400 and resp.status_code < 500:
-            self._unexpected_client_err(self.doi, resp, resj)
+            self._reslvr._unexpected_client_err(self.doi, resp, resj)
 
         elif resp.status_code < 200 or resp.status_code >= 300:
-            self._unexpected_resolver_err(self.doi, resp, resj)
+            self._reslvr._unexpected_resolver_err(self.doi, resp, resj)
 
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexpected_resolver_err(doipath, resp, resj,
+            self._reslvr._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def publish(self, attrs=None):
@@ -629,15 +629,15 @@ class DataCiteDOI(object):
                                 JAErr(resp.get('errors',[]),
                                       "Insufficient metadata to publish")._())
         elif resp.status_code >= 400 and resp.status_code < 500:
-            self._unexpected_client_err(self.doi, resp, resj)
+            self._reslvr._unexpected_client_err(self.doi, resp, resj)
 
         elif resp.status_code < 200 or resp.status_code >= 300:
-            self._unexpected_resolver_err(self.doi, resp, resj)
+            self._reslvr._unexpected_resolver_err(self.doi, resp, resj)
 
         try:
             self._data = resj['data']
         except KeyError as ex:
-            self._unexpected_resolver_err(doipath, resp, resj,
+            self._reslvr._unexpected_resolver_err(doipath, resp, resj,
                         "Unexpected JSON data returned: missing %s property" % str(ex))
 
     def delete(self, relax=False):
