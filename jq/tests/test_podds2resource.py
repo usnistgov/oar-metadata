@@ -3,11 +3,12 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.2#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.3#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")
+minfile =  os.path.join(datadir, "minimal_pod.json")
 pdlfile = os.path.join(datadir, "nist-pdl-oct2016.json")
 jqlib = os.path.dirname(os.path.abspath(os.path.dirname(__file__)))
 schemadir = os.path.join(os.path.dirname(jqlib), "model")
@@ -28,7 +29,7 @@ class TestJanaf(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.2#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.3#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -141,7 +142,7 @@ class TestCORR(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.2#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.3#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -230,6 +231,32 @@ class TestCORR(unittest.TestCase):  #
         self.assertEqual(theme[1], "Materials characterization")
         
 
+class TestMinimal(unittest.TestCase):  # 
+
+    def setUp(self):
+        # pdb.set_trace() # nerdm::podds2resourc
+        self.out = send_file_thru_jq('nerdm::podds2resource', minfile,
+                                     {"id": "ark:ID"})
+
+    def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
+    def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_context(self):
+        self.assertEquals(self.out['@context'],
+                        [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
+                          {"@base": "ark:ID"} ])
+                          
+    def test_arestr(self):
+        props = "title modified ediid landingPage".split()
+        for prop in props:
+            self.assertIn(prop, self.out, "Property not found: " + prop)
+            self.assertIsInstance(self.out[prop], types.StringTypes,
+                "Property '{0}' not a string: {1}".format(prop, self.out[prop]))
+
+    def test_default_landingPage(self):
+        self.assertIsNotNone(self.out.get('landingPage'))
+        self.assertEqual(self.out.get('landingPage'),
+                         "https://data.nist.gov/od/id/EBC9DB05EDF05B0EE043065706812DF87")
+
 class TestValidateNerdm(unittest.TestCase):
 
     def setUp(self):
@@ -250,7 +277,6 @@ class TestValidateNerdm(unittest.TestCase):
         out = send_jsonstr_thru_jq('nerdm::podds2resource', ds, {"id": "ark:ID"})
 
         self.val.validate(out, False, True)
-        
 
 def format_argopts(argdata):
     """
