@@ -8,6 +8,8 @@ from pymongo import MongoClient
 from ejsonschema import ExtValidator
 from ejsonschema import ValidationError, SchemaError, RefResolutionError
 
+from ..exceptions import DatabaseStateError
+
 _dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
 class Loader(object):

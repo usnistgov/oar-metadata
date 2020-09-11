@@ -21,11 +21,11 @@ include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.2#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.3#";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#";
 
 # the NERDm context location
 #
@@ -38,6 +38,27 @@ def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
 # the resource identifier provided on the command line
 #
 def resid:  if $id then $id else null end;
+
+# the base URL for the PDR-generated landing page
+#
+def pdrLandingPageBaseURL: "https://data.nist.gov/od/id/";
+
+# extract the local identifier from the EDI-ID.  If the input is an ARK identifier, the scheme and 
+# prefix are dropped
+# 
+# Input: string
+# Output: string
+def ediid2localid:
+    if test("^ark:/\\d+/") then
+        sub("ark:/\\d+/"; "")
+    else . end
+;
+
+# the full URL for PDR-generated landing page, given the EDI-ID
+#
+# Input: string
+# Output: string
+def pdrLandingPageURL:  ediid2localid | (pdrLandingPageBaseURL + .);
 
 # extract the path component from a URI
 #
@@ -209,7 +230,7 @@ def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/DataFile" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/DataFile" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -223,7 +244,7 @@ def dist2checksum:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/ChecksumFile" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/ChecksumFile" ] |
     .["mediaType"] = "text/plain" |
     .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
     if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
@@ -263,7 +284,7 @@ def dist2inaccess:
 def dist2accesspage:
     .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("#")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/AccessPage" ] |
+    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/AccessPage" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -522,6 +543,7 @@ def podds2resource:
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
     if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
+    if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
     if .topic then . else del(.topic) end |
     if .issued then . else del(.issued) end |

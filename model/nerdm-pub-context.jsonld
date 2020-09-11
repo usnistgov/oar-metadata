@@ -50,7 +50,7 @@
             "@id": "schema:author",
             "@container": "@list"
         }
-    }
+    },
 
     "@id": "https://data.nist.gov/od/dm/nerdm-context.jsonld",
     "title": "The core NIST Extended Resource Data model (NERDm) JSON-LD context",
