@@ -97,6 +97,7 @@ done
 # export context files
 cp $modeldir/nerdm-schema-context.jsonld $installdir
 cp $modeldir/nerdm-pub-context.jsonld $installdir
+cp $modeldir/nerdm-context.jsonld $installdir
 
 # export help schema documentation
 mkdir -p $installdir/nerdm
