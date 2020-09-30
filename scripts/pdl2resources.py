@@ -22,6 +22,8 @@ if not os.path.exists(jqlib):
     jqlib2 = os.path.join(basedir, "jq")
     if os.path.exists(jqlib2):
         jqlib = jqlib2
+
+schemadir = None   # default will be based on the value of jqlib
     
 if 'OAR_PYTHONPATH' in os.environ:
     oarpypath = os.environ['OAR_PYTHONPATH']
@@ -31,6 +33,8 @@ if not os.path.exists(jqlib):
     print("jq library location is unknown; please, set the OAR_HOME or "
           "OAR_JQ_LIB environment variable", file=sys.stderr)
     sys.exit(10)
+if 'OAR_SCHEMA_DIR' in os.environ:
+    schemadir = os.environ['OAR_SCHEMA_DIR']
 
 sys.path.extend(oarpypath.split(os.pathsep))
 try:
@@ -84,7 +88,8 @@ def main(args):
 
     seq = IDSEQ + opts.start
     minter = PDRMinter(None, { 'shoulder_for_edi': 'mds0' })
-    cvtr = PODds2Res(jqlib)
+    cvtr = PODds2Res(jqlib, schemadir=schemadir)
+    cvtr.fix_theme = opts.fixtheme
 
     ensure_out_dir(opts.odir)
 
@@ -104,10 +109,6 @@ def main(args):
     if opts.start >= len(dss):
         raise RuntimeError("Not enough datasets found for requested starting record: start={0} > found={1}".format(opts.start, len(dss)))
 
-    tax = None
-    if opts.fixtheme:
-        tax = load_theme_vocab()
-
     extracted = 0
     lim = len(dss)
     if opts.count >= 0:
@@ -119,8 +120,6 @@ def main(args):
         id = minter.mint(iddata)
         basename = id[SHOULDER_POS:]
         res = cvtr.convert_data(dss[i], id)
-        if opts.fixtheme:
-            set_theme_as_topic(res, tax)
         with open(os.path.join(opts.odir,basename+".json"), 'w') as fd:
             json.dump(res, fd, indent=4, separators=(',', ': '))
         extracted += 1

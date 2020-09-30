@@ -2,12 +2,19 @@
 Classes and functions for converting from and to the NERDm schema
 """
 import os, json, re
-from collections import OrderedDict
+from collections import OrderedDict, Mapping
 
-from .. import jq
-from ..doi import resolve, is_DOI
-from ..doi.resolving import Resolver
-from .constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI
+from ... import jq
+from ...doi import resolve, is_DOI
+from ...doi.resolving import Resolver
+from ..constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
+                         TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
+from ..taxonomy import ResearchTopicsTaxonomy
+
+# a taxonony URI with www.nist.gov instead of data.nist.gov got out into
+# the wild
+TAXONOMY_VOCAB_BASE_URI_RE = re.compile('^'+re.sub(r'/data\.', '/(www|data).',
+                                                   TAXONOMY_VOCAB_BASE_URI))
 
 class PODds2Res(object):
     """
@@ -31,16 +38,18 @@ class PODds2Res(object):
                                doi_resolver.client_info be set.  
     """
 
-    def __init__(self, jqlibdir, config=None, logger=None):
+    def __init__(self, jqlibdir, config=None, logger=None, schemadir=None):
         """
         create the converter
 
-        :param jqlibdir str:   path to the directory containing the nerdm jq
+        :param jqlibdir  str:  path to the directory containing the nerdm jq
                                modules
-        :param config  dict:   a dictionary with conversion configuration data
+        :param config   dict:  a dictionary with conversion configuration data
                                in it (see class documentation)
         :param logger Logger:  a logger object that can be used to write warning
                                messages 
+        :param schemadir str:  path to the directory containing the taxonomy
+                               definitions
         """
         self.jqt = jq.Jq('nerdm::podds2resource', jqlibdir, ["pod2nerdm:nerdm"])
         if config is None:
@@ -48,6 +57,21 @@ class PODds2Res(object):
         self.cfg = config
         self._log = logger
         self._doires = DOIResolver.from_config(self.cfg.get('doi_resolver', {}))
+
+        self.taxon = None
+        if not schemadir:
+            schemadir = self.cfg.get('schema_dir')
+            if not schemadir:
+                schemadir = os.path.join(jqlibdir, "..", "model")
+                if not os.path.exists(schemadir):
+                    schemadir = os.path.join(jqlibdir, "..", "..", "etc", "schemas")
+        if os.path.exists(schemadir):
+            self.taxon = ResearchTopicsTaxonomy.from_schema_dir(schemadir)
+        elif self._log:
+            self._log.warning("PODds2Res: taxonomy definition data not available")
+            if schemadir:
+                self._log.warning("PODds2Res: schema directory not found: %s",
+                                  schemadir)
 
     def convert(self, podds, id):
         """
@@ -58,6 +82,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform(podds, {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -71,6 +97,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform(json.dumps(podds), {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -84,6 +112,8 @@ class PODds2Res(object):
         :param id str:      The identifier to assign to the output NERDm resource
         """
         out = self.jqt.transform_file(poddsfile, {"id": id})
+        if 'theme' in out:
+            out['topic'] = self.themes2topics(out['theme'])
         if self.should_massage:
             self.massage(out)
         return out
@@ -94,7 +124,8 @@ class PODds2Res(object):
         True if either enrich_refs or fetch_authors is set to True
         """
         return self.cfg.get('enrich_refs', False) or \
-               self.cfg.get('fetch_authors', False)
+               self.cfg.get('fetch_authors', False) or \
+               (self.taxon and self.cfg.get('fix_themes', True))
 
     @property
     def enrich_refs(self):
@@ -110,7 +141,8 @@ class PODds2Res(object):
 
     @enrich_refs.deleter
     def enrich_refs(self):
-        del self.cfg['enrich_refs']
+        if 'enrich_refs' in self.cfg:
+            del self.cfg['enrich_refs']
 
     @property
     def fetch_authors(self):
@@ -127,7 +159,30 @@ class PODds2Res(object):
 
     @fetch_authors.deleter
     def fetch_authors(self):
-        del self.cfg['fetch_authors']
+        if 'fetch_authors' in self.cfg:
+            del self.cfg['fetch_authors']
+
+    @property
+    def fix_themes(self):
+        """
+        True if the themes array should be fixed to properly match the latest
+        terms from the NIST taxonomy.
+        """
+        return self.taxon and self.cfg.get('fix_themes', True)
+
+    @fix_themes.setter
+    def fix_themes(self, tf):
+        if tf:
+            self._check_taxon_enabled()
+        self.cfg['fix_themes'] = bool(tf)
+    @fix_themes.deleter
+    def fix_themes(self):
+        if 'fix_themes' in self.cfg:
+            del self.cfg['fix_themes']
+
+    def _check_taxon_enabled(self):
+        if not self.taxon:
+            raise RuntimeError("Taxonomy data unavailable (schema dir unknown?)")
 
     def massage(self, nerd):
         """
@@ -137,8 +192,10 @@ class PODds2Res(object):
         If enrich_refs is True, massage_refs will be called.  The given NERDm
         record will be updated in-situ
 
-        @param nerd   the NERDm record to update
+        :param dict nerd:   the NERDm record to update
         """
+        if self.fix_themes:
+            self.massage_themes(nerd)
         if self.fetch_authors:
             self.massage_authors(nerd)
         if self.enrich_refs:
@@ -173,7 +230,141 @@ class PODds2Res(object):
                     refs[i].update(newref)
 
         return nerd
-            
+
+    def massage_themes(self, nerd):
+        """
+        update the themes value to properly reflect the latest NIST taxonomy
+        """
+        if nerd.get('topic'):
+            nerd['theme'] = self.topics2themes(nerd['topic'])
+
+    def themes2topics(self, themes, latest=True, incl_unrec=True):
+        """
+        Convert the given theme terms to NERDm topic nodes referencing the 
+        NIST Research Taxonomy.  The input terms can be approximate matches 
+        to the NIST taxonomy--i.e. have missing or misspelled words, 
+        incorrect capitalization, or missing parent componets; this function 
+        will match them to proper values in the taxonomy
+        :param list themes:      an array of theme terms
+        :param boolean latest:   if True and a theme matches a deprecated theme,
+                                 an attempt is made to 
+        :param boolean incl_unrec: if True and a theme cannot be matched to a 
+                                 term in the NIST taxonomy, do not include it in 
+                                 the output.
+        """
+        self._check_taxon_enabled()
+        return self.taxon.themes2topics(themes, latest, incl_unrec)
+
+    def topics2themes(self, topics, incl_unrec=True):
+        """
+        convert an array of NERDm topic nodes to a list of themes (as given in 
+        NIST POD files).
+        :param list topics:  a list of NIST topic nodes
+        :param boolean incl_unrec:  if False and a topic is not marked as being
+                             from the NIST taxonomy (based on the 'scheme' 
+                             property).  
+        """
+        return topics2themes(topics, incl_unrec);
+
+
+def topics2themes(topics, incl_unrec=True):
+    """
+    convert an array of NERDm topic nodes to a list of themes (as given in 
+    NIST POD files).
+    :param list topics:  a list of NIST topic nodes
+    :param boolean incl_unrec:  if False and a topic is not marked as being
+                         from the NIST taxonomy (based on the 'scheme' 
+                         property).  
+    """
+    out = []
+    for topic in topics:
+        if incl_unrec or ('scheme' in topic and 'tag' in topic and \
+                          TAXONOMY_VOCAB_BASE_URI_RE.search(topic['scheme'])):
+            out.append(topic['tag'])
+
+    return out
+
+
+class Res2PODds(object):
+    """
+    a class for converting a NERDm Resource object to a POD Dataset object.
+
+    Currently, there are no configuration parameters supported.
+    """
+
+    _flavor = {
+        "midas": "resource2midaspodds",
+        "pdr":   "resource2midaspodds",
+    }
+
+    def __init__(self, jqlibdir, config=None, logger=None):
+        """
+        create the converter
+
+        :param jqlibdir str:   path to the directory containing the nerdm jq
+                               modules
+        :param config  dict:   a dictionary with conversion configuration data
+                               in it; currently, no paramters are supported.
+        :param logger Logger:  a logger object that can be used to write warning
+                               messages 
+        """
+        self.jqt = {
+            "midas": jq.Jq('nerdm::resource2midaspodds', jqlibdir,
+                           ["nerdm2pod:nerdm"])
+        }
+        if config is None:
+            config = {}
+        self.cfg = config
+        self._log = logger
+
+    def _jq4flavor(self, flavor):
+        if flavor in self.jqt:
+            return self.jqt[flavor]
+
+        if flavor in self._flavors:
+            flavor = self._flavors[flavor]
+        self.jqt[flavor] = jq.Jq('nerdm::'+flavor, jqlibdir, ["nerdm2pod:nerdm"])
+        return self.jqt[flavor]
+
+    def convert(self, nerdm, flavor="midas"):
+        """
+        convert JSON-encoded data to a resource object
+
+        :param nerdm str:   a string containing the JSON-formatted input NERDm
+                            Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform(nerdm)
+        return out
+
+    def convert_data(self, nerdm, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdm dict:  A dictionary containing a NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        return self.convert(json.dumps(nerdm))
+
+    def convert_file(self, nerdmfile, flavor="midas"):
+        """
+        convert parsed POD record data to a resource object
+
+        :param nerdmfile str: the path to a file containing a JSON-encoded 
+                              NERDm Resource record
+        :param flavor str:  a name indicating which flavor of POD to conver to;
+                            recognized names include "midas" and "pdr" 
+                            (default: "midas")
+        """
+        jqt = self._jq4flavor(flavor)
+        out = jqt.transform_file(nerdmfile)
+        return out
+
 
 class ComponentCounter(object):
     """
@@ -295,7 +486,7 @@ class DOIResolver(object):
         info = self.resolver.resolve(doi)
         out = []
 
-        if info.source == "Datacite":
+        if info.source == "Crosscite" or info.source == "Datacite":
             out = datacite_creators2nerdm_authors(info.native.get('creators'))
         elif info.source == "Crossref":
             out = crossref_authors2nerdm_authors(info.native.get('author'))
@@ -331,30 +522,64 @@ class DOIResolver(object):
             cfg.get('email', "datasupport@nist.gov")
         )
         return DOIResolver(ci, resolver)
-            
+
+def _date_parts2date(parts):
+    if not parts:
+        return None
+    
+    if not isinstance(parts[0], int) or parts[0] < 1000 or parts[0] > 3000:
+        return None
+    out = str(parts[0])
+
+    if len(parts) > 1:
+        if not isinstance(parts[1], int) or parts[1] < 1 or parts[1] > 12:
+            return out
+        out += "-{0:0>2}".format(parts[1])
+
+    if len(parts) > 2 and \
+       isinstance(parts[2], int) and parts[2] > 0 and parts[2] < 32:
+        out += "-{0:0>2}".format(parts[2])
+
+    return out
 
 def _doiinfo2reference(info, resolver):
     out = OrderedDict( [('@id', "doi:"+info.id)] )
 
     # what type of reference
-    if info.source == "Datacite":
-        out['@type'] = ['npg:Dataset']
+    tp = info.data.get('type')
+    if not tp:
+        if info.source == "Datacite":
+            tp = 'dataset'
+        elif info.source == "Crossref":
+            tp = 'article'
+        else:
+            tp = 'document'
+
+    if tp == 'dataset':
+        out['@type'] = ['schema:Dataset']
         out['refType'] = "References"
-    elif info.source == "Crossref":
-        out['@type'] = ['npg:Article']
+    elif tp.startswith('article'):
+        out['@type'] = ['schema:Article']
         out['refType'] = "IsCitedBy"
+    elif tp == 'book':
+        out['@type'] = ['schema:Book']
+        out['refType'] = "References"
+    elif tp == 'thesis':
+        out['@type'] = ['schema:Thesis']
+        out['refType'] = "References"
     else:
         out['@type'] = ['npg:Document']
         out['refType'] = "References"
 
     if info.data.get('title'):
         out['title'] = info.data['title']
-    if info.data.get('issued') and 'date-parts' in info.data['issued']:
-        parts = info.data['issued']['date-parts'][0]
-        if len(parts) > 0: out['issued'] = str(parts[0])
-        if len(parts) > 1: out['issued'] += "-{0:0>2}".format(parts[1])
-        if len(parts) > 2: out['issued'] += "-{0:0>2}".format(parts[2])
 
+    if info.data.get('issued') and 'date-parts' in info.data['issued'] and \
+       len(info.data['issued']['date-parts']) > 0:
+        issued = _date_parts2date(info.data['issued']['date-parts'][0])
+        if issued:
+            out['issued'] = issued
+            
     if 'location' not in out:
         out['location'] = resolver + info.id
 
@@ -472,8 +697,20 @@ def datacite_creator2nerdm_author(creator):
 
     # affiliation
     if creator.get('affiliation'):
-        out['affiliation'] = [ OrderedDict( [("@type", "schema:affiliation")] ) ]
-        out['affiliation'][0]['title'] = creator['affiliation']
+        out['affiliation'] = []
+        if isinstance(creator.get('affiliation'), (str, unicode)):
+            out['affiliation'].append(
+                OrderedDict( [("@type", "schema:affiliation"),
+                              ('title', creator.get('affiliation'))] )
+            )
+        else:
+            for caffil in creator.get('affiliation',[]):
+                affil = OrderedDict( [("@type", "schema:affiliation")] )
+                if isinstance(caffil, Mapping):
+                    affil['title'] = caffil.get('name','')
+                else:
+                    affil['title'] = caffil
+                out['affiliation'].append(affil)
 
     return out
 
@@ -492,8 +729,5 @@ def citeproc_ref2nerdm_ref(data):
     convert a reference description in CiteProc format to a reference 
     description in NERDm format.
     """
-    
+    raise NotImplementedError()
 
-        
-                                
-    

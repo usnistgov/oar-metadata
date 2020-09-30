@@ -5,10 +5,12 @@ import re
 from .common import *
 from .datacite import DataciteDOIInfo
 from .crossref import CrossrefDOIInfo
+from .crosscite import CrossciteDOIInfo
 from . import common as _comm
 
 _dc_resolver_re = re.compile(r'^https?://[^/]+\.datacite\.org/')
 _cr_resolver_re = re.compile(r'^https?://[^/]+\.crossref\.org/')
+_cc_resolver_re = re.compile(r'^https?://data\.crosscite\.org/')
 
 class Resolver(object):
     """
@@ -77,6 +79,9 @@ class Resolver(object):
             # the source; treat as unknown
             info = DOIInfo(doi, resolver=self._resolver, logger=self._log)
 
+        elif _cc_resolver_re.match(loc):
+            info = CrossciteDOIInfo(doi, resolver=self._resolver,
+                                    logger=self._log)
         elif _dc_resolver_re.match(loc):
             info = DataciteDOIInfo(doi, resolver=self._resolver,logger=self._log)
         elif _cr_resolver_re.match(loc):

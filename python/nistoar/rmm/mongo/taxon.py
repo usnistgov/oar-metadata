@@ -47,7 +47,8 @@ class TaxonomyLoader(Loader):
         if len(termdata) > 1:
             id = None
         for term in termdata:
-            results = self.load_obj(term, validate, results, id)
+            if not term.get('deprecatedSince'):
+                results = self.load_obj(term, validate, results, id)
 
         return results
 

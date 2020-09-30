@@ -1,7 +1,7 @@
 import unittest, pdb, os, json
 from collections import OrderedDict
 
-import nistoar.nerdm.convert as cvt
+import nistoar.nerdm.convert.pod as cvt
 from nistoar.doi.resolving import DOIInfo
 
 citeproc_auths = [
@@ -19,7 +19,7 @@ citeproc_auths = [
 
 datacite_auths = [
     {"name":"Fenner, Martin", "nameType":"Personal", "givenName":"Martin",
-     "familyName":"Fenner","affiliation":"DataCite",
+     "familyName":"Fenner","affiliation":[{"name": "DataCite"}],
      "contributorType":"Editor",
      "nameIdentifiers":[
          {"nameIdentifier":"https://orcid.org/0000-0001-6528-2027",
@@ -212,13 +212,32 @@ datacite = {
         
 class TestConvertReferences(unittest.TestCase):
 
+    def test_date_parts2date(self):
+        self.assertIsNone(cvt._date_parts2date([]))
+        self.assertIsNone(cvt._date_parts2date([None]))
+        self.assertIsNone(cvt._date_parts2date(["2020"]))
+        self.assertIsNone(cvt._date_parts2date([837]))
+        self.assertIsNone(cvt._date_parts2date([3030]))
+        self.assertEqual(cvt._date_parts2date([1786]), "1786")
+        self.assertEqual(cvt._date_parts2date([2020]), "2020")
+        self.assertEqual(cvt._date_parts2date([2020, None]), "2020")
+        self.assertEqual(cvt._date_parts2date([2020, 53]), "2020")
+        self.assertEqual(cvt._date_parts2date([1966, 3]), "1966-03")
+        self.assertEqual(cvt._date_parts2date([1866, 11]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 35]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, "1"]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, None]), "1866-11")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 4]), "1866-11-04")
+        self.assertEqual(cvt._date_parts2date([1866, 11, 4, 8]), "1866-11-04")
+        
+
     def test_crossref_doiinfo2reference(self):
         info = DOIInfo("10.10/XXX", source="Crossref")
         info._data = crossref
         info._cite = "ibid"
 
         ref = cvt._doiinfo2reference(info, "https://goober.org/")
-        self.assertEqual(ref['@type'], ['npg:Article'])
+        self.assertEqual(ref['@type'], ['schema:Article'])
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
         self.assertEqual(ref['refType'], 'IsCitedBy')
         self.assertEqual(ref['title'],
@@ -233,7 +252,7 @@ class TestConvertReferences(unittest.TestCase):
         info._cite = "ibid"
 
         ref = cvt._doiinfo2reference(info, "https://goober.org/")
-        self.assertEqual(ref['@type'], ['npg:Dataset'])
+        self.assertEqual(ref['@type'], ['schema:Dataset'])
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
         self.assertEqual(ref['refType'], 'References')
         self.assertEqual(ref['title'],
@@ -243,7 +262,7 @@ class TestConvertReferences(unittest.TestCase):
         self.assertEqual(ref['citation'], 'ibid')
         self.assertIn('_extensionSchemas', ref)
         self.assertTrue(isinstance(ref['_extensionSchemas'], list))
-        self.assertTrue(ref['_extensionSchemas'][0].startswith("https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/"), msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
+        self.assertTrue(ref['_extensionSchemas'][0].startswith("https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/"), msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
 
 class TestDOIResolver(unittest.TestCase):
 
@@ -286,7 +305,7 @@ class TestDOIResolver(unittest.TestCase):
         rslvr = cvt.DOIResolver.from_config(rescfg)
         ref = rslvr.to_reference("10.18434/m33x0v")
 
-        self.assertEqual(ref['@type'], ['npg:Dataset'])
+        self.assertEqual(ref['@type'], ['schema:Dataset'])
         self.assertEqual(ref['@id'], 'doi:10.18434/m33x0v')
         self.assertEqual(ref['refType'], 'References')
         self.assertTrue(ref['title'].startswith("Effect of Heterogeneity"))
@@ -304,10 +323,10 @@ class TestDOIResolver(unittest.TestCase):
         self.assertEqual(auths[0]['givenName'], "Joseph")
         self.assertEqual(auths[0]['familyName'], "Conny")
         self.assertEqual(auths[0]['fn'], "Joseph Conny")
-        self.assertIn('affiliation', auths[0])
-        self.assertIn('affiliation', auths[1])
-        self.assertEqual(auths[0]['affiliation'][0]['title'],
-                         "National Institute of Standards and Technology")
+        # self.assertIn('affiliation', auths[0])
+        # self.assertIn('affiliation', auths[1])
+        # self.assertEqual(auths[0]['affiliation'][0]['title'],
+        #                  "National Institute of Standards and Technology")
         self.assertNotIn('orcid', auths[0])
         self.assertNotIn('orcid', auths[1])
 
