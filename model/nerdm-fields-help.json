@@ -116,7 +116,7 @@
         "name": "description",
         "type": "string",
         "label": "Resource Description",
-        "tags": [ "filterable" ],
+        "tags": [ "searchable", "filterable" ],
         "tips": {
             "search": "A summary of what this resource is about"
         }
