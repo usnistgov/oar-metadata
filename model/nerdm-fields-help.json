@@ -126,7 +126,7 @@
         "type": "array",
         "item_type": "string",
         "label": "Subject keywords",
-        "tags": [ "searchable", "filterable" ],
+        "tags": [ "searchable" ],
         "tips": {
             "search": "keywords that describe what this resource is about"
         }
@@ -144,7 +144,7 @@
         "name": "topic.tag",
         "type": "str",
         "label": "Research Topic",
-        "tags": [ "searchable", "filterable" ],
+        "tags": [ "searchable" ],
         "tips": {
             "search": "vocabulary terms that describe whatthis resource is about"
         }
