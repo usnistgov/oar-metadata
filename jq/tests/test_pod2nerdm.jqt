@@ -10,7 +10,7 @@
 #
 include "pod2nerdm"; nerdm_schema
 null
-"https://data.nist.gov/od/dm/nerdm-schema/v0.3#"
+"https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
 
 #--------------
 # testing nerdm_schema()
@@ -31,7 +31,7 @@ null
 #
 include "pod2nerdm"; dciteRefType
 null
-"https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/DCiteReference"
+"https://data.nist.gov/od/dm/nerdm-schema/v0.4#/definitions/DCiteReference"
 
 #--------------
 # testing resid()
@@ -91,7 +91,7 @@ include "pod2nerdm"; pdrLandingPageURL
 #
 include "pod2nerdm"; map(cvtref)
 [ "http://goob.net/doc1.txt", "https://goob.gov/doc2.txt" ]
-[{ "@type": ["deo:BibliographicReference"],"@id":"#ref:doc1.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/DCiteReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": ["deo:BibliographicReference"],"@id":"#ref:doc2.txt", "refType": "IsReferencedBy", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/DCiteReference" ], "location": "https://goob.gov/doc2.txt"}]
+[{ "@type": ["deo:BibliographicReference"],"@id":"#ref:doc1.txt", "refType": "IsSupplementTo", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.4#/definitions/DCiteReference" ], "location": "http://goob.net/doc1.txt"}, { "@type": ["deo:BibliographicReference"],"@id":"#ref:doc2.txt", "refType": "IsSupplementTo", "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/v0.4#/definitions/DCiteReference" ], "location": "https://goob.gov/doc2.txt"}]
 
 #---------------
 # testing filepath()

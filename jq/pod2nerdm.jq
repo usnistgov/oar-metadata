@@ -21,7 +21,7 @@ include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.3#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.4#";
 
 # the base NERDm JSON schema namespace
 #
@@ -174,7 +174,7 @@ def ansc_coll_paths:
 def cvtref:  {
     "@type": ["deo:BibliographicReference"],
     "@id": ("#ref:" + (. | urlpath | sub("^/"; ""))),
-    "refType": "IsReferencedBy",
+    "refType": "IsSupplementTo",
     "location": .,
     "_extensionSchemas": [ dciteRefType ]
 };

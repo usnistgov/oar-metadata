@@ -3,7 +3,7 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.3#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
 nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
@@ -29,7 +29,7 @@ class TestJanaf(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.3#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -101,7 +101,7 @@ class TestJanaf(unittest.TestCase):  #
         self.assertIsInstance(refs[0]['@type'], list)
         self.assertIsInstance(refs[0]['@type'][0], types.StringTypes)
         self.assertEquals(refs[0]['@type'], ["deo:BibliographicReference"])
-        self.assertEquals(refs[0]['refType'], "IsReferencedBy")
+        self.assertEquals(refs[0]['refType'], "IsSupplementTo")
         self.assertEquals(refs[0]['location'],
                           "http://www.nist.gov/data/PDFfiles/jpcrdS1V14.pdf")
 
@@ -142,7 +142,7 @@ class TestCORR(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.3#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']

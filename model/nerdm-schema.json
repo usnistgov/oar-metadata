@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.3#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -651,7 +651,7 @@
                                 "Note that with this term, the subject of relationship is the resource described by this NERDm record and the object is the referenced resource given by the @id property in this node.  Although this violates the JSON-LD semantics that properties in this node should describe what's given with the local @id--the referenced resource, in this case--it is more consistant with their use in the DataCite schema."
                             ],
                             "type": "string",
-                            "enum": [ "IsDocumentedBy", "IsSupplementedTo",
+                            "enum": [ "IsDocumentedBy", "IsSupplementTo", "IsSupplementedBy",
                                       "IsCitedBy", "Cites", "IsReviewedBy",
                                       "IsReferencedBy", "References",
                                       "IsSourceOf", "IsDerivedFrom",
@@ -664,10 +664,18 @@
                                         "This resource is expected to be or include a human-readable document."
                                     ]
                                 },
-                                "IsSupplementedTo": {
+                                "IsSupplementTo": {
                                     "description": "The referenced document is a supplement to this resource.",
                                     "notes": [
-                                        "a supplement typically refers to data (often small) that appears closely attached to a journal article."
+                                        "A supplement typically refers to data that is closely associated with a journal article that serves as the primary description of how the data was taken and what results were extracted from them.",
+                                        "This resource is expected to be or include a human-readable document.",
+                                        "The resource is usually considered the primary reference for this data resource"
+                                    ]
+                                },
+                                "IsSupplementedBy": {
+                                    "description": "The referenced document (or dataset) is a supplement to this resource.",
+                                    "notes": [
+                                        "This can be applied to refer to other datasets that may have resulted from the same experimental/observational activity but which might be considered less central of useful to other, e.g. calibration data."
                                     ]
                                 },
                                 "IsCitedBy": {
@@ -697,6 +705,8 @@
                                 "References": {
                                     "description": "The referenced document is used as a source of information by the resource.",
                                     "notes": [
+                                        "This type is provided as a general purpose reference to documents or data that are indirectly relate to this one",
+                                        "This type is recommend for references provided for citations in the textual description (e.g. the description property) of this resource."
                                     ]
                                 },
                                 "IsSourceOf": {
