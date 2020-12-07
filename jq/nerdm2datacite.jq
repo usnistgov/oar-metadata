@@ -109,7 +109,7 @@ def orcid2nameid:
 # Input:  NERDm affiliation object
 # Output: datacite affiliation string
 #
-def affil2simpleaffil:
+def affil2affilname:
     if .subunits then
         (.title + ", " + (.subunits | join(", ")))
     else
@@ -124,7 +124,7 @@ def affil2simpleaffil:
 #
 def affil2affil:
     {
-        affiliation: affil2simpleaffil,
+        name: affil2affilname,
         affiliationIdentifier: (
             if (.["@id"]|not) and .title == "NIST" then "grid:NIST" else .["@id"] end
         ),
@@ -137,7 +137,7 @@ def affil2affil:
         (.affiliationIdentifier = (.affiliationIdentifier|sub("ror:";"https://ror.org/"))|
          .affiliationIdentifierScheme = "ROR")
     elif (.affiliationIdentifer == "grid.94225.38" or
-          (.affiliation | contains("National Institute of Standards and Technology")) or
+          (.name | contains("National Institute of Standards and Technology")) or
           (.affiliationIdentifier == "grid:NIST"))
     then
         (.affiliationIdentifier = "https://ror.org/05xpvk416" |
