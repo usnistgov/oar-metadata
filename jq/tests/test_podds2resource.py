@@ -4,7 +4,7 @@ import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
 nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")

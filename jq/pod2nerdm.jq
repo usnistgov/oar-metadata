@@ -25,7 +25,7 @@ def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.4#";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#";
 
 # the NERDm context location
 #
@@ -230,7 +230,7 @@ def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/DataFile" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/DataFile" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -244,7 +244,7 @@ def dist2checksum:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/ChecksumFile" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/ChecksumFile" ] |
     .["mediaType"] = "text/plain" |
     .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
     if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
@@ -284,7 +284,7 @@ def dist2inaccess:
 def dist2accesspage:
     .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("#")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/AccessPage" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/AccessPage" ] |
     if .format then .format = { description: .format } else . end
 ;
 
