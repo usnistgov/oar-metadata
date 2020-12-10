@@ -20,6 +20,13 @@ def pub_schema_uri_for(version):
     """
     return schema_uri_for(core_schema_base+"pub/", version)
 
+def bib_schema_uri_for(version):
+    """
+    return the schema URI for the requested version of the Core NERDm schema
+    @raises ValueError   if the given version is not a recognized version
+    """
+    return schema_uri_for(core_schema_base+"bib/", version)
+
 def schema_uri_for(schema_base, version):
     """
     return the schema URI for the requested version of the Core NERDm schema
@@ -35,6 +42,7 @@ def schema_uri_for(schema_base, version):
 
 CORE_SCHEMA_URI = core_schema_uri_for(schema_versions[0])
 PUB_SCHEMA_URI = pub_schema_uri_for(schema_versions[0])
+BIB_SCHEMA_URI = bib_schema_uri_for(schema_versions[0])
 
 TAXONOMY_VOCAB_BASE_URI = "https://data.nist.gov/od/dm/nist-themes/"
 TAXONOMY_VOCAB_INIT_URI = "https://www.nist.gov/od/dm/nist-themes/v1.0"
