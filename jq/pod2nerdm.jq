@@ -23,9 +23,13 @@ include "urldecode";
 #
 def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.4#";
 
-# the base NERDm JSON schema namespace
+# the NERDm pub schema extension namespace
 #
 def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#";
+
+# the NERDm bib schema extension namespace
+#
+def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#";
 
 # the NERDm context location
 #
@@ -33,7 +37,7 @@ def nerdm_context: "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld";
 
 # where the Datacite Document Reference types are defined
 #
-def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
+def dciteRefType: nerdm_bib_schema + "/definitions/DCiteReference";
 
 # the resource identifier provided on the command line
 #

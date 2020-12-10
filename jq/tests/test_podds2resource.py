@@ -5,6 +5,7 @@ import ejsonschema as ejs
 
 nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
 nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#"
+nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")
@@ -107,7 +108,7 @@ class TestJanaf(unittest.TestCase):  #
 
         exts = refs[0]['_extensionSchemas']
         self.assertEquals(len(exts), 1)
-        self.assertIn(nerdm+"/definitions/DCiteReference", exts)
+        self.assertIn(nerdmbib+"/definitions/DCiteReference", exts)
 
     def test_hierarchy(self):
         self.assertIn("dataHierarchy", self.out,

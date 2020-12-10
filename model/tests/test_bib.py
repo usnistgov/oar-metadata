@@ -50,6 +50,20 @@ class TestExamples(test.TestCase):
         schema = nerdmbib + "/definitions/DCiteReference"
         self.val.validate(tstref, False, True, schema, True)
 
+    def test_attype(self):
+        tstref = {
+            u'refType': u'IsDocumentedBy',
+            u'location': u'http://kinetics.nist.gov/janaf/pdf/JANAF-FourthEd-1998-1Vol1-Intro.pdf',
+            u'_extensionSchemas': [
+                u'https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#/definitions/DCiteReference'
+            ],
+            u'@type': [u'schema:Book'],
+            u'label': u'JPCRD Monograph: NIST-JANAF Thermochemical Tables, Pt. 1 (AL-C'
+        }
+
+        schema = nerdm + "/definitions/BibliographicReference"
+        self.val.validate(tstref, False, True, schema, True)
+
 
         
         
