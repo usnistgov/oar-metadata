@@ -7,8 +7,8 @@ class DataciteDOIInfo(DOIInfo):
     """
 
     def __init__(self, doi, source="Datacite", resolver=default_doi_resolver,
-                 logger=None):
-        super(DataciteDOIInfo, self).__init__(doi, source, resolver, logger)
+                 logger=None, client_info=None):
+        super(DataciteDOIInfo, self).__init__(doi, source, resolver, logger, client_info)
 
     @property
     def native(self):

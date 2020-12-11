@@ -1,7 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from collections import Mapping
-from nistoar.tests import *
+# from nistoar.tests import *
 
 import nistoar.doi.resolving as res
 import nistoar.doi.resolving.common as comm
@@ -24,7 +24,7 @@ class TestResolving(test.TestCase):
                  "kindly skipping doi service checks")
     def test_resolve_dc(self):
         info = res.resolve(dcdoi, logger=logger)
-        self.assertEqual(info.source, "Datacite")
+        self.assertIn(info.source, ["Datacite", "Crosscite"])
         self.assertTrue(isinstance(info, res.DataciteDOIInfo))
         self.assertIsNotNone(info._data)
         self.assertEqual(info.data['DOI'], dcdoi)

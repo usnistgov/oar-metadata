@@ -1,7 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from collections import Mapping
-from nistoar.tests import *
+# from nistoar.tests import *
 
 import nistoar.doi.resolving.datacite as res
 
@@ -25,7 +25,7 @@ class TestDataciteDOIInfo(test.TestCase):
         self.assertTrue(isinstance(doi.native, Mapping))
         self.assertTrue(isinstance(doi._native, Mapping))
         self.assertIn('url', doi.native)
-        self.assertEqual(doi.native['doi'], dcdoi)
+        self.assertEqual(doi.native['doi'].lower(), dcdoi)
         
         
         
