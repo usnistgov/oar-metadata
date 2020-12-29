@@ -240,7 +240,7 @@ class TestConvertReferences(unittest.TestCase):
         ref = cvt._doiinfo2reference(info, "https://goober.org/")
         self.assertEqual(ref['@type'], ['schema:Article'])
         self.assertEqual(ref['@id'], 'doi:10.10/XXX')
-        self.assertEqual(ref['refType'], 'IsCitedBy')
+        self.assertEqual(ref['refType'], 'IsSupplementedBy')
         self.assertEqual(ref['title'],
                          "Ecological traits of the world\u2019s primates")
         self.assertEqual(ref['location'], "https://goober.org/10.10/XXX")
