@@ -560,7 +560,7 @@ def _doiinfo2reference(info, resolver):
         out['refType'] = "References"
     elif tp.startswith('article'):
         out['@type'] = ['schema:Article']
-        out['refType'] = "IsSupplementedBy"
+        out['refType'] = "IsCitedBy"
     elif tp == 'book':
         out['@type'] = ['schema:Book']
         out['refType'] = "References"
