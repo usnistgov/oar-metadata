@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.3#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -419,7 +419,8 @@
                 "abbrev": {
                     "description": "an abbreviated form of the resource's title",
                     "notes": [
-                        "this can be used as a label for a compact display or text for a link to this resource"
+                        "this can be used as a label for a compact display or text for a link to this resource",
+                        "this may be helpful for discovery when an abbreviation is included in a free-text search"
                     ],
                     "type": "array",
                     "items": {
@@ -623,118 +624,12 @@
                             "description": "the type of relationship that this document has with the resource",
                             "notes": [
                                 "This is equivalent to the Datacite relationType in that the term is a predicate that connects the resource as the subject to the referenced document as the object (e.g. resource IsDocumentedBy referenced-doc)",
-                                "The DCiteReference type sets DataCite terms as controlled vocabulary"
+                                "The DCiteReference type from Bibliographic extension sets DataCite terms as controlled vocabulary"
                             ],
                             "type": "string"
                         }
                     },
                     "required": [ "@type", "location" ]
-                }
-            ]
-        },
-
-        "DCiteReference": {
-            "description": "a bibliographical reference with a controlled vocabulary for its reference type (refType)",
-            "notes": [
-                "Note that some refType values are specifically for references of type npg:Document:  'isDocumentedBy', 'isReviewedBy'",
-                "Use 'isDocumentedBy' to indicate documents that provide the most comprehensive explanation of the contents of the resource.  List these documents in order of importance (as the first one will be exported as the 'describedBy' document when converted to the POD schema).",
-                "Use 'isSourceOf' if the document provides analysis and interpretation of the resource.  In particular, journal articles that are co-published with this resource should be listed with this type.  It is recommended that these documents be listed either in order of publication date or importance.",
-                "Documents may be listed more than once having different types, namely both 'isDocumentedBy' and 'isSourceOf'; however, it is recommended that such multiple classifications should be minimized."
-            ],
-            "allOf": [
-                { "$ref": "#/definitions/BibliographicReference" },
-                {
-                    "properties": {
-                        "refType": {
-                            "description": "a term indicating the nature of the relationship between this resource and the one being referenced",
-                            "notes": [
-                                "Note that with this term, the subject of relationship is the resource described by this NERDm record and the object is the referenced resource given by the @id property in this node.  Although this violates the JSON-LD semantics that properties in this node should describe what's given with the local @id--the referenced resource, in this case--it is more consistant with their use in the DataCite schema."
-                            ],
-                            "type": "string",
-                            "enum": [ "IsDocumentedBy", "IsSupplementedTo",
-                                      "IsCitedBy", "Cites", "IsReviewedBy",
-                                      "IsReferencedBy", "References",
-                                      "IsSourceOf", "IsDerivedFrom",
-                                      "IsNewVersionOf", "IsPreviousVersionOf" ],
-                            "valueDocumentation": {
-                                "IsDocumentedBy": {
-                                    "description": "The referenced document provides documentation of this resource.",
-                                    "notes": [
-                                        "This type should be applied to the reference that provides the best, most complete, or otherwise most preferred description of how the data in this resource was created.",
-                                        "This resource is expected to be or include a human-readable document."
-                                    ]
-                                },
-                                "IsSupplementedTo": {
-                                    "description": "The referenced document is a supplement to this resource.",
-                                    "notes": [
-                                        "a supplement typically refers to data (often small) that appears closely attached to a journal article."
-                                    ]
-                                },
-                                "IsCitedBy": {
-                                    "description": "The referenced document cites the resource in some way.",
-                                    "notes": [
-                                        "This relationship indicates is lighter than IsReferenceBy: the referenced document may discuss this resource without drawing on and using data or information from this resource."
-                                    ]
-                                },
-                                "Cites": {
-                                    "description": "This resource cites the referenced document.",
-                                    "notes": [
-                                        "Human readable descriptions can refer to this type of resource via its label, e.g. '...previous research [Smith98; Jones10]...'",
-                                        "Like IsCitedBy, the relationship indicated is lighter than References: this resource makes reference to the referenced resource in discussion without necessarily drawing on and using data or information from that resource."
-                                    ]
-                                },
-                                "IsReviewedBy": {
-                                    "description": "The referenced document reviews this resource.",
-                                    "notes": [
-                                        "This is a lighter relationship than the resource property, describedBy; the latter refers to a document that is the primary, detailed description and/or analysis of this resource"
-                                    ]
-                                },
-                                "IsReferencedBy": {
-                                    "description": "The resource is used as a source of information by the referenced document.",
-                                    "notes": [
-                                    ]
-                                },
-                                "References": {
-                                    "description": "The referenced document is used as a source of information by the resource.",
-                                    "notes": [
-                                    ]
-                                },
-                                "IsSourceOf": {
-                                    "description": "The resource is the source of upon which the referenced resource is based.",
-                                    "notes": [
-                                        "In other words, the referenced document is derived from the resource.",
-                                        "This is a stronger relationship than 'References'"
-                                    ]
-                                },
-                                "IsDerivedFrom": {
-                                    "description": "The referenced document is the source upon which the resource is based.",
-                                    "notes": [
-                                        "In other words, the resource is derived from the referenced document.",
-                                        "This is a stronger relationship than 'IsReferencedBy'"
-                                    ]
-                                },
-                                "IsNewVersionOf": {
-                                    "description": "The referenced resource is a previous version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource is deprecated by this one."
-                                    ]
-                                },
-                                "IsPreviousVersionOf": {
-                                    "description": "The referenced resource is a newer version of this resource.",
-                                    "notes": [
-                                        "This usually means that the referenced resource deprecates this one."
-                                    ]
-                                },
-                                "IsVariantOf": {
-                                    "description": "The referenced resource contains the content of this resource in a different form.",
-                                    "notes": [
-                                        "As an example, the referenced resource may be based on the same raw data but calibrated differently."
-                                    ]
-                                }
-                            }
-                        }
-                    },
-                    "required": [ "refType" ]
                 }
             ]
         },

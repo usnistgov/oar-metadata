@@ -13,8 +13,10 @@ def set_client_info(project, version, projecturl, email):
     queries to DOI information services to, as a courtesy, identify us as a
     user of the services.
 
-    At the moment, this is supported by the Crossref services only.  (See
-    the crossrefapi python package).  
+    Setting this information is most useful for Crossref services to classify 
+    requests as "polite" and guard it from potential throttling; nevertheless,
+    if set it will be sent to all DOI service endpoints.  It is applied 
+    by setting the web requests' user-agent header field.  
 
     :param str project:     the name of the application accessing DOIs
     :param str version:     the version of the application
@@ -26,6 +28,19 @@ def set_client_info(project, version, projecturl, email):
         _client_info = None
     else:
         _client_info = (project, version, projecturl, email)
+
+def get_default_user_agent():
+    """
+    set the default User-Agent string that can be used for DOI service requests.  This 
+    may be over-ridden by resolver classes.  The value is based on the currently-set, global 
+    client information set via set_client_info().
+    """
+    global _client_info
+    if not _client_info:
+        return None
+    if isinstance(_client_info, tuple):
+        return "%s/%s (%s; mailto:%s)" % _client_info
+    return str(_client_info)
 
 class CT(object):
     """
@@ -52,7 +67,18 @@ class DOIInfo(object):
     information is loaded from a REST call to a DOI resolver.  
     """
 
-    def __init__(self, doi, source="unknown", resolver=None, logger=None):
+    def __init__(self, doi, source="unknown", resolver=None, logger=None, client_info=None):
+        """
+        create the DOIInfo base instance
+        :param str           doi:  the DOI to resolve to metadata
+        :param str        source:  a string label indicating where the metadata comes from
+        :param str      resolver:  the base URL for the DOI resolving service
+        :param Logger     logger:  the logger to send messages to
+        :param tuple client_info:  a 4-element tuple providing the information that identifies this 
+                                   client to the service.  The elements are the same as the 
+                                   parameters accepted by set_client_info(), in order.  If not 
+                                   provided, the values set via set_client_info() will be used.
+        """
         if not resolver:
             resolver = default_doi_resolver
         self.resolver = resolver.strip()
@@ -64,6 +90,41 @@ class DOIInfo(object):
         self._cite = None
         self._data = None
         self._native = None
+
+        self._client_info = None
+        if not client_info:
+            client_info = _client_info
+        if client_info:
+            self._client_info = client_info
+
+    @property
+    def client_info(self):
+        return self._client_info
+
+    @property
+    def user_agent(self):
+        """
+        return a string that can be used as the User-Agent field in requests to 
+        this service or None if client info information has not yet been set.
+        """
+        if not self.client_info:
+            return None
+        if isinstance(self.client_info, tuple):
+            return "%s/%s (%s; mailto:%s)" % self.client_info
+        return str(self.client_info)
+
+    def get_default_headers(self):
+        """
+        return a dictionary of HTTP request headers that will be included by default
+        in HTTP requests to this service.  Implementations should expand and override 
+        these as appropriate, either in the subclass's overriding of this function or 
+        in the function that actually sends the request.  
+        """
+        out = {}
+        ua = self.user_agent
+        if ua:
+            out['User-Agent'] = ua
+        return out
 
     @property
     def source(self):
@@ -108,7 +169,8 @@ class DOIInfo(object):
         return self._native
 
     def _get_data(self, cntntype, format="text"):
-        hdrs = { "Accept": cntntype }
+        hdrs = self.get_default_headers()
+        hdrs["Accept"] = cntntype 
         url = self.resolver + self.id
         if self.log:
             self.log.debug("Requesting %s from %s", cntntype, url)
