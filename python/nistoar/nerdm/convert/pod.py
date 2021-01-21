@@ -7,7 +7,7 @@ from collections import OrderedDict, Mapping
 from ... import jq
 from ...doi import resolve, is_DOI
 from ...doi.resolving import Resolver
-from ..constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI,
+from ..constants import (CORE_SCHEMA_URI, PUB_SCHEMA_URI, BIB_SCHEMA_URI,
                          TAXONOMY_VOCAB_BASE_URI, TAXONOMY_VOCAB_URI)
 from ..taxonomy import ResearchTopicsTaxonomy
 
@@ -587,7 +587,7 @@ def _doiinfo2reference(info, resolver):
     if info.citation_text:
         out['citation'] = info.citation_text
 
-    out['_extensionSchemas'] = [ CORE_SCHEMA_URI+"#/definitions/DCiteReference" ]
+    out['_extensionSchemas'] = [ BIB_SCHEMA_URI+"#/definitions/DCiteReference" ]
     return out
 
     

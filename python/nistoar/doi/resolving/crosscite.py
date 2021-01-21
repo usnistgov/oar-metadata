@@ -7,8 +7,8 @@ class CrossciteDOIInfo(DOIInfo):
     """
 
     def __init__(self, doi, source="Crosscite", resolver=default_doi_resolver,
-                 logger=None):
-        super(CrossciteDOIInfo, self).__init__(doi, source, resolver, logger)
+                 logger=None, client_info=None):
+        super(CrossciteDOIInfo, self).__init__(doi, source, resolver, logger, client_info)
 
     @property
     def native(self):

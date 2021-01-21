@@ -1,7 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from collections import Mapping
-from nistoar.tests import *
+# from nistoar.tests import *
 
 import nistoar.doi.resolving.crossref as res
 from nistoar.doi.resolving.common import set_client_info
@@ -40,6 +40,17 @@ class TestCrossrefDOIInfo(test.TestCase):
         self.assertIsNotNone(doi.client_info)
         self.assertEqual(doi.client_info.application_version, "testing")
 
+    def test_get_default_headers(self):
+        set_client_info(None, None, None, None)
+        doi = res.CrossrefDOIInfo(crdoi)
+        hdrs = doi.get_default_headers()
+        self.assertEqual(hdrs, {})
+
+        doi = res.CrossrefDOIInfo(crdoi, client_info=("test", "v0", "url", "email"))
+        self.assertTrue(doi.user_agent.startswith("test/v0 (url; mailto:email) BasedOn: CrossrefAPI/"))
+        hdrs = doi.get_default_headers()
+        self.assertEqual(hdrs, {"User-Agent": doi.user_agent})
+        
 
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                  "kindly skipping doi service checks")

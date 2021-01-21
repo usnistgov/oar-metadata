@@ -1,13 +1,19 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from collections import Mapping
-from nistoar.tests import *
+# from nistoar.tests import *
 
 import nistoar.doi.resolving.common as res
 
 dcdoi = "10.18434/m33x0v"
+cli = ("NIST Open Access for Research", "testing",
+       "http://github.com/usnistgov/oar-metadata/",
+       "datasupport@nist.gov")
 
 class TestFuncs(test.TestCase):
+
+    def tearDown(self):
+        res._client_info = None
 
     def test_set(self):
         self.assertIsNone(res._client_info)
@@ -34,6 +40,11 @@ class TestFuncs(test.TestCase):
         
         doi = res.strip_DOI("dx.doi.org/"+dcdoi, "dx.doi.org/")
         self.assertEqual(doi, dcdoi)
+
+    def test_get_default_user_agent(self):
+        self.assertIsNone(res.get_default_user_agent())
+        res.set_client_info("test", "v0", "url", "email")
+        self.assertEqual(res.get_default_user_agent(), "test/v0 (url; mailto:email)")
         
 
 class TestDOIInfo(test.TestCase):
@@ -48,6 +59,8 @@ class TestDOIInfo(test.TestCase):
         self.assertIsNone(doi._data)
         self.assertIsNone(doi._cite)
         self.assertIsNone(doi._native)
+        self.assertIsNone(doi.client_info)
+        self.assertIsNone(doi.user_agent)
 
         doi = res.DOIInfo("doi:"+dcdoi, "Datacite", "https://myresolver.net/")
         self.assertEqual(doi.id, dcdoi)
@@ -67,10 +80,30 @@ class TestDOIInfo(test.TestCase):
         self.assertEqual(doi.resolver, res.default_doi_resolver)
         self.assertIsNone(doi._data)
 
+        doi = res.DOIInfo("https://doi.org/"+dcdoi, "Crossref", client_info=("test", "v0", "url", "email"))
+        self.assertEqual(doi.id, dcdoi)
+        self.assertEqual(doi.source, "Crossref")
+        self.assertEqual(doi.resolver, res.default_doi_resolver)
+        self.assertIsNone(doi._data)
+        self.assertEqual(doi.client_info, ("test", "v0", "url", "email"))
+        self.assertEqual(doi.user_agent, "test/v0 (url; mailto:email)")
+
+    def test_get_default_headers(self):
+        doi = res.DOIInfo("https://doi.org/"+dcdoi, "Crossref")
+        hdrs = doi.get_default_headers()
+        self.assertEqual(hdrs, {})
+
+        doi = res.DOIInfo("https://doi.org/"+dcdoi, "Crossref", client_info=("test", "v0", "url", "email"))
+        self.assertEqual(doi.user_agent, "test/v0 (url; mailto:email)")
+        hdrs = doi.get_default_headers()
+        self.assertEqual(hdrs, {"User-Agent": doi.user_agent})
+        
+        
+
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                  "kindly skipping doi service checks")
     def test_get_data(self):
-        doi = res.DOIInfo(dcdoi)
+        doi = res.DOIInfo(dcdoi, client_info=cli)
         data = doi._get_data("application/x-bibtex")
         self.assertGreater(len(data), 1)
         self.assertTrue(data.startswith("@misc{https://doi.org/"))
@@ -87,7 +120,7 @@ class TestDOIInfo(test.TestCase):
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                  "kindly skipping doi service checks")
     def test_data(self):
-        doi = res.DOIInfo(dcdoi)
+        doi = res.DOIInfo(dcdoi, client_info=cli)
         self.assertIsNone(doi._data)
         self.assertTrue(isinstance(doi.data, Mapping))
         self.assertTrue(isinstance(doi._data, Mapping))

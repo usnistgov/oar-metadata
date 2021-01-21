@@ -49,10 +49,14 @@ class Resolver(object):
         doi = _comm.strip_DOI(doi, self._resolver)
         url = self._resolver + doi
 
+        hdrs = {"Accept": CT.Citeproc_JSON}
+        ua = get_default_user_agent()
+        if ua:
+            hdrs['User-Agent'] = ua
+
         # Do a HEAD request on the DOI to examine where it gets forwarded to
         try:
-            resp = requests.head(url, headers={"Accept": CT.Citeproc_JSON},
-                                 allow_redirects=False)
+            resp = requests.head(url, headers=hdrs, allow_redirects=False)
         except (requests.ConnectionError,
                 requests.HTTPError,
                 requests.ConnectTimeout)   as ex:
@@ -80,10 +84,11 @@ class Resolver(object):
             info = DOIInfo(doi, resolver=self._resolver, logger=self._log)
 
         elif _cc_resolver_re.match(loc):
-            info = CrossciteDOIInfo(doi, resolver=self._resolver,
-                                    logger=self._log)
+            info = CrossciteDOIInfo(doi, resolver=self._resolver, logger=self._log,
+                                    client_info=self._client_info)
         elif _dc_resolver_re.match(loc):
-            info = DataciteDOIInfo(doi, resolver=self._resolver,logger=self._log)
+            info = DataciteDOIInfo(doi, resolver=self._resolver,logger=self._log,
+                                   client_info=self._client_info)
         elif _cr_resolver_re.match(loc):
             info = CrossrefDOIInfo(doi, resolver=self._resolver,logger=self._log,
                                    client_info=self._client_info)

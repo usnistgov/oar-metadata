@@ -12,13 +12,9 @@ class CrossrefDOIInfo(DOIInfo):
 
     def __init__(self, doi, source="Crossref", resolver=default_doi_resolver,
                  logger=None, client_info=None):
-        super(CrossrefDOIInfo, self).__init__(doi, source, resolver, logger)
-
-        self.client_info = None
-        if not client_info:
-            client_info = _comm._client_info
-        if client_info:
-            self.client_info = xref.Etiquette(*client_info)
+        super(CrossrefDOIInfo, self).__init__(doi, source, resolver, logger, client_info)
+        if self._client_info:
+            self._client_info = xref.Etiquette(*self._client_info)
 
     @property
     def native(self):
