@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 #
 import os, unittest, json, subprocess as subproc, types, pdb
 from collections import OrderedDict
@@ -240,18 +240,18 @@ class TestMinimal(unittest.TestCase):  #
         self.out = send_file_thru_jq('nerdm::podds2resource', minfile,
                                      {"id": "ark:ID"})
 
-    def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
-    def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_id(self): self.assertEqual(self.out['@id'], "ark:ID")
+    def test_al(self): self.assertEqual(self.out['accessLevel'], "public")
     def test_context(self):
-        self.assertEquals(self.out['@context'],
-                        [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-                          {"@base": "ark:ID"} ])
+        self.assertEqual(self.out['@context'],
+                         [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
+                           {"@base": "ark:ID"} ])
                           
     def test_arestr(self):
         props = "title modified ediid landingPage".split()
         for prop in props:
             self.assertIn(prop, self.out, "Property not found: " + prop)
-            self.assertIsInstance(self.out[prop], types.StringTypes,
+            self.assertIsInstance(self.out[prop], (str,),
                 "Property '{0}' not a string: {1}".format(prop, self.out[prop]))
 
     def test_default_landingPage(self):

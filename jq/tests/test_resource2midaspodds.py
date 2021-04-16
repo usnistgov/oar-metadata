@@ -106,7 +106,7 @@ def send_file_thru_jq(jqfilter, filepath, args=None):
     
     with open(filepath):
         pass
-    if not isinstance(jqfilter, types.StringTypes):
+    if not isinstance(jqfilter, (str,)):
         raise ValueError("jqfilter parameter not a string: " + str(jqfilter))
 
     cmd = "jq -L {0}".format(jqlib).split() + argopts

@@ -698,7 +698,7 @@ def datacite_creator2nerdm_author(creator):
     # affiliation
     if creator.get('affiliation'):
         out['affiliation'] = []
-        if isinstance(creator.get('affiliation'), (str, unicode)):
+        if isinstance(creator.get('affiliation'), str):
             out['affiliation'].append(
                 OrderedDict( [("@type", "schema:affiliation"),
                               ('title', creator.get('affiliation'))] )
