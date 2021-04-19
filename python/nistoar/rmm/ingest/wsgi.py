@@ -6,8 +6,8 @@ necessary for integration into a WSGI server.  It should be replaced with
 a framework-based implementation if any further capabilities are needed.
 """
 
-import os, sys, logging, json, cgi, re
-from urllib.parse import urlsplit, urlunsplit
+import os, sys, logging, json, re
+from urllib.parse import urlsplit, urlunsplit, parse_qs
 from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
@@ -83,7 +83,7 @@ class RMMRecordIngestApp(object):
             else:
                 log.info("Authorization key is required of clients via query parameter")
         else:
-            log.warn("No authorization key required of clients")
+            log.warning("No authorization key required of clients")
         
 
     def handle_request(self, env, start_resp):
@@ -146,13 +146,13 @@ class Handler(object):
             return self.authorize_via_queryparam()
 
     def authorize_via_queryparam(self):
-        params = cgi.parse_qs(self._env.get('QUERY_STRING', ''))
+        params = parse_qs(self._env.get('QUERY_STRING', ''))
         auths = params.get('auth',[])
         if self._auth[1]:
             # match the last value provided
             return len(auths) > 0 and self._auth[1] == auths[-1]  
         if len(auths) > 0:
-            log.warn("Authorization key provided, but none has been configured")
+            log.warning("Authorization key provided, but none has been configured")
         return len(auths) == 0
 
     def authorize_via_headertoken(self):
@@ -163,7 +163,7 @@ class Handler(object):
             return len(parts) > 1 and parts[0] == "Bearer" and \
                 self._auth[1] == parts[1]
         if authhdr:
-            log.warn("Authorization key provided, but none has been configured")
+            log.warning("Authorization key provided, but none has been configured")
         return authhdr == ""
 
     def send_unauthorized(self):
@@ -178,19 +178,21 @@ class Handler(object):
         if not path:
             try:
                 out = json.dumps(list(self._loaders.keys())) + '\n'
+                out = out.encode()
             except Exception as ex:
                 log.exception("Internal error: "+str(ex))
                 return self.send_error(500, "Internal error")
 
             self.set_response(200, "Supported Record Types")
             self.add_header('Content-Type', 'application/json')
+            self.add_header('Content-Length', str(len(out)))
             self.end_headers()
             return [out]
         elif path in self._loaders:
             self.set_response(200, "Service is ready")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return ["Service ready\n"]
+            return [b"Service ready\n"]
         else:
             return self.send_error(404, "resource does not exist")
             
@@ -274,8 +276,8 @@ class Handler(object):
             rec = json.loads(doc)
         except Exception as ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
-            log.warn("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
-                     .format(doc[:75], doc[-20:], len(doc), clen))
+            log.warning("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
+                        .format(doc[:75], doc[-20:], len(doc), clen))
             return self.send_error(400,
                                    "Failed to load input record (bad format?): "+
                                    str(ex))

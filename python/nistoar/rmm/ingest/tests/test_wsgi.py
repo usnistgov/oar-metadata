@@ -71,7 +71,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         if not hasattr(client, 'get_database'):
             client.get_database = client.get_default_database
         db = client.get_database()
-        if "record" in db.collection_names():
+        if "record" in db.list_collection_names():
             db.drop_collection("record")
         tmpfiles.clean()
         
@@ -259,9 +259,9 @@ class TestRMMRecordIngestApp(test.TestCase):
             client.get_database = client.get_default_database
         try:
             db = client.get_database()
-            if "record" in db.collection_names():
+            if "record" in db.list_collection_names():
                 recs = db['record'].find()
-                self.assertEqual(recs.count(), 0)
+                self.assertEqual(db['record'].count_documents(), 0)
             client.close()
         finally:
             client.close()
@@ -288,9 +288,9 @@ class TestRMMRecordIngestApp(test.TestCase):
             if not hasattr(client, 'get_database'):
                 client.get_database = client.get_default_database
             db = client.get_database()
-            self.assertIn("record", db.collection_names())
+            self.assertIn("record", db.list_collection_names())
             recs = db['record'].find()
-            self.assertEqual(recs.count(), 1)
+            self.assertEqual(db['record'].count_documents({}), 1)
             self.assertIn("JANAF", recs[0]['title'])
         finally:
             client.close()

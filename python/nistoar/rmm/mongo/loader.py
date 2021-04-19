@@ -120,12 +120,12 @@ class Loader(object, metaclass=ABCMeta):
             coll = self._db[self.coll]
 
             if key:
-                curs = coll.find(key)
-                if curs.count() > 1:
+                count = coll.count_documents(key);
+                if count > 1:
                     # key should have returned no more than 1 record
                     raise DatabaseStateError("unique key query returns "
                                              "multiple records")
-                if curs.count() > 0:
+                if count > 0:
                     # a previous record with matching key exists
                     if onupdate == 'fail':
                         raise RecordIngestError("Existing record with key "
