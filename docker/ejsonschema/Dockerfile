@@ -1,12 +1,17 @@
 FROM oar-metadata/jqfromsrc:latest
 
-RUN apt-get update && apt-get install -y unzip uwsgi uwsgi-plugin-python3 
-RUN update-alternatives --install /usr/lib/uwsgi/plugins/python_plugin.so \
-    python_plugin.so /usr/lib/uwsgi/plugins/python3_plugin.so 1
+RUN apt-get update && apt-get install -y unzip uwsgi uwsgi-src \
+                                         uuid-dev libcap-dev libpcre3-dev python3-distutils
+RUN PYTHON=python3.7 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python37" && \
+    mv python37_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so && \
+    chmod 644 /usr/lib/uwsgi/plugins/python37_plugin.so
 
-RUN pip install setuptools --upgrade
-RUN pip install json-spec jsonmerge==1.3.0 jsonschema==2.6.0 requests \
-                pytest==4.6.5 filelock crossrefapi pyyaml
+RUN update-alternatives --install /usr/lib/uwsgi/plugins/python3_plugin.so \
+    python_plugin.so /usr/lib/uwsgi/plugins/python37_plugin.so 1
+
+RUN python -m pip install setuptools --upgrade
+RUN python -m pip install json-spec jsonmerge==1.3.0 jsonschema==2.6.0 requests \
+                          pytest==4.6.5 filelock crossrefapi pyyaml
 
 WORKDIR /root
 
