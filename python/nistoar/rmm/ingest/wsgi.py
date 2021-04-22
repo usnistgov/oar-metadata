@@ -295,14 +295,16 @@ class Handler(object):
                 self.set_response(400, "Input record is not valid")
                 self.add_header('Content-Type', 'application/json')
                 self.end_headers()
-                return [ json.dumps([str(e) for e in res.errs]) + '\n' ]
+                out = json.dumps([str(e) for e in res.errs]) + '\n'
+                return [ out.encode() ]
 
         except RecordIngestError as ex:
             log.exception("Failed to load posted record: "+str(ex))
             self.set_response(400, "Input record is not valid (missing @id)")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return [ json.dumps([ "Record is missing @id property" ]) + '\n' ]
+            out = json.dumps([ "Record is missing @id property" ]) + '\n'
+            return [ out.encode() ]
 
         except Exception as ex:
             log.exception("Loading error: "+str(ex))
