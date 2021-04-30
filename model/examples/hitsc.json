@@ -1,6 +1,6 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#/definitions/DataPublication" ],
 
     "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublishedDataResource" ],

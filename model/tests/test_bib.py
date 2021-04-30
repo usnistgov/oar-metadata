@@ -6,7 +6,7 @@ import ejsonschema as ejs
 
 from jsonschema.exceptions import ValidationError
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
 
 schemadir = os.path.dirname(os.path.dirname(__file__))

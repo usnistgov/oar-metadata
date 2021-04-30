@@ -3,7 +3,7 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#"
 nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
@@ -30,7 +30,7 @@ class TestJanaf(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.5#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -143,7 +143,7 @@ class TestCORR(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.5#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
