@@ -25,11 +25,11 @@ def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.5#";
 
 # the NERDm pub schema extension namespace
 #
-def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#";
 
 # the NERDm bib schema extension namespace
 #
-def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#";
+def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#";
 
 # the NERDm context location
 #

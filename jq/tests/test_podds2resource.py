@@ -5,8 +5,8 @@ from collections import OrderedDict
 import ejsonschema as ejs
 
 nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#"
-nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#"
+nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")

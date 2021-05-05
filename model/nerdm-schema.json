@@ -25,60 +25,6 @@
                     }
                 },
 
-                "version": {
-                    "title": "Version",
-                    "description": "a string indicating the version of the release of this resource",
-                    "type": "string",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Version",
-                        "referenceProperty": "schema:version"
-                    }
-                },
-
-                "versionHistory": {
-                    "title": "History",
-                    "description": "a list describing the release of different versions of this resource",
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/VersionRelease" }
-                },
-
-                "replaces": {
-                    "title": "Replaces",
-                    "description": "a listing of other existing resources that are deprecated by this resource",
-                    "type": "array",
-                    "items": {
-                        "allOf": [
-                            { "$ref": "#/definitions/RelatedResource" },
-                            { "required": [ "@id", "proxyFor", "label", "issued" ] }
-                        ]
-                    },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Replaces",
-                        "referenceProperty": "dc:replaces"
-                    }
-                },
-
-                "isReplacedBy": {
-                    "title": "Replaced by",
-                    "description": "another existing resources that should be considered a replacement for this resource",
-                    "notes": [
-                        "This typically refers to a newer version of this resource",
-                        "In the PDR system, this value is automatically generated given the overall state of the PDR's catalog"
-                    ],
-                    "allOf": [
-                        { "$ref": "#/definitions/RelatedResource" },
-                        { "required": [ "@id", "proxyFor", "label", "issued" ] }
-                    ],
-                    
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Is replaced by",
-                        "referenceProperty": "dc:isReplacedBy"
-                    }
-                },
-
                 "description": {
                     "title": "Description",                    
                     "description": "Human-readable description (e.g., an abstract) of the resource",
@@ -185,6 +131,39 @@
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Release Date",
                         "range": "xsd:date"
+                    }
+                },
+
+                "status": {
+                    "description": "A label indicating its release and availability status",
+                    "notes": [
+                        "This value is meant to flag a resource as perhaps unavailable--temporarily or permanently--with some indication as to why; further explanation could be amended to the resource description.",
+                        "This value is intended to be orthogonal to the accessLevel property.",
+                        "See value documentation for recognized values. If this property is not provided, the assumed value should 'available'"
+                    ],
+                    "type": "string",
+                    "valueDocumentation": {
+                        "available":  {
+                            "description": "this resource is currently available via its landing page and the links therein as well as via its component links"
+                        },
+                        "deprecated": {
+                            "description": "this resource is still available; however, the publisher wishes to indicate that the use of the data is no longer recommended"
+                        },
+                        "unavailable": {
+                            "description": "this resource is temporarily unavailable, usuallly for known reasons",
+                            "notes": [
+                                "This might be set if the server that provides the resource is going to be down for an extended period of time"
+                            ]
+                        },
+                        "missing": {
+                            "description": "the resource is unavailable for unknown reasons",
+                            "notes": [
+                                "The publisher may apply the landing page and/or component links are unresponsive for an extended period of time."
+                            ]
+                        },
+                        "removed": {
+                            "description": "this resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
+                        }
                     }
                 },
                 
