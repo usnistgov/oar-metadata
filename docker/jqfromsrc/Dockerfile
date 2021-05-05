@@ -2,7 +2,7 @@ From oar-metadata/pymongo
 
 RUN apt-get update && \
     apt-get install -y libonig-dev curl build-essential libtool zip \
-                       unzip autoconf git
+                       unzip autoconf git python3 pipenv
 
 WORKDIR /root
 RUN git clone http://github.com/stedolan/jq.git jq-dev && \
