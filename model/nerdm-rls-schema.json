@@ -1,0 +1,161 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.1#",
+    "rev": "wd1",
+    "title": "The NERDm extension metadata for describing versions and releases of resources",
+    "description": "These classes extend the based NERDm schema to capture version history.  It defines a special Resource, a ReleaseCollection, that collects all the versions of an evolving resource, as well as an informative resource reference, a ReleaseHistory, to reference that resource.  The ReleasedResource can serve as a base Resource type for resources that are versioned.",
+    "definitions": {
+
+        "ReleasedResource": {
+            "description": "a Resource that can be revised and released under a sequence of versions",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Resource" },
+                { 
+                    "properties": {
+                        "isVersionOf": {
+                            "description": "the ID for the general resource that this resource is a version of",
+                            "notes": [
+                                "This value refers to a notion of the resource that is evolving over time as each version is released and typically should resolve to the last version",
+                                "Set this property if @id is set to a value refering to a specific version"
+                            ],
+                            "type": "string",
+                            "format": "uri"
+                        },
+
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating the version of the release of this resource",
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        },
+
+                        "releaseHistory": {
+                            "title": "Release History",
+                            "description": "a reference to the sequence of releases that this resource is a part of",
+                            "notes": [
+                                "This property may include a listing of the releases that make up the release history"
+                            ],
+                            "$ref": "#/definitions/ReleaseHistory",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Release History",
+                                "referenceProperty": "dc:isPartOf"
+                            }
+                        },
+
+                        "replaces": {
+                            "title": "Replaces",
+                            "description": "a listing of other existing resources that are deprecated by this resource",
+                            "notes": [
+                                "This replicates information provided in the releaseHistory property.  While the latter is preferred for this information, replaces can be added for ease of processing by certain applications."
+                            ],
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/RelatedResource" },
+                                    { "required": [ "@id", "issued" ] }
+                                ]
+                            },
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Replaces",
+                                "referenceProperty": "dc:replaces"
+                            }
+                        },
+
+                        "isReplacedBy": {
+                            "title": "Replaced by",
+                            "description": "another existing resources that should be considered a replacement for this resource",
+                            "notes": [
+                                "This typically refers to a newer version of this resource",
+                                "This value is inferrable from the releaseHistory property.  While the latter is preferred for this information, isReplacedBy can be added for ease of processing by certain applications.",
+                                "This property may be set explicitly when this resource is intended to be replaced by another resource that is not simple a newer version of this resource."
+                            ],
+                            "allOf": [
+                                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/RelatedResource" },
+                                { "required": [ "@id", "issued" ] }
+                            ],
+                            
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Is replaced by",
+                                "referenceProperty": "dc:isReplacedBy"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+
+        "ReleaseHistory": {
+            "title": "Release History",
+            "description": "a reference to a release history collection that contains all the releases of the resources",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "hasRelease": {
+                            "title": "Releases",
+                            "description": "the list of known releases that are part of this release history collection",
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/Release" }
+                        }
+                    },
+                    "required": [ "@id" ]
+                }
+            ]
+        },
+
+        "Release": { 
+            "title": "Release",
+            "description": "a reference to a release of a RevisableResource",
+            "notes": [
+                "A release entry provides an abbreviated description of one of the versions in series of releases."
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating a version of the release of this resource",
+                            "notes": [
+                                "label could contain the same value"
+                            ],
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        }
+                    },
+                    "required": [ "@id", "version", "issued" ]
+                }
+            ]
+        },
+
+        "ReleaseCollection": {
+            "description": "a special collection that enumerates the different versions available for a particular resouce",
+            "allOf": [ 
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Resource" },
+                {
+                    "properties": {
+                        "hasRelease": {
+                            "title": "Releases",
+                            "description": "the list of known releases that are part of this release history collection",
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/Release" }
+                        }
+                    },
+                    "required": [ "hasRelease" ]
+                }
+            ]
+        }
+    }
+}
