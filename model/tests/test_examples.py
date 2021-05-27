@@ -4,8 +4,10 @@ import os, json, pdb
 import unittest as test
 import ejsonschema as ejs
 
-nerdm = "https://www.nist.gov/od/dm/nerdm-schema/v0.1#"
-nerdmpub = "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.1#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.1#"
+poduri = "https://data.nist.gov/od/dm/pod-schema/v1.1#definitions/Dataset"
+podrlxuri = "https://data.nist.gov/od/dm/pod-schema/relaxed-1.1#definitions/Dataset"
 
 schemadir = os.path.dirname(os.path.dirname(__file__))
 exdir = os.path.join(schemadir, "examples")
@@ -19,12 +21,12 @@ class TestExamples(test.TestCase):
         loader = ejs.SchemaLoader.from_directory(schemadir)
         self.val = ejs.ExtValidator(loader, ejsprefix='_')
 
-    def validate_file(self, filename):
+    def validate_file(self, filename, schemauri=None):
         fpath = os.path.join(exdir, filename)
         with open(fpath) as fd:
             data = json.load(fd)
 
-        self.val.validate(data, False, True)
+        self.val.validate(data, False, True, schemauri)
 
     def test_validate_janaf(self):
         self.validate_file("janaf.json")
@@ -50,6 +52,12 @@ class TestExamples(test.TestCase):
     def test_validate_ceramicsportal_0_1(self):
         self.validate_file("ceramicsportal-0.1.json")
 
+    def test_validate_pod(self):
+        self.validate_file("pod.json", poduri)
+
+    def test_validate_relaxed_pod(self):
+        self.validate_file("pod.json", podrlxuri)
+
 class TestSchemas(test.TestCase):
 
     def setUp(self):
@@ -68,7 +76,11 @@ class TestSchemas(test.TestCase):
     def test_pub_nerdm(self):
         self.validate_file("nerdm-pub-schema.json")
 
+    def test_pod(self):
+        self.validate_file("pod-schema.json")
         
+    def test_relaxed_pod(self):
+        self.validate_file("pod-relaxed-schema.json")
         
 
 if __name__ == '__main__':
