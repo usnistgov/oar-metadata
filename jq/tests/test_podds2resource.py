@@ -64,8 +64,11 @@ class TestJanaf(unittest.TestCase):  #
         self.assertEqual(len(self.out['description']), 1)
 
     def test_ediid(self):
-        self.assertEquals(self.out['ediid'],
+        self.assertEqual(self.out['ediid'],
                           "ECBCC1C1301D2ED9E04306570681B10735")
+
+    def test_status(self):
+        self.assertEqual(self.out['status'], "available")
 
     def test_components(self):
         comps = self.out['components']

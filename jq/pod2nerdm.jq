@@ -510,6 +510,15 @@ def resourceTypes:
     [ isSRD, isPDR, isDCatDS ]
 ;
 
+# Convert a pod status to a NERDm status
+#
+# Input: POD status string or null
+# Output: a NERDm status string
+#
+def cvtstatus:
+    if . == "deactivated" then "removed" else "available" end
+;
+
 # Converts an entire POD Dataset node to a NERDm Resource node
 #
 def podds2resource:
@@ -524,6 +533,7 @@ def podds2resource:
         contactPoint,
         issued,
         modified,
+        status: .status | cvtstatus,
 
         ediid: .identifier,
         landingPage,
