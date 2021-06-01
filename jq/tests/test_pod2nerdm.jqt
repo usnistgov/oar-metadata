@@ -486,6 +486,18 @@ include "pod2nerdm"; resourceTypes
 { "@type": "dcat:Dataset", "title": "The Big Database - SRD 1024" }
 [ "nrd:SRD", "nrdp:PublicDataResource", "dcat:Dataset" ]
 
+include "pod2nerdm"; cvtstatus
+"deactivated"
+"removed"
+
+include "pod2nerdm"; cvtstatus
+null
+"available"
+
+include "pod2nerdm"; cvtstatus
+"goob"
+"available"
+
 # testing podds2resoure:
 #
 # this will be handled by test_podds2resource.py
