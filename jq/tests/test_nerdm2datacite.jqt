@@ -353,6 +353,13 @@ include "nerdm2datacite"; make_ref_rel
 { "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isSupplementTo" }
 
 #--------------
+# testing make_obsoletedby_rel
+#
+include "nerdm2datacite"; make_obsoletedby_rel
+{ "@id": "doi:10.0000/goober", "title": "Hello!" }
+{ "relatedIdentifier": "doi:10.0000/goober", "relatedIdentifierType": "DOI", "relationType": "isObsoletedBy" }
+
+#--------------
 # testing resource2datacite
 #
 # require minimal information
