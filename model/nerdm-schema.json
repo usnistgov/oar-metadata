@@ -135,22 +135,19 @@
                 },
 
                 "status": {
-                    "description": "A label indicating its release and availability status",
+                    "description": "A label indicating this resource's release and availability status",
+                    "type": "string",
                     "notes": [
                         "This value is meant to flag a resource as perhaps unavailable--temporarily or permanently--with some indication as to why; further explanation could be amended to the resource description.",
                         "This value is intended to be orthogonal to the accessLevel property.",
-                        "See value documentation for recognized values. If this property is not provided, the assumed value should 'available'"
+                        "See ReleaseStatus value documentation (from the nerdm-schema/rls schema) for the full set of values recognized by the NIST PDR.  If this property is not provided, the assumed value should 'available'"
                     ],
-                    "type": "string",
                     "valueDocumentation": {
                         "available":  {
-                            "description": "this resource is currently available via its landing page and the links therein as well as via its component links"
-                        },
-                        "deprecated": {
-                            "description": "this resource is still available; however, the publisher wishes to indicate that the use of the data is no longer recommended"
+                            "description": "the resource is currently available via its landing page and the links therein as well as via its component links"
                         },
                         "unavailable": {
-                            "description": "this resource is temporarily unavailable, usuallly for known reasons",
+                            "description": "the resource is temporarily unavailable, usuallly for known reasons (other than being in an embargoed state)",
                             "notes": [
                                 "This might be set if the server that provides the resource is going to be down for an extended period of time"
                             ]
@@ -162,7 +159,7 @@
                             ]
                         },
                         "removed": {
-                            "description": "this resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
+                            "description": "the resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
                         }
                     }
                 },
