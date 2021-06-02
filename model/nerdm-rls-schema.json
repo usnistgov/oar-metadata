@@ -133,6 +133,15 @@
                                 "prefLabel": "Version",
                                 "referenceProperty": "schema:version"
                             }
+                        },
+                        "status": {
+                            "title": "Status",
+                            "description": "a label indicating the availability status of the release",
+                            "notes": [
+                                "As some releases may disappear or be embargoed, this label is used indicate whether this release is currently available and, if not, why.",
+                                "See ReleaseStatus value documentation for allowed values.  If this property is not provided, the assumed value should 'available'"
+                            ],
+                            "$ref": "#/definitions/ReleaseStatus"
                         }
                     },
                     "required": [ "@id", "version", "issued" ]
@@ -156,6 +165,38 @@
                     "required": [ "hasRelease" ]
                 }
             ]
-        }
+        },
+
+        "ReleaseStatus": {
+            "description": "A label indicating a resource's release and availability status",
+            "type": "string",
+            "enum": [ "available", "deprecated", "embargoed", "unavailable", "missing", "removed" ],
+            "valueDocumentation": {
+                "available":  {
+                    "description": "the resource is currently available via its landing page and the links therein as well as via its component links"
+                },
+                "deprecated": {
+                    "description": "the resource is still available; however, the publisher wishes to indicate that the use of the data is no longer recommended"
+                },
+                "embargoed": {
+                    "description": "the resource is currently unavailable but is expected to become available sometime in the future."
+                },
+                "unavailable": {
+                    "description": "the resource is temporarily unavailable, usuallly for known reasons (other than being in an embargoed state)",
+                    "notes": [
+                        "This might be set if the server that provides the resource is going to be down for an extended period of time"
+                    ]
+                },
+                "missing": {
+                    "description": "the resource is unavailable for unknown reasons",
+                    "notes": [
+                        "The publisher may apply the landing page and/or component links are unresponsive for an extended period of time."
+                    ]
+                },
+                "removed": {
+                    "description": "the resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
+                }
+            }
+        }        
     }
 }
