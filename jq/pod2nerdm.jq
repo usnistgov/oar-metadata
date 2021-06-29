@@ -170,6 +170,10 @@ def ansc_coll_paths:
     reduce .[] as $ary ([]; .+$ary) | unique
 ;
 
+def shortenDOI:
+    if . then sub("https?://.*doi.org/(doi:)?"; "doi:") else . end
+;
+
 # conversion for a POD-to-NERDm reference node
 #
 # Input: a string containing the reference URL
@@ -298,8 +302,10 @@ def dist2accesspage:
 #
 # Input: a Distribution object
 # Output: a Component object with the detected types given in @type
+# doi:  the "doi:"-prefixed form of the DOI assigned to this records, used to identify
+#       the DOI Access distribution
 #
-def dist2comp: 
+def dist2comp(doi):
     if .downloadURL then
         if (.downloadURL | endswith(".sha256")) then
             dist2checksum
@@ -307,7 +313,7 @@ def dist2comp:
             dist2download
         end
     else if .accessURL then
-        if (.accessURL | test("doi.org")) then
+        if ((.accessURL|shortenDOI) == doi) then
           dist2hidden
         else
           dist2accesspage
@@ -319,7 +325,7 @@ def dist2comp:
 ;
 
 # return the DOI stored in the accessURL, if it exists.  null is returned, if
-# none is found.
+# none is found.   DEPRECATED: DOI passed in via doi property
 #
 # Input: a Distribution object
 # Output:  string: A DOI in in the form of "doi:..."
@@ -528,7 +534,7 @@ def podds2resource:
         "_extensionSchemas": [ nerdm_pub_schema + "/definitions/PublicDataResource" ],
         "@type": resourceTypes,
         "@id": resid,
-        "doi": (.distribution + []) | doiFromDist,
+        "doi": .doi | shortenDOI,
         title,
         contactPoint,
         issued,
@@ -554,8 +560,9 @@ def podds2resource:
         bureauCode,
         programCode
     } |
+    .doi as $doi | 
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
-    if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
+    if .components then .components = (.components | map(dist2comp($doi)) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
     if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
