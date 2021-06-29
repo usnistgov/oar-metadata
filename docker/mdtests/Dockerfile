@@ -1,17 +1,6 @@
 FROM oar-metadata/ejsonschema
 
-RUN sed -e '/jessie-updates/ s/^deb/#deb/' /etc/apt/sources.list \
-    > /tmp/sources.list && mv /tmp/sources.list /etc/apt/sources.list
-RUN apt-get update && \
-    apt-get upgrade && \
-    apt-get install -y --no-install-recommends zip 
-RUN apt-get update
-RUN apt-get install -y wget 
-RUN apt-get install -y ca-certificates 
-RUN apt-get update
-RUN apt-get install -y git 
-RUN apt-get update
-RUN apt-get install -y gnupg-curl
+RUN apt-get update && apt-get install -y zip wget git
 
 ENV GOSU_VERSION 1.10
 RUN set -ex; \
@@ -21,12 +10,13 @@ RUN set -ex; \
     wget -O /usr/local/bin/gosu.asc \
 "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc";\
     export GNUPGHOME="$(mktemp -d)"; \
-    gpg --batch --keyserver hkps://keys.openpgp.org \
-         --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+    echo "disable-ipv6" >> "$GNUPGHOME/dirmngr.conf"; \
+    gpg --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     gosu nobody true
+
 # Create the user that build/test operations should run as.  Normally,
 # this is set to match identity information of the host user that is
 # launching the container.
@@ -55,3 +45,5 @@ RUN mkdir -p /dev/oar-metadata
 WORKDIR /dev/oar-metadata
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+
