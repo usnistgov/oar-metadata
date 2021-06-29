@@ -5,7 +5,10 @@ RUN sed -e '/jessie-updates/ s/^deb/#deb/' /etc/apt/sources.list \
 RUN apt-get update && \
     apt-get upgrade && \
     apt-get install -y --no-install-recommends zip wget 
-RUN apt-get install -y ca-certificates git 
+RUN apt-get install -y ca-certificates 
+RUN apt-get update
+RUN apt-get install -y git 
+RUN apt-get update
 RUN apt-get install -y gnupg-curl
 
 ENV GOSU_VERSION 1.10
