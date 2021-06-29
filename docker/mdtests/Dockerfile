@@ -3,6 +3,7 @@ FROM oar-metadata/ejsonschema
 RUN sed -e '/jessie-updates/ s/^deb/#deb/' /etc/apt/sources.list \
     > /tmp/sources.list && mv /tmp/sources.list /etc/apt/sources.list
 RUN apt-get update && \
+    apt-get upgrade && \
     apt-get install -y --no-install-recommends zip wget ca-certificates git gnupg-curl
 
 ENV GOSU_VERSION 1.10
