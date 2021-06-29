@@ -1,6 +1,9 @@
 FROM oar-metadata/ejsonschema
 
-RUN apt-get update && apt-get install -y --no-install-recommends zip wget git gnupg-curl
+RUN sed -e '/jessie-updates/ s/^deb/#deb/' /etc/apt/sources.list \
+    > /tmp/sources.list && mv /tmp/sources.list /etc/apt/sources.list
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends zip wget ca-certificates git gnupg-curl
 
 ENV GOSU_VERSION 1.10
 RUN set -ex; \
@@ -10,14 +13,12 @@ RUN set -ex; \
     wget -O /usr/local/bin/gosu.asc \
 "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc";\
     export GNUPGHOME="$(mktemp -d)"; \
-    echo "disable-ipv6" >> "$GNUPGHOME/dirmngr.conf"; \
     gpg --batch --keyserver hkps://keys.openpgp.org \
-         --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+        --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
     gosu nobody true
-
 # Create the user that build/test operations should run as.  Normally,
 # this is set to match identity information of the host user that is
 # launching the container.
