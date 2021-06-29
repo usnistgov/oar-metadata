@@ -1,6 +1,6 @@
 FROM oar-metadata/ejsonschema
 
-RUN apt-get update && apt-get install -y zip wget git
+RUN apt-get update && apt-get install -y zip wget git gnupg-curl
 
 ENV GOSU_VERSION 1.10
 RUN set -ex; \
@@ -11,7 +11,7 @@ RUN set -ex; \
 "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc";\
     export GNUPGHOME="$(mktemp -d)"; \
     echo "disable-ipv6" >> "$GNUPGHOME/dirmngr.conf"; \
-    gpg --keyserver ha.pool.sks-keyservers.net \
+    gpg --batch --keyserver hkps://keys.openpgp.org \
          --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
