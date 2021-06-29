@@ -4,7 +4,9 @@ RUN sed -e '/jessie-updates/ s/^deb/#deb/' /etc/apt/sources.list \
     > /tmp/sources.list && mv /tmp/sources.list /etc/apt/sources.list
 RUN apt-get update && \
     apt-get upgrade && \
-    apt-get install -y --no-install-recommends zip wget 
+    apt-get install -y --no-install-recommends zip 
+RUN apt-get update
+RUN apt-get install -y wget 
 RUN apt-get install -y ca-certificates 
 RUN apt-get update
 RUN apt-get install -y git 
