@@ -281,6 +281,8 @@ class TestValidateNerdm(unittest.TestCase):
         out = send_jsonstr_thru_jq('nerdm::podds2resource', ds, {"id": "ark:ID"})
 
         self.val.validate(out, False, True)
+        self.assertIn("doi", out)
+        self.assertEqual(out.get("doi"), "doi:10.18434/T42C7D")
 
 def format_argopts(argdata):
     """
