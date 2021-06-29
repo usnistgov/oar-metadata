@@ -14,7 +14,7 @@ RUN set -ex; \
 "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$arch.asc";\
     export GNUPGHOME="$(mktemp -d)"; \
     gpg --batch --keyserver hkps://keys.openpgp.org \
-        --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+         --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
     gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
     rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
     chmod +x /usr/local/bin/gosu; \
