@@ -353,6 +353,20 @@ def make_ispartof_rel:
     end
 ;
 
+# convert a replacedBy object into an IsObsoletedBy relation
+#
+def make_obsoletedby_rel:
+    if (. and .["@id"] and (.["@id"] | contains("doi"))) then
+      {
+        relatedIdentifier: .["@id"],
+        relatedIdentifierType: "DOI",
+        relationType: "isObsoletedBy"
+      }
+    else
+      empty
+    end
+;
+
 # convert a reference object into a related identifier object
 #
 def make_ref_rel:
@@ -429,7 +443,8 @@ def resource2datacite:
       relatedIdentifiers: [
         (
           (.isPartOf | make_ispartof_rel),
-          (.references | if (.) then (.[] | make_ref_rel) else empty end)
+          (.references | if (.) then (.[] | make_ref_rel) else empty end),
+          (.isReplacedBy | make_obsoletedby_rel)
         )
       ],
       language: "en-US"

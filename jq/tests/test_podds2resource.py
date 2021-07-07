@@ -3,9 +3,9 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#"
-nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
+nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#"
+nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#"
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")
@@ -30,7 +30,7 @@ class TestJanaf(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.5#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -64,8 +64,11 @@ class TestJanaf(unittest.TestCase):  #
         self.assertEqual(len(self.out['description']), 1)
 
     def test_ediid(self):
-        self.assertEquals(self.out['ediid'],
+        self.assertEqual(self.out['ediid'],
                           "ECBCC1C1301D2ED9E04306570681B10735")
+
+    def test_status(self):
+        self.assertEqual(self.out['status'], "available")
 
     def test_components(self):
         comps = self.out['components']
@@ -143,7 +146,7 @@ class TestCORR(unittest.TestCase):  #
                           
     def test_schema(self):
         self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.4#")
+                          "https://data.nist.gov/od/dm/nerdm-schema/v0.5#")
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -278,6 +281,8 @@ class TestValidateNerdm(unittest.TestCase):
         out = send_jsonstr_thru_jq('nerdm::podds2resource', ds, {"id": "ark:ID"})
 
         self.val.validate(out, False, True)
+        self.assertIn("doi", out)
+        self.assertEqual(out.get("doi"), "doi:10.18434/T42C7D")
 
 def format_argopts(argdata):
     """

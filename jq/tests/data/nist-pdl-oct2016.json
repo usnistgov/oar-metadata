@@ -8987,6 +8987,7 @@
                     "title": "DOI Access for Volatile Data Streat"
                 }
             ],
+            "doi": "http://doi.org/10.18434/T4FK54",
             "identifier": "349FC6C113FA5700E0531A5706810A431464",
             "keyword": [
                 "MTConnect",
@@ -9081,6 +9082,7 @@
                     "title": "Collaborative Guarded-Hot-Plate Tests between the Laboratoire national de m\u00e9trologie et d'essais and the National Institute of Standards and Technology"
                 }
             ],
+            "doi": "https://doi.org/10.18434/T4XK5G",
             "identifier": "3541C38AF67059C5E0531A57068159D51467",
             "keyword": [
                 "bilateral",
@@ -9133,6 +9135,7 @@
                     "title": "Project Data: Wireless Systems for Industrial Environments"
                 }
             ],
+            "doi": "http://doi.org/10.18434/T44S3N",
             "identifier": "356944A3D8670CF4E0531A570681CBA51468",
             "keyword": [
                 "wireless",
@@ -9288,6 +9291,7 @@
                     "title": "SHA-256 file for ASCII version of the code"
                 }
             ],
+            "doi": "http://doi.org/10.18434/T4SW26",
             "identifier": "3A1EE2F169DD3B8CE0531A570681DB5D1491",
             "keyword": [
                 "optical sorting",
@@ -9343,6 +9347,7 @@
                     "title": "Digital Manufacturing Certificate Toolkit"
                 }
             ],
+            "doi": "http://doi.org/10.18434/T4P30K",
             "identifier": "3A28A855F9ABBC7FE0531A570681D98B1492",
             "keyword": [
                 "Trustworthiness",
@@ -9395,6 +9400,7 @@
                     "title": "A Library to Enable the Modeling of Optical Imaging of Finite Multi-Line Arrays"
                 }
             ],
+            "doi": "https://doi.org/10.18434/T42C7D",
             "identifier": "3DA7897F530C7988E0531A570681AAF01502",
             "keyword": [
                 "optical imaging",

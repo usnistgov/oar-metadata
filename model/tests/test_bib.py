@@ -6,8 +6,8 @@ import ejsonschema as ejs
 
 from jsonschema.exceptions import ValidationError
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
-nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#"
+nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
+nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#"
 
 schemadir = os.path.dirname(os.path.dirname(__file__))
 exdir = os.path.join(schemadir, "examples")
@@ -55,7 +55,7 @@ class TestExamples(test.TestCase):
             u'refType': u'IsDocumentedBy',
             u'location': u'http://kinetics.nist.gov/janaf/pdf/JANAF-FourthEd-1998-1Vol1-Intro.pdf',
             u'_extensionSchemas': [
-                u'https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#/definitions/DCiteReference'
+                u'https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#/definitions/DCiteReference'
             ],
             u'@type': [u'schema:Book'],
             u'label': u'JPCRD Monograph: NIST-JANAF Thermochemical Tables, Pt. 1 (AL-C'

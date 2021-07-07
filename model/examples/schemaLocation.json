@@ -4,15 +4,31 @@
     "https://www.nist.gov/od/dm/nerdm-schema/v0.1#": "../nerdm-schema-0.1.json",
     "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.1#": "../nerdm-pub-schema-0.1.json",
     "https://www.nist.gov/od/dm/nerdm-schema/v0.2": "../nerdm-schema-0.2.json",
-    "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.2": "../nerdm-pub-schema-0.2.json",
-    "https://www.nist.gov/od/dm/nerdm-schema/v0.2#": "../nerdm-schema-0.2.json",
-    "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.2#": "../nerdm-pub-schema-0.2.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/v0.2": "../nerdm-schema-0.2.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2": "../nerdm-pub-schema-0.2.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/v0.2#": "../nerdm-schema-0.2.json",
+
+    "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.2":   "../nerdm-pub-schema-0.2.json",
+    "https://www.nist.gov/od/dm/nerdm-schema/v0.2#":      "../nerdm-schema-0.2.json",
+    "https://www.nist.gov/od/dm/nerdm-schema/pub/v0.2#":  "../nerdm-pub-schema-0.2.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.2":      "../nerdm-schema-0.2.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2":  "../nerdm-pub-schema-0.2.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.2#":     "../nerdm-schema-0.2.json",
     "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#": "../nerdm-pub-schema-0.2.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/v0.3": "../nerdm-schema.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3": "../nerdm-pub-schema.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/v0.3#": "../nerdm-schema.json",
-    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#": "../nerdm-pub-schema.json"
+
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.3":      "../nerdm-schema-0.3.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3":  "../nerdm-pub-schema-0.3.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.3#":     "../nerdm-schema-0.3.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#": "../nerdm-pub-schema-0.3.json",
+
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.4":      "../nerdm-schema-0.4.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4":  "../nerdm-pub-schema-0.4.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4":  "../nerdm-bib-schema-0.4.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.4#":     "../nerdm-schema-0.4.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#": "../nerdm-pub-schema-0.4.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#": "../nerdm-bib-schema-0.4.json",
+
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.5":      "../nerdm-schema.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5":  "../nerdm-pub-schema.json"
+    "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5":  "../nerdm-bib-schema.json"
+    "https://data.nist.gov/od/dm/nerdm-schema/v0.5#":     "../nerdm-schema.json",
+    "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#": "../nerdm-pub-schema.json"
+    "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#": "../nerdm-bib-schema.json"
 }
