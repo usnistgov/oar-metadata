@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -22,6 +22,60 @@
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Title",
                         "referenceProperty": "dc:title"
+                    }
+                },
+
+                "version": {
+                    "title": "Version",
+                    "description": "a string indicating the version of the release of this resource",
+                    "type": "string",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Version",
+                        "referenceProperty": "schema:version"
+                    }
+                },
+
+                "versionHistory": {
+                    "title": "History",
+                    "description": "a list describing the release of different versions of this resource",
+                    "type": "array",
+                    "items": { "$ref": "#/definitions/VersionRelease" }
+                },
+
+                "replaces": {
+                    "title": "Replaces",
+                    "description": "a listing of other existing resources that are deprecated by this resource",
+                    "type": "array",
+                    "items": {
+                        "allOf": [
+                            { "$ref": "#/definitions/RelatedResource" },
+                            { "required": [ "@id", "proxyFor", "label", "issued" ] }
+                        ]
+                    },
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Replaces",
+                        "referenceProperty": "dc:replaces"
+                    }
+                },
+
+                "isReplacedBy": {
+                    "title": "Replaced by",
+                    "description": "another existing resources that should be considered a replacement for this resource",
+                    "notes": [
+                        "This typically refers to a newer version of this resource",
+                        "In the PDR system, this value is automatically generated given the overall state of the PDR's catalog"
+                    ],
+                    "allOf": [
+                        { "$ref": "#/definitions/RelatedResource" },
+                        { "required": [ "@id", "proxyFor", "label", "issued" ] }
+                    ],
+                    
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Is replaced by",
+                        "referenceProperty": "dc:isReplacedBy"
                     }
                 },
 
@@ -68,7 +122,7 @@
                 },
 
                 "modified": {
-                    "description": "Most recent date on which the main content of this resource was modified.",
+                    "description": "Most recent date on which the dataset was changed, updated or modified.",
                     "notes": [
                         "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
                     ],
@@ -80,87 +134,15 @@
                     }
                 },
 
-                "revised": {
-                    "title": "Release Date",
-                    "description": "The date of the last formal issuance of the resource due to any change in the resource, including the addition of new content to this resource",
-                    "$ref": "#/definitions/FlexibleDate",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "referenceProperty": "dc:issued",
-                        "range": "xsd:date"
-                    }
-                },
-
                 "issued": {
                     "title": "Release Date",
                     "description": "Date of formal issuance of the resource",
-                    "notes": [
-                        "At NIST, this is the date when this resource was issued under its EDI ID and/or DOI",
-                        "At NIST, this value does not change when new data is added to the resource"
-                    ],
                     "$ref": "#/definitions/FlexibleDate",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Release Date",
                         "referenceProperty": "dc:issued",
                         "range": "xsd:date"
-                    }
-                },
-
-                "firstIssued": {
-                    "title": "Initial Release Date",
-                    "description": "Date of the first formal issuance of the resource",
-                    "$ref": "#/definitions/FlexibleDate",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "referenceProperty": "dc:issued",
-                        "range": "xsd:date"
-                    }
-                },
-                
-                "annotated": {
-                    "title": "Last Annotation Date",
-                    "description": "Date of the last minor update to metadata or other ancillary information that (by itself) did not affect the main content of the resource",
-                    "notes": [
-                        "This will always get updated for both minor and major changes; that is, when the revision date changes, this date will change as well."
-                    ],
-                    "$ref": "#/definitions/FlexibleDate",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Release Date",
-                        "range": "xsd:date"
-                    }
-                },
-
-                "status": {
-                    "description": "A label indicating this resource's release and availability status",
-                    "type": "string",
-                    "notes": [
-                        "This value is meant to flag a resource as perhaps unavailable--temporarily or permanently--with some indication as to why; further explanation could be amended to the resource description.",
-                        "This value is intended to be orthogonal to the accessLevel property.",
-                        "See ReleaseStatus value documentation (from the nerdm-schema/rls schema) for the full set of values recognized by the NIST PDR.  If this property is not provided, the assumed value should 'available'"
-                    ],
-                    "valueDocumentation": {
-                        "available":  {
-                            "description": "the resource is currently available via its landing page and the links therein as well as via its component links"
-                        },
-                        "unavailable": {
-                            "description": "the resource is temporarily unavailable, usuallly for known reasons (other than being in an embargoed state)",
-                            "notes": [
-                                "This might be set if the server that provides the resource is going to be down for an extended period of time"
-                            ]
-                        },
-                        "missing": {
-                            "description": "the resource is unavailable for unknown reasons",
-                            "notes": [
-                                "The publisher may apply the landing page and/or component links are unresponsive for an extended period of time."
-                            ]
-                        },
-                        "removed": {
-                            "description": "the resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
-                        }
                     }
                 },
                 

@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "$extensionSchemas": ["http://mgi.nist.gov/mgi-json-schema/v0.1"],
+    "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
     "id": "https://data.nist.gov/od/dm/pod-schema/relaxed-1.1#",
     "title": "US Project Open Data Schema as Extended JSON Schema",
     "description": "This JSON Schema expresses the POD schema (v1.1) so that instances can be validated via a JSON Schema validater",
@@ -94,7 +94,18 @@
                     "notes": [
                         "Dates should be ISO 8601 of highest resolution. In other words, as much of YYYY-MM-DDThh:mm:ss.sTZD as is relevant to this dataset. If there is a need to reflect that the dataset is continually updated, ISO 8601 formatting can account for this with repeating intervals. For instance, R/P1D for daily, R/P2W for every two weeks, and R/PT5M for every five minutes."
                     ],
-                    "$ref": "#/definitions/ISO8601DateRange",
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/ISO8601DateRange"
+                        },
+                        {
+                            "type": "string",
+                            "enum": [""]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Last Update",

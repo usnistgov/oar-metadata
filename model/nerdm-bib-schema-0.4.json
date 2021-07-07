@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.4#",
     "rev": "wd1",
     "title": "The NERDm extension metadata for bibliographic information",
     "description": "This schema extends NERDm's BibliographicReference to provide more specific ways to describe scholory references.",
@@ -115,7 +115,7 @@
                 "It is recommended that such multiple classifications of the same reference should be avoided."
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/BibliographicReference" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#/definitions/BibliographicReference" },
                 {
                     "properties": {
                         "refType": {
