@@ -21,7 +21,7 @@ include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.4#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.5#";
 
 # the NERDm pub schema extension namespace
 #

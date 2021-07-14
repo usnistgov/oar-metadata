@@ -1,6 +1,6 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.4#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.4#/definitions/DataPublication" ],
 
     "@type": [ "nrd:SRD", "nrdp:DataPublication", "nrdp:PublicDataResource" ],
@@ -91,7 +91,9 @@
         ]
     },
     "issued": "1964",
+    "firstIssued": "1964",
     "modified": "2013-01-01",
+    "annotated": "2021-04-30",
 
     
     "ediid": "ECBCC1C1301D2ED9E04306570681B10735",

@@ -10,7 +10,7 @@
 #
 include "pod2nerdm"; nerdm_schema
 null
-"https://data.nist.gov/od/dm/nerdm-schema/v0.4#"
+"https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 
 #--------------
 # testing nerdm_schema()
