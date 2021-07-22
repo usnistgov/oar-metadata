@@ -1,0 +1,86 @@
+# This is a annotated version of the example record, ncnrexp0.json.  It represents an example of record
+# that could be submitted to the Programmatic Data Publishing service (pdp1).  It describes an experiement
+# from the NCNR facility.
+{
+    # These two properties enable validation (using nerdmvalidate).
+    # _schema identifies the core NERDm schema
+    # _extensionSchemas identifies the extension specific to submissions to the publishing service
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/sip/v0.1#/definitions/PDRSubmission" ],
+
+    # @type identifies this as a submission to publishing service (required)
+    "@type": [ "nrdp:PDRSubmission" ],
+
+    # @id is the requested ID to assign; if this ID cannot be assigned (because it is already being used
+    # or it has an incorrect form, then the submission will be rejected.  If not provided, one will be
+    # automatically defined.  (Optional)
+    "@id": "ark:/88434/cnr0-22872",
+
+    "title": "Neutron Reflectometry of Electrochemically Grown Hydrous Iridium Oxide Films",  # required
+    "contactPoint": {
+        "hasEmail": "mailto:joseph.dura@nist.gov",              # required
+        "fn": "Joe Dura",                                       # required
+        "proxyFor": "https://orchid.org/0000-0001-6877-959X"    # optional
+    },
+    "authors": [                                                # author list is optional
+        {
+            "fn": "Eric Rus",                                   # required; recommended rendering of full name
+            "familyName": "Rus",                                # optional
+            "firstName": "Eric",                                # optional
+            "orcid": "0000-0001-5031-6888"                      # optional
+        },
+        {
+            "fn": "Joseph A. Dura",
+            "familyName": "Dura",
+            "firstName": "Joseph",
+            "middleName": "A.",
+            "orcid": "0000-0001-6877-959X"
+        }
+    ],
+
+    # each string element should be thought of as a separate paragraph in the description, with the
+    # first one being most important.  (required)
+    "description": [
+        ""
+    ],
+    "keywords": [ "electrochemistry", "oxide films" ],   # optional
+    "accessLevel": "public",                             # required (for the moment)
+
+    "modified": "2018-04-05T17:16:54",  # optional but recommended; set to the latest activity endtime
+
+    # we propose that each activity be listed as a component of this publication (these can be
+    # submitted separately or as part of this main resource metadata.  
+    "components": [
+        {
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage"
+            ],
+            "@id": "components/201706",     # required: follow this form, including the activity ID
+            "@type": [ "nrdp:AccessPage" ], # required
+
+            # required; this is a link to the page where the activity can be downloaded from
+            "accessURL": "https://pub/ncnrdata/cgd/201706/22872/data",  
+
+            # optional but recommended: this text would appear as the link text on the landing page
+            "title": "Download Access for Activity 201706",
+
+            # optional but recommended; the description would appear as a tool tip text indicating what the
+            # user will see if they click on the accessURL link
+            "format": {
+                "description": "NCNR Repository web page"
+            }
+        },
+        {
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage"
+            ],
+            "@id": "components/201803",
+            "@type": [ "nrdp:AccessPage" ],
+            "accessURL": "https://pub/ncnrdata/cgd/201803/22872/data",
+            "title": "Download Access for Activity 201803",
+            "format": {
+                "description": "NCNR Repository web page"
+            }
+        }
+    ]
+}
