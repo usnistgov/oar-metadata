@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -461,7 +461,10 @@
 
             },
 
-            "required": [ "title", "contactPoint" ]
+            "required": [
+                "title", "description", "landingPage", "publisher", 
+                "contactPoint", "accessLevel"
+            ]
         },
 
         "FlexibleDate": {

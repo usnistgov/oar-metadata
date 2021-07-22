@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#",
     "rev": "wd1",
     "title": "The NERDm extension metadata for Public Data",
     "description": "These classes extend the based NERDm schema to different types of published data",
@@ -11,11 +11,10 @@
             "description": "a resource that can/should have a record in NIST's public data listing (PDL)",
             "notes": [
                 "This must be convertable to a compliant and complete POD record; thus, this class adds all remaining POD properties missing from the core",
-                "In addition to the core properties, this also inherits release-related information, including version, releaseHistory, and isVersionOf",
-                "The ancestor types require the following properties:  @id, publisher, accessLevel, title, and contactPoint."
+                "In addition to the core properties, this also inherits release-related information, including version, releaseHistory, and isVersionOf"
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.2#/definitions/ReleasedResource"},
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.1#/definitions/ReleasedResource"},
                 {
                     "type": "object",
                     "properties": {
@@ -151,7 +150,7 @@
                         }
                         
                     },
-                    "required": [ "description", "landingPage", "bureauCode", "programCode", "ediid" ]
+                    "required": [ "bureauCode", "programCode", "ediid" ]
                 }
             ]
         },
@@ -186,7 +185,7 @@
         "DownloadableFile": {
             "description": "a description of a downloadable, finite stream of data",
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component" },
                 {
                     "properties": {
 
@@ -333,7 +332,7 @@
                     "properties": {
                         "algorithm": {
                             "description": "the algorithm used to produce the checksum hash",
-                            "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Topic"
+                            "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Topic"
                         },
                         
                         "valid": {
@@ -361,7 +360,7 @@
             "properties": {
                 "algorithm": {
                     "description": "the algorithm used to produce the checksum hash",
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Topic"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Topic"
                 },
                 "hash": {
                     "description": "the checksum value",
@@ -382,7 +381,7 @@
                 "This Component subtype implements hierarchical resources; a subcollection is equivalent to a directory that can contain other components, including other subcollections."
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component" },
                 {
                     "properties": {
                         
@@ -435,7 +434,7 @@
                 "This type should not be used to capture a resource's home page as this would be redundant with the landingPage resource property."
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component" },
                 {
                     "properties": {
                         "accessURL": {
@@ -477,7 +476,7 @@
                 "When converting an API component to a POD distribution, the output format should set to 'API'."
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component" },
                 {
                     "properties": {
                         "accessURL": {
@@ -731,7 +730,7 @@
         "Affiliation": {
             "description":  "a description of an organization that a person is a member of",
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/ResourceReference" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/ResourceReference" },
                 {
                     "properties": {
                         "subunits": { 
