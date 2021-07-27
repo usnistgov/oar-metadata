@@ -1,4 +1,4 @@
-name: testall
+name: integration
 on:
   workflow_dispatch:
   push:
