@@ -1,7 +1,6 @@
-name: testall
+name: source updates
 on:
   workflow_dispatch:
-  pull_request:
   push:
     branches-ignore: ['main', 'integration']
     paths:
