@@ -10,8 +10,11 @@ from .. import constants as NERDM_CONST
 from .. import utils
 
 _nrdpat = re.compile(r"^("+NERDM_CONST.core_schema_base+"\S+/)v\d[\w\.]*((#.*)?)$")
+_oldnrdpat = re.compile(r"^https?://www.nist.gov/od/dm/nerdm-schema/")
 def _schuripatfor(uribase):
     return re.compile(r"^("+uribase+")v\d[\w\.]*((#.*)?)$")
+
+version_extension_re = re.compile("v\d+(_\d+)*$")
 
 class NERDm2Latest(object):
     """
@@ -21,6 +24,7 @@ class NERDm2Latest(object):
     changes to a record according to a named convention.  Multiple conventions can be applied; these 
     convetions massagers are applied after migrating a record to the latest schemas
     """
+    _verextre = version_extension_re 
 
     def __init__(self, logger=None, massagers=None, defconv=[], defver=None, byext={}):
         """
@@ -105,6 +109,54 @@ class NERDm2Latest(object):
         """
         out = OrderedDict([("@id", nerdmd['@id'] + idext), ("@type", ["nrdr:ReleaseHistory"])])
         out['hasRelease'] = nerdmd.get("versionHistory", [])
+
+        if len(out['hasRelease']) == 0:
+            out['hasRelease'].append(self.create_release_ref(nerdmd))
+
+        return out
+
+    def create_release_ref(self, nerdm, defver="1.0.0"):
+        """
+        create a NERDm Release object (a reference to a versioned release of a reousrce) for the 
+        given NERDm Resource.
+        :param dict nerdm:   the NERDm Resource record to create a Release for
+        :param str devver:   the default version to assume if the given Resource does not have a 
+                               version property set
+        :rtype: OrderedDict
+        :return: the Release object refering to the nerdm input
+        """
+        version = nerdm.get('version')
+        if not version:
+            version = defver
+
+        issued = None
+        for prop in "annotated revised issued modified".split(): 
+            issued = nerdm.get(prop)
+            if issued:
+                break
+
+        id = nerdm.get('@id')
+        if not self._verextre.search(id):
+            id += ".v%s" % version.replace('.', '_')
+
+        out = OrderedDict([("@id", id), ("version", version)])
+        if issued:
+            out['issued'] = issued
+        if nerdm.get('landingPage'):
+            out['location'] = nerdm.get('landingPage')
+
+        # PDR-specific?
+        v = version.split('.')
+        for i in range(len(v), 3):
+            v.append('0')
+        if len(v) == 3:
+            if v[2] != '0':
+                out['description'] = "metadata update"
+            elif v[1] != '0':
+                out['description'] = "data update"
+            elif v[0] == '1':
+                out['description'] = "initial release"
+
         return out
 
     def update_nerdm_schema(self, nerdmd, version=None, byext=None, inplace=False):
@@ -202,6 +254,7 @@ class NERDm2Latest(object):
                 self._upd_schema_ver_on_array(el, schprop, byext, defver)
 
     def _upd_schema_ver(self, schuri, byext, defver):
+        schuri = _oldnrdpat.sub(NERDM_CONST.core_schema_base, schuri)
         for r in byext:
             match = r.search(schuri)
             if match:
@@ -242,4 +295,12 @@ def update_nerdm_schema(nerdmd, version=None, byext={}):
                           string for the value means that the version for that
                           extension should not be changed.
     """
-    NERDm2Latest().update_nerdm_schema(nerdmd, version=version, byext=byext, inplace=True)
+    return NERDm2Latest().update_nerdm_schema(nerdmd, version=version, byext=byext, inplace=True)
+
+def update_to_latest_schema(nerdmd, inplace=True):
+    """
+    update the given NERDm record to the latest versions of the NERDm schemas, transforming the 
+    data for compliance.
+    """
+    return NERDm2Latest().convert(nerdmd, inplace=inplace)
+

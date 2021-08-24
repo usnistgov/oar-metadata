@@ -5,6 +5,14 @@ from copy import deepcopy
 from nistoar.nerdm.convert import latest
 import nistoar.nerdm.constants as const
 
+basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.dirname(__file__))))))
+schemadir = os.path.join(basedir, 'model')
+datadir1 = os.path.join(schemadir, "examples")
+datadir2 = os.path.join(basedir, "jq", "tests", "data")
+hitsc = os.path.join(datadir1, "hitsc-0.2.json")
+simplenerd = os.path.join(datadir2, "simple-nerdm.json")
+
 NERDM_SCH_ID_BASE = const.core_schema_base
 
 class TestNERDm2Latest(test.TestCase):
@@ -195,6 +203,56 @@ class TestNERDm2Latest(test.TestCase):
         hist = cvtr.create_release_history(nerdm)
         self.assertEqual(hist.get("@id"), nerdm['@id']+".rel")
 
+        nerdm = {
+            "$schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.3",
+            "@id": "ark:/88888/goob",
+            "modified": "2021-08-21"
+        }            
+        hist = cvtr.create_release_history(nerdm)
+        self.assertEqual(hist.get("@id"), nerdm['@id']+".rel")
+        self.assertEqual(len(hist['hasRelease']), 1)
+        self.assertEqual(hist['hasRelease'][0]['version'], "1.0.0")
+        self.assertEqual(hist['hasRelease'][0]['@id'], "ark:/88888/goob.v1_0_0")
+        self.assertEqual(hist['hasRelease'][0]['issued'], "2021-08-21")
+
+
+    def test_create_release_ref(self):
+        cvtr = latest.NERDm2Latest()
+        nerdm = {
+            "@id": "ark:/88888/goob"
+        }
+        ref = cvtr.create_release_ref(nerdm)
+        self.assertEqual(ref['version'], '1.0.0')
+        self.assertEqual(ref['@id'], "ark:/88888/goob.v1_0_0")
+        self.assertNotIn('issued', ref)
+        self.assertNotIn('location', ref)
+        self.assertEqual(ref['description'], "initial release")
+
+        nerdm = {
+            "@id": "ark:/88888/goob",
+            "version": "2.4.2",
+            "landingPage": "https://testdata.nist.gov/od/id/ark:/88888/goob",
+            "annotated": "2021-08-24"
+        }
+        ref = cvtr.create_release_ref(nerdm)
+        self.assertEqual(ref['version'], '2.4.2')
+        self.assertEqual(ref['@id'], "ark:/88888/goob.v2_4_2")
+        self.assertEqual(ref['issued'], "2021-08-24")
+        self.assertEqual(ref['location'], "https://testdata.nist.gov/od/id/ark:/88888/goob")
+        self.assertEqual(ref['description'], "metadata update")
+
+        nerdm = {
+            "@id": "ark:/88888/goob.v2_3_0",
+            "landingPage": "https://testdata.nist.gov/od/id/ark:/88888/goob",
+            "issued": "2021-08-25"
+        }
+        ref = cvtr.create_release_ref(nerdm, "2.4.0")
+        self.assertEqual(ref['version'], '2.4.0')
+        self.assertEqual(ref['@id'], "ark:/88888/goob.v2_3_0")
+        self.assertEqual(ref['issued'], "2021-08-25")
+        self.assertEqual(ref['location'], "https://testdata.nist.gov/od/id/ark:/88888/goob")
+        self.assertEqual(ref['description'], "data update")
+
     def test_convert(self):
         cvtr = latest.NERDm2Latest()
         nerdm = {
@@ -216,7 +274,41 @@ class TestNERDm2Latest(test.TestCase):
         self.assertNotIn("versionHistory", data)
         self.assertIn("releaseHistory", data)
         self.assertEqual(data['releaseHistory']['@id'], nerdm['@id']+".rel")
-                    
+
+    def test_convert2(self):
+        cvtr = latest.NERDm2Latest()
+        with open(hitsc) as fd:
+            nerdm = json.load(fd)
+        self.assertTrue(nerdm['_schema'].endswith("/v0.2#"))
+        self.assertIn('versionHistory', nerdm)
+
+        ltst = cvtr.convert(nerdm)
+
+        self.assertEqual(ltst['@id'], nerdm['@id'])
+        self.assertEqual(ltst['_schema'], const.CORE_SCHEMA_URI+"#")
+        self.assertEqual(ltst['version'], "1.0")
+        self.assertIn('version', ltst)
+        self.assertNotIn('versionHistory', ltst)
+        self.assertIn('releaseHistory', ltst)
+        self.assertEqual(len(ltst['releaseHistory']['hasRelease']), 1)
+
+    def test_convert3(self):
+        cvtr = latest.NERDm2Latest()
+        with open(simplenerd) as fd:
+            nerdm = json.load(fd)
+        self.assertTrue(nerdm['_schema'].endswith("/v0.1#"))
+        self.assertNotIn('versionHistory', nerdm)
+        self.assertNotIn('version', nerdm)
+
+        ltst = cvtr.convert(nerdm)
+
+        self.assertEqual(ltst['@id'], nerdm['@id'])
+        self.assertEqual(ltst['_schema'], const.CORE_SCHEMA_URI+"#")
+        self.assertEqual(ltst['_extensionSchemas'], [const.PUB_SCHEMA_URI+"#/definitions/PublicDataResource"])
+        self.assertNotIn('versionHistory', ltst)
+        self.assertNotIn('version', ltst)
+        self.assertNotIn('releaseHistory', ltst)
+
                          
 if __name__ == '__main__':
     test.main()
