@@ -96,6 +96,14 @@ class NERDm2Latest(object):
             nerdmd['releaseHistory'] = self.create_release_history(nerdmd)
             del nerdmd['versionHistory']
 
+        if utils.cmp_versions(schver, "0.1") >= 0:
+            if 'references' in nerdmd:
+                for ref in nerdmd['references']:
+                    if 'refid' in ref:
+                        if '@id' not in ref:
+                            ref['@id'] = ref['refid']
+                        del ref['refid']
+
         # now apply any massagers
         for convention in conv:
             nerdmd = messagers[convention](nerdmd)

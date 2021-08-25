@@ -17,7 +17,7 @@ The RMM includes three relevant collections:
                        as a version-specific ID.
 """
 import re
-from collections import OrderedDict
+from collections import OrderedDict, Mapping
 from urllib.parse import urljoin
 
 from .. import validate
@@ -98,6 +98,17 @@ class NERDmForRMM(object):
         rec = self._2latest.convert(nerdm)
         if 'version' not in rec:
             rec['version'] = defver
+        if 'releaseHistory' in rec:
+            for vref in rec['releaseHistory'].get('hasRelease',[]):
+                if '@id' not in vref:
+                    if 'version' in vref:
+                        vref['@id'] = "%s.v%s" % (nerdm['@id'], vref['version'].replace('.','_'))
+                    elif 'refid' in vref:
+                        vref['@id'] = vref['refid']
+                    else:
+                        vref['@id'] = rec.get('@id')
+                if 'refid' in vref:
+                    del vref['refid']
         
         out = {
             'record': rec,
@@ -121,11 +132,14 @@ class NERDmForRMM(object):
             ('@type', ['nrdr:ReleaseCollection', 'dcat:Catalog'])
         ])
         vc['@id'] = rec['@id'] + ".rel"
-        fromkeys(rec, vc, "title description keyword firstIssued publisher contactPoint theme abbrev".split())
-        fromkeys(rec, vc, "version hasRelease".split())
+        fromkeys(rec, vc, "title description keyword firstIssued publisher contactPoint theme".split())
+        fromkeys(rec, vc, "abbrev version".split())
 
-        if 'hasRelease' not in vc:
+        if 'releaseHistory' in rec:
+            vc['hasRelease'] = rec['releaseHistory'].get('hasRelease', [])
+        else:
             vc['hasRelease'] = []
+
         if len(vc['hasRelease']) == 0:
             vc['hasRelease'] = [ self._2latest.create_release_ref(out['version']) ]
 
@@ -137,19 +151,36 @@ class NERDmForRMM(object):
         return out
 
     def validate_rmm(self, rmmmd):
+        """
+        validate each of the objects under the "record", "version", and "releaseSet" are valid.  In 
+        particular, this ensures that a NERDm record of the proper type appears under each property.  
+        :param dict rmmmd:  the RMM-format record, as is returned by to_rmm().  
+        :raise ValidationError: if there any of the objects under the three properties are invalid.
+        """
         if not self._valid8r:
             raise RuntimeError("NERDmForRMM: not configured for validation")
         if 'record' in rmmmd:
+            if not isinstance(rmmmd['version'], Mapping):
+                raise validate.ValidationError("'record' property does not contain a NERDm record (type: "+
+                                               str(type(rmmmd['record'])))
             if not utils.is_any_type(rmmmd['record'], ["Resource", "PublicDataResource", "DataPublication"]):
-                raise validate.ValidationError("Unexpected @type for 'record': "+str(rmmmd['@type']))
+                raise validate.ValidationError("Unexpected @type for 'record': "+str(rmmmd['record']['@type']))
             self._valid8r.validate(rmmmd['record'])
         if 'version' in rmmmd:
+            if not isinstance(rmmmd['version'], Mapping):
+                raise validate.ValidationError("'version' property does not contain a NERDm record (type: "+
+                                               str(type(rmmmd['version'])))
             if not utils.is_any_type(rmmmd['version'], ["Resource", "PublicDataResource", "DataPublication"]):
-                raise validate.ValidationError("Unexpected @type for 'version': "+str(rmmmd['@type']))
+                raise validate.ValidationError("Unexpected @type for 'version': "
+                                               +str(rmmmd['version']['@type']))
             self._valid8r.validate(rmmmd['version'])
-        if 'releaseSet' in rmmmmd:
-            if not utils.is_type(rmmmd['releaseSet'], "ResourceCollection"):
-                raise validate.ValidationError("'releaseSet' not a 'ResourceCollection': "+str(rmmmd['@type']))
+        if 'releaseSet' in rmmmd:
+            if not isinstance(rmmmd['releaseSet'], Mapping):
+                raise validate.ValidationError("'releaseSet' property does not contain a NERDm record (type: "+
+                                               str(type(rmmmd['releaseSet'])))
+            if not utils.is_type(rmmmd['releaseSet'], "ReleaseCollection"):
+                raise validate.ValidationError("'releaseSet' not a 'ReleaseCollection': "
+                                               +str(rmmmd['releaseSet']['@type']))
             self._valid8r.validate(rmmmd['releaseSet'])
         
 

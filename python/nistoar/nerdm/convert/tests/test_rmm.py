@@ -4,9 +4,10 @@ from copy import deepcopy
 
 from nistoar.nerdm.convert import rmm
 import nistoar.nerdm.constants as const
+from nistoar.nerdm import validate
 
 basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
-    os.path.dirname(__file__))))))
+    os.path.dirname(os.path.abspath(__file__)))))))
 schemadir = os.path.join(basedir, 'model')
 datadir1 = os.path.join(schemadir, "examples")
 datadir2 = os.path.join(basedir, "jq", "tests", "data")
@@ -33,6 +34,7 @@ class TestNERDm2RMM(test.TestCase):
         self.assertEqual(cvtr._lpsbase, "http://localhost/lps/show?id=")
 
         self.assertTrue(os.path.isdir(schemadir))
+        self.assertTrue(os.path.isfile(os.path.join(schemadir,"nerdm-schema.json")))
         cvtr = rmm.NERDmForRMM(schemadir=schemadir)
         self.assertTrue(cvtr._valid8r)
 
@@ -57,6 +59,63 @@ class TestNERDm2RMM(test.TestCase):
         self.assertNotIn('versionHistory', ing['record'])
         self.assertIn('releaseHistory', ing['record'])
         self.assertEqual(len(ing['record']['releaseHistory']['hasRelease']), 1)
+        self.assertEqual(ing['version']['@id'], nerdm['@id']+".v1_0")
+        self.assertEqual(ing['version']['releaseHistory']['hasRelease'][0]['version'], "1.0")
+        self.assertEqual(ing['version']['releaseHistory']['hasRelease'][0]['description'], "initial release")
+
+        self.assertEqual(ing['releaseSet']['@id'], nerdm['@id']+".rel")
+        self.assertEqual(ing['releaseSet']['title'], nerdm['title'])
+        self.assertEqual(ing['releaseSet']['_schema'], const.CORE_SCHEMA_URI+"#")
+        self.assertEqual(ing['releaseSet']['version'], "1.0")
+        self.assertIn('version', ing['releaseSet'])
+        self.assertNotIn('versionHistory', ing['releaseSet'])
+        self.assertNotIn('releaseHistory', ing['releaseSet'])
+        self.assertIn('hasRelease', ing['releaseSet'])
+        self.assertEqual(len(ing['releaseSet']['hasRelease']), 1)
+        self.assertEqual(ing['releaseSet']['hasRelease'][0]['version'], "1.0")
+        self.assertEqual(ing['releaseSet']['hasRelease'][0]['description'], "initial release")
+        
+    def test_validate_rmm(self):
+        lpsep = "https://testdata.nist.gov/od/id/"
+        cvtr = rmm.NERDmForRMM()
+
+        with open(hitsc) as fd:
+            nerdm = json.load(fd)
+        self.assertTrue(nerdm['_schema'].endswith("/v0.2#"))
+        self.assertIn('versionHistory', nerdm)
+
+        ing = cvtr.to_rmm(nerdm)
+        with self.assertRaises(RuntimeError):
+            cvtr.validate_rmm(ing)   # validator not configured
+
+        cvtr = rmm.NERDmForRMM(schemadir=schemadir)
+        cvtr.validate_rmm(ing)  # should not raise exception
+        
+        with self.assertRaises(validate.ValidationError):
+            cvtr.validate_rmm(ing['version'])
+
+        ing['record'] = ing['releaseSet']
+        with self.assertRaises(validate.ValidationError):
+            cvtr.validate_rmm(ing)
+
+    def test_convert(self):
+        lpsep = "https://testdata.nist.gov/od/id/"
+        cvtr = rmm.NERDmForRMM(schemadir=schemadir, pubeps={"landingPageService": lpsep})
+
+        with open(hitsc) as fd:
+            nerdm = json.load(fd)
+        self.assertTrue(nerdm['_schema'].endswith("/v0.2#"))
+        self.assertIn('versionHistory', nerdm)
+
+        ing = cvtr.convert(nerdm, True)
+
+        self.assertEqual(ing['record']['@id'], nerdm['@id'])
+        self.assertEqual(ing['record']['title'], nerdm['title'])
+        self.assertEqual(ing['record']['_schema'], const.CORE_SCHEMA_URI+"#")
+        self.assertEqual(ing['record']['version'], "1.0")
+        self.assertNotIn('versionHistory', ing['record'])
+        self.assertIn('releaseHistory', ing['record'])
+        self.assertEqual(len(ing['record']['releaseHistory']['hasRelease']), 1)
         self.assertEqual(ing['version']['releaseHistory']['hasRelease'][0]['version'], "1.0")
         self.assertEqual(ing['version']['releaseHistory']['hasRelease'][0]['description'], "initial release")
 
@@ -73,7 +132,7 @@ class TestNERDm2RMM(test.TestCase):
         self.assertEqual(ing['releaseSet']['hasRelease'][0]['description'], "initial release")
         
 
-
+        
                     
                          
 if __name__ == '__main__':
