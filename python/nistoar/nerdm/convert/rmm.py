@@ -8,12 +8,12 @@ The RMM includes three relevant collections:
                        be of the general ARK form without any qualifying extensions.
   * ``releasesets`` -- contains ``ReleaseCollection`` resource records corresponding to each resource in
                        ``records``.  The ``releaseHistory`` property included in each record must include
-                       all known (released) versions.  The ``@id`` property with include the ".rel" 
+                       all known (released) versions.  The ``@id`` property with include the "/_v" 
                        extension, qualifying it as a ReleaseCollection ID.
   * ``versions``    -- contains all of the different versions of the NERDm records in ``records``.  The 
                        ``releaseHistory`` property in each record is not expected to be up to date but 
                        rather reflect the history at the time the version was ingested.  The ``@id`` 
-                       property with include the version extension of the form .vM_N_P, qualifying it 
+                       property with include the version extension of the form /_v/M.N.P, qualifying it 
                        as a version-specific ID.
 """
 import re
@@ -23,7 +23,7 @@ from urllib.parse import urljoin
 from .. import validate
 from .. import utils
 from ..constants import rls_ver as RLSVER
-from .latest import NERDm2Latest, version_extension_re
+from .latest import NERDm2Latest, VERSION_EXTENSION_RE, RELHIST_EXTENSION, to_version_ext
 
 
 class NERDmForRMM(object):
@@ -31,7 +31,7 @@ class NERDmForRMM(object):
     a transformation engine for turning a "latest" NERDm record into records to be loaded into the RMM.
     """
     _pfxre = re.compile("^[^:]+:")
-    _verextre = version_extension_re
+    _verextre = VERSION_EXTENSION_RE
 
     def __init__(self, logger=None, schemadir=None, pubeps={}):
         """
@@ -71,13 +71,13 @@ class NERDmForRMM(object):
     def to_rmm(self, nerdm, defver="1.0.0"):
         """
         convert the NERDm record to an RMM-ready record.  The input NERDm record is taken to be the 
-        "latest" record (thus the ``@id`` identifier should not have a trainling .rel or .v extension).
+        "latest" record (thus the ``@id`` identifier should not have a trailing /_v extension).
         The output record will be a dictionary with three properties:
           * ``record`` -- the input record massaged to serve as the "latest" record in the RMM database
           * ``releaseSet`` -- a ``ReleaseCollection`` record derived from the ``releaseHistory`` of 
                           the input record
           * ``version`` -- the input record massaged to serve as the versioned copied of the record; in
-                          particular, the ``@id`` property will be appended with a .v extension for 
+                          particular, the ``@id`` property will be appended with a /_v/M.N.P extension for 
                           version indicated by the ``version`` property.  If the ``version`` property 
                           is not present, the value of the defval parameter will be used. 
 
@@ -92,7 +92,7 @@ class NERDmForRMM(object):
         if '@id' not in nerdm or '@type' not in nerdm:
             raise ValueError("Input apparently not a NERDm record (must have @id and @type)")
 
-        if utils.is_type(nerdm, "ReleaseCollection") or nerdm.get('version', '').endswith(".rel"):
+        if utils.is_type(nerdm, "ReleaseCollection") or nerdm.get('version', '').endswith(RELHIST_EXTENSION):
             raise ValueError("Input NERDm must not be a ReleaseCollection resource")
 
         rec = self._2latest.convert(nerdm)
@@ -102,7 +102,7 @@ class NERDmForRMM(object):
             for vref in rec['releaseHistory'].get('hasRelease',[]):
                 if '@id' not in vref:
                     if 'version' in vref:
-                        vref['@id'] = "%s.v%s" % (nerdm['@id'], vref['version'].replace('.','_'))
+                        vref['@id'] = nerdm['@id'] + to_version_ext(vref['version'])
                     elif 'refid' in vref:
                         vref['@id'] = vref['refid']
                     else:
@@ -118,7 +118,7 @@ class NERDmForRMM(object):
         # massage the identifiers to match the PDR convention for "latest" and "versioned"
         rec['@id'] = self._verextre.sub('', rec['@id'])
         if not self._verextre.search(out['version']['@id']):
-            out['version']['@id'] += ".v%s" % rec['version'].replace('.','_')
+            out['version']['@id'] += to_version_ext(rec['version'])
 
         def fromkeys(fromdict, todict, keys):
             for key in keys:
@@ -131,7 +131,7 @@ class NERDmForRMM(object):
             ('_extensionSchemas', [ "https://data.nist.gov/od/dm/nerdm-schema/rls/v"+RLSVER ]),
             ('@type', ['nrdr:ReleaseCollection', 'dcat:Catalog'])
         ])
-        vc['@id'] = rec['@id'] + ".rel"
+        vc['@id'] = rec['@id'] + RELHIST_EXTENSION
         fromkeys(rec, vc, "title description keyword firstIssued publisher contactPoint theme".split())
         fromkeys(rec, vc, "abbrev version".split())
 
@@ -144,7 +144,7 @@ class NERDmForRMM(object):
             vc['hasRelease'] = [ self._2latest.create_release_ref(out['version']) ]
 
         for rel in vc['hasRelease']:
-            rel['location'] = self._lpsbase + rec['@id'] + '.v' + rel['version'].replace('.','_')
+            rel['location'] = self._lpsbase + rec['@id'] + to_version_ext(rel['version'])
 
         out['releaseSet'] = vc
 

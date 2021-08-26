@@ -14,7 +14,11 @@ _oldnrdpat = re.compile(r"^https?://www.nist.gov/od/dm/nerdm-schema/")
 def _schuripatfor(uribase):
     return re.compile(r"^("+uribase+")v\d[\w\.]*((#.*)?)$")
 
-version_extension_re = re.compile("v\d+(_\d+)*$")
+RELHIST_EXTENSION = "/pdr:v"
+VERSION_EXTENSION_RE = re.compile(RELHIST_EXTENSION+r"/\d+(\.\d+)*$")
+
+def to_version_ext(version):
+    return RELHIST_EXTENSION + '/' + version
 
 class NERDm2Latest(object):
     """
@@ -24,7 +28,7 @@ class NERDm2Latest(object):
     changes to a record according to a named convention.  Multiple conventions can be applied; these 
     convetions massagers are applied after migrating a record to the latest schemas
     """
-    _verextre = version_extension_re 
+    _verextre = VERSION_EXTENSION_RE 
 
     def __init__(self, logger=None, massagers=None, defconv=[], defver=None, byext={}):
         """
@@ -110,7 +114,7 @@ class NERDm2Latest(object):
 
         return nerdmd
 
-    def create_release_history(self, nerdmd, idext=".rel"):
+    def create_release_history(self, nerdmd, idext=RELHIST_EXTENSION):
         """
         return a NERDm ReleaseHistory object from version history information in the given NERDm
         Resource object
@@ -145,7 +149,7 @@ class NERDm2Latest(object):
 
         id = nerdm.get('@id')
         if not self._verextre.search(id):
-            id += ".v%s" % version.replace('.', '_')
+            id += to_version_ext(version)
 
         out = OrderedDict([("@id", id), ("version", version)])
         if issued:

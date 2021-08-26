@@ -201,7 +201,7 @@ class TestNERDm2Latest(test.TestCase):
         self.assertEqual(hist['hasRelease'][0]['version'], "1.0.0")
         self.assertEqual(hist['hasRelease'][1]['version'], "1.0.1")
         hist = cvtr.create_release_history(nerdm)
-        self.assertEqual(hist.get("@id"), nerdm['@id']+".rel")
+        self.assertEqual(hist.get("@id"), nerdm['@id']+"/pdr:v")
 
         nerdm = {
             "$schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.3",
@@ -209,10 +209,10 @@ class TestNERDm2Latest(test.TestCase):
             "modified": "2021-08-21"
         }            
         hist = cvtr.create_release_history(nerdm)
-        self.assertEqual(hist.get("@id"), nerdm['@id']+".rel")
+        self.assertEqual(hist.get("@id"), nerdm['@id']+"/pdr:v")
         self.assertEqual(len(hist['hasRelease']), 1)
         self.assertEqual(hist['hasRelease'][0]['version'], "1.0.0")
-        self.assertEqual(hist['hasRelease'][0]['@id'], "ark:/88888/goob.v1_0_0")
+        self.assertEqual(hist['hasRelease'][0]['@id'], "ark:/88888/goob/pdr:v/1.0.0")
         self.assertEqual(hist['hasRelease'][0]['issued'], "2021-08-21")
 
 
@@ -223,7 +223,7 @@ class TestNERDm2Latest(test.TestCase):
         }
         ref = cvtr.create_release_ref(nerdm)
         self.assertEqual(ref['version'], '1.0.0')
-        self.assertEqual(ref['@id'], "ark:/88888/goob.v1_0_0")
+        self.assertEqual(ref['@id'], "ark:/88888/goob/pdr:v/1.0.0")
         self.assertNotIn('issued', ref)
         self.assertNotIn('location', ref)
         self.assertEqual(ref['description'], "initial release")
@@ -236,19 +236,19 @@ class TestNERDm2Latest(test.TestCase):
         }
         ref = cvtr.create_release_ref(nerdm)
         self.assertEqual(ref['version'], '2.4.2')
-        self.assertEqual(ref['@id'], "ark:/88888/goob.v2_4_2")
+        self.assertEqual(ref['@id'], "ark:/88888/goob/pdr:v/2.4.2")
         self.assertEqual(ref['issued'], "2021-08-24")
         self.assertEqual(ref['location'], "https://testdata.nist.gov/od/id/ark:/88888/goob")
         self.assertEqual(ref['description'], "metadata update")
 
         nerdm = {
-            "@id": "ark:/88888/goob.v2_3_0",
+            "@id": "ark:/88888/goob/pdr:v/2.3.0",
             "landingPage": "https://testdata.nist.gov/od/id/ark:/88888/goob",
             "issued": "2021-08-25"
         }
         ref = cvtr.create_release_ref(nerdm, "2.4.0")
         self.assertEqual(ref['version'], '2.4.0')
-        self.assertEqual(ref['@id'], "ark:/88888/goob.v2_3_0")
+        self.assertEqual(ref['@id'], "ark:/88888/goob/pdr:v/2.3.0")
         self.assertEqual(ref['issued'], "2021-08-25")
         self.assertEqual(ref['location'], "https://testdata.nist.gov/od/id/ark:/88888/goob")
         self.assertEqual(ref['description'], "data update")
@@ -273,7 +273,7 @@ class TestNERDm2Latest(test.TestCase):
         self.assertEqual(data["$schema"], const.CORE_SCHEMA_URI)
         self.assertNotIn("versionHistory", data)
         self.assertIn("releaseHistory", data)
-        self.assertEqual(data['releaseHistory']['@id'], nerdm['@id']+".rel")
+        self.assertEqual(data['releaseHistory']['@id'], nerdm['@id']+"/pdr:v")
 
     def test_convert2(self):
         cvtr = latest.NERDm2Latest()
