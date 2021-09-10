@@ -5,8 +5,10 @@
     # These two properties enable validation (using nerdmvalidate).
     # _schema identifies the core NERDm schema
     # _extensionSchemas identifies the extension specific to submissions to the publishing service
+    #    as well as the extension supporting metadata describing experiments
     "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
-    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/sip/v0.1#/definitions/PDRSubmission" ],
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/sip/v0.1#/definitions/PDRSubmission",
+                           "https://data.nist.gov/od/dm/nerdm-schema/exp/v0.1#/definitions/ExperimentalContext" ],
 
     # @type identifies this as a submission to publishing service (required)
     "@type": [ "nrdp:PDRSubmission" ],
@@ -48,6 +50,22 @@
 
     "modified": "2018-04-05T17:16:54",  # optional but recommended; set to the latest activity endtime
 
+    "isPartOfProjects": [
+        {
+            "localID": "22872"     # the NCNR project ID
+        }
+    ],
+
+    # instruments used
+    "instrumentsUsed": [
+        {
+            "localID": "bt7",                                    # use either the number or abbreviation
+            "title": "Double-focusing triple-axis spectrometer", # optional
+            "abbrev": ["BT-7"],                                  # used for display purposes; more than one can be given 
+            "location": "https://www.nist.gov/ncnr/bt-7-double-focusing-triple-axis-spectrometer"  # optional
+        }
+    ],
+
     # we propose that each activity be listed as a component of this publication (these can be
     # submitted separately or as part of this main resource metadata.  
     "components": [
@@ -68,7 +86,12 @@
             # user will see if they click on the accessURL link
             "format": {
                 "description": "NCNR Repository web page"
-            }
+            },
+
+            # The start and stop times in Epoch seconds.
+            # Note: the PDR will covert these to human-friendly strings downstream
+            "acquisitionStartTime": 1498848003,
+            "acquisitionEndTime":   1499352540
         },
         {
             "_extensionSchemas": [
@@ -80,7 +103,9 @@
             "title": "Download Access for Activity 201803",
             "format": {
                 "description": "NCNR Repository web page"
-            }
+            },
+            "acquisitionStartTime": 1522513412,
+            "acquisitionEndTime":   1522948614
         }
     ]
 }

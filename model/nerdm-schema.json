@@ -524,17 +524,30 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "proxyFor": {
-                    "description": "a local identifier representing this resource",
+                "abbrev": {
+                    "description": "an abbreviated form of the resource's title",
                     "notes": [
-                        "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+                        "this can be used as a label for a compact display or text for a link to this resource",
+                        "this may be helpful for discovery when an abbreviation is included in a free-text search"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 24
+                    }
+                },
+                "localID": {
+                    "description": "a local identifier the referenced resource within a local inventory",
+                    "notes": [
+                        "When the related resource is managed externally in another system or repository, that system may have assisgned an identifier that has important relevence locally; this property makes that identifier available for display as part of the reference.",
+                        "There are no lexical constraints on what the local identifier looks like; this allows for non-URI identifiers."
                     ],
                     "type": "string",
                     "format": "uri",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
+                        "prefLabel": "Identified locally as",
+                        "referenceProperty": "ctlog:localIdentifier"
                     }
                 },
                 "location": {
@@ -806,6 +819,16 @@
                             "notes": [
                                 "@id should be the ID for the included resource as a component of this resource; use the required proxyFor property to give the native ID of the included resource."
                             ]
+                        },
+                        "proxyFor": {
+                            "description": "the native PID for the resource outside the context of this inclusion",
+                            "type": "string",
+                            "format": "uri",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "See also",
+                                "referenceProperty": "ore:proxyFor"
+                            }
                         },
                         "resourceType": {
                             "description":  "the linked-data class types for the included resource",
