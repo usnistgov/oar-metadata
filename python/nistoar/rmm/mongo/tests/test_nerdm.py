@@ -32,11 +32,15 @@ class TestNERDmLoader(test.TestCase):
         if not hasattr(client, 'get_database'):
             client.get_database = client.get_default_database
         db = client.get_database()
-        if "record" in db.collection_names():
+        if "record" in db.list_collection_names():
             db.drop_collection("record")
+        if "versions" in db.list_collection_names():
+            db.drop_collection("versions")
+        if "releaseSets" in db.list_collection_names():
+            db.drop_collection("releaseSets")
         
     def test_ctor(self):
-        self.assertEqual(self.ldr.coll, "record")
+        self.assertEqual(self.ldr.coll, "versions")
 
     def test_validate(self):
         with open(janaffile) as fd:
@@ -53,29 +57,39 @@ class TestNERDmLoader(test.TestCase):
             data = json.load(fd)
         key = { '@id': "ark:/88434/sdp0fjspek351" }
         self.assertEqual(self.ldr.load_data(data, key, 'fail'), 1)
-        c = self.ldr._client.get_database().record.find()
-        self.assertEqual(c.count(), 1)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 0)
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 0)
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
+        c = self.ldr._client.get_database().versions.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
 
     def test_load(self):
         with open(janaffile) as fd:
             data = json.load(fd)
         res = self.ldr.load(data)
-        self.assertEqual(res.attempt_count, 1)
-        self.assertEqual(res.success_count, 1)
+        self.assertEqual(res.attempt_count, 3)
+        self.assertEqual(res.success_count, 3)
         self.assertEqual(res.failure_count, 0)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
         c = self.ldr._client.get_database().record.find()
-        self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
+        c = self.ldr._client.get_database().versions.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v/1.0.0')
 
     def test_load_from_file(self):
         res = self.ldr.load_from_file(janaffile)
-        self.assertEqual(res.attempt_count, 1)
-        self.assertEqual(res.success_count, 1)
+        self.assertEqual(res.attempt_count, 3)
+        self.assertEqual(res.success_count, 3)
         self.assertEqual(res.failure_count, 0)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
         c = self.ldr._client.get_database().record.find()
-        self.assertEqual(c.count(), 1)
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
 
         
             

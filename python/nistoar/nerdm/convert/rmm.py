@@ -22,7 +22,7 @@ from urllib.parse import urljoin
 
 from .. import validate
 from .. import utils
-from ..constants import rls_ver as RLSVER
+from ..constants import RLS_SCHEMA_URI
 from .latest import NERDm2Latest, VERSION_EXTENSION_RE, RELHIST_EXTENSION, to_version_ext
 
 
@@ -128,7 +128,7 @@ class NERDmForRMM(object):
         # construct the ReleaseCollection from the base record
         vc = OrderedDict([
             ('_schema', rec['_schema']),
-            ('_extensionSchemas', [ "https://data.nist.gov/od/dm/nerdm-schema/rls/v"+RLSVER ]),
+            ('_extensionSchemas', [ RLS_SCHEMA_URI ]),
             ('@type', ['nrdr:ReleaseCollection', 'dcat:Catalog'])
         ])
         vc['@id'] = rec['@id'] + RELHIST_EXTENSION
