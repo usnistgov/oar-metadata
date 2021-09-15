@@ -73,6 +73,14 @@ class TestRMMRecordIngestApp(test.TestCase):
         db = client.get_database()
         if "record" in db.list_collection_names():
             db.drop_collection("record")
+        if "versions" in db.list_collection_names():
+            db.drop_collection("versions")
+        if "releaseSets" in db.list_collection_names():
+            db.drop_collection("releaseSets")
+        if "taxonomy" in db.list_collection_names():
+            db.drop_collection("taxonomy")
+        if "fields" in db.list_collection_names():
+            db.drop_collection("fields")
         tmpfiles.clean()
         
     def test_ctor(self):

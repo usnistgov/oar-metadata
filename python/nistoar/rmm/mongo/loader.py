@@ -137,7 +137,8 @@ class Loader(object, metaclass=ABCMeta):
 
                     if doload:
                         if onupdate != 'quiet':
-                            msg = "Updating previously loaded record"
+                            msg = "Updating previously loaded record into %s: %s" % \
+                                  (self.coll, str(key))
                             if self.log:
                                 self.log.warn(msg)
                             else:
