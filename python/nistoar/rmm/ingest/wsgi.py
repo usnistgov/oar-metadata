@@ -216,13 +216,14 @@ class Handler(object):
         records that have been accepted but not ingested.  
         """
         try:
-            arkid = rec['@id']
-            outfile = os.path.join(self._archdir, '_cache',
-                                   os.path.basename(arkid)+".json")
+            arkid = re.sub(r'/.*$', '', re.sub(r'ark:/\d+/', '', rec['@id']))
+            ver = rec.get('version', '1.0.0').replace('.', '_')
+            recid = "%s-v%s" % (os.path.basename(arkid), ver)
+            outfile = os.path.join(self._archdir, '_cache', recid+".json")
             with open(outfile, 'w') as fd:
                 json.dump(rec, fd, indent=2)
 
-            return arkid
+            return recid
         
         except KeyError as ex:
             # this shouldn't happen if the record was already validated
@@ -236,23 +237,22 @@ class Handler(object):
             raise RuntimeError("Failed to cache record ({0}): {1}"
                                .format(arkid, str(ex)))
 
-    def nerdm_archive_commit(self, arkid):
+    def nerdm_archive_commit(self, recid):
         """
         commit a previously cached record to the local disk archive.  This
         method is called after the record has been successfully ingested to
         the RMM's database.
         """
-        outfile = os.path.join(self._archdir, '_cache',
-                               os.path.basename(arkid)+".json")
+        outfile = os.path.join(self._archdir, '_cache', recid+".json")
         if not os.path.exists(outfile):
             raise RuntimeError("record to commit ({0}) not found in cache: {1}"
-                               .format(arkid, outfile))
+                               .format(recid, outfile))
         try:
             os.rename(outfile,
                       os.path.join(self._archdir, os.path.basename(outfile)))
         except OSError as ex:
             raise RuntimeError("Failed to archvie record ({0}): {1}"
-                               .format(arkid, str(ex)))
+                               .format(recid, str(ex)))
         
 
     def post_nerdm_record(self):

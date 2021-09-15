@@ -99,7 +99,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
-        self.assertEqual(body[0].strip(), '["nerdm"]')
+        self.assertEqual(body[0].decode().strip(), '["nerdm"]')
 
     def test_is_ready(self):
         req = {
@@ -110,7 +110,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
-        self.assertEqual(body[0], 'Service ready\n')
+        self.assertEqual(body[0].decode(), 'Service ready\n')
 
     def test_auth(self):
         # test rejection when auth key provided but wsgi is not configured to
@@ -138,7 +138,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertGreater(len(body), 0)
-        self.assertEqual(body[0], 'Service ready\n')
+        self.assertEqual(body[0].decode(), 'Service ready\n')
 
         # test single rejection
         req['QUERY_STRING'] = 'goob=able&auth=gurn'
@@ -171,7 +171,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertGreater(len(body), 0)
-        self.assertEqual(body[0], 'Service ready\n')
+        self.assertEqual(body[0].decode(), 'Service ready\n')
 
         self.resp = []
         req['HTTP_AUTHORIZATION'] = 'Token 9e73'
@@ -286,7 +286,7 @@ class TestRMMRecordIngestApp(test.TestCase):
 
             body = self.svc(req, self.start)
 
-        archfile = os.path.join(self.archdir, "sdp0fjspek351.json")
+        archfile = os.path.join(self.archdir, "sdp0fjspek351-v1_0_0.json")
         self.assertTrue(os.path.isfile(archfile))
 
         self.assertIn("200", self.resp[0])
@@ -320,7 +320,7 @@ class TestArchive(test.TestCase):
         self.assertTrue(rec)
 
         recid = self.hdlr.nerdm_archive_cache(rec)
-        self.assertEqual(recid, "ark:/88434/sdp0fjspek351")
+        self.assertEqual(recid, "sdp0fjspek351-v1_0_0")
         cachefile = os.path.join(self.archdir, "_cache",
                                  os.path.basename(recid)+".json")
 
