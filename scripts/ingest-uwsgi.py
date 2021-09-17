@@ -26,14 +26,22 @@ from nistoar.rmm import config
 from nistoar.rmm.exceptions import ConfigurationException
 from nistoar.rmm.ingest import wsgi
 
+def get_uwsgi_opt(key, default=None):
+    out = uwsgi.opt.get(key)
+    if out is None:
+        return default
+    elif isinstance(out, bytes):
+        return out.decode('utf-8')
+    return out
+
 confsrvc = None
 def get_confservice():
     cfgsrvc = None
     if 'oar_config_service' in uwsgi.opt:
         # this service is based on uwsgi command-line inputs
-        cfgsrvc = config.ConfigService(uwsgi.opt.get('oar_config_service'),
-                                        uwsgi.opt.get('oar_config_env'))
-        timeout = int(uwsgi.opt.get('oar_config_timeout', 10))
+        cfgsrvc = config.ConfigService(get_uwsgi_opt('oar_config_service'),
+                                        get_uwsgi_opt('oar_config_env'))
+        timeout = int(get_uwsgi_opt('oar_config_timeout', 10))
                                
     else:
         # this service is based on environment variables
@@ -47,15 +55,15 @@ def get_confservice():
 # determine where the configuration is coming from.  Check first to see
 # files were provided via the uwsgi command line.
 cfg = None
-confsrc = uwsgi.opt.get("oar_config_file").decode("utf-8")
+confsrc = get_uwsgi_opt("oar_config_file")
 if confsrc:
-    cfg = config.resolve_configuration("file:" + confsrc)
+    cfg = config.resolve_configuration("file:" + confsrc.decode("utf-8"))
 
 if not cfg:
     # get the configuration from the config service
     confsrvc = get_confservice()
     if confsrvc:
-        appname = uwsgi.opt.get('oar_config_appname',
+        appname = get_uwsgi_opt('oar_config_appname',
                                 os.environ.get('OAR_CONFIG_APP', 'rmm-ingest'))
         cfg = confsrvc.get(appname)
 
@@ -79,7 +87,7 @@ if cfg.get('db_authn') and \
     acfg = cfg['db_authn']
     try:
         rmmcfg = None
-        rmmconfsrc = uwsgi.opt.get("oar_rmm_config_file",
+        rmmconfsrc = get_uwsgi_opt("oar_rmm_config_file",
                                    acfg.get("rmm_config_file"))
         if rmmconfsrc:
             rmmcfg = config.resolve_configuration(rmmconfsrc)
