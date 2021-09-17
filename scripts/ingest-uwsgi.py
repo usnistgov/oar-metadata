@@ -57,7 +57,7 @@ def get_confservice():
 cfg = None
 confsrc = get_uwsgi_opt("oar_config_file")
 if confsrc:
-    cfg = config.resolve_configuration("file:" + confsrc.decode("utf-8"))
+    cfg = config.resolve_configuration("file:" + confsrc)
 
 if not cfg:
     # get the configuration from the config service
