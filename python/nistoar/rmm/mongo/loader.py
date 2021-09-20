@@ -133,7 +133,11 @@ class Loader(object, metaclass=ABCMeta):
 
                     doload = True
                     if hasattr(onupdate, '__call__'):
-                        doload = onupdate(data, key)
+                        c = coll.find(key)
+                        try:
+                            doload = onupdate(data, key)
+                        finally:
+                            c.close()
 
                     if doload:
                         if onupdate != 'quiet':
