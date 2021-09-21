@@ -45,7 +45,8 @@ class _NERDmRenditionLoader(Loader):
 
     def _get_onupdate(self, nerdm):
         newver = nerdm.get('version', "1.0.0")
-        return lambda data, key: utils.cmp_versions(newver, data.get('version', '1.0.0')) > 0
+        # replace previous record if the version of new rec is newer or same as previous
+        return lambda data, key: utils.cmp_versions(newver, data.get('version', '1.0.0')) >= 0
 
     def load(self, rec, validate=True, results=None, id=None):
         """
