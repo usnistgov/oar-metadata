@@ -66,6 +66,8 @@ class TestNERDmLoader(test.TestCase):
     def test_load(self):
         with open(janaffile) as fd:
             data = json.load(fd)
+        data['title'] = "Version 1.0.0"
+        data['version'] = "1.0.0"
         res = self.ldr.load(data)
         self.assertEqual(res.attempt_count, 3)
         self.assertEqual(res.success_count, 3)
@@ -73,12 +75,96 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
         c = self.ldr._client.get_database().record.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(c[0]['version'], '1.0.0')
+        self.assertEqual(c[0]['title'], 'Version 1.0.0')
         self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
         c = self.ldr._client.get_database().releaseSets.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
+        self.assertEqual(c[0]['version'], '1.0.0')
+        self.assertEqual(c[0]['title'], 'Version 1.0.0')
         self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
         c = self.ldr._client.get_database().versions.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v/1.0.0')
+        self.assertEqual(c[0]['version'], '1.0.0')
+        self.assertEqual(c[0]['title'], 'Version 1.0.0')
+
+        # update with next version
+        self.ldr.onupdate = 'quiet'
+        data['title'] = "Version 1.0.1"
+        data['version'] = "1.0.1"
+        res = self.ldr.load(data)
+        self.assertEqual(res.attempt_count, 3)
+        self.assertEqual(res.success_count, 3)
+        self.assertEqual(res.failure_count, 0)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
+        c = self.ldr._client.get_database().record.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 2)
+        c = self.ldr._client.get_database().versions.find()
+        for i in range(1):
+            v = c[i]['version']
+            self.assertEqual(c[i]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v/'+v)
+            self.assertEqual(c[0]['version'], v)
+            self.assertEqual(c[0]['title'], 'Version '+v)
+
+        # update older version
+        self.ldr.onupdate = 'quiet'
+        data['title'] = "A Version 1.0.0"
+        data['version'] = "1.0.0"
+        res = self.ldr.load(data)
+        self.assertEqual(res.attempt_count, 1)
+        self.assertEqual(res.success_count, 1)
+        self.assertEqual(res.failure_count, 0)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
+        c = self.ldr._client.get_database().record.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 2)
+        c = self.ldr._client.get_database().versions.find()
+        for i in range(1):
+            if c[i]['version'] == "1.0.0":
+                self.assertEqual(c[0]['title'], 'A Version 1.0.0')
+            else:
+                self.assertEqual(c[0]['title'], 'Version 1.0.1')
+
+        # update last version
+        self.ldr.onupdate = 'quiet'
+        data['title'] = "A Version 1.0.1"
+        data['version'] = "1.0.1"
+        res = self.ldr.load(data)
+        self.assertEqual(res.attempt_count, 3)
+        self.assertEqual(res.success_count, 3)
+        self.assertEqual(res.failure_count, 0)
+        self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 1)
+        c = self.ldr._client.get_database().record.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'A Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
+        self.assertEqual(c[0]['version'], '1.0.1')
+        self.assertEqual(c[0]['title'], 'A Version 1.0.1')
+        self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 2)
+        c = self.ldr._client.get_database().versions.find()
+        for i in range(1):
+            v = c[i]['version']
+            self.assertEqual(c[i]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v/'+v)
+            self.assertEqual(c[0]['version'], v)
+            self.assertEqual(c[0]['title'], 'A Version '+v)
 
     def test_load_from_file(self):
         res = self.ldr.load_from_file(janaffile)

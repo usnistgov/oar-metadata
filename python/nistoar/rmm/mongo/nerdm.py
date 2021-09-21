@@ -79,10 +79,11 @@ class _NERDmRenditionLoader(Loader):
                 return results.add(id, errs)
 
         try:
-            self.load_data(rec, key, self._get_onupdate(rec))
+            if self.load_data(rec, key, self._get_onupdate(rec)):
+                results.add(key, None)
         except Exception as ex:
-            errs = [ex]
-        return results.add(key, errs)
+            results.add(key, [ex])
+        return results
 
     def _mkloadlog(self):
         return LoadLog("NERDm resources")
@@ -209,8 +210,8 @@ class NERDmLoader(_NERDmRenditionLoader):
 
         # load the version record
         try:
-            self.load_data(parts['version'], key, self._get_onupdate(parts['version']))
-            results.add(id, None)
+            if self.load_data(parts['version'], key, self._get_onupdate(parts['version'])):
+                results.add(id, None)
         except Exception as ex:
             errs = [ex]
             return results.add(id, errs)

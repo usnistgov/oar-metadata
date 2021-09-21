@@ -135,12 +135,12 @@ class Loader(object, metaclass=ABCMeta):
                     if hasattr(onupdate, '__call__'):
                         c = coll.find(key)
                         try:
-                            doload = onupdate(data, key)
+                            doload = onupdate(c[0], key)
                         finally:
                             c.close()
 
                     if doload:
-                        if onupdate != 'quiet':
+                        if isinstance(onupdate, str) and onupdate != 'quiet':
                             msg = "Updating previously loaded record into %s: %s" % \
                                   (self.coll, str(key))
                             if self.log:
