@@ -15,7 +15,7 @@ DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
 
 LATEST_COLLECTION_NAME="record"
 VERSIONS_COLLECTION_NAME="versions"
-RELEASES_COLLECTION_NAME="releaseSets"
+RELEASES_COLLECTION_NAME="releasesets"
 
 class _NERDmRenditionLoader(Loader):
     """
