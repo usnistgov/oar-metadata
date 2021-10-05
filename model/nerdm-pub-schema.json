@@ -53,7 +53,7 @@
                             "title": "Bureau Code",
                             "description": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
                             "notes": [
-                                "OMB Circular A-11, Appendix C is available via http://www.whitehouse.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
+                                "OMB Circular A-11, Appendix C is available via https://obamawhitehouse.archives.gov/sites/default/files/omb/assets/a11_current_year/app_c.pdf",
                                 "A machine-readable listing of the defined codes is available via https://project-open-data.cio.gov/data/omb_bureau_codes.csv",
                                 "Codes have the format of 015:01"
                             ],
@@ -74,7 +74,7 @@
                             "title": "Program Code",
                             "description": "an identifier provided by the Federal Program Inventory that identifies the primary program related to this data asset",
                             "notes": [
-                                "A machine-readable listing of the defined codes is available via https://www.performance.gov/sites/default/files/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
+                                "A machine-readable listing of the defined codes is available via https://obamaadministration.archives.performance.gov/s3fs-public/files/FederalProgramInventory_FY13_MachineReadable_091613.xls",
                                 "Codes have the format of 015:001"
                             ],
                             "type": "array",
