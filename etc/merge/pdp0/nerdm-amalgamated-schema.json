@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.1#",
+    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.6#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -266,7 +266,7 @@
                     ],
                     "type": "string",
                     "minLength": 5,
-                    "mergeStrategy": "keepHead"
+                    "mergeStrategy": "overwrite"
                 },
 
                 "doi": {
@@ -278,13 +278,13 @@
                     "type": "string",
                     "pattern": "^doi:[0-9]+\\.[0-9]+/.*$",
                     "minLength": 5,
-                    "mergeStrategy": "keepHead"
+                    "mergeStrategy": "overwrite"
                 },
 
                 "ediid": {
                     "description": "the NIST EDI identifier assigned to the resource",
                     "type": "string",
-                    "mergeStrategy": "keepHead"
+                    "mergeStrategy": "overwrite"
                 },
                 
                 "abbrev": {
@@ -422,7 +422,7 @@
                             "type": "null"
                         }
                     ],
-                    "mergeStrategy": "keepHead"
+                    "mergeStrategy": "overwrite"
                 }
             },
 
@@ -620,7 +620,7 @@
                         "A relative identifier requires that @base be set to the Resource identifier in the @context."
                     ],
                     "type": "string",
-                    "mergeStrategy": "keepHead"
+                    "mergeStrategy": "overwrite"
                 },
                 "@type": {
                     "description": "the types of components that this component can be classified as",
