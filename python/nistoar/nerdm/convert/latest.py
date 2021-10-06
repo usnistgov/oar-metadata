@@ -14,6 +14,9 @@ _oldnrdpat = re.compile(r"^https?://www.nist.gov/od/dm/nerdm-schema/")
 def _schuripatfor(uribase):
     return re.compile(r"^("+uribase+")v\d[\w\.]*((#.*)?)$")
 
+__all__ = [ 'RELHIST_EXTENSION', 'VERSION_EXTENSION_RE', 'to_version_ext', 'NERDm2Latest',
+            'update_to_latest_schema' ]
+
 RELHIST_EXTENSION = "/pdr:v"
 VERSION_EXTENSION_RE = re.compile(RELHIST_EXTENSION+r"/\d+(\.\d+)*$")
 
