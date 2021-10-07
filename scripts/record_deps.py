@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # record_deps.py -- encode the dependencies of a distribution as JSON object,
 #                   writing it to standard output.
