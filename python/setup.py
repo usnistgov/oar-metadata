@@ -55,7 +55,7 @@ class build(_build):
         write_version_mod(get_version())
         _build.run(self)
 
-setup(name='nistoar-metadata',
+setup(name='nistoar',
       version=get_version(),
       description="the NERDm metadata support for nistoar",
       author="Ray Plante",
@@ -69,6 +69,7 @@ setup(name='nistoar-metadata',
       cmdclass={'build_py': build},
       classifiers=[
           'Programming Language :: Python :: 3 :: Only'
-      ]
+      ],
+      zip_safe=False
 )
 
