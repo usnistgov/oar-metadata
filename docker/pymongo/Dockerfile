@@ -4,7 +4,7 @@ MAINTAINER Ray Plante <raymond.plante@nist.gov>
 COPY mongod.conf /etc/mongod.conf
 COPY mongod_ctl.sh /usr/local/bin
 
-RUN apt-get update && apt-get install -y locales python3.7 python3-pip python3.7-dev
+RUN apt-get update && apt-get install -y ca-certificates locales python3.7 python3-pip python3.7-dev
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1; \
     update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.7 1; \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1
