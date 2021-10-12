@@ -1,19 +1,16 @@
 """
 Exceptions issued by the NERDm utilities
 """
+from ...base import OARException
 
-class MetadataError(Exception):
+class MetadataError(OARException):
     """
     an exception indicating an error handling metadata
     """
-    def __init__(self, msg=None, cause=None):
-        if not msg:
-            if cause:
-                msg = str(cause)
-            else:
-                msg = "Unknown Metadata System Error"
-        super(MetadataError, self).__init__(msg)
-        self.cause = cause
+    def __init__(self, msg=None, cause=None, sys=None):
+        if not msg and not cause:
+            msg = "Unknown Metadata Error"
+        super(MetadataError, self).__init__(msg, cause, sys)
 
 class NERDError(MetadataError):
     """
@@ -26,7 +23,7 @@ class NERDTypeError(MetadataError):
     an exception indicating that a NERm metadata value is of an invalid or 
     unexpected type.
     """
-    def __init__(self, need=None, got=None, property=None, msg=None, cause=None):
+    def __init__(self, need=None, got=None, property=None, msg=None, cause=None, sys=None):
         """
         create the exception
 
@@ -55,7 +52,7 @@ class NERDTypeError(MetadataError):
             if got:
                 msg += (need and ",") or ":" + " got " + str(got)
 
-        super(NERDTypeError, self).__init__(msg, cause)
+        super(NERDTypeError, self).__init__(msg, cause, sys)
 
 
 class MergeError(MetadataError):

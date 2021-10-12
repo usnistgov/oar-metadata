@@ -8,7 +8,7 @@ from pymongo import MongoClient
 from ejsonschema import ExtValidator
 from ejsonschema import ValidationError, SchemaError, RefResolutionError
 
-from ..exceptions import DatabaseStateError
+from ..exceptions import RMMException, DatabaseStateError
 
 _dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
@@ -292,19 +292,15 @@ class LoadLog(object):
                 self._results.append(res)
         return self
 
-class RecordIngestError(Exception):
+class RecordIngestError(RMMException):
     """
-    an exception indicating a failure to load a record
+    an exception indicating a failure to load a record into the RMM
     """
 
     def __init__(self, msg=None, cause=None):
-        if not msg:
-            if cause:
-                msg = str(cause)
-            else:
-                msg = "Unknown Ingest Error"
-        super(RecordIngestError, self).__init__(msg)
-        self.cause = cause
+        if not msg and not cause:
+            msg = "Unknown RMM Ingest Error"
+        super(RecordIngestError, self).__init__(msg, cause)
 
 class JSONEncodingError(RecordIngestError):
     """
