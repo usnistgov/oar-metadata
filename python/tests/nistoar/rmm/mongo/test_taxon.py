@@ -54,7 +54,7 @@ class TestTaxonomyLoader(test.TestCase):
         self.assertIsNone(self.ldr._client)
         self.ldr.connect()
         self.assertIsNotNone(self.ldr._client)
-        self.assertEqual(self.ldr._client.get_database().list_collection_names(), [])
+        self.assertNotIn("taxonomy" , self.ldr._client.get_database().list_collection_names())
         self.ldr.disconnect()
         self.assertIsNone(self.ldr._client)
         

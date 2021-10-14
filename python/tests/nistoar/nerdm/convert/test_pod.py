@@ -65,8 +65,8 @@ class TestPODds2Res(unittest.TestCase):
             data = fd.read()
             
         res = cvtr.convert(data, "ark:ID")
-        self.assertEquals(res["@id"], "ark:ID")
-        self.assertEquals(res["accessLevel"], "public")
+        self.assertEqual(res["@id"], "ark:ID")
+        self.assertEqual(res["accessLevel"], "public")
 
     def test_convert_data(self):
         cvtr = cvt.PODds2Res(jqlibdir)
@@ -77,8 +77,8 @@ class TestPODds2Res(unittest.TestCase):
         data['theme'] = ['optical physics']
 
         res = cvtr.convert_data(data, "ark:ID")
-        self.assertEquals(res["@id"], "ark:ID")
-        self.assertEquals(res["accessLevel"], "public")
+        self.assertEqual(res["@id"], "ark:ID")
+        self.assertEqual(res["accessLevel"], "public")
 
         self.assertEqual(len(res['references']), 1)
         self.assertNotIn('citation', res["references"][0])
@@ -187,8 +187,8 @@ class TestPODds2Res(unittest.TestCase):
         data['references'].append("https://doi.org/10.1126/science.169.3946.635")
             
         res = cvtr.convert_data(data, "ark:ID")
-        self.assertEquals(res["@id"], "ark:ID")
-        self.assertEquals(res["accessLevel"], "public")
+        self.assertEqual(res["@id"], "ark:ID")
+        self.assertEqual(res["accessLevel"], "public")
 
         self.assertEqual(len(res['references']), 2)
         self.assertNotIn('citation', res["references"][0])
@@ -317,8 +317,8 @@ class TestRes2PODds(unittest.TestCase):
     def test_convert_file(self):
         cvtr = cvt.Res2PODds(jqlibdir)
         pod = cvtr.convert_file(os.path.join(nerddir,"janaf.json"))
-        self.assertEquals(pod["accessLevel"], "public")
-        self.assertEquals(pod["@type"], "dcat:Dataset")
+        self.assertEqual(pod["accessLevel"], "public")
+        self.assertEqual(pod["@type"], "dcat:Dataset")
 
         self.assertEqual(len(pod['references']), 2)
         self.assertEqual(len(pod['distribution']), 319)
@@ -331,8 +331,8 @@ class TestRes2PODds(unittest.TestCase):
         with open(os.path.join(nerddir,"janaf.json")) as fd:
             data = json.load(fd)
         pod = cvtr.convert(json.dumps(data))
-        self.assertEquals(pod["accessLevel"], "public")
-        self.assertEquals(pod["@type"], "dcat:Dataset")
+        self.assertEqual(pod["accessLevel"], "public")
+        self.assertEqual(pod["@type"], "dcat:Dataset")
 
         self.assertEqual(len(pod['references']), 2)
         self.assertEqual(len(pod['distribution']), 319)
@@ -345,8 +345,8 @@ class TestRes2PODds(unittest.TestCase):
         with open(os.path.join(nerddir,"janaf.json")) as fd:
             data = json.load(fd)
         pod = cvtr.convert_data(data)
-        self.assertEquals(pod["accessLevel"], "public")
-        self.assertEquals(pod["@type"], "dcat:Dataset")
+        self.assertEqual(pod["accessLevel"], "public")
+        self.assertEqual(pod["@type"], "dcat:Dataset")
 
         self.assertEqual(len(pod['references']), 2)
         self.assertEqual(len(pod['distribution']), 319)
@@ -376,7 +376,7 @@ class TestHierarchyBuilder(unittest.TestCase):
     def test_build_hierarchy(self):
         hb = cvt.HierarchyBuilder(jqlibdir)
         hier = hb.build_hierarchy(simplenerd['components'])
-        self.assertEquals(hier, simplehier)
+        self.assertEqual(hier, simplehier)
         
 if __name__ == '__main__':
     unittest.main()

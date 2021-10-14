@@ -4,7 +4,7 @@ from copy import deepcopy
 import unittest as test
 from ejsonschema import ExtValidator, SchemaValidator
 
-from nistoar.tests import *
+from nistoar.testing import *
 from nistoar.rmm.ingest import wsgi
 
 pydir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))

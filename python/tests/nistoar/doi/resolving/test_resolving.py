@@ -1,6 +1,6 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
-from collections import Mapping
+from collections.abc import Mapping
 # from nistoar.tests import *
 
 import nistoar.doi.resolving as res
@@ -25,9 +25,9 @@ class TestResolving(test.TestCase):
     def test_resolve_dc(self):
         info = res.resolve(dcdoi, logger=logger)
         self.assertIn(info.source, ["Datacite", "Crosscite"])
-        self.assertTrue(isinstance(info, res.DataciteDOIInfo))
+        self.assertTrue(isinstance(info, res.CrossciteDOIInfo))
         self.assertIsNotNone(info._data)
-        self.assertEqual(info.data['DOI'], dcdoi)
+        self.assertTrue(info.data['DOI'] == dcdoi or info.data['DOI'] == dcdoi.upper())
 
     @test.skipIf("doi" not in os.environ.get("OAR_TEST_INCLUDE",""),
                  "kindly skipping doi service checks")
@@ -60,6 +60,9 @@ class TestResolving(test.TestCase):
             pass
 
 class TestResolver(test.TestCase):
+
+    def setUp(self):
+        set_client_info(*cli)
 
     def test_ctor(self):
         rslvr = res.Resolver(resolver="ftp:/goober.com/")

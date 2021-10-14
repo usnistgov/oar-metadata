@@ -1,17 +1,17 @@
-from __future__ import absolute_import
-import os, pdb, requests, logging, time, json
+import os, pdb, requests, logging, time, json, sys
 import unittest as test
 from copy import deepcopy
-from StringIO import StringIO
+from io import BytesIO
 
 testdir = os.path.dirname(os.path.abspath(__file__))
 datadir = os.path.join(testdir, 'data')
 
-import imp
+import importlib.util
 simsrvrsrc = os.path.join(testdir, "sim_datacite_srv.py")
-with open(simsrvrsrc, 'r') as fd:
-    svc = imp.load_module("sim_datacite_svc", fd, simsrvrsrc,
-                          (".py", 'r', imp.PY_SOURCE))
+spec = importlib.util.spec_from_file_location("sim_datacite_svc", simsrvrsrc)
+svc = importlib.util.module_from_spec(spec)
+sys.modules["sim_datacite_svc"] = svc
+spec.loader.exec_module(svc)
 
 basedir = os.path.dirname(os.path.dirname(os.path.dirname(
     os.path.dirname(os.path.dirname(testdir)))))
@@ -153,7 +153,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("404", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         self.resp = []
@@ -162,7 +162,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("406", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
 
 
     def test_badHEAD(self):
@@ -210,7 +210,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("405", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -221,7 +221,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("415", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -232,7 +232,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("406", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
     def test_badPUT(self):
@@ -264,7 +264,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("405", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -274,7 +274,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("401", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -285,7 +285,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("415", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -296,7 +296,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("406", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         req.update({
@@ -307,7 +307,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("404", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
     def test_badPOST_input(self):
@@ -317,13 +317,13 @@ class TestSimIDService(test.TestCase):
             'HTTP_ACCEPT': svc.JSONAPI_MT,
             'CONTENT_TYPE': svc.JSONAPI_MT,
             'PATH_INFO': "/dois",
-            'wsgi.input':  StringIO(inp)
+            'wsgi.input':  BytesIO(inp.encode())
         }
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
         inp = 'Tinker\nTailor\n'
@@ -331,7 +331,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
         inp = '{"goob":"gurn"}'
@@ -339,7 +339,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
         inp = '{"data":{}}'
@@ -347,7 +347,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
         inp = '{"data":{"attributes":{}}}'
@@ -355,7 +355,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
         inp = '{"data":{"type":"dois","attributes":{}}}'
@@ -363,7 +363,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("400", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
     def test_create_update(self):
@@ -381,14 +381,14 @@ class TestSimIDService(test.TestCase):
             'HTTP_ACCEPT': svc.JSONAPI_MT,
             'CONTENT_TYPE': svc.JSONAPI_MT,
             'PATH_INFO': "/dois",
-            'wsgi.input':  StringIO(inp)
+            'wsgi.input':  BytesIO(inp.encode())
         }
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("201", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "draft")
@@ -404,7 +404,7 @@ class TestSimIDService(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertEqual(doc['data']['attributes'], saved)
         
         req = {
@@ -443,7 +443,7 @@ class TestSimIDService(test.TestCase):
             'HTTP_ACCEPT': svc.JSONAPI_MT,
             'CONTENT_TYPE': svc.JSONAPI_MT,
             'PATH_INFO': "/dois/"+id,
-            'wsgi.input':  StringIO(inp)
+            'wsgi.input':  BytesIO(inp.encode())
         }
         self.resp = []
 
@@ -451,7 +451,7 @@ class TestSimIDService(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("201", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "draft")
@@ -468,14 +468,14 @@ class TestSimIDService(test.TestCase):
                 }
             }
         })
-        req['wsgi.input'] = StringIO(inp)
+        req['wsgi.input'] = BytesIO(inp.encode())
         self.resp = []
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("422", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "draft")
@@ -497,13 +497,13 @@ class TestSimIDService(test.TestCase):
                 }
             }
         })
-        req['wsgi.input'] = StringIO(inp)
+        req['wsgi.input'] = BytesIO(inp.encode())
         self.resp = []
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("201", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "findable")
@@ -520,13 +520,13 @@ class TestSimIDService(test.TestCase):
                 }
             }
         })
-        req['wsgi.input'] = StringIO(inp)
+        req['wsgi.input'] = BytesIO(inp.encode())
 
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("201", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "findable")
@@ -546,7 +546,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("404", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
 
         # create
@@ -563,7 +563,7 @@ class TestSimIDService(test.TestCase):
             'HTTP_ACCEPT': svc.JSONAPI_MT,
             'CONTENT_TYPE': svc.JSONAPI_MT,
             'PATH_INFO': "/dois",
-            'wsgi.input':  StringIO(json.dumps(inp))
+            'wsgi.input':  BytesIO(json.dumps(inp).encode())
         }
         self.resp = []
 
@@ -571,7 +571,7 @@ class TestSimIDService(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("201", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "draft")
@@ -602,7 +602,7 @@ class TestSimIDService(test.TestCase):
             'HTTP_ACCEPT': svc.JSONAPI_MT,
             'CONTENT_TYPE': svc.JSONAPI_MT,
             'PATH_INFO': "/dois",
-            'wsgi.input':  StringIO(json.dumps(inp))
+            'wsgi.input':  BytesIO(json.dumps(inp).encode())
         }
         self.resp = []
 
@@ -610,7 +610,7 @@ class TestSimIDService(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("422", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "draft")
@@ -624,7 +624,7 @@ class TestSimIDService(test.TestCase):
             "creators": [{"fn": "me"}],
             "types": { "resourceType": "Dataset", "schemaOrg": "Dataset"}
         })
-        req['wsgi.input'] = StringIO(json.dumps(inp))
+        req['wsgi.input'] = BytesIO(json.dumps(inp).encode())
         
         self.resp = []
 
@@ -632,7 +632,7 @@ class TestSimIDService(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
 
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         saved = doc['data']['attributes']
         self.assertEqual(saved['doi'], id)
         self.assertEqual(saved['state'], "findable")
@@ -647,7 +647,7 @@ class TestSimIDService(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("403", self.resp[0])
-        doc = json.loads("\n".join(body))
+        doc = json.loads("\n".join([b.decode('utf-8') for b in body]))
         self.assertIn('errors', doc)
         
             

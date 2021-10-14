@@ -1,9 +1,9 @@
-from __future__ import absolute_import, print_function
-import json, os, cgi, sys, re, hashlib, json, logging, random
+import json, os, sys, re, hashlib, json, logging, random
 from datetime import datetime
 from wsgiref.headers import Headers
 from collections import OrderedDict, Mapping
 from copy import deepcopy
+from urllib.parse import parse_qs
 
 JSONAPI_MT = "application/vnd.api+json"
 
@@ -108,7 +108,7 @@ class SimHandler(object):
         self._code = 0
         self._msg = "unknown state"
 
-    def send_error(self, code, message, errtitle=None, errdesc={}):
+    def send_error(self, code, message, errtitle=None, errdesc={}, tellexc=False):
         edata = None
         if errdesc and not errtitle:
             errtitle=message
@@ -122,10 +122,15 @@ class SimHandler(object):
             self.add_header("Content-type", JSONAPI_MT)
             self.add_header("Content-length", len(edata))
         status = "{0} {1}".format(str(code), message)
-        self._start(status, self._hdr.items(), sys.exc_info())
+        excinfo = None
+        if tellexc:
+            excinfo = sys.exc_info()
+            if excinfo == (None, None, None):
+                excinfo = None
+        self._start(status, self._hdr.items(), excinfo)
 
         if edata:
-            return [ edata ]
+            return [ edata.encode() ]
         return []
 
     def add_header(self, name, value):
@@ -143,7 +148,7 @@ class SimHandler(object):
         meth_handler = 'do_'+self._meth
 
         path = self._env.get('PATH_INFO', '/')
-        params = cgi.parse_qs(self._env.get('QUERY_STRING', ''))
+        params = parse_qs(self._env.get('QUERY_STRING', ''))
 
         if path.startswith(self.basepath):
             path = path[len(self.basepath):]
@@ -186,10 +191,10 @@ class SimHandler(object):
             self.add_header("Content-type", JSONAPI_MT)
             self.add_header("Content-length", len(out))
             self.end_headers()
-            return [out]
+            return [out.encode()]
         except (ValueError, TypeError) as ex:
             return self.send_error(500, "JSON encoding error",
-                                   errdesc={"detail": str(ex)})
+                                   errdesc={"detail": str(ex)}, tellexc=True)
 
     def do_HEAD(self, path, params=None):
         if path:
@@ -218,8 +223,8 @@ class SimHandler(object):
                                    {"detail": self._env['CONTENT_TYPE']})
 
         try:
-            bodyin = self._env['wsgi.input']
-            doc = json.load(bodyin, object_pairs_hook=OrderedDict)
+            bodyin = self._env['wsgi.input'].read().decode('utf-8')
+            doc = json.loads(bodyin, object_pairs_hook=OrderedDict)
         except (ValueError, TypeError) as ex:
             return self.send_error(400, "Not JSON", "Failed to parse input as JSON",
                                    {"detail": str(ex)})
@@ -296,9 +301,9 @@ class SimHandler(object):
             self.add_header("Content-type", JSONAPI_MT)
             self.add_header("Content-length", str(len(out)))
             self.end_headers()
-            return [out]
+            return [out.encode()]
         except (ValueError, TypeError) as ex:
-            return self.send_error(500,"JSON encoding error", errdesc={"detail":str(ex)})
+            return self.send_error(500,"JSON encoding error", errdesc={"detail":str(ex)}, tellexc=True)
 
     def do_PUT(self, path, params=None):
         if path:
@@ -326,8 +331,8 @@ class SimHandler(object):
             return self.send_error(404, "ID Not Found", errdesc={"detail": path})
 
         try:
-            bodyin = self._env['wsgi.input']
-            doc = json.load(bodyin, object_pairs_hook=OrderedDict)
+            bodyin = self._env['wsgi.input'].read().decode('utf-8')
+            doc = json.loads(bodyin, object_pairs_hook=OrderedDict)
         except (ValueError, TypeError) as ex:
             return self.send_error(400, "Not JSON", "Failed to parse input as JSON",
                                    {"detail": str(ex)})
@@ -371,9 +376,9 @@ class SimHandler(object):
             self.add_header("Content-type", JSONAPI_MT)
             self.add_header("Content-length", len(out))
             self.end_headers()
-            return [out]
+            return [out.encode()]
         except (ValueError, TypeError) as ex:
-            return self.send_error(500, "JSON encoding error")
+            return self.send_error(500, "JSON encoding error", tellexc=True)
 
     def do_DELETE(self, path, params=None):
         if path:
@@ -391,6 +396,13 @@ class SimHandler(object):
 
         return self.send_error(204, "Deleted")
 
+def get_uwsgi_opt(key, default=None):
+    out = uwsgi.opt.get(key)
+    if out is None:
+        return default
+    elif isinstance(out, bytes):
+        return out.decode('utf-8')
+    return out
 
-prefixes = re.split(r'\s*,\s*', uwsgi.opt.get("prefixes", ""))
+prefixes = re.split(r'\s*,\s*', get_uwsgi_opt("prefixes", ""))
 application = SimIDService("/dois", prefixes)

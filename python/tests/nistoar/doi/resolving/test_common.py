@@ -1,6 +1,6 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
-from collections import Mapping
+from collections.abc import Mapping
 # from nistoar.tests import *
 
 import nistoar.doi.resolving.common as res
@@ -11,6 +11,9 @@ cli = ("NIST Open Access for Research", "testing",
        "datasupport@nist.gov")
 
 class TestFuncs(test.TestCase):
+
+    def setUp(self):
+        res._client_info = None
 
     def tearDown(self):
         res._client_info = None
@@ -48,6 +51,12 @@ class TestFuncs(test.TestCase):
         
 
 class TestDOIInfo(test.TestCase):
+
+    def setUp(self):
+        res._client_info = None
+
+    def tearDown(self):
+        res._client_info = None
 
     def test_ctor(self):
         self.assertEqual(res.default_doi_resolver, "https://doi.org/")

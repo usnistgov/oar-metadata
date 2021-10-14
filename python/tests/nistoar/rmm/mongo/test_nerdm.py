@@ -36,8 +36,8 @@ class TestNERDmLoader(test.TestCase):
             db.drop_collection("record")
         if "versions" in db.list_collection_names():
             db.drop_collection("versions")
-        if "releaseSets" in db.list_collection_names():
-            db.drop_collection("releaseSets")
+        if "releasesets" in db.list_collection_names():
+            db.drop_collection("releasesets")
         
     def test_ctor(self):
         self.assertEqual(self.ldr.coll, "versions")
@@ -58,7 +58,7 @@ class TestNERDmLoader(test.TestCase):
         key = { '@id': "ark:/88434/sdp0fjspek351" }
         self.assertEqual(self.ldr.load_data(data, key, 'fail'), 1)
         self.assertEqual(self.ldr._client.get_database().record.count_documents({}), 0)
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 0)
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 0)
         self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
         c = self.ldr._client.get_database().versions.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
@@ -77,8 +77,8 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(c[0]['version'], '1.0.0')
         self.assertEqual(c[0]['title'], 'Version 1.0.0')
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
-        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releasesets.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
         self.assertEqual(c[0]['version'], '1.0.0')
         self.assertEqual(c[0]['title'], 'Version 1.0.0')
@@ -101,8 +101,8 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'Version 1.0.1')
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
-        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releasesets.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'Version 1.0.1')
@@ -127,8 +127,8 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'Version 1.0.1')
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
-        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releasesets.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'Version 1.0.1')
@@ -153,8 +153,8 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'A Version 1.0.1')
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
-        c = self.ldr._client.get_database().releaseSets.find()
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
+        c = self.ldr._client.get_database().releasesets.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351/pdr:v')
         self.assertEqual(c[0]['version'], '1.0.1')
         self.assertEqual(c[0]['title'], 'A Version 1.0.1')
@@ -175,7 +175,7 @@ class TestNERDmLoader(test.TestCase):
         c = self.ldr._client.get_database().record.find()
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
-        self.assertEqual(self.ldr._client.get_database().releaseSets.count_documents({}), 1)
+        self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
 
         
             

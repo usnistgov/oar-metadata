@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 import os, sys, unittest, pdb
 # from nistoar.rmm.mongo.tests import warnings
@@ -15,6 +15,7 @@ nerdmtest = [os.path.join(testdir, "test_podds2resource.py"),
 pdltest = os.path.join(basedir, "scripts", "test_pdl2resources.py")
 extest = os.path.join(basedir, "model", "tests", "test_examples.py")
 pydir = os.path.join(basedir, "python")
+pytestdir = os.path.join(pydir, "tests")
 
 print("Executing all tests...")
 
@@ -30,16 +31,16 @@ if notok or notok2 or notok3:
 
 print("Executing validation tests...")
 
-notok  = os.system("python {0}".format(nerdmtest[0]))
-notok2 = os.system("python {0}".format(nerdmtest[1]))
+notok  = os.system("/usr/bin/env python3 {0}".format(nerdmtest[0]))
+notok2 = os.system("/usr/bin/env python3 {0}".format(nerdmtest[1]))
 if notok or notok2:
     print("**ERROR: some or all basic validation tests have failed")
     status += 2
-notok = os.system("python3 {0}".format(extest))
+notok = os.system("/usr/bin/env python3 {0}".format(extest))
 if notok:
     print("**ERROR: some or all example files have failed validation")
     status += 4
-notok = os.system("python3 {0}".format(pdltest))
+notok = os.system("/usr/bin/env python3 {0}".format(pdltest))
 if notok:
     print("**ERROR: some or all pdl2resources output files have failed validation")
     status += 8
@@ -47,7 +48,7 @@ if notok:
 print("Executing nistoar python tests...")
 
 ldr = unittest.TestLoader()
-suite = ldr.discover(pydir, "test_*.py")
+suite = ldr.discover(pytestdir, "test_*.py", pydir)
 result = unittest.TextTestRunner().run(suite)
 if not result.wasSuccessful():
     status += 16

@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import os, pdb, sys, json, requests, logging, time, re, hashlib, shutil
 import unittest as test
 
@@ -28,11 +27,12 @@ def startService():
     srvport = port
     pidfile = os.path.join(tdir,"simsrv"+str(srvport)+".pid")
     
-    wpy = "python/nistoar/doi/tests/sim_datacite_srv.py"
-    cmd = "uwsgi --daemonize {0} --plugin python --http-socket :{1} " \
+    wpy = "python/tests/nistoar/doi/sim_datacite_srv.py"
+    cmd = "uwsgi --daemonize {0} --plugin python3 --http-socket :{1} " \
           "--wsgi-file {2} --pidfile {3} --set-ph prefixes={4}"
     cmd = cmd.format(os.path.join(tdir,"simsrv.log"), srvport,
                      os.path.join(basedir, wpy), pidfile, ",".join(prefixes))
+#    print(cmd)
     os.system(cmd)
     time.sleep(0.2)
 
@@ -63,6 +63,7 @@ def tearDownModule():
     if loghdlr:
         if rootlog:
             rootlog.removeHandler(loghdlr)
+        loghdlr.close()
         loghdlr = None
     stopService()
     shutil.rmtree(tmpdir())

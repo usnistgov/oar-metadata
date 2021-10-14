@@ -1,6 +1,6 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
-from nistoar.tests import *
+from nistoar.testing import *
 
 import nistoar.rmm.config as config
 

@@ -2,6 +2,7 @@ import unittest, pdb, os, json
 from collections import OrderedDict
 
 import nistoar.nerdm.convert.pod as cvt
+import nistoar.doi.resolving.common as res
 from nistoar.doi.resolving import DOIInfo
 from nistoar.nerdm.constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI, BIB_SCHEMA_URI
 
@@ -268,9 +269,20 @@ class TestConvertReferences(unittest.TestCase):
 
 class TestDOIResolver(unittest.TestCase):
 
+    def setUp(self):
+        res._client_info = None
+
+    def tearDown(self):
+        res._client_info = None
+
     def test_ctor(self):
         rslvr = cvt.DOIResolver()
         self.assertIsNone(rslvr.resolver._client_info)
+        self.assertEqual(rslvr.resolver._resolver, "https://doi.org/")
+
+        res.set_client_info('d', 'c', 'b', 'a')
+        rslvr = cvt.DOIResolver()
+        self.assertEqual(rslvr.resolver._client_info, ('d', 'c', 'b', 'a'))
         self.assertEqual(rslvr.resolver._resolver, "https://doi.org/")
         
         rslvr = cvt.DOIResolver(resolver="https://goob.org/")

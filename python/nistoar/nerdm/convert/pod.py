@@ -558,7 +558,7 @@ def _doiinfo2reference(info, resolver):
     if tp == 'dataset':
         out['@type'] = ['schema:Dataset']
         out['refType'] = "References"
-    elif tp.startswith('article'):
+    elif tp == 'journal-article' or tp.startswith('article'):
         out['@type'] = ['schema:Article']
         out['refType'] = "IsCitedBy"
     elif tp == 'book':

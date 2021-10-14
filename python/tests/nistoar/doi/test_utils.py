@@ -1,7 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
-from collections import Mapping
-from nistoar.tests import *
+from collections.abc import Mapping
+from nistoar.testing import *
 
 import nistoar.doi.utils as utils
 

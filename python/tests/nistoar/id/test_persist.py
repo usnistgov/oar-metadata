@@ -2,7 +2,7 @@ import unittest, os, json, pdb, pynoid as noid, logging
 from random import randint
 
 from nistoar.id import persist
-from nistoar.tests import *
+from nistoar.testing import *
 
 loghdlr = None
 rootlog = None

@@ -1,7 +1,7 @@
 """
 Exceptions issued by the NERDm utilities
 """
-from ...base import OARException
+from ..base import OARException
 
 class MetadataError(OARException):
     """

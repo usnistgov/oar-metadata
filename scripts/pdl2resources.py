@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 #
 # Usage: pdl2resources [-d DIR] [-i START] [-c COUNT] PDLFILE
 #
