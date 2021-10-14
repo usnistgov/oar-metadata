@@ -9,7 +9,10 @@ class SystemInfoMixin(object):
     a part of.  
     """
 
-    def __init__(self, sysname, sysabbrev, subsname, subsabbrev, version):
+    # the currently set global system; see get_global_system() below
+    __globalsys = None
+
+    def __init__(self, sysname: str, sysabbrev: str, subsname: str, subsabbrev: str, version: str):
         self._sysn = sysname
         self._abbrev = sysabbrev
         self._subsys = subsname
@@ -45,6 +48,25 @@ class SystemInfoMixin(object):
             out = out.getChild(self.subsystem_abbrev)
         return out
 
+    @classmethod
+    def get_global_system(cls):
+        """
+        return the system instance currently set as the global system.  This instance is intended to 
+        be set at __main__/script level when the script is intended to operate as part of a single 
+        system.  Some class constructors may consult this to determine which system the instance should 
+        be considered part of.  If None, no system has been so set.  
+        """
+        return cls.__globalsys
+
+    def make_global(self):
+        """
+        register this system instance as the global system.  This method is intended to be called at
+        the __main__/script level to indicate that the script is operating as part of this system.  
+        There can only be one global system registered, so if this method has been called on any other 
+        system object, the previous one is replaced.  
+        """
+        self.__class__.__globalsys = self
+
 
 class OARException(Exception):
     """
@@ -65,6 +87,8 @@ class OARException(Exception):
             else:
                 message = "Unknown OAR exception occurred"
         self.cause = cause
+        if not sys:
+            sys = SystemInfoMixin.get_global_system()
         self.system = sys
         super(OARException, self).__init__(message)
         
