@@ -23,4 +23,4 @@ class RMMSystem(SystemInfoMixin):
     def __init__(self):
         super(RMMSystem, self).__init__(_RMMSYSNAME, _RMMSYSABBREV, "", "", __version__)
 
-_sys = RMMSystem()
+system = RMMSystem()
