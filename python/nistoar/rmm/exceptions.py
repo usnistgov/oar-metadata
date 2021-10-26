@@ -1,7 +1,7 @@
 """
 Exceptions and warnings for the RMM system
 """
-from . import _sys
+from . import system as _sys
 from ..base import OARException
 
 class RMMException(OARException):
