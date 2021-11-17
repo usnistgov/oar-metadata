@@ -23,6 +23,9 @@ class TestJanaf(unittest.TestCase):  #
 
     def test_id(self): self.assertEquals(self.out['@id'], "ark:ID")
     def test_al(self): self.assertEquals(self.out['accessLevel'], "public")
+    def test_rights(self):
+        self.assertEquals(self.out['rights'], "data is free to use")
+                          
     def test_context(self):
         self.assertEquals(self.out['@context'],
                         [ "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",

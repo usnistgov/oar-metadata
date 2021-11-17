@@ -552,6 +552,7 @@ def podds2resource:
         references,
         accessLevel,
         license,
+        rights,
         inventory: [{"forCollection": "", "childCount": 0, "descCount": 0,
                      "byType": [], "childCollections": [] }],
         components: .distribution,
@@ -567,6 +568,7 @@ def podds2resource:
     if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
     if .topic then . else del(.topic) end |
+    if .rights then . else del(.rights) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
     if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |
