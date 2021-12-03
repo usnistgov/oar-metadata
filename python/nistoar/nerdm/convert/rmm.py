@@ -8,17 +8,18 @@ The RMM includes three relevant collections:
                        be of the general ARK form without any qualifying extensions.
   * ``releasesets`` -- contains ``ReleaseCollection`` resource records corresponding to each resource in
                        ``records``.  The ``releaseHistory`` property included in each record must include
-                       all known (released) versions.  The ``@id`` property with include the "/_v" 
+                       all known (released) versions.  The ``@id`` property with include the "/pdr:v" 
                        extension, qualifying it as a ReleaseCollection ID.
   * ``versions``    -- contains all of the different versions of the NERDm records in ``records``.  The 
                        ``releaseHistory`` property in each record is not expected to be up to date but 
                        rather reflect the history at the time the version was ingested.  The ``@id`` 
-                       property with include the version extension of the form /_v/M.N.P, qualifying it 
+                       property with include the version extension of the form /pdr:v/M.N.P, qualifying it 
                        as a version-specific ID.
 """
 import re
 from collections import OrderedDict, Mapping
 from urllib.parse import urljoin
+from copy import deepcopy
 
 from .. import validate
 from .. import utils
@@ -44,6 +45,8 @@ class NERDmForRMM(object):
                (Default: https://data.nist.gov/).
           *  landingPageService -- the base URL that, when combined with an ID, resolves to a landing 
                page.  If relative, it will be combined with the value for "portalBase" (Default: "/od/id/")
+          *  distributionService -- the base URL that, when combined with an ID and filepath, downloads a 
+               dataset. If relative, it will be combined with the value for "portalBase" (Default: "/od/ds/")
         :param dict   config:  a dictionary with conversion configuration data
                                in it (see class documentation)
         :param Logger logger:  a logger object that can be used to write warning
@@ -51,7 +54,7 @@ class NERDmForRMM(object):
         :param str schemadir:  path to the directory containing NERDm schemas; provide this to 
                                enable automatic validation
         :param dict   pubeps:  a dictionary of public PDR endpoints that should be assumed when filling 
-                               out URL values into ht converted record.
+                               out URL values into the converted record.
         """
         if pubeps is None:
             pubeps = {}
@@ -66,6 +69,8 @@ class NERDmForRMM(object):
 
         self._lpsbase = urljoin(self.cfg.get("portalBase", "https://data.nist.gov/"),
                                 self.cfg.get("landingPageService", "od/id/"))
+        self._distbase = urljoin(self.cfg.get("portalBase", "https://data.nist.gov/"),
+                                 self.cfg.get("distributionService", "od/ds/"))
 
 
     def to_rmm(self, nerdm, defver="1.0.0"):
@@ -112,13 +117,28 @@ class NERDmForRMM(object):
         
         out = {
             'record': rec,
-            'version': dict(rec)  # shallow copy
+            'version': deepcopy(rec)  # deep copy
         }
 
         # massage the identifiers to match the PDR convention for "latest" and "versioned"
         rec['@id'] = self._verextre.sub('', rec['@id'])
         if not self._verextre.search(out['version']['@id']):
             out['version']['@id'] += to_version_ext(rec['version'])
+
+        # massage URLs to point to versioned copies
+        # tweak the PDR landing page
+        if out['version'].get('landingPage'):
+            m = re.match(r'^https?://[^/]+/od/id/(ark:/\d+/)?([^/]+)',
+                         out['version']['landingPage'])
+            if m and not out['version']['landingPage'][m.end():].startswith(RELHIST_EXTENSION):
+                out['version']['landingPage'] += to_version_ext(rec['version'])
+
+        # tweak PDR download URLs
+        dsre = re.compile(r'^https?://[^/]+/od/ds/(ark:/\d+/)?([^/]+)')
+        for cmp in [c for c in out['version'].get('components', []) if c.get('downloadURL')]:
+            m = dsre.match(cmp['downloadURL'])
+            if m and not cmp['downloadURL'][m.end():].startswith("_v/"):
+                cmp['downloadURL'] = m.group() + "/_v/" + rec['version'] + cmp['downloadURL'][m.end():]
 
         def fromkeys(fromdict, todict, keys):
             for key in keys:
