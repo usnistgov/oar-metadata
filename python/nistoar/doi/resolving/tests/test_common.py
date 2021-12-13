@@ -10,6 +10,9 @@ cli = ("NIST Open Access for Research", "testing",
        "http://github.com/usnistgov/oar-metadata/",
        "datasupport@nist.gov")
 
+def setUpModule():
+    res._client_info = None
+
 class TestFuncs(test.TestCase):
 
     def tearDown(self):
