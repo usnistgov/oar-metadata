@@ -8,6 +8,7 @@ a framework-based implementation if any further capabilities are needed.
 
 import os, sys, logging, json, cgi, re, subprocess
 from urlparse import urlsplit, urlunsplit
+from collections import Mapping
 from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
@@ -17,6 +18,7 @@ from ..exceptions import ConfigurationException
 log = logging.getLogger("RMM").getChild("ingest")
 
 DEF_BASE_PATH = "/"
+
 
 class RMMRecordIngestApp(object):
 
@@ -352,9 +354,13 @@ class Handler(object):
         except Exception as ex:
             log.error("Unexpected failure executing post-commit script:\n  %s\n%s", " ".join(cmd), str(ex))
 
-def _mkpostcomm(cmd, recid='{recid}', archdir=None, recfile=None, **vals):
+def _mkpostcomm(cmd, recid='{recid}', archdir=None, recfile=None, **fmtdata):
     if not isinstance(cmd, (list, tuple)):
         cmd = cmd.split()
+
+    if fmtdata is None:
+        fmtdata = {}
+    vals = _data4fmt(fmtdata)
 
     vals['recid'] = recid
     if recfile is None:
@@ -365,6 +371,17 @@ def _mkpostcomm(cmd, recid='{recid}', archdir=None, recfile=None, **vals):
 
     cmd = [arg.format(**vals) for arg in cmd]
     return cmd
+
+class _ov(object):
+    def __init__(self, d):
+        self.__dict__ = _data4fmt(d)
+
+def _data4fmt(d):
+    d = dict(d)
+    for key in d:
+        if isinstance(d[key], Mapping):
+            d[key] = _ov(d[key])
+    return d
 
 def _get_oar_home():
     home = os.environ.get('OAR_HOME')
