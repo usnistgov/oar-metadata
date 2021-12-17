@@ -14,7 +14,10 @@ medradoi = "10.1392/onix_doi_schema_v1.1"
 cli = ("NIST Open Access for Research", "testing",
        "http://github.com/usnistgov/oar-metadata/",
        "datasupport@nist.gov")
-set_client_info(*cli)
+def setUpModule():
+    set_client_info(*cli)
+def tearDownModule():
+    set_client_info(None, None, None, None)
 
 logger = logging.getLogger("test")
 
