@@ -21,8 +21,36 @@ DEF_BASE_PATH = "/"
 
 
 class RMMRecordIngestApp(object):
+    """
+    This is the WSGI implementation of the NERDm record ingest service.  NERDm records submitted to this 
+    service are validated and (if valid) loads them into the RMM.  This service can be configured to also 
+    carry out a post-ingest action; this is leveraged by oar-docker to update the SDP's autocomplete index. 
+
+    This App accepts the following configuration parameters:
+    :param str db_url:     the (MongoDB) URL of the RMM database to load into
+    :param dict db_authn:  the configuration controlling authentication to the database
+    :param str db_authn.user:  the database user name to connect to the database with
+    :param str db_authn.pass:  the database password (corresponding to `db_authn.user`) to authenticate 
+                           to the database with.
+    :param str db_authn.rm_config_loc:  the name of a configuration set to retrieve to load authentication 
+                           in from.  The values found there (which should include `user` and `pass`) will 
+                           be loaded into the `db_authn` configuration.
+    :param str auth_key:   the Bearer token that must be presented as client credentials to the service;
+                           if an incorrect token is included with service requests, the request will 
+                           rejected with a 401 status.  
+    :param str archive_dir  a directory where accepted records should be stored after ingest.
+    :param str|list post_commit_exec:  a string or list of strings that specify a program and its arguments
+                           that should be run after the record is loaded into the database.  If given as 
+                           string, it will be split into a list at its spaces to provide the executable and 
+                           arguments.  The string values an include a words surrounded by braces (e.g.
+                           `{archive_dir}`); those whose word matches a parameter that is part of the 
+                           provided configuration will get substituted with the values of the parameters.  
+    """
 
     def __init__(self, config):
+        """
+        instantiate the service with the provided configuration.
+        """
         self.base_path = config.get('base_path', DEF_BASE_PATH)
         self.dburl = config.get('db_url')
         if not self.dburl:
