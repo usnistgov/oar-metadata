@@ -152,7 +152,7 @@ class NERDmForRMM(object):
             ('@type', ['nrdr:ReleaseCollection', 'dcat:Catalog'])
         ])
         vc['@id'] = rec['@id'] + RELHIST_EXTENSION
-        fromkeys(rec, vc, "title description keyword firstIssued publisher contactPoint theme".split())
+        fromkeys(rec, vc, "ediid title description keyword firstIssued publisher contactPoint theme".split())
         fromkeys(rec, vc, "abbrev version".split())
 
         if 'releaseHistory' in rec:

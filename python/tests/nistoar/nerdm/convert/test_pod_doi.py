@@ -39,6 +39,10 @@ rescfg = {
     "email": "datasupport@nist.gov"
 }
 
+def setUpModule():
+    import nistoar.doi.resolving.common as res
+    res._client_info = None
+
 class TestConvertAuthors(unittest.TestCase):
 
     def test_citeproc_author2nerdm_author(self):

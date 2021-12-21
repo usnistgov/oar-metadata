@@ -7,11 +7,13 @@ from ejsonschema import ExtValidator, SchemaValidator
 from nistoar.testing import *
 from nistoar.rmm.ingest import wsgi
 
-pydir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+testdir = os.path.dirname(os.path.abspath(__file__))
+pydir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(testdir))))
 basedir = os.path.dirname(pydir)
 schemadir = os.path.join(basedir, "model")
 exdir = os.path.join(schemadir, "examples")
 janaffile = os.path.join(exdir, "janaf.json")
+postcomm = os.path.join(testdir, "postcomm.sh")
 
 dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
@@ -57,6 +59,8 @@ class TestRMMRecordIngestApp(test.TestCase):
             "db_url": dburl,
             'nerdm_schema_dir': os.path.abspath(schemadir),
             'archive_dir': self.archdir
+            'post_commit_exec': postcomm + os.path.join(self.archdir, "postcommit.txt") + \
+                                " {db_url} {recid} {recfile}"
         }
 
         try:
@@ -313,6 +317,40 @@ class TestArchive(test.TestCase):
 
     def tearDown(self):
         tmpfiles.clean()
+
+    def test_mkcommexec(self):
+        commexec = "echo {recfile} goober {recid} {file}"
+        commexec = wsgi._mkcommexec(commexec, file="/tmp/gurn.txt")
+        self.assertTrue(isinstance(commexec, list), "Output is not a list")
+        self.assertEqual(len(commexec), 5)
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "{recfile}")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "{recid}")
+
+        commexec = wsgi._mkcommexec(commexec, "mds2-5555", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "{recfile}")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
+        commexec = wsgi._mkcommexec(commexec, "mds2-5556", "/tmp", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "/tmp/mds2-5556.json")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
+        commexec = "echo {recfile} goober {recid} {file}"
+        commexec = wsgi._mkcommexec(commexec, "mds2-5555", "/tmp", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gary.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "/tmp/mds2-5555")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
         
     def test_nerdm_archive_cache(self):
         with open(janaffile) as fd:

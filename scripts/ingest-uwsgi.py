@@ -103,10 +103,11 @@ if cfg.get('db_authn') and \
 
         acfg['user'] = rmmcfg['oar.mongodb.readwrite.user']
         acfg['pass'] = rmmcfg['oar.mongodb.readwrite.password']
+        acfg['rouser'] = rmmcfg['oar.mongodb.read.user']
+        acfg['ropass'] = rmmcfg['oar.mongodb.read.password']
 
     except Exception as ex:
-        raise ConfigurationException("Failed to retrieve Mongo authentication "+
-                                     "info: "+str(ex), cause=ex)
+        raise ConfigurationException("Failed to retrieve Mongo authentication info: "+str(ex), cause=ex)
 
 application = wsgi.app(cfg)
 

@@ -1,6 +1,7 @@
 {
     "@type": "dcat:Dataset",
     "accessLevel": "public",
+    "rights": "data is free to use",
     "bureauCode": [
         "006:55"
     ],

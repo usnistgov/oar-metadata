@@ -67,6 +67,7 @@ class TestNERDm2RMM(test.TestCase):
 
         self.assertEqual(ing['releaseSet']['@id'], nerdm['@id']+"/pdr:v")
         self.assertEqual(ing['releaseSet']['title'], nerdm['title'])
+        self.assertEqual(ing['releaseSet']['ediid'], nerdm['ediid'])
         self.assertEqual(ing['releaseSet']['_schema'], const.CORE_SCHEMA_URI+"#")
         self.assertEqual(ing['releaseSet']['version'], "1.0")
         self.assertIn('version', ing['releaseSet'])
@@ -110,6 +111,7 @@ class TestNERDm2RMM(test.TestCase):
 
         self.assertEqual(ing['releaseSet']['@id'], nerdm['@id']+"/pdr:v")
         self.assertEqual(ing['releaseSet']['title'], nerdm['title'])
+        self.assertEqual(ing['releaseSet']['ediid'], nerdm['ediid'])
         self.assertEqual(ing['releaseSet']['_schema'], const.CORE_SCHEMA_URI+"#")
         self.assertEqual(ing['releaseSet']['version'], "1.6.0")
         self.assertIn('version', ing['releaseSet'])
