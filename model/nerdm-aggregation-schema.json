@@ -1,0 +1,187 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$extensionSchemas": [
+        "https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"
+    ],
+    "id": "https://data.nist.gov/od/dm/science-initiative-schema/v0.1#",
+    "rev": "wd1",
+    "title": "The JSON Schema for specific science domains",
+    "description": "A JSON Schema which helps add different science initiatives and related projects together",
+    "definitions": {
+        "AggregationResource": {
+            "description": "Agregation of different resources published with PDR and are part of a science initiative",
+            "notes": [ "" ],
+            "allOf": [
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "creators": {
+                            "title": "Creators",
+                            "description": "An individual or an organization responsible of this collection of resources",
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Creator"
+                            },
+                            "uniqueItems": true
+                        },
+                        "components": {
+                            "title": "Components",
+                            "description": "a listing of the various component resources",
+                            "notes": [
+                                "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
+                                "The @type property will indicate which type of component it is.  The first value in the @type list should be considered the primary or most important classification.",
+                                "If an item's @type includes dcat:Distribution, the item should be convertable to a distribution in the POD schema.",
+                                "The order should be considered meaningful (at least for components of the same type).  The meaning or intention behind the order can depend on the type; however, generally, display of the components of a common type should preserve the order.  For clarity then, it is recommended that items of the same primary type should be grouped together in the list."
+                            ],
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Component"
+                            },
+                            "minLength": 1,
+                            "uniqueItems": true,
+                            "mergeStrategy": "arrayMergeById",
+                            "mergeOptions": {
+                                "idRef": "/@id"
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+        "Component": {
+            "description": "a description of a component of a resource",
+            "type": "object",
+            "notes": [
+                "Include a $extensionSchema property to validate this description against a Component sub-type"
+            ],
+            "properties": {
+                "@type": {
+                    "description": "the types of components that this component can be classified as",
+                    "notes": [
+                        "the first value should be considered its primary type.  This is usually a subtype of Component."
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "mergeStrategy": "uniqueArray",
+                    "mergeOptions": {
+                        "incompatible": [
+                            [
+                                "nrdp:Subcollection",
+                                "nrd:Hidden",
+                                "nrdp:AccessPage",
+                                "nrdp:IncludedResource",
+                                "nrdp:DynamicResourceSet",
+                                "nrdp:SearchPage"
+                            ]
+                        ]
+                    }
+                },
+                "title": {
+                    "description": "a descriptive title for the component",
+                    "type": "string",
+                    "mergeStrategy": "preferBase"
+                },
+                "description": {
+                    "description": "a description of the nature and contents of the component, including the role it plays as part of the resource",
+                    "type": "string",
+                    "mergeStrategy": "preferBase"
+                },
+                "topic": {
+                    "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Topic"
+                    },
+                    "mergeStrategy": "topicArray"
+                },
+                "conformsTo": {
+                    "title": "Standard",
+                    "description": "URI used to identify a standardized specification the component conforms to",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ],
+                    "mergeStrategy": "preferBase"
+                }
+            }
+        },
+        "Creator": {
+            "description": "an identification a Person responsible for the resource",
+            "notes": [
+                "The information here is intended to reflect information about the person who is one of the main leads of the project."
+            ],
+            "type": "object",
+            "properties": {
+                "@type": {
+                    "description": "the class indicating that this is a Person",
+                    "type": "string",
+                    "enum": [
+                        "foaf:Creator"
+                    ]
+                },
+
+                "fullName": {
+                    "description": "full name in the preferred format",
+                    "type": "string",
+                    "minLength": 1,
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Creator Name",
+                        "referenceProperty": "vcard:fn"
+                    }
+                },
+
+                "orcid": {
+                    "description":  "the author's ORCID",
+                    "notes:": [
+                        "The value should not include the resolving URI base (http://orcid.org)"
+                    ],
+                    "$ref": "#/definitions/ORCIDpath",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Last Name",
+                        "referenceProperty": "vivo:orcidid"
+                    }
+                },
+
+                "affiliation": {
+                    "description": "The institution the person was affiliated with at the time of publication",
+                    "type": "array",
+                    "items": {
+                        "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/ResourceReference"
+                    },
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Affiliation",
+                        "referenceProperty": "schema:affiliation"
+                    } 
+                },
+
+                "proxyFor": {
+                    "description": "a local identifier representing this person",
+                    "notes": [
+                        "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+                    ],
+                    "type": "string",
+                    "format": "uri",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Current Person Information",
+                        "referenceProperty": "ore:proxyFor"
+                    }
+                }
+            },
+            "required": [ "fullName" ]
+        }
+    }
+}
