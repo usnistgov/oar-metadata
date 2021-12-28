@@ -1,22 +1,6 @@
 {
     "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
     "topic": [],
-    "references": [
-        {
-            "refType": "IsCitedBy",
-            "title": "NIST special database 301: nail to nail fingerprint challenge dry run",
-            "issued": "2018-07",
-            "citation": "Fiumara, G., Flanagan, P., Schwarz, M., Tabassi, E., & Boehnen, C. (2018). NIST special database 301: nail to nail fingerprint challenge dry run. doi:10.6028/nist.tn.2002\n",
-            "location": "https://doi.org/10.6028/NIST.TN.2002",
-            "@id": "#ref:10.6028/NIST.TN.2002",
-            "@type": [
-                "npg:Article"
-            ],
-            "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/v0.2#/definitions/DCiteReference"
-            ]
-        }
-    ],
     "keyword": [
         "latent",
         "digital forensics",
@@ -24,10 +8,11 @@
         "forensics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource",
+        "https://data.nist.gov/od/dm/nerdm-schema/science-initiative-schema/v0.1#/definitions/ResearchInitiative"
     ],
     "landingPage": "https://www.nist.gov/forensic-science/research-focus-areas",
-    "title": "NIST scientific research in different aspects of forensics and related fields. ",
+    "title": "NIST scientific research in different aspects of forensics and related fields.",
     "theme": [
         "Information Technology",
         "Forensics",
@@ -78,7 +63,7 @@
         }
     ],
     "@type": [
-        "nrdp: AggregationResource",
-        "nrdp:PublicDataResource"
+        "nrdp: ResearchInitiative",
+        "nrdp: PublicDataResource"
     ]
 }

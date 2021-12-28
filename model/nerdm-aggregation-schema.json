@@ -8,12 +8,12 @@
     "title": "The JSON Schema for specific science domains",
     "description": "A JSON Schema which helps add different science initiatives and related projects together",
     "definitions": {
-        "AggregationResource": {
+        "Aggregation": {
             "description": "Agregation of different resources published with PDR and are part of a science initiative",
             "notes": [ "" ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Resource"
                 },
                 {
                     "type": "object",
@@ -23,12 +23,12 @@
                             "description": "An individual or an organization responsible of this collection of resources",
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Creator"
+                                "$ref": "#/definitions/Person"
                             },
                             "uniqueItems": true
                         },
-                        "components": {
-                            "title": "Components",
+                        "aggre-components": {
+                            "title": "AggregationComponents",
                             "description": "a listing of the various component resources",
                             "notes": [
                                 "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
@@ -38,7 +38,7 @@
                             ],
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Component"
+                                "$ref": "#/definitions/AggregationComponent"
                             },
                             "minLength": 1,
                             "uniqueItems": true,
@@ -51,7 +51,7 @@
                 }
             ]
         },
-        "Component": {
+        "AggregationComponent": {
             "description": "a description of a component of a resource",
             "type": "object",
             "notes": [
@@ -114,74 +114,6 @@
                     "mergeStrategy": "preferBase"
                 }
             }
-        },
-        "Creator": {
-            "description": "an identification a Person responsible for the resource",
-            "notes": [
-                "The information here is intended to reflect information about the person who is one of the main leads of the project."
-            ],
-            "type": "object",
-            "properties": {
-                "@type": {
-                    "description": "the class indicating that this is a Person",
-                    "type": "string",
-                    "enum": [
-                        "foaf:Creator"
-                    ]
-                },
-
-                "fullName": {
-                    "description": "full name in the preferred format",
-                    "type": "string",
-                    "minLength": 1,
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Creator Name",
-                        "referenceProperty": "vcard:fn"
-                    }
-                },
-
-                "orcid": {
-                    "description":  "the author's ORCID",
-                    "notes:": [
-                        "The value should not include the resolving URI base (http://orcid.org)"
-                    ],
-                    "$ref": "#/definitions/ORCIDpath",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Last Name",
-                        "referenceProperty": "vivo:orcidid"
-                    }
-                },
-
-                "affiliation": {
-                    "description": "The institution the person was affiliated with at the time of publication",
-                    "type": "array",
-                    "items": {
-                        "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/ResourceReference"
-                    },
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Affiliation",
-                        "referenceProperty": "schema:affiliation"
-                    } 
-                },
-
-                "proxyFor": {
-                    "description": "a local identifier representing this person",
-                    "notes": [
-                        "This identifier is expected to point to an up-to-date description of the person as known to the local system.  The properties associated with that identifier may be different those given in the current record."
-                    ],
-                    "type": "string",
-                    "format": "uri",
-                    "asOntology": {
-                        "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
-                    }
-                }
-            },
-            "required": [ "fullName" ]
         }
     }
 }

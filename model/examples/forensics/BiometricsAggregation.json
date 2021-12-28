@@ -72,7 +72,7 @@
         }
     ],
     "@type": [
-        "nrdp:ResearchInitiative",
-        "nrdp:PublicDataResource"
+        "nrdp: ResearchInitiative",
+        "nrdp: PublicDataResource"
     ]
 }
