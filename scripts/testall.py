@@ -46,6 +46,8 @@ if notok:
     status += 8
 
 print("Executing nistoar python tests...")
+os.environ.setdefault('OAR_TEST_INCLUDE', '')
+os.environ['OAR_TEST_INCLUDE'] += " noreload"
 
 ldr = unittest.TestLoader()
 suite = ldr.discover(pytestdir, "test_*.py", pydir)

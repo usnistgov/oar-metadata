@@ -25,7 +25,7 @@ class TestJanaf(unittest.TestCase):  #
     def test_id(self): self.assertEqual(self.out['@id'], "ark:ID")
     def test_al(self): self.assertEqual(self.out['accessLevel'], "public")
     def test_rights(self):
-        self.assertEquals(self.out['rights'], "data is free to use")
+        self.assertEqual(self.out['rights'], "data is free to use")
                           
     def test_context(self):
         self.assertEqual(self.out['@context'],

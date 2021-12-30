@@ -23,7 +23,6 @@ except ImportError:
     import nistoar
 
 from nistoar.rmm import config
-from nistoar.rmm.exceptions import ConfigurationException
 from nistoar.rmm.ingest import wsgi
 
 def get_uwsgi_opt(key, default=None):
@@ -68,8 +67,8 @@ if not cfg:
         cfg = confsrvc.get(appname)
 
 if not cfg:
-    raise ConfigurationException("ingester: nist-oar configuration not "+
-                                 "provided")
+    raise config.ConfigurationException("ingester: nist-oar configuration not "+
+                                        "provided")
 
 # set up logging
 if 'logfile' not in cfg:
@@ -96,8 +95,8 @@ if cfg.get('db_authn') and \
             if not confsrvc:
                 convsrvc = get_confservice()
             if not confsrvc:
-                raise ConfigurationException("ingester: configuration not "+
-                                     "available; set db_authn.rmm_config_file")
+                raise config.ConfigurationException("ingester: configuration not "+
+                                                    "available; set db_authn.rmm_config_file")
             rmmcfg = confsrvc.get(acfg.get('rmm_config_loc', 'oar-rmm'),
                                   flat=True)
 
@@ -107,7 +106,7 @@ if cfg.get('db_authn') and \
         acfg['ropass'] = rmmcfg['oar.mongodb.read.password']
 
     except Exception as ex:
-        raise ConfigurationException("Failed to retrieve Mongo authentication info: "+str(ex), cause=ex)
+        raise config.ConfigurationException("Failed to retrieve Mongo authentication info: "+str(ex), cause=ex)
 
 application = wsgi.app(cfg)
 

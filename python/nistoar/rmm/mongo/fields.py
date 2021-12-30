@@ -13,7 +13,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
                      UpdateWarning, LoadLog)
 from .loader import ValidationError, SchemaError, RefResolutionError
 
-DEF_BASE_SCHEMA = "https://www.nist.gov/od/dm/field-help/v0.1#"
+DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/field-help/v0.1#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/FieldInfo"
 
 COLLECTION_NAME="fields"

@@ -403,8 +403,10 @@ class TestConfigService(test.TestCase):
 
         self.assertEqual(config.ConfigService.extract(data, flat=True), out)
         
-
-    def test_defservice(self):
+    @test.skipIf("noreload" in os.environ.get("OAR_TEST_INCLUDE", ""),
+                 "Avoid reloading modules when part of larger TestSuite")
+    def test_defservice_reload(self):
+        config.service = None
         self.assertNotIn('OAR_CONFIG_SERVICE', os.environ)
         self.assertIsNone(config.service)
         try:
@@ -416,6 +418,21 @@ class TestConfigService(test.TestCase):
         finally:
             if 'OAR_CONFIG_SERVICE' in os.environ:
                 del os.environ['OAR_CONFIG_SERVICE']
+            config.service = None
+
+    def test_defservice(self):
+        self.assertNotIn('OAR_CONFIG_SERVICE', os.environ)
+        self.assertIsNone(config.service)
+        try:
+            os.environ['OAR_CONFIG_SERVICE'] = "https://config.org/oar/"
+            config.service = config.ConfigService.from_env()
+            self.assertIsNotNone(config.service)
+            self.assertEqual(config.service._base, "https://config.org/oar/")
+            self.assertIsNone(config.service._prof)
+        finally:
+            if 'OAR_CONFIG_SERVICE' in os.environ:
+                del os.environ['OAR_CONFIG_SERVICE']
+            config.service = None
             
 
 

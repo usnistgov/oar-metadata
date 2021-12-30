@@ -32,20 +32,14 @@ class RMMWarning(Warning):
         self.sys = _sys
         Warning.__init__(self, msg)
 
-class ConfigurationException(RMMException):
-    """
-    a class indicating an error in the configuration of the RMM system
-    """
-    pass
-
-class StateException(RMMException):
+class RMMStateException(RMMException):
     """
     a class indicating that the RMM system or environment is in 
     an uncorrectable state preventing proper processing
     """
     pass
 
-class DatabaseStateError(StateException):
+class DatabaseStateError(RMMStateException):
     """
     a class indicating that the RMM database is in 
     an uncorrectable state preventing proper processing.  An example 

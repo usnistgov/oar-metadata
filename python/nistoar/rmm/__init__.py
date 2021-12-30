@@ -6,6 +6,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 
 from .version import __version__
 from ..base import SystemInfoMixin
+from ..base import config
 
 __all__ = [ 'RMMSystem' ]
 

@@ -13,7 +13,7 @@ from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
                            RecordIngestError, JSONEncodingError)
-from ..exceptions import ConfigurationException
+from nistoar.base.config import ConfigurationException
 
 log = logging.getLogger("RMM").getChild("ingest")
 
@@ -118,7 +118,7 @@ class RMMRecordIngestApp(object):
         self._postexec = config.get('post_commit_exec')
         if self._postexec:
             try:
-                self._postexec = _mkcommexec(self._postexec, '{recid}', **config)
+                self._postexec = _mkpostcomm(self._postexec, '{recid}', **config)
             except ValueError as ex:
                 raise ConfigurationExcetpion("post_commit_exec contains bad formatting")
 
@@ -395,10 +395,10 @@ def _mkpostcomm(cmd, recid='{recid}', archdir=None, recfile=None, **fmtdata):
     if recfile is None:
         recfile = '{recfile}'
         if archdir:
-            recfile = os.path.join(self._archdir, '_cache', recid+".json")
+            recfile = os.path.join(archdir, re.sub(r'^ark:/\d+/', '', recid)+".json")
     vals['recfile'] = recfile
 
-    cmd = [arg.format(recid=recid, recfile=recfile) for arg in cmd]
+    cmd = [arg.format(**vals) for arg in cmd]
     return cmd
 
 class _ov(object):

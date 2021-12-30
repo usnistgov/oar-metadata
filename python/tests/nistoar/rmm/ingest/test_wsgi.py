@@ -58,7 +58,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.config = {
             "db_url": dburl,
             'nerdm_schema_dir': os.path.abspath(schemadir),
-            'archive_dir': self.archdir
+            'archive_dir': self.archdir,
             'post_commit_exec': postcomm + os.path.join(self.archdir, "postcommit.txt") + \
                                 " {db_url} {recid} {recfile}"
         }
@@ -318,9 +318,9 @@ class TestArchive(test.TestCase):
     def tearDown(self):
         tmpfiles.clean()
 
-    def test_mkcommexec(self):
+    def test_mkpostcomm(self):
         commexec = "echo {recfile} goober {recid} {file}"
-        commexec = wsgi._mkcommexec(commexec, file="/tmp/gurn.txt")
+        commexec = wsgi._mkpostcomm(commexec, file="/tmp/gurn.txt")
         self.assertTrue(isinstance(commexec, list), "Output is not a list")
         self.assertEqual(len(commexec), 5)
         self.assertEqual(commexec[4], "/tmp/gurn.txt")
@@ -329,14 +329,14 @@ class TestArchive(test.TestCase):
         self.assertEqual(commexec[2], "goober")
         self.assertEqual(commexec[3], "{recid}")
 
-        commexec = wsgi._mkcommexec(commexec, "mds2-5555", file="/tmp/gary.txt")
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5555", file="/tmp/gary.txt")
         self.assertEqual(commexec[4], "/tmp/gurn.txt")
         self.assertEqual(commexec[0], "echo")
         self.assertEqual(commexec[1], "{recfile}")
         self.assertEqual(commexec[2], "goober")
         self.assertEqual(commexec[3], "mds2-5555")
 
-        commexec = wsgi._mkcommexec(commexec, "mds2-5556", "/tmp", file="/tmp/gary.txt")
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5556", "/tmp", file="/tmp/gary.txt")
         self.assertEqual(commexec[4], "/tmp/gurn.txt")
         self.assertEqual(commexec[0], "echo")
         self.assertEqual(commexec[1], "/tmp/mds2-5556.json")
@@ -344,10 +344,10 @@ class TestArchive(test.TestCase):
         self.assertEqual(commexec[3], "mds2-5555")
 
         commexec = "echo {recfile} goober {recid} {file}"
-        commexec = wsgi._mkcommexec(commexec, "mds2-5555", "/tmp", file="/tmp/gary.txt")
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5555", "/tmp", file="/tmp/gary.txt")
         self.assertEqual(commexec[4], "/tmp/gary.txt")
         self.assertEqual(commexec[0], "echo")
-        self.assertEqual(commexec[1], "/tmp/mds2-5555")
+        self.assertEqual(commexec[1], "/tmp/mds2-5555.json")
         self.assertEqual(commexec[2], "goober")
         self.assertEqual(commexec[3], "mds2-5555")
 
