@@ -32,7 +32,8 @@
     "landingPage": "https://www.nist.gov/itl/iad/image-group/nist-special-database-302",
     "title": "NIST Special Database 302 Nail to Nail (N2N) Fingerprint Challenge",
     "theme": [
-        "Information Technology:Biometrics"
+        "Information Technology:Biometrics",
+        "Forensics:Biometrics"
     ],
     "version": "1.0.1",
     "programCode": [
@@ -101,5 +102,11 @@
     ],
     "@type": [
         "nrdp:PublicDataResource"
-    ]
+    ],
+    "isPartOf": [{
+        "title": "NIST Research in Biometric forensics. ",
+        "proxyFor": "ark:/88434/mds991122",
+        "resType": [ "nrdp: Aggregation",
+            "nrdp: PublicDataResource" ]
+    }]
 }

@@ -16,8 +16,7 @@
     "theme": [
         "Information Technology",
         "Forensics",
-        "Materials",
-        "Digital Forensics"
+        "Materials"
     ],
     "version": "1.0.0",
     "programCode": [
@@ -39,6 +38,36 @@
         "hasEmail": "mailto:barbara.guttman@nist.gov",
         "fn": "Barbara Guttman"
     },
+    "investigators": [
+        {
+            "middleName": "",
+            "familyName": "Guttman",
+            "affiliation": [
+            {
+            "@type": "org:Organization",
+            "title": "NIST Forensics division"
+            }
+            ],
+            "orcid": "",
+            "givenName": "Barbara",
+            "@type": "foaf:Person",
+            "fn": "Barbara Guttman"
+            },
+        {
+        "middleName": "",
+        "familyName": "Fiumara",
+        "affiliation": [
+        {
+        "@type": "org:Organization",
+        "title": "NIST Forensics division"
+        }
+        ],
+        "orcid": "",
+        "givenName": "Gregory",
+        "@type": "foaf:Person",
+        "fn": "Greg Fiumara"
+        }
+        ],
     "accessLevel": "public",
     "@id": "ark:/88434/mds9911",
     "publisher": {

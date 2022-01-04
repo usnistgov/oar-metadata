@@ -32,7 +32,8 @@
     "landingPage": "https://www.nist.gov/itl/iad/image-group/nist-special-database-301",
     "title": "NIST Special Database 301 Nail to Nail (N2N) Fingerprint Challenge Dry Run",
     "theme": [
-        "Information Technology:Biometrics"
+        "Information Technology:Biometrics",
+        "Forensics:Biometrics"
     ],
     "version": "1.0.4",
     "programCode": [
@@ -121,6 +122,12 @@
     ],
     "@type": [
         "nrdp: IncludedResource",
-        "nrdp:PublicDataResource"
-    ]
+        "nrdp: PublicDataResource"
+    ],
+    "isPartOf": [{
+        "title": "NIST Research in Biometric forensics. ",
+        "proxyFor": "ark:/88434/mds991122",
+        "resType": [ "nrdp: Aggregation",
+            "nrdp: PublicDataResource" ]
+    }]
 }

@@ -10,34 +10,49 @@
         "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
     ],
     "landingPage": "https://www.nist.gov/itl/iad/image-group",
-    "title": "NIST Research in Biometric technology under forensics. ",
+    "title": "NIST Research in Biometric forensics.",
     "theme": [
-        "Information Technology:Biometrics"
+        "Information Technology:Biometrics",
+        "Forensics:Biometrics"
     ],
-    "version": "1.0.4",
+    "version": "1.0.0",
     "programCode": [
         "006:045"
     ],
     "@context": [
         "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
         {
-            "@base": "ark:/88434/mds11ckbd2"
+            "@base": "ark:/88434/mds991122"
         }
     ],
     "description": [
-        "In April 2017, the Intelligence Advanced Research Projects Activity (IARPA) held a dry run for the data collection portion of its Nail to Nail (N2N) Fingerprint Challenge. This data collection event was designed to ensure that the real data collection event held in September 2017 would be successful. To this end, biometric data from unhabituated individuals needed to be collected. That data is now released by NIST as Special Database 301.",
-        "In total, 14 fingerprint sensors were deployed during the data collection, amassing a series of rolled and plain images. The devices include rolled fingerprints captured by skilled experts from the Federal Bureau of Investigation (FBI) Biometric Training Team. Captures of slaps, palms, and other plain impression fingerprint impressions were additionally recorded.",
-        "NIST also partnered with the FBI and Schwarz Forensic Enterprises to design activity scenarios in which subjects would likely leave fingerprints on different objects. The activities and associated objects were chosen in order to use a number of latent print development techniques and simulate the types of objects often found in real law enforcement case work. NIST also collected some mugshot-style face and iris images of the subjects who participated in the dry run. These data are also available for download."
-    ],
+        "This is Biometrics research projects collection. There are many different projects are created here."    ],
     "bureauCode": [
         "006:55"
     ],
     "contactPoint": {
-        "hasEmail": "mailto:patricia.flanagan@nist.gov",
-        "fn": "Patricia A. Flanagan"
+        "hasEmail": "mailto:biometrics@nist.gov",
+        "fn": "NIST Biometrics Group"
     },
+
+    "Creators": [
+        {
+        "middleName": "",
+        "familyName": "Fiumara",
+        "affiliation": [
+        {
+        "@type": "org:Organization",
+        "title": "NIST Forensics division"
+        }
+        ],
+        "orcid": "",
+        "givenName": "Gregory",
+        "@type": "foaf:Person",
+        "fn": "Greg Fiumara"
+        }
+        ],
     "accessLevel": "public",
-    "@id": "ark:/88434/mds11ckbd2",
+    "@id": "ark:/88434/mds991122",
     "publisher": {
         "name": "National Institute of Standards and Technology",
         "@type": "org:Organization"
@@ -47,32 +62,25 @@
     "language": [
         "en"
     ],
-    "modified": "2018-06-14 00:00:00",
+    "modified": "2022-01-01 12:01:02",
     "ediid": "6F1714704711023AE053245706818C1A1936",
-    "components": [
-        {
-            "accessURL": "https://doi.org/10.18434/T4/1502474",
-            "description": "DOI Access to NIST Special Database 301 Nail to Nail (N2N) Fingerprint Challenge Dry Run",
-            "format": "text/html",
-            "title": "DOI Access to NIST Special Database 301 Nail to Nail (N2N) Fingerprint Challenge Dry Run",
-            "@id": "#doi:10.18434/T4/1502474",
-            "@type": [
-                "nrd:Hidden",
-                "dcat:Distribution"
-            ]
-        }
-    ],
     "versionHistory": [
         {
-            "issued": "2018-06-14",
+            "issued": "2021-12-31",
             "version": "1.0.0",
-            "@id": "ark:/88434/mds11ckbd2",
-            "location": "https://data.nist.gov/od/id/ark:/88434/mds11ckbd2",
+            "@id": "ark:/88434/mds991122",
+            "location": "https://data.nist.gov/od/id/ark:/88434/mds991122",
             "description": "initial release"
         }
     ],
     "@type": [
-        "nrdp: ResearchInitiative",
+        "nrdp: Aggregation",
         "nrdp: PublicDataResource"
-    ]
+    ],
+    "isPartOf": [{
+        "title": "NIST Forensics Research. ",
+        "proxyFor": "ark:/88434/mds9911",
+        "resType": [ "nrdp: ScienceInitiative",
+            "nrdp: PublicDataResource" ]
+    }]
 }
