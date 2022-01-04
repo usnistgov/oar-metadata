@@ -26,7 +26,8 @@
         }
     ],
     "description": [
-        "This is Biometrics research projects collection. There are many different projects are created here."    ],
+        "This is Biometrics research projects collection. There are many different projects are created here."
+    ],
     "bureauCode": [
         "006:55"
     ],
@@ -34,23 +35,6 @@
         "hasEmail": "mailto:biometrics@nist.gov",
         "fn": "NIST Biometrics Group"
     },
-
-    "Creators": [
-        {
-        "middleName": "",
-        "familyName": "Fiumara",
-        "affiliation": [
-        {
-        "@type": "org:Organization",
-        "title": "NIST Forensics division"
-        }
-        ],
-        "orcid": "",
-        "givenName": "Gregory",
-        "@type": "foaf:Person",
-        "fn": "Greg Fiumara"
-        }
-        ],
     "accessLevel": "public",
     "@id": "ark:/88434/mds991122",
     "publisher": {
@@ -77,10 +61,35 @@
         "nrdp: Aggregation",
         "nrdp: PublicDataResource"
     ],
-    "isPartOf": [{
-        "title": "NIST Forensics Research. ",
-        "proxyFor": "ark:/88434/mds9911",
-        "resType": [ "nrdp: ScienceInitiative",
-            "nrdp: PublicDataResource" ]
-    }]
+    "Creators": [
+        {
+            "middleName": "",
+            "familyName": "Fiumara",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Gregory",
+            "@type": "foaf:Person",
+            "fn": "Greg Fiumara"
+        }
+    ],
+    "aggregation-components": [
+        {
+            "searchURL": "/rmm/records?isPartOf.proxyFor=ark:/88434/mds991122"
+        }
+    ],
+    "isPartOf": [
+        {
+            "title": "NIST Forensics Research. ",
+            "proxyFor": "ark:/88434/mds9911",
+            "resType": [
+                "nrdp: ScienceInitiative",
+                "nrdp: PublicDataResource"
+            ]
+        }
+    ]
 }

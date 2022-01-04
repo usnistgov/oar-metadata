@@ -10,7 +10,9 @@
     "definitions": {
         "Aggregation": {
             "description": "Agregation of different resources published with PDR and are part of a science initiative",
-            "notes": [ "" ],
+            "notes": [
+                ""
+            ],
             "allOf": [
                 {
                     "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Resource"
@@ -27,14 +29,11 @@
                             },
                             "uniqueItems": true
                         },
-                        "aggre-components": {
-                            "title": "AggregationComponents",
-                            "description": "a listing of the various component resources",
+                        "aggregation-components": {
+                            "title": "Aggregation Components",
+                            "description": "a listing of the various aggregation resources",
                             "notes": [
-                                "Records for the resources referenced in this list should specify this resource in its isPartOf field.",
-                                "The @type property will indicate which type of component it is.  The first value in the @type list should be considered the primary or most important classification.",
-                                "If an item's @type includes dcat:Distribution, the item should be convertable to a distribution in the POD schema.",
-                                "The order should be considered meaningful (at least for components of the same type).  The meaning or intention behind the order can depend on the type; however, generally, display of the components of a common type should preserve the order.  For clarity then, it is recommended that items of the same primary type should be grouped together in the list."
+                                 ""
                             ],
                             "type": "array",
                             "items": {
@@ -48,6 +47,29 @@
                             }
                         }
                     }
+                }
+            ]
+        },
+        "DynamicResourceSet": {
+            "description": "this provides a search query to get all the resources part of this aggregation",
+            "notes": [
+                "Provide this component even if the accessURL is the same as the landing page; this indicates that the landing page provides a search tool in it."
+            ],
+            "allOf": [
+                {
+                    "$ref": "#/definitions/DynamicResourceSet"
+                },
+                {
+                    "properties": {
+                        "searchURL": {
+                            "description": "the URL for querying service to get list of resources",
+                            "type": "string",
+                            "format": "uri"
+                        }
+                    },
+                    "required": [
+                        "searchURL"
+                    ]
                 }
             ]
         },
@@ -80,24 +102,6 @@
                             ]
                         ]
                     }
-                },
-                "title": {
-                    "description": "a descriptive title for the component",
-                    "type": "string",
-                    "mergeStrategy": "preferBase"
-                },
-                "description": {
-                    "description": "a description of the nature and contents of the component, including the role it plays as part of the resource",
-                    "type": "string",
-                    "mergeStrategy": "preferBase"
-                },
-                "topic": {
-                    "description": "Identified tags referring to things or concepts that this component addresses or speaks to",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Topic"
-                    },
-                    "mergeStrategy": "topicArray"
                 },
                 "conformsTo": {
                     "title": "Standard",
