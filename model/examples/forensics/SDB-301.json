@@ -33,7 +33,8 @@
     "title": "NIST Special Database 301 Nail to Nail (N2N) Fingerprint Challenge Dry Run",
     "theme": [
         "Information Technology:Biometrics",
-        "Forensics:Biometrics"
+        "Forensics:Biometrics",
+        "Forensics: Biometrics: Fingerprints"
     ],
     "version": "1.0.4",
     "programCode": [

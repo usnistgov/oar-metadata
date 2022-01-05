@@ -34,7 +34,9 @@
     "title": "NIST Special Database 300 Uncompressed Plain and Rolled Images from Fingerprint Cards",
     "theme": [
         "Information Technology:Biometrics",
-        "Forensics:Biometrics"
+        "Forensics:Biometrics",
+        "Forensics: Biometrics: Fingerprints: Rolled",
+        "Forensics: Biometrics: Fingerprints: Plain"
     ],
     "version": "1.0.2",
     "programCode": [
