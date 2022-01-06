@@ -77,7 +77,7 @@
             "fn": "Greg Fiumara"
         }
     ],
-    "aggregation-components": [
+    "componenets": [
         {
             "searchURL": "/rmm/records?isPartOf.proxyFor=ark:/88434/mds991122"
         }
