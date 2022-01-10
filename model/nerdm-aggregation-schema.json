@@ -3,7 +3,7 @@
     "$extensionSchemas": [
         "https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"
     ],
-    "id": "https://data.nist.gov/od/dm/science-initiative-schema/v0.1#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#",
     "rev": "wd1",
     "title": "The JSON Schema for specific science domains",
     "description": "A JSON Schema which helps add different science initiatives and related projects together",
@@ -22,38 +22,30 @@
                     "properties": {
                         "creators": {
                             "title": "Creators",
-                            "description": "An individual or an organization responsible of this collection of resources",
+                            "description": "The individuals that created this aggregation and initially defined its memebership",
                             "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Person"
-                            },
+                            "items": { "$ref": "#/definitions/Person" },
                             "uniqueItems": true
-                        },
-                        "aggregation-components": {
-                            "title": "Aggregation Components",
-                            "description": "a listing of the various aggregation resources",
-                            "notes": [
-                                ""
-                            ],
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/AggregationComponent"
-                            },
-                            "minLength": 1,
-                            "uniqueItems": true,
-                            "mergeStrategy": "arrayMergeById",
-                            "mergeOptions": {
-                                "idRef": "/@id"
-                            }
                         }
                     }
                 }
             ]
         },
+        
+        "ScienceTheme": {
+            "description": "An aggregation of resources that are considered contributions to a particular science or research theme.",
+            "notes": [
+                "Although this type defines no new properties beyond those inherited from its parent type (Aggregation), it is expected that instances will often make use of vocabularies specific to the science theme."
+            ],
+            "allOf": [
+                { "$ref": "#/definitions/Aggregation" }
+            ]
+            
+        },
+
         "DynamicResourceSet": {
             "description": "this provides a search query to get all the resources part of this aggregation",
             "notes": [
-                ""
             ],
             "allOf": [
                 {
@@ -70,59 +62,6 @@
                     "required": [
                         "searchURL"
                     ]
-                }
-            ]
-        },
-        "AggregationComponent": {
-            "description": "a description of a component of a resource",
-            "type": "object",
-            "notes": [
-                "Include a $extensionSchema property to validate this description against a Component sub-type"
-            ],
-            "allOf": [
-                {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Components"
-                },
-                {
-                    "properties": {
-                        "@type": {
-                            "description": "the types of components that this component can be classified as",
-                            "notes": [
-                                "the first value should be considered its primary type.  This is usually a subtype of Component."
-                            ],
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            },
-                            "mergeStrategy": "uniqueArray",
-                            "mergeOptions": {
-                                "incompatible": [
-                                    [
-                                        "nrdp:Subcollection",
-                                        "nrd:Hidden",
-                                        "nrdp:AccessPage",
-                                        "nrdp:IncludedResource",
-                                        "nrdp:DynamicResourceSet",
-                                        "nrdp:SearchPage"
-                                    ]
-                                ]
-                            }
-                        },
-                        "conformsTo": {
-                            "title": "Standard",
-                            "description": "URI used to identify a standardized specification the component conforms to",
-                            "anyOf": [
-                                {
-                                    "type": "string",
-                                    "format": "uri"
-                                },
-                                {
-                                    "type": "null"
-                                }
-                            ],
-                            "mergeStrategy": "preferBase"
-                        }
-                    }
                 }
             ]
         }
