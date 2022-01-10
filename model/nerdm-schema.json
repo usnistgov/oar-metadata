@@ -307,18 +307,17 @@
                 },
 
                 "isPartOf": {
-                    "title": "Collection",
-                    "description": "The collection of which the dataset is a subset",
+                    "title": "Collections",
+                    "description": "The collections that this dataset formally belongs to"
                     "notes": [
                         "This property indicates relation of different resources"
                     ],
                     "type": "array",
-                    "items": { "type": "string", "minLength": 1 },
-                    "$ref": "#/definitions/ResourceReference",
+                    "items": { "$ref": "#/definitions/ResourceReference" },
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Collection",
-                        "referenceProperty": "dcat:isPartOf"
+                        "referenceProperty": "dct:isPartOf"
                     }
                 },
                              
