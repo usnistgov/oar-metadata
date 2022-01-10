@@ -308,7 +308,7 @@
 
                 "isPartOf": {
                     "title": "Collections",
-                    "description": "The collections that this dataset formally belongs to"
+                    "description": "The collections that this dataset formally belongs to",
                     "notes": [
                         "This property indicates relation of different resources"
                     ],
