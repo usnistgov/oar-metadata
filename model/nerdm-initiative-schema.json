@@ -17,9 +17,8 @@
                 },
                 {
                     "type": "object",
-                    "properties": { 
-
-                        "researchProgram":{
+                    "properties": {
+                        "researchProgram": {
                             "investigators": {
                                 "title": "Individuals responsible for the project",
                                 "description": " This can be a person or group of people who are project investigators",
@@ -31,9 +30,8 @@
                                     "$ref": "#/definitions/Person"
                                 },
                                 "uniqueItems": true
-                                
                             },
-                            "researchParticipants":{
+                            "researchParticipants": {
                                 "title": "Groups/parties involved in this research program",
                                 "description": " This can be a person or group of people who are project investigators",
                                 "notes": [
@@ -45,18 +43,14 @@
                                 },
                                 "uniqueItems": true
                             },
-
-                            "researchtopic":{
-                                "title":"Research Initiative Topic",
+                            "researchtopic": {
+                                "title": "Research Initiative Topic",
                                 "description": "Specific research area name , this is special type of aggregation which is broad umbrella of sub projects"
                             }
-
                         }
-
-
                     }
                 }
-            ]            
+            ]
         }
     }
 }

@@ -33,7 +33,7 @@
                             "title": "Aggregation Components",
                             "description": "a listing of the various aggregation resources",
                             "notes": [
-                                 ""
+                                ""
                             ],
                             "type": "array",
                             "items": {
@@ -56,7 +56,9 @@
                 ""
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component" },
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component"
+                },
                 {
                     "properties": {
                         "searchURL": {
@@ -77,45 +79,52 @@
             "notes": [
                 "Include a $extensionSchema property to validate this description against a Component sub-type"
             ],
-            "properties": {
-                "@type": {
-                    "description": "the types of components that this component can be classified as",
-                    "notes": [
-                        "the first value should be considered its primary type.  This is usually a subtype of Component."
-                    ],
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "mergeStrategy": "uniqueArray",
-                    "mergeOptions": {
-                        "incompatible": [
-                            [
-                                "nrdp:Subcollection",
-                                "nrd:Hidden",
-                                "nrdp:AccessPage",
-                                "nrdp:IncludedResource",
-                                "nrdp:DynamicResourceSet",
-                                "nrdp:SearchPage"
-                            ]
-                        ]
-                    }
+            "allOf": [
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Components"
                 },
-                "conformsTo": {
-                    "title": "Standard",
-                    "description": "URI used to identify a standardized specification the component conforms to",
-                    "anyOf": [
-                        {
-                            "type": "string",
-                            "format": "uri"
+                {
+                    "properties": {
+                        "@type": {
+                            "description": "the types of components that this component can be classified as",
+                            "notes": [
+                                "the first value should be considered its primary type.  This is usually a subtype of Component."
+                            ],
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            },
+                            "mergeStrategy": "uniqueArray",
+                            "mergeOptions": {
+                                "incompatible": [
+                                    [
+                                        "nrdp:Subcollection",
+                                        "nrd:Hidden",
+                                        "nrdp:AccessPage",
+                                        "nrdp:IncludedResource",
+                                        "nrdp:DynamicResourceSet",
+                                        "nrdp:SearchPage"
+                                    ]
+                                ]
+                            }
                         },
-                        {
-                            "type": "null"
+                        "conformsTo": {
+                            "title": "Standard",
+                            "description": "URI used to identify a standardized specification the component conforms to",
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "format": "uri"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "mergeStrategy": "preferBase"
                         }
-                    ],
-                    "mergeStrategy": "preferBase"
+                    }
                 }
-            }
+            ]
         }
     }
 }
