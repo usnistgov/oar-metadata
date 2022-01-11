@@ -168,11 +168,15 @@ class NERDmLoader(_NERDmRenditionLoader):
         """
         if not results:
             results = self._mkloadlog()
+        errs = []
 
         # the input is a versioned Resource record; convert it into its three parts for the three
         # collections (record, versions, releaseSets)
-        parts = self.tormm.convert(rec, validate=False)
-        errs = []
+        try:
+            parts = self.tormm.convert(rec, validate=False)
+        except (ValueError, ValidationError) as ex:
+            return results.add(id or json.dumps({'@id': rec.get('@id','?')}), ex)
+
         for prop in "record version releaseSet".split():
             if prop not in parts or not isinstance(parts[prop], Mapping):
                 errs.append(
@@ -192,8 +196,8 @@ class NERDmLoader(_NERDmRenditionLoader):
         except KeyError as ex:
             if id is None:
                 id = json.dumps({'@id': '?'})
-            return results.add(id,
-                     RecordIngestError("Data is missing input key value, @id"))
+            return results.add(id, RecordIngestError("Data is missing input key value, @id"))
+
         if id is None:
             id = key
 
@@ -232,7 +236,12 @@ class NERDmLoader(_NERDmRenditionLoader):
             try:
                 data = json.load(fd)
             except ValueError as ex:
-                raise JSONEncodingError(ex)
+                ex = JSONEncodingError(ex)
+                if not results:
+                    raise ex
+                results.add(filepath, ex)
+                return results
+
         return self.load(data, validate=validate, results=results, id=filepath)
 
     def load_from_dir(self, dirpath, validate=True, results=None):
