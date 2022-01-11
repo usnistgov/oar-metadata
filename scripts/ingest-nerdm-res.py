@@ -5,7 +5,7 @@
 #
 # Load NERDm JSON files into the RMM
 #
-import os, sys, errno, json, re, warnings
+import os, sys, errno, json, re, warnings, shutil
 from argparse import ArgumentParser
 
 basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -54,8 +54,8 @@ def define_opts(progname=None):
                              "ingesting them")
     parser.add_argument('-A', '--archive-records', dest='archdir', metavar="DIR",
                         action='store', default=None,
-                        help="after successfully loading each record, save a copy "+
-                             "of it in the directory DIR")
+                        help="after successfully loading each record, move the "+
+                             "record file to the archive directory DIR")
     parser.add_argument('-q', '--quiet', dest='quiet', default=False,
                         action="store_true",
                         help="do not print non-fatal status messages")
@@ -161,8 +161,7 @@ def load_from_file(filepath, loader, validate=True, archdir=None, results=None):
         outfile = os.path.join(archdir, "%s-v%s.json" % (os.path.basename(recid), ver))
 
         # this should not raise errors, but if it does, let it bubble up
-        with open(outfile, 'w') as fd:
-            json.dump(data, fd, indent=2)
+        shutil.move(filepath, outfile)
             
     return out
 
