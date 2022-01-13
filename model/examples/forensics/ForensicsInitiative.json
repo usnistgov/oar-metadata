@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [],
     "keyword": [
         "latent",
@@ -9,9 +9,9 @@
     ],
     "_extensionSchemas": [
         "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource",
-        "https://data.nist.gov/od/dm/nerdm-schema/science-initiative-schema/v0.1#/definitions/ResearchInitiative"
+        "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/ScienceTheme"
     ],
-    "landingPage": "https://www.nist.gov/forensic-science/research-focus-areas",
+    "landingPage": "https://www.nist.gov/forensic-science",
     "title": "NIST scientific research in different aspects of forensics and related fields.",
     "theme": [
         "Information Technology",
@@ -38,36 +38,6 @@
         "hasEmail": "mailto:barbara.guttman@nist.gov",
         "fn": "Barbara Guttman"
     },
-    "investigators": [
-        {
-            "middleName": "",
-            "familyName": "Guttman",
-            "affiliation": [
-            {
-            "@type": "org:Organization",
-            "title": "NIST Forensics division"
-            }
-            ],
-            "orcid": "",
-            "givenName": "Barbara",
-            "@type": "foaf:Person",
-            "fn": "Barbara Guttman"
-            },
-        {
-        "middleName": "",
-        "familyName": "Fiumara",
-        "affiliation": [
-        {
-        "@type": "org:Organization",
-        "title": "NIST Forensics division"
-        }
-        ],
-        "orcid": "",
-        "givenName": "Gregory",
-        "@type": "foaf:Person",
-        "fn": "Greg Fiumara"
-        }
-        ],
     "accessLevel": "public",
     "@id": "ark:/88434/mds9911",
     "publisher": {

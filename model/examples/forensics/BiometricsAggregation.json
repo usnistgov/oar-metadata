@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [],
     "keyword": [
         "latent",
@@ -7,7 +7,8 @@
         "forensics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource",
+        "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Aggregation"
     ],
     "landingPage": "https://www.nist.gov/itl/iad/image-group",
     "title": "NIST Research in Biometric forensics.",
@@ -79,17 +80,18 @@
     ],
     "componenets": [
         {
-            "searchURL": "/rmm/records?isPartOf.proxyFor=ark:/88434/mds991122"
+            "@type": [ "nrda:DynamicResourceSet" ],
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet"
+            ],
+            "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122"
         }
     ],
     "isPartOf": [
         {
             "title": "NIST Forensics Research. ",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrdp: ScienceInitiative",
-                "nrdp: PublicDataResource"
-            ]
+            "@id": "ark:/88434/mds9911",
+            "@type": [ "nrdp: ScienceTheme", "nrdp: PublicDataResource" ]
         }
     ]
 }
