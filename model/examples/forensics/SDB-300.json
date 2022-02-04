@@ -72,7 +72,7 @@
         "en"
     ],
     "modified": "2018-06-12 00:00:00",
-    "ediid": "6B5200EAC9FB2EB1E0532457068101C91919",
+    "ediid": "ark:/88434/mds1068c0v",
     "components": [
         {
             "accessURL": "https://doi.org/10.18434/T4/1502472",
@@ -110,7 +110,8 @@
         }
     ],
     "@type": [
-        "nrdp:PublicDataResource"
+        "nrdp:PublicDataResource",
+        "nrda:DynamicResourceSet"
     ],
     "isPartOf": [{
         "title": "NIST Research in Biometric forensics. ",

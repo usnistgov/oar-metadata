@@ -59,10 +59,10 @@
         }
     ],
     "@type": [
-        "nrdp: Aggregation",
+        "nrda: ScienceTheme",
         "nrdp: PublicDataResource"
     ],
-    "Creators": [
+    "Facilitators": [
         {
             "middleName": "",
             "familyName": "Fiumara",
@@ -75,16 +75,35 @@
             "orcid": "",
             "givenName": "Gregory",
             "@type": "foaf:Person",
-            "fn": "Greg Fiumara"
+            "fn": "Greg Fiumara",
+            "jobTitle" : "PI"
+        }
+    ],
+    "Creators": [
+        {
+            "middleName": "",
+            "familyName": "Brady",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Mary",
+            "@type": "foaf:Person",
+            "fn": "Mary Brady",
+            "jobTitle" : "PI"
         }
     ],
     "componenets": [
         {
-            "@type": [ "nrda:DynamicResourceSet" ],
+            "@type": [ "nrda:DynamicResourceSet","nrdp:SearchPage" ],
             "_extensionSchemas": [
                 "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet"
             ],
-            "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122"
+            "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122",
+            "name": "Biometrics Data"
         }
     ],
     "isPartOf": [
@@ -93,8 +112,8 @@
 
             "proxyFor": "ark:/88434/mds9911",
             "resType": [
-                "nrdp: SciecneTheme",
-                "nrdp: PublicDataResource"
+                "nrda:SciecneTheme",
+                "nrdp:PublicDataResource"
             ]
         }
     ]

@@ -31,16 +31,49 @@
                 }
             ]
         },
-        
-        "ScienceTheme": {
-            "description": "An aggregation of resources that are considered contributions to a particular science or research theme.",
-            "notes": [
-                "Although this type defines no new properties beyond those inherited from its parent type (Aggregation), it is expected that instances will often make use of vocabularies specific to the science theme."
-            ],
+
+
+
+        "Creators":{
+            "description": "This field  is to give option of adding information of people in-charge in different roles",
+            "type": "array",
             "allOf": [
-                { "$ref": "#/definitions/Aggregation" }
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Person"
+                },
+                
+                {
+                
+            "properties":{
+                
+                "Title":{
+                    "description": "This field helps list the job title or role of the person for this project.",
+                    "type": "string"
+                }
+
+            }}
             ]
-            
+        },    
+
+        "Facilitators":{
+            "description": "This field  is to include list of people who are helping project in various ways. These need not be the PIs or product owners",
+            "type": "array",
+            "allOf": [
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Person"
+                },
+                
+                {
+                
+            "properties":{
+                
+                "jobTitle":{
+                    "description": "This field helps list the job title or role of the person for this project.",
+                    "type": "string"
+                }
+
+            }}
+            ]
         },
 
         "DynamicResourceSet": {
@@ -57,6 +90,10 @@
                             "description": "the URL for querying service to get list of resources",
                             "type": "string",
                             "format": "uri"
+                        },
+                        "name":{
+                            "description": "The name of the dynamic resource type",
+                            "type": "string"
                         }
                     },
                     "required": [

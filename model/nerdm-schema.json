@@ -1073,6 +1073,17 @@
                 "prefLabel": "Identifier information",
                 "referenceClass": "mads:Identifier"
             }
+        },
+        "ScienceTheme": {
+            "description": "To indicate the group of records based on certain similar science initiatives.",
+            "notes": [
+                "This type can be used to create an aggregation of specific theme which is part of larger more generic science domain."
+            ],
+            "allOf": [
+                {
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Resource"
+                }
+            ]
         }
     },
 
