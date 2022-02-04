@@ -302,10 +302,10 @@
                             "type": "boolean",
                             "description": "A flag, if True, indicating the the hash value contained in this ChecksumFile is confirmed to be correct for its associated data file."
                         }
-                        
+                        ,
                         "describes": {
                             "type": "string",
-                            "format": "uri-reference"
+                            "format": "uri-reference",
                             "asOntology": {
                                 "@context": "profile-schema-onto.json",
                                 "prefLabel": "Checksum for",

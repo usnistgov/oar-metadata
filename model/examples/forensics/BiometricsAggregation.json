@@ -90,8 +90,12 @@
     "isPartOf": [
         {
             "title": "NIST Forensics Research. ",
-            "@id": "ark:/88434/mds9911",
-            "@type": [ "nrdp: ScienceTheme", "nrdp: PublicDataResource" ]
+
+            "proxyFor": "ark:/88434/mds9911",
+            "resType": [
+                "nrdp: SciecneTheme",
+                "nrdp: PublicDataResource"
+            ]
         }
     ]
 }
