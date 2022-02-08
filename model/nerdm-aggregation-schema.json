@@ -21,7 +21,7 @@
                     "type": "object",
                     "properties": {
                         "creators": {
-                            "title": "Creators",
+                            "title": "creators",
                             "description": "The individuals that created this aggregation and initially defined its memebership",
                             "type": "array",
                             "items": { "$ref": "#/definitions/Person" },
@@ -34,7 +34,7 @@
 
 
 
-        "Creators":{
+        "creators":{
             "description": "This field  is to give option of adding information of people in-charge in different roles",
             "type": "array",
             "allOf": [
@@ -55,7 +55,7 @@
             ]
         },    
 
-        "Facilitators":{
+        "facilitators":{
             "description": "This field  is to include list of people who are helping project in various ways. These need not be the PIs or product owners",
             "type": "array",
             "allOf": [
