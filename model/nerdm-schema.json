@@ -872,6 +872,7 @@
                     }
                 },
 
+                
                 "scheme": {
                     "description": "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in.",
                     "type": "string",

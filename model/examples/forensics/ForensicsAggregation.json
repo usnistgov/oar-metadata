@@ -59,7 +59,7 @@
             "description": "initial release"
         }
     ],
-    "Facilitators": [
+    "facilitators": [
         {
             "middleName": "",
             "familyName": "Guttman",
@@ -98,7 +98,7 @@
     "componenets": [
         {
             "@type": [
-                "nrda:DynamicResourceSet"
+                "nrda:DynamicResourceSet", "nrdp:SearchPage"
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122",
             "name": "NIST forensics aggregation"
