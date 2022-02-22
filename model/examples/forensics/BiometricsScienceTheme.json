@@ -107,7 +107,7 @@
             "jobTitle": "PI"
         }
     ],
-    "componenets": [
+    "components": [
         {
             "@type": [
                 "nrda:DynamicResourceSet",
