@@ -95,7 +95,7 @@
         "nrda: Aggregation",
         "nrdp: PublicDataResource"
     ],
-    "componenets": [
+    "components": [
         {
             "@type": [
                 "nrda:DynamicResourceSet", "nrdp:SearchPage"
