@@ -113,6 +113,16 @@
     ],
     "@type": [
         "nrdp:PublicDataResource",
-        "dcat:Dataset"
+        "nrda:DynamicResourceSet"
+    ],
+    "isPartOf": [
+        {
+            "title": "NIST Research in DNA and biological evidence. ",
+            "proxyFor": "ark:/88434/mds991133",
+            "resType": [
+                "nrda: ScienceTheme",
+                "nrdp: PublicDataResource"
+            ]
+        }
     ]
 }
