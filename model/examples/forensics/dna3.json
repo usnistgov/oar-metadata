@@ -105,8 +105,16 @@
     ],
     "isPartOf": [
         {
-            "title": "NIST Research in DNA and biological evidence. ",
+            "title": "DNA and Biological Evidence data collection",
             "proxyFor": "ark:/88434/mds991133",
+            "resType": [
+                "nrda: ScienceTheme",
+                "nrdp: PublicDataResource"
+            ]
+        },
+        {
+            "title": "Forensics Data Collection",
+            "proxyFor": "ark:/88434/mds9911",
             "resType": [
                 "nrda: ScienceTheme",
                 "nrdp: PublicDataResource"

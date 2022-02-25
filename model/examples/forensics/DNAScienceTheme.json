@@ -110,12 +110,13 @@
                 "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet"
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991133",
-            "name": "DNA and Biological Evidence data"
+            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds991133",
+            "title": "DNA and Biological Evidence data collection"
         }
     ],
     "isPartOf": [
         {
-            "title": "NIST Forensics Research.",
+            "title": "Forensics Data Collection",
             "proxyFor": "ark:/88434/mds9911",
             "resType": [
                 "nrda:Aggregation",

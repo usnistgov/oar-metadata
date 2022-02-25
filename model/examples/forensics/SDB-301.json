@@ -141,10 +141,22 @@
         "nrdp: IncludedResource",
         "nrdp: PublicDataResource"
     ],
-    "isPartOf": [{
-        "title": "NIST Research in Biometric forensics. ",
-        "proxyFor": "ark:/88434/mds991122",
-        "resType": [ "nrdp: Aggregation",
-            "nrdp: PublicDataResource" ]
-    }]
+    "isPartOf": [
+        {
+            "title": "Biometrics Data Collection",
+            "proxyFor": "ark:/88434/mds991122",
+            "resType": [
+                "nrdp: Aggregation",
+                "nrdp: PublicDataResource"
+            ]
+        },
+        {
+            "title": "Forensics Data Collection",
+            "proxyFor": "ark:/88434/mds9911",
+            "resType": [
+                "nrda: ScienceTheme",
+                "nrdp: PublicDataResource"
+            ]
+        }
+    ]
 }

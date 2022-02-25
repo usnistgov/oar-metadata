@@ -55,7 +55,7 @@
     "title": "NIST Special Database 300 Uncompressed Plain and Rolled Images from Fingerprint Cards",
     "theme": [
         "Information Technology:Biometrics",
-        "Forensics:Biometrics",
+        "Forensics: Biometrics",
         "Forensics: Biometrics: Fingerprints: Rolled",
         "Forensics: Biometrics: Fingerprints: Plain"
     ],
@@ -138,6 +138,14 @@
         {
             "title": "NIST Research in Biometric forensics. ",
             "proxyFor": "ark:/88434/mds991122",
+            "resType": [
+                "nrda: ScienceTheme",
+                "nrdp: PublicDataResource"
+            ]
+        },
+        {
+            "title": "Forensics Data Collection",
+            "proxyFor": "ark:/88434/mds9911",
             "resType": [
                 "nrda: ScienceTheme",
                 "nrdp: PublicDataResource"

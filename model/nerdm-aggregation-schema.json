@@ -90,10 +90,6 @@
                             "description": "the URL for querying service to get list of resources",
                             "type": "string",
                             "format": "uri"
-                        },
-                        "name":{
-                            "description": "The name of the dynamic resource type",
-                            "type": "string"
                         }
                     },
                     "required": [
