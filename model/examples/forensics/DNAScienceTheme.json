@@ -52,7 +52,7 @@
         "en"
     ],
     "modified": "2022-01-01 12:01:02",
-    "ediid": "6F1714704711023AE053245706818C1A1936",
+    "ediid": "ark:/88434/mds991122",
     "versionHistory": [
         {
             "issued": "2021-12-31",
@@ -66,7 +66,7 @@
         "nrda: ScienceTheme",
         "nrdp: PublicDataResource"
     ],
-    "Facilitators": [
+    "facilitators": [
         {
             "middleName": "",
             "familyName": "Fiumara",
@@ -83,7 +83,7 @@
             "jobTitle": "PI"
         }
     ],
-    "Creators": [
+    "creators": [
         {
             "middleName": "",
             "familyName": "Brady",
@@ -119,6 +119,7 @@
             "title": "Forensics Data Collection",
             "proxyFor": "ark:/88434/mds9911",
             "resType": [
+                "nrda:ScienceTheme",
                 "nrda:Aggregation",
                 "nrdp:PublicDataResource"
             ]

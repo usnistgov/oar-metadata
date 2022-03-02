@@ -125,7 +125,7 @@
             "title": "Biometrics Data Collection",
             "proxyFor": "ark:/88434/mds991122",
             "resType": [
-                "nrdp: Aggregation",
+                "nrda: Aggregation",
                 "nrdp: PublicDataResource"
             ]
         },

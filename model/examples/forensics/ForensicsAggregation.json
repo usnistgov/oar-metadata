@@ -94,7 +94,7 @@
             "givenName": "Barbara",
             "@type": "foaf:Person",
             "fn": "Barbara Guttman",
-            "title": "PI"
+            "jobTitle": "PI"
         },
         {
             "middleName": "",
@@ -109,7 +109,7 @@
             "givenName": "Gregory",
             "@type": "foaf:Person",
             "fn": "Greg Fiumara",
-            "title": "Project Manager"
+            "jobTitle": "Project Manager"
         }
     ],
     "@type": [
@@ -122,7 +122,7 @@
                 "nrda:DynamicResourceSet", "nrdp:SearchPage"
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds9911",
-            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds9911",
+            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds9911&scienceTheme=forensics",
             "title": "Forensics Data Collection",
             "decription": "The search URL here queries all the data which is part of Forensics data collection."
         }
