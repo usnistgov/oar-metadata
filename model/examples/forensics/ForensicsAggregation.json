@@ -122,9 +122,28 @@
                 "nrda:DynamicResourceSet", "nrdp:SearchPage"
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds9911",
-            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds9911&scienceTheme=forensics",
-            "title": "Forensics Data Collection",
+            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds9911&alternateView=forensics",
+            "title": "All Forensics Data Collection",
             "decription": "The search URL here queries all the data which is part of Forensics data collection."
+        },
+        {
+            "@type": [
+                "nrda:DynamicResourceSet", "nrdp:SearchPage"
+            ],
+            "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991133",
+            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds991133&alternateView=forensics",
+            "title": "DNA and Biological Evidence data collection",
+            "decription": "Search URL for the DNA and Biological evidence data collection."
+        },
+        {
+            "@type": [
+                "nrda:DynamicResourceSet", "nrdp:SearchPage"
+            ],
+            "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122",
+            "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds991122&alternateView=forensics",
+            "title": "Biometrics Data Collection",
+            "decription": "Search URL for the biometrics data collection."
         }
+
     ]
 }

@@ -73,7 +73,7 @@
         "nrda: ScienceTheme",
         "nrdp: PublicDataResource"
     ],
-    "Facilitators": [
+    "facilitators": [
         {
             "middleName": "",
             "familyName": "Fiumara",
@@ -90,7 +90,7 @@
             "jobTitle": "PI"
         }
     ],
-    "Creators": [
+    "creators": [
         {
             "middleName": "",
             "familyName": "Brady",
