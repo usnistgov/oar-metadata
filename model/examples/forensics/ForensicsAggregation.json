@@ -33,7 +33,7 @@
         "https://data.nist.gov/od/dm/nerdm-schema/science-initiative-schema/v0.1#/definitions/ResearchInitiative"
     ],
     "landingPage": "https://www.nist.gov/forensic-science/research-focus-areas",
-    "title": "NIST scientific research in different aspects of forensics and related fields.",
+    "title": "NIST Forensics Research Data",
     "theme": [
         "Information Technology",
         "Forensics",
@@ -56,8 +56,8 @@
         "006:55"
     ],
     "contactPoint": {
-        "hasEmail": "mailto:barbara.guttman@nist.gov",
-        "fn": "Barbara Guttman"
+        "hasEmail": "mailto:gregory.fiumara@nist.gov",
+        "fn": "Gregory Fiumara"
     },
     "accessLevel": "public",
     "@id": "ark:/88434/mds9911",
@@ -94,7 +94,7 @@
             "givenName": "Barbara",
             "@type": "foaf:Person",
             "fn": "Barbara Guttman",
-            "jobTitle": "PI"
+            "jobTitle": "Program Lead"
         },
         {
             "middleName": "",
@@ -102,14 +102,74 @@
             "affiliation": [
                 {
                     "@type": "org:Organization",
-                    "title": "NIST Forensics division"
+                    "title": "NIST Forensics Biometrics division"
                 }
             ],
             "orcid": "",
             "givenName": "Gregory",
             "@type": "foaf:Person",
-            "fn": "Greg Fiumara",
-            "jobTitle": "Project Manager"
+            "fn": "Gregory Fiumara",
+            "jobTitle": "Program Lead"
+        },
+        {
+            "middleName": "",
+            "familyName": "Navarro",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Marcela",
+            "@type": "foaf:Person",
+            "fn": "Marcela Navarro",
+            "jobTitle": "Program Lead"
+        },
+        {
+            "middleName": "",
+            "familyName": "Vallone",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Peter",
+            "@type": "foaf:Person",
+            "fn": "Peter Vallone",
+            "jobTitle": "Program Lead"
+        },
+        {
+            "middleName": "",
+            "familyName": "Lund",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Steve",
+            "@type": "foaf:Person",
+            "fn": "Steve Lund",
+            "jobTitle": "Program Lead"
+        },
+        {
+            "middleName": "",
+            "familyName": "Taylor",
+            "affiliation": [
+                {
+                    "@type": "org:Organization",
+                    "title": "NIST Forensics division"
+                }
+            ],
+            "orcid": "",
+            "givenName": "Melissa",
+            "@type": "foaf:Person",
+            "fn": "Melissa Taylor",
+            "jobTitle": "Program Lead"
         }
     ],
     "@type": [
