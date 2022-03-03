@@ -173,6 +173,7 @@
         }
     ],
     "@type": [
+        "nrda: ScienceTheme",
         "nrda: Aggregation",
         "nrdp: PublicDataResource"
     ],
