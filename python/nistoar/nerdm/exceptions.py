@@ -41,7 +41,7 @@ class NERDError(MetadataError):
     def __init__(self, msg=None, cause=None, src=None, sys=None):
         if not msg and not cause:
             msg = "Unknown NERD metadata error"
-        super(PODError, self).__init__(msg, cause, src, sys)
+        super(NERDError, self).__init__(msg, cause, src, sys)
     pass
 
 class NERDTypeError(NERDError):
