@@ -33,12 +33,14 @@ class NERDm2Latest(object):
     """
     _verextre = VERSION_EXTENSION_RE 
 
-    def __init__(self, logger=None, massagers=None, defconv=[], defver=None, byext={}):
+    def __init__(self, logger=None, resolver=None, massagers=None, defconv=[], defver=None, byext={}):
         """
         initialize the updater with a set of available massagers provided as a dictionary: the keys
         are names of conventions for how information should be captured in a NERDm record, and the 
         values are functions that take a NERDm record as input 
         :param Logger  logger:  the log to write messages to; if None, no messages will be written
+        :param str   resolver:  the base URL for the ID resolver service.  This is used to set
+                                location of versioned releases.
         :param dict massagers:  a dictionary mapping convention names to functions to be applied to
                                 a NERDm record.
         :param str|list defconv: the default convention or conventions to apply.  These will be 
@@ -66,6 +68,9 @@ class NERDm2Latest(object):
         self.defver = defver
         self.byext = byext
         self._massagers = massagers
+        self.resolver_baseurl = resolver
+        if self.resolver_baseurl:
+            self.resolver_baseurl = self.resolver_baseurl.rstrip('/') + '/'
         if defconv is None:
             defconv = []
         elif isinstance(defconv, str):
@@ -130,37 +135,23 @@ class NERDm2Latest(object):
 
         return out
 
-    def create_release_ref(self, nerdm, defver="1.0.0"):
+    def create_release_ref_for(self, version, baseid=None):
         """
-        create a NERDm Release object (a reference to a versioned release of a reousrce) for the 
-        given NERDm Resource.
-        :param dict nerdm:   the NERDm Resource record to create a Release for
-        :param str devver:   the default version to assume if the given Resource does not have a 
-                               version property set
-        :rtype: OrderedDict
-        :return: the Release object refering to the nerdm input
+        create a bare-bones release reference object for a given base ID and version.  This 
+        implementation reflects PDR-specific conventions for IDs and ID resolution.
+        :param str version:  the version to create the reference object for
+        :param str  baseid:  the base PDR identifier (i.e. not version-specific) 
         """
-        version = nerdm.get('version')
-        if not version:
-            version = defver
+        out = OrderedDict([ ('version', version) ])
+        if baseid:
+            verid = baseid.rstrip('/')
+            if not self._verextre.search(verid):
+                verid += to_version_ext(version)
+            out['@id'] = verid
+        
+            if self.resolver_baseurl:
+                out['location'] = self.resolver_baseurl + verid
 
-        issued = None
-        for prop in "annotated revised issued modified".split(): 
-            issued = nerdm.get(prop)
-            if issued:
-                break
-
-        id = nerdm.get('@id')
-        if not self._verextre.search(id):
-            id += to_version_ext(version)
-
-        out = OrderedDict([("@id", id), ("version", version)])
-        if issued:
-            out['issued'] = issued
-        if nerdm.get('landingPage'):
-            out['location'] = nerdm.get('landingPage')
-
-        # PDR-specific?
         v = version.split('.')
         for i in range(len(v), 3):
             v.append('0')
@@ -171,6 +162,31 @@ class NERDm2Latest(object):
                 out['description'] = "data update"
             elif v[0] == '1':
                 out['description'] = "initial release"
+        
+        return out
+
+    def create_release_ref(self, nerdm, defver="1.0.0"):
+        """
+        create a NERDm Release object (a reference to a versioned release of a reousrce) for the 
+        given NERDm Resource.
+        :param dict nerdm:   the NERDm Resource record to create a Release for
+        :param str devver:   the default version to assume if the given Resource does not have a 
+                               version property set
+        :rtype: OrderedDict
+        :return: the Release object refering to the nerdm input
+        """
+        out = self.create_release_ref_for(nerdm.get('version', defver), nerdm.get('@id'))
+        
+        issued = None
+        for prop in "annotated revised issued modified".split(): 
+            issued = nerdm.get(prop)
+            if issued:
+                break
+
+        if issued:
+            out['issued'] = issued
+        if not out.get('location') and nerdm.get('landingPage'):
+            out['location'] = nerdm.get('landingPage')
 
         return out
 
