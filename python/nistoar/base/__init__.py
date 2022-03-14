@@ -94,11 +94,19 @@ class OARException(Exception):
                 message = str(cause)
             else:
                 message = "Unknown OAR exception occurred"
-        self.cause = cause
         if not sys:
             sys = SystemInfoMixin.get_global_system()
         self.system = sys
         super(OARException, self).__init__(message)
+        self.__cause__ = cause
+
+    @property
+    def cause(self):
+        """
+        return the exception instance that was set as the underlying cause for this exception.  This 
+        returns __cause__ and is provide for backward compatibility with legacy PDR code.
+        """
+        return self.__cause__
         
 class OARWarning(Warning):
     """
