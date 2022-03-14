@@ -16,7 +16,7 @@
     # @id is the requested ID to assign; if this ID cannot be assigned (because it is already being used
     # or it has an incorrect form, then the submission will be rejected.  If not provided, one will be
     # automatically defined.  (Optional)
-    "@id": "ark:/88434/cnr0-22872",
+    "@id": "cnr0:22872",
 
     "title": "Neutron Reflectometry of Electrochemically Grown Hydrous Iridium Oxide Films",  # required
     "contactPoint": {
@@ -71,10 +71,11 @@
     "components": [
         {
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage",
+                "https://data.nist.gov/od/dm/nerdm-schema/exp/v0.1#/definitions/ExperimentalContext"
             ],
             "@id": "components/201706",     # required: follow this form, including the activity ID
-            "@type": [ "nrdp:AccessPage" ], # required
+            "@type": [ "nrde:AcquisitionActivity", "nrdp:AccessPage" ], # required
 
             # required; this is a link to the page where the activity can be downloaded from
             "accessURL": "https://pub/ncnrdata/cgd/201706/22872/data",  
@@ -95,10 +96,11 @@
         },
         {
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage",
+                "https://data.nist.gov/od/dm/nerdm-schema/exp/v0.1#/definitions/ExperimentalContext"
             ],
             "@id": "components/201803",
-            "@type": [ "nrdp:AccessPage" ],
+            "@type": [ "nrde:AcquisitionActivity", "nrdp:AccessPage" ],
             "accessURL": "https://pub/ncnrdata/cgd/201803/22872/data",
             "title": "Download Access for Activity 201803",
             "format": {
