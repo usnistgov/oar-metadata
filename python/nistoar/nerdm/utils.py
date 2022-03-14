@@ -63,6 +63,34 @@ def which_type(nerdm, typenames):
             return name
     return None
 
+def _insert_before_val(vals, inval, *beforevals):
+    p = -1
+    for insertpt in beforevals:
+        try: 
+            p = vals.index(insertpt)
+            vals.insert(p, inval)
+            break
+        except ValueError:
+            continue
+    if p < 0:
+        vals.append(inval)
+    return vals
+
+def insert_type(nerdm, newtype, *beforetypes):
+    """
+    ensure that a given type is included among the values of the `@type` property.  
+    :param Mapping nerdm:  the NERDm object that is expected to have an @type property
+    :param str newtype:    the `@type` value to look for and insert if not found
+    :param *List[str] beforetypes:  a list of `@type` values to look for if `newtype` is 
+                           not found in the current `@type` property; the new value should 
+                           be inserted before the first of these values found in the 
+                           currently set list.  If none of these values are found, the `newtype`
+                           will be appended to the list.
+    """
+    types = nerdm.setdefault('@type', [])
+    _insert_before_val(types, newtype, *beforetypes)
+    return nerdm
+
 def get_schema(nerdm, prefixchs=META_PREFIXES):
     schemaprop = meta_prop_ch(nerdm, prefixchs=prefixchs) + "schema"
     return nerdm.get(schemaprop)

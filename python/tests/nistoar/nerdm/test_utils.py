@@ -47,6 +47,32 @@ class TestUtils(test.TestCase):
         with self.assertRaises(TypeError):
             utils.is_any_type(data, "Goob")
 
+    def test_insert_before_val(self):
+        vals = []
+        self.assertEqual(utils._insert_before_val(vals, 'r'), ['r'])
+        self.assertEqual(utils._insert_before_val(vals, 'g', 'u', 'r', 'n'), ['g', 'r'])
+        self.assertEqual(utils._insert_before_val(vals, 'u', 'r', 'n'), ['g', 'u', 'r'])
+        self.assertEqual(utils._insert_before_val(vals, 'n'), ['g', 'u', 'r', 'n'])
+        self.assertEqual(utils._insert_before_val(vals, 'y', ['o', 'o', 'b']), ['g', 'u', 'r', 'n', 'y'])
+
+    def test_insert_type(self):
+        nerdm = {}
+        utils.insert_type(nerdm, "nrd:Resource")
+        self.assertIn('@type', nerdm)
+        self.assertEqual(nerdm['@type'], ['nrd:Resource'])
+
+        nerdm = {}
+        utils.insert_type(nerdm, "nrd:Resource", "gb:Gurn")
+        self.assertIn('@type', nerdm)
+        self.assertEqual(nerdm['@type'], ['nrd:Resource'])
+
+        utils.insert_type(nerdm, "nrdp:DataPublication", "nrd:PublicDataResource", "nrd:Resource")
+        self.assertEqual(nerdm['@type'], ['nrdp:DataPublication', 'nrd:Resource'])
+        utils.insert_type(nerdm, "nrd:Resource", "gb:Gurn")
+        self.assertEqual(nerdm['@type'], ['nrdp:DataPublication', 'nrd:Resource', 'nrd:Resource'])
+        utils.insert_type(nerdm, "gb:Gurn")
+        self.assertEqual(nerdm['@type'], ['nrdp:DataPublication', 'nrd:Resource', 'nrd:Resource', 'gb:Gurn'])
+
     def test_nerdm_schema_version(self):
         self.assertEqual(utils.nerdm_schema_version(const.CORE_SCHEMA_URI), const.core_ver.lstrip('v'))
         self.assertEqual(utils.nerdm_schema_version("urn:goober/v3.0"), "3.0")
