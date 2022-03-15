@@ -222,6 +222,10 @@ class NERDm2Latest(object):
             byext["bib"] = version or NERDM_CONST.bib_ver
         if "rls" not in byext:
             byext["rls"] = version or NERDM_CONST.rls_ver
+        if "exp" not in byext:
+            byext["exp"] = version or NERDM_CONST.exp_ver
+        if "sip" not in byext:
+            byext["sip"] = version or NERDM_CONST.sip_ver
         if "" not in byext:
             byext[""] = defver
 
