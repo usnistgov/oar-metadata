@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -29,8 +29,8 @@
         "forensics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource",
-        "https://data.nist.gov/od/dm/nerdm-schema/science-initiative-schema/v0.1#/definitions/ResearchInitiative"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource",
+        "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Aggregation"
     ],
     "landingPage": "https://www.nist.gov/forensic-science/research-focus-areas",
     "title": "NIST Forensics Research Data",
@@ -80,102 +80,23 @@
             "description": "initial release"
         }
     ],
-    "facilitators": [
+    "creators": [
         {
-            "middleName": "",
-            "familyName": "Guttman",
+            "familyName": "Brady",
             "affiliation": [
                 {
                     "@type": "org:Organization",
                     "title": "NIST Forensics division"
                 }
             ],
-            "orcid": "",
-            "givenName": "Barbara",
+            "givenName": "Mary",
             "@type": "foaf:Person",
-            "fn": "Barbara Guttman",
-            "jobTitle": "Program Lead"
-        },
-        {
-            "middleName": "",
-            "familyName": "Fiumara",
-            "affiliation": [
-                {
-                    "@type": "org:Organization",
-                    "title": "NIST Forensics Biometrics division"
-                }
-            ],
-            "orcid": "",
-            "givenName": "Gregory",
-            "@type": "foaf:Person",
-            "fn": "Gregory Fiumara",
-            "jobTitle": "Program Lead"
-        },
-        {
-            "middleName": "",
-            "familyName": "Navarro",
-            "affiliation": [
-                {
-                    "@type": "org:Organization",
-                    "title": "NIST Forensics division"
-                }
-            ],
-            "orcid": "",
-            "givenName": "Marcela",
-            "@type": "foaf:Person",
-            "fn": "Marcela Navarro",
-            "jobTitle": "Program Lead"
-        },
-        {
-            "middleName": "",
-            "familyName": "Vallone",
-            "affiliation": [
-                {
-                    "@type": "org:Organization",
-                    "title": "NIST Forensics division"
-                }
-            ],
-            "orcid": "",
-            "givenName": "Peter",
-            "@type": "foaf:Person",
-            "fn": "Peter Vallone",
-            "jobTitle": "Program Lead"
-        },
-        {
-            "middleName": "",
-            "familyName": "Lund",
-            "affiliation": [
-                {
-                    "@type": "org:Organization",
-                    "title": "NIST Forensics division"
-                }
-            ],
-            "orcid": "",
-            "givenName": "Steve",
-            "@type": "foaf:Person",
-            "fn": "Steve Lund",
-            "jobTitle": "Program Lead"
-        },
-        {
-            "middleName": "",
-            "familyName": "Taylor",
-            "affiliation": [
-                {
-                    "@type": "org:Organization",
-                    "title": "NIST Forensics division"
-                }
-            ],
-            "orcid": "",
-            "givenName": "Melissa",
-            "@type": "foaf:Person",
-            "fn": "Melissa Taylor",
-            "jobTitle": "Program Lead"
+            "fn": "Mary Brady"
         }
     ],
     "@type": [
-        "nrda: ScienceTheme",
-        "nrda: Aggregation",
-        "nrdp: PublicDataResource"
+        "nrda:Aggregation",
+        "nrdp:PublicDataResource"
     ],
     "components": [
         {
@@ -184,8 +105,13 @@
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds9911",
             "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds9911&alternateView=forensics",
+            "resultSetMediaType": "application/json",
             "title": "All Forensics Data Collection",
-            "description": "The search URL here queries all the data which is part of Forensics data collection."
+            "description": "The search URL here queries all the data which is part of Forensics data collection.",
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+            ]
         },
         {
             "@type": [
@@ -193,8 +119,13 @@
             ],
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991133",
             "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds991133&alternateView=forensics",
+            "resultSetMediaType": "application/json",
             "title": "DNA and Biological Evidence data collection",
-            "description": "Search URL for the DNA and Biological evidence data collection."
+            "description": "Search URL for the DNA and Biological evidence data collection.",
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+            ]
         },
         {
             "@type": [
@@ -203,7 +134,11 @@
             "searchURL": "/rmm/records?isPartOf.@id=ark:/88434/mds991122",
             "accessURL": "https://data.nist.gov/sdp/#/search?q=isPartOf.@id%3Dark:/88434/mds991122&alternateView=forensics",
             "title": "Biometrics Data Collection",
-            "description": "Search URL for the biometrics data collection."
+            "description": "Search URL for the biometrics data collection.",
+            "_extensionSchemas": [
+                "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+            ]
         }
 
     ]

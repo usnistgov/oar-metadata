@@ -1,6 +1,6 @@
 {
 
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -21,7 +21,7 @@
         "short tandem repeats"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
     ],
     "landingPage": null,
     "title": "NIST Short Tandem Repeat DNA Internet DataBase",
@@ -106,18 +106,18 @@
     "isPartOf": [
         {
             "title": "DNA and Biological Evidence data collection",
-            "proxyFor": "ark:/88434/mds991133",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds991133",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         },
         {
             "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds9911",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         }
     ]

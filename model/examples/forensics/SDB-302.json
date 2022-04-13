@@ -1,6 +1,6 @@
 {
     "issued": "2019-12-18",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -43,7 +43,7 @@
         "slap"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
     ],
     "landingPage": "https://www.nist.gov/itl/iad/image-group/nist-special-database-302",
     "title": "NIST Special Database 302 Nail to Nail (N2N) Fingerprint Challenge",
@@ -121,20 +121,20 @@
         "nrdp:PublicDataResource"
     ],
     "isPartOf": [
-        {
-            "title": "Biometrics Data Collection",
-            "proxyFor": "ark:/88434/mds991122",
-            "resType": [
-                "nrda: Aggregation",
-                "nrdp: PublicDataResource"
+         {
+            "title": "NIST Research in Biometric forensics.",
+            "@id": "ark:/88434/mds991122",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         },
         {
-            "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "title": "NIST Forensics Research Data",
+            "@id": "ark:/88434/mds9911",
+            "@type": [
+                "nrda:Aggregation",
+                "nrdp:PublicDataResource"
             ]
         }
     ]

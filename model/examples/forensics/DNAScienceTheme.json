@@ -13,7 +13,7 @@
     ],
     "_extensionSchemas": [
         "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource",
-        "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Aggregation"
+        "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/ScienceTheme"
     ],
     "landingPage": "https://www.nist.gov/itl/iad/image-group",
     "title": "NIST Research in DNA and biological evidence.",
@@ -64,11 +64,10 @@
     ],
     "@type": [
         "nrda: ScienceTheme",
-        "nrdp: PublicDataResource"
+        "nrdp:PublicDataResource"
     ],
     "facilitators": [
         {
-            "middleName": "",
             "familyName": "Fiumara",
             "affiliation": [
                 {
@@ -76,7 +75,6 @@
                     "title": "NIST Forensics division"
                 }
             ],
-            "orcid": "",
             "givenName": "Gregory",
             "@type": "foaf:Person",
             "fn": "Greg Fiumara",
@@ -85,7 +83,6 @@
     ],
     "creators": [
         {
-            "middleName": "",
             "familyName": "Brady",
             "affiliation": [
                 {
@@ -93,7 +90,6 @@
                     "title": "NIST Forensics division"
                 }
             ],
-            "orcid": "",
             "givenName": "Mary",
             "@type": "foaf:Person",
             "fn": "Mary Brady",
@@ -117,9 +113,8 @@
     "isPartOf": [
         {
             "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrda:ScienceTheme",
+            "@id": "ark:/88434/mds9911",
+            "@type": [
                 "nrda:Aggregation",
                 "nrdp:PublicDataResource"
             ]

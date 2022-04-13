@@ -317,10 +317,10 @@
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Collection",
-                        "referenceProperty": "dct:isPartOf"
+                        "referenceProperty": "dc:isPartOf"
                     }
                 },
-                             
+
                 "language": {
                     "title": "Language",
                     "description": "The primary language used in the dataset",
@@ -851,7 +851,7 @@
         },
 
         "Topic": {
-            "description": "a container for an identified concept term or proper thing",
+            "description": "a container for identified concept terms or proper things used to describe a resource's subject matter",
             "notes": [
                 "A concept term refers to a subject or keyword term, like 'magnetism' while a proper thing is a particular instance of a concept that has a name, like the planet 'Saturn' or the person called 'Abraham Lincoln'",
                 "The meaning of concept is that given by the OWL ontology (owl:Concept); the meaning of thing is that given by the SKOS ontology (skos:Thing).  See also the FOAF ontology."
@@ -871,7 +871,6 @@
                         }
                     }
                 },
-
                 
                 "scheme": {
                     "description": "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in.",
@@ -1074,17 +1073,6 @@
                 "prefLabel": "Identifier information",
                 "referenceClass": "mads:Identifier"
             }
-        },
-        "ScienceTheme": {
-            "description": "To indicate the group of records based on certain similar science initiatives.",
-            "notes": [
-                "This type can be used to create an aggregation of specific theme which is part of larger more generic science domain."
-            ],
-            "allOf": [
-                {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Resource"
-                }
-            ]
         }
     },
 
