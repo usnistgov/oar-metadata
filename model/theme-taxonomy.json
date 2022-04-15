@@ -342,8 +342,56 @@
             "term": "Wildland urban interface fire",
             "level": 2
         },
-
-       
+        {
+            "term": "Forensics",
+            "level": 1
+        },
+        {
+            "parent": "Forensics",
+            "term": "Ballistics",
+            "level": 2
+        },
+        {
+            "parent": "Forensics",
+            "term": "Digital evidence",
+            "level": 2,
+            "since": "1.1"
+        },
+        {
+            "parent": "Forensics",
+            "term": "Digital and multimedia evidence",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Forensics: Digital evidence"
+        },
+        {
+            "parent": "Forensics",
+            "term": "DNA and biological evidence",
+            "level": 2
+        },
+        {
+            "parent": "Forensics",
+            "term": "Drugs and toxicology",
+            "level": 2
+        },
+        {
+            "parent": "Forensics",
+            "term": "Fingerprints and pattern evidence",
+            "level": 2,
+            "since": "1.1"
+        },
+        {
+            "parent": "Forensics",
+            "term": "Pattern evidence",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Forensics: Fingerprints and pattern evidence"
+        },
+        {
+            "parent": "Forensics",
+            "term": "Trace evidence",
+            "level": 2
+        },
         {
             "term": "Health",
             "level": 1
