@@ -1,6 +1,6 @@
 {
     "issued": "2020-07-10",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -34,7 +34,7 @@
         "engineering biology"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
     ],
     "landingPage": "https://data.nist.gov/od/id/mds2-2259",
     "title": "LacI protein genotype-phenotype landscape data",
@@ -98,7 +98,7 @@
             "mediaType": "text/csv",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/LacI%20landscape%20data%20columns%20description.csv",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
             ],
             "@id": "cmps/LacI landscape data columns description.csv",
             "@type": [
@@ -126,7 +126,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/LacI%20landscape%20data.hdf.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
             ],
             "describes": "cmps/LacI landscape data.hdf",
             "@id": "cmps/LacI landscape data.hdf.sha256",
@@ -155,7 +155,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/Example%20code_Open%20LacI%20Data%20Table.ipynb.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Example code_Open LacI Data Table.ipynb",
             "@id": "cmps/Example code_Open LacI Data Table.ipynb.sha256",
@@ -184,7 +184,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/LacI%20landscape%20data%20columns%20description.csv.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
             ],
             "describes": "cmps/LacI landscape data columns description.csv",
             "@id": "cmps/LacI landscape data columns description.csv.sha256",
@@ -207,7 +207,7 @@
             "mediaType": "application/octet-stream",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/Example%20code_Open%20LacI%20Data%20Table.ipynb",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
             ],
             "@id": "cmps/Example code_Open LacI Data Table.ipynb",
             "@type": [
@@ -230,7 +230,7 @@
             "mediaType": "application/x-hdf",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2259/LacI%20landscape%20data.hdf",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
             ],
             "@id": "cmps/LacI landscape data.hdf",
             "@type": [
@@ -248,18 +248,18 @@
     "isPartOf": [
         {
             "title": "DNA and Biological Evidence data collection",
-            "proxyFor": "ark:/88434/mds991133",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds991133",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         },
         {
             "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds9911",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         }
     ]

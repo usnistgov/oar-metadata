@@ -22,12 +22,14 @@
         ]
     },
     "abbrev": [ "SRD#62" ],
-    "isPartOf": {
-        "@id": "ark:/88434/sdp0fjspek352",
-        "title": "NIST Ceramics WebBook - SRD 151",
-        "proxyFor": "ark:/88434/sdp0fjspek352",
-        "@type": [ "nrdp:Portal", "nrdp:SRD" ]
-    },
+    "isPartOf": [
+        {
+            "@id": "ark:/88434/sdp0fjspek352",
+            "title": "NIST Ceramics WebBook - SRD 151",
+            "proxyFor": "ark:/88434/sdp0fjspek352",
+            "@type": [ "nrdp:Portal", "nrdp:SRD" ]
+        }
+    ],
     "contactPoint": {
         "hasEmail": "mailto:angela.lee@nist.gov",
         "@type": "vcard:Contact",

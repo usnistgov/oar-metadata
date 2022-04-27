@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.2#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -43,7 +43,7 @@
         "biometrics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.2#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
     ],
     "landingPage": "https://www.nist.gov/itl/iad/image-group/nist-special-database-301",
     "title": "NIST Special Database 301 Nail to Nail (N2N) Fingerprint Challenge Dry Run",
@@ -144,16 +144,16 @@
     "isPartOf": [
         {
             "title": "Biometrics Data Collection",
-            "proxyFor": "ark:/88434/mds991122",
-            "resType": [
+            "@id": "ark:/88434/mds991122",
+            "@type": [
                 "nrda: Aggregation",
                 "nrdp: PublicDataResource"
             ]
         },
         {
             "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
+            "@id": "ark:/88434/mds9911",
+            "@type": [
                 "nrda: ScienceTheme",
                 "nrdp: PublicDataResource"
             ]

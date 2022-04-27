@@ -9,9 +9,12 @@
     "description": "A JSON Schema which helps add different science initiatives and related projects together",
     "definitions": {
         "Aggregation": {
-            "description": "Agregation of different resources published with PDR and are part of a science initiative",
+            "description": "A formal collection of individually identified resources that share a common intent or theme, as defined by the creator of the collection",
             "notes": [
-                ""
+                "This is the most general form of collection, and it purpose and membership is determined by the creator",
+                "It is recommended that the resource description describe what unifies the collection",
+                "Though not required, member datasets may declare their membership by pointing to an Aggregation via the isPartOf property",
+                "An Aggregation can list its member directly or indirectly within its components property.  A direct reference can be done with an IncludedResource; an indirect pointer can be done with either a SearchPage (which returns a browsable page that dynamically lists its members), a DynamicResourceSet (which returns a dynamically-created, machine-readable listing of the members), or a combination of the two."
             ],
             "allOf": [
                 {
@@ -24,7 +27,7 @@
                             "title": "creators",
                             "description": "The individuals that created this aggregation and initially defined its memebership",
                             "type": "array",
-                            "items": { "$ref": "#/definitions/Person" },
+                            "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Person" },
                             "uniqueItems": true
                         }
                     }
@@ -32,62 +35,93 @@
             ]
         },
 
-
-
-        "creators":{
-            "description": "This field  is to give option of adding information of people in-charge in different roles",
-            "type": "array",
+        "ScienceTheme": {
+            "description": "A collection of resources that all relate to a common science topic or theme",
+            "notes": [
+                "This type implies a more specific intent for a collection compared to an Aggregation, along with more active support, as supported through the facilitators property",
+                "Though not required, member datasets may declare their membership by pointing to an Aggregation via the isPartOf property"
+            ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Person"
+                    "$ref": "#/definitions/Aggregation"
                 },
-                
                 {
-                
-            "properties":{
-                
-                "Title":{
-                    "description": "This field helps list the job title or role of the person for this project.",
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                        "facilitators": {
+                            "description": "A set of people play specific roles in the maintenance of this collection and the creation and support of its member resources",
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/Facilitator" },
+                            "uniqueItems": true
+                        }
+                    }
                 }
-
-            }}
             ]
-        },    
+        },
 
-        "facilitators":{
-            "description": "This field  is to include list of people who are helping project in various ways. These need not be the PIs or product owners",
-            "type": "array",
+        "Facilitator": {
+            "description": "a person with specified role",
+            "notes": [
+                
+            ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Person"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Person"
                 },
-                
                 {
-                
-            "properties":{
-                
-                "jobTitle":{
-                    "description": "This field helps list the job title or role of the person for this project.",
-                    "type": "string"
+                    "type": "object",
+                    "properties": {
+                        "jobTitle": {
+                            "description": "The name for the job or role that the person fulfills in the maintenance of this collection and its members",
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Job Title",
+                                "referenceClass": "proton:JobTitle"
+                            }
+                        }
+                    }
                 }
-
-            }}
             ]
         },
 
         "DynamicResourceSet": {
-            "description": "this provides a search query to get all the resources part of this aggregation",
+            "description": "a Component that represents set of machine-readable resource that is dynamically generated from a URL that invokes a search on a remote database",
             "notes": [
             ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/Component"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component"
                 },
                 {
                     "properties": {
                         "searchURL": {
                             "description": "the URL for querying service to get list of resources",
+                            "type": "string",
+                            "format": "uri"
+                        },
+                        
+                        "resultSetMediaType": {
+                            "title": "Media Type",
+                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the result set returned by searchURL",
+                            "anyOf": [
+                                {
+                                    "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Media Type",
+                                "referenceProperty": "dcat:mediaType"
+                            }
+                        },
+
+                        "schema": {
+                            "description":  "the URI identifying the schema that results are expected to be compliant with",
                             "type": "string",
                             "format": "uri"
                         }

@@ -806,24 +806,23 @@
 
     "@type": [
         "nrdp:PublicDataResource",
-        "nrda:DynamicResourceSet",
         "dcat:Dataset"
     ],
     "isPartOf": [
         {
             "title": "DNA and Biological Evidence data collection",
-            "proxyFor": "ark:/88434/mds991133",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds991133",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         },
         {
             "title": "Forensics Data Collection",
-            "proxyFor": "ark:/88434/mds9911",
-            "resType": [
-                "nrda: ScienceTheme",
-                "nrdp: PublicDataResource"
+            "@id": "ark:/88434/mds9911",
+            "@type": [
+                "nrda:ScienceTheme",
+                "nrdp:PublicDataResource"
             ]
         }
     ]
