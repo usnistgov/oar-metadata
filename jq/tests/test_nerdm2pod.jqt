@@ -74,6 +74,49 @@ include "nerdm2pod"; findDOIdist
 {"@type": "dcat:Distribution","accessURL": "https://doi.org/12345/TES32843","format": "text/html","title": "DOI Access" }
 
 #--------------
+# testing isPartOfRef2str
+#
+include "nerdm2pod"; isPartOfRef2str
+{"proxyFor":"doi:10.8888/sample","title":"My Story","@id":"#localref","location":"https://ego.net/mystory.pdf","@type":["dcat:Dataset"]}
+"doi:10.8888/sample"
+
+#--------------
+# testing isPartOfRef2str
+#
+include "nerdm2pod"; isPartOfRef2str
+{"title":"My Story","@id":"#localref","location":"https://ego.net/mystory.pdf","@type":["dcat:Dataset"]}
+"https://ego.net/mystory.pdf"
+
+#--------------
+# testing isPartOfRef2str
+#
+include "nerdm2pod"; isPartOfRef2str
+{"title":"My Story","@id":"#localref","@type":["dcat:Dataset"]}
+"My Story"
+
+#--------------
+# testing isPartOfRef2str
+#
+include "nerdm2pod"; isPartOfRef2str
+{"@id":"#localref","@type":["dcat:Dataset"]}
+"#localref"
+
+#--------------
+# testing selectIsPartOf
+#
+include "nerdm2pod"; selectIsPartOf
+{"title":"My Story","@id":"#localref","location":"https://ego.net/mystory.pdf","@type":["dcat:Dataset"]}
+"https://ego.net/mystory.pdf"
+
+#--------------
+# testing selectIsPartOf
+#
+include "nerdm2pod"; selectIsPartOf
+[{"title":"My Story","@id":"#localref","@type":["dcat:Dataset"]},{"title":"My Story","@id":"#localref","location":"https://ego.net/mystory.pdf","@type":["dcat:Dataset"]}]
+"My Story"
+
+
+#--------------
 # testing resource2midaspodds
 #
 include "nerdm2pod"; resource2midaspodds
