@@ -10,8 +10,9 @@ RUN update-alternatives --install /usr/lib/uwsgi/plugins/python3_plugin.so \
     python_plugin.so /usr/lib/uwsgi/plugins/python38_plugin.so 1
 
 RUN python -m pip install setuptools --upgrade
-RUN python -m pip install json-spec jsonmerge==1.3.0 jsonschema==2.6.0 requests \
+RUN python -m pip install json-spec jsonschema==2.4.0 requests \
                           pytest==4.6.5 filelock crossrefapi pyyaml
+RUN python -m pip install --no-dependencies jsonmerge==1.3.0 
 
 WORKDIR /root
 
