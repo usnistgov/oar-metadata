@@ -105,8 +105,9 @@ class NERDmForRMM(object):
             rec['version'] = defver
         if 'releaseHistory' in rec:
             for vref in rec['releaseHistory'].get('hasRelease',[]):
-                if '@id' not in vref:
-                    if 'version' in vref:
+                vext = to_version_ext(vref['version']) if vref.get('version') else None
+                if not vref.get('@id') or not self._verextre.search(vref['@id']):
+                    if vext:
                         vref['@id'] = nerdm['@id'] + to_version_ext(vref['version'])
                     elif 'refid' in vref:
                         vref['@id'] = vref['refid']
@@ -164,7 +165,7 @@ class NERDmForRMM(object):
             vc['hasRelease'] = [ self._2latest.create_release_ref(out['version']) ]
 
         for rel in vc['hasRelease']:
-            rel['location'] = self._lpsbase + rec['@id'] + to_version_ext(rel['version'])
+            rel['location'] = self._lpsbase + rel['@id']
 
         out['releaseSet'] = vc
 
