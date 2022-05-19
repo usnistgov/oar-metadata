@@ -164,7 +164,9 @@ class NERDmForRMM(object):
         if len(vc['hasRelease']) == 0:
             vc['hasRelease'] = [ self._2latest.create_release_ref(out['version']) ]
 
-        for rel in vc['hasRelease']:
+        # make sure the location property in release history points to the version specific value.
+        # do this for all three renditions.
+        for rel in vc['hasRelease'] + out['version'].get('releaseHistory',{}).get('hasRelease',[]):
             rel['location'] = self._lpsbase + rel['@id']
 
         out['releaseSet'] = vc
