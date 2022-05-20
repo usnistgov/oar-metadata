@@ -107,7 +107,7 @@
                 "publisher": {
                     "description": "The publishing entity and optionally their parent organization(s).",
                     "notes": [
-                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
                     "$ref": "#/definitions/Organization",
                     "asOntology": {
@@ -118,9 +118,9 @@
                 },
 
                 "contactPoint": {
-                    "description": "Contact person’s name and email for the asset",
+                    "description": "Contact person's name and email for the asset",
                     "notes": [
-                        "This is a container for two fields that together make up the contact information for the dataset. contactPoint should always contain both the person’s appropriately formatted full name (fn) and email (hasEmail)."
+                        "This is a container for two fields that together make up the contact information for the dataset. contactPoint should always contain both the person's appropriately formatted full name (fn) and email (hasEmail)."
                     ],
                     "$ref": "#/definitions/ContactPoint",
                     "asOntology": {
@@ -133,7 +133,7 @@
                 "identifier": {
                     "description": "A unique identifier for the dataset or API as maintained within an Agency catalog or database",
                     "notes": [
-                        "This field allows third parties to maintain a consistent record for datasets even if title or URLs are updated. Agencies may integrate an existing system for maintaining unique identifiers. Each identifier must be unique across the agency’s catalog and remain fixed. It is highly recommended that a URI (preferably an HTTP URL) be used to provide a globally unique identifier. Identifier URLs should be designed and maintained to persist indefinitely regardless of whether the URL of the resource itself changes."
+                        "This field allows third parties to maintain a consistent record for datasets even if title or URLs are updated. Agencies may integrate an existing system for maintaining unique identifiers. Each identifier must be unique across the agency's catalog and remain fixed. It is highly recommended that a URI (preferably an HTTP URL) be used to provide a globally unique identifier. Identifier URLs should be designed and maintained to persist indefinitely regardless of whether the URL of the resource itself changes."
                     ],
                     "type": "string",
                     "minLength": 1,
@@ -628,7 +628,7 @@
         },
 
         "ContactPoint": {
-            "description": "Contact person’s name and email for the asset",
+            "description": "Contact person's name and email for the asset",
             "type": "object",
             "properties": {
                 "@type": {

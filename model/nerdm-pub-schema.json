@@ -215,7 +215,7 @@
                         
                         "mediaType": {
                             "title": "Media Type",
-                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s downloadURL",
+                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file's downloadURL",
                             "anyOf": [
                                 {
                                     "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
@@ -304,7 +304,7 @@
                         
                         "describedByType": {
                             "title": "Data Dictionary Type",
-                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s describedBy URL",
+                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file's describedBy URL",
                             "anyOf": [
                                 {
                                     "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",
@@ -510,7 +510,7 @@
                         
                         "describedByType": {
                             "title": "API Descriptions Type",
-                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file’s describedBy URL",
+                            "description": "The machine-readable file format (IANA Media Type or MIME Type) of the file's describedBy URL",
                             "anyOf": [
                                 {
                                     "pattern": "^[-\\w]+/[-\\w]+(\\.[-\\w]+)*([+][-\\w]+)?$",

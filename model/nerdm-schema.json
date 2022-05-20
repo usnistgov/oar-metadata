@@ -167,7 +167,7 @@
                 "publisher": {
                     "description": "The publishing entity and optionally their parent organization(s).",
                     "notes": [
-                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
                     "$ref": "#/definitions/Organization",
                     "asOntology": {
