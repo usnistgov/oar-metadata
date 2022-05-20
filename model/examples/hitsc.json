@@ -1,7 +1,7 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
-    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataPublication" ],
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataPublication" ],
 
     "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublishedDataResource" ],
     "@id": "ark:/88434/sdp0fjspek353",
@@ -22,12 +22,13 @@
         ]
     },
     "abbrev": [ "SRD#62" ],
-    "isPartOf": {
-        "@id": "ark:/88434/sdp0fjspek352",
-        "title": "NIST Ceramics WebBook - SRD 151",
-        "proxyFor": "ark:/88434/sdp0fjspek352",
-        "@type": [ "nrdp:Portal", "nrdp:SRD" ]
-    },
+    "isPartOf": [
+        {
+            "@id": "ark:/88434/sdp0fjspek352",
+            "title": "NIST Ceramics WebBook - SRD 151",
+            "@type": [ "nrdp:Portal", "nrdp:SRD" ]
+        }
+    ],
     "contactPoint": {
         "hasEmail": "mailto:angela.lee@nist.gov",
         "@type": "vcard:Contact",
@@ -55,11 +56,12 @@
     "references": [
         {
             "@type": [ "npg:Article", "schema:Article" ],
+            "@id": "#ref:htshelp",
             "refType": "IsDocumentedBy",
             "label": "User Manual",
             "location": "https://srdata.nist.gov/CeramicDataPortal/Manual/HtsHelper",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#/definitions/DCiteReference"
+                "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#/definitions/DCiteReference"
             ]
         }
     ],

@@ -114,6 +114,47 @@ def findDOIdist:
     if length > 0 then .[0] else null end
 ;
 
+# convert an isPartOf reference to a suitable string substitute
+#
+# Input:  a ResourceReference object
+# Output: a string representation of the enclosing resource 
+#
+def isPartOfRef2str:
+    if .proxyFor then
+       .proxyFor
+    else
+       if .location then
+          .location
+       else
+          if .title then
+             .title
+          else
+             if .["@id"] then
+                .["@id"]
+             else
+                null
+             end
+          end
+       end
+    end
+;
+
+# given a list of NERDm isPartOf references, return a POD-compatible
+# rendering of the first reference
+#
+# Input:  array of ResourceReference objects
+# Output: a string representation of the enclosing resource or null if
+#         there are no objects in the input array
+#
+def selectIsPartOf:
+    (
+      (arrays |
+          map(select(.)|isPartOfRef2str) |
+          if (.|length) > 0 then .[0] else null end),
+      (objects | isPartOfRef2str)
+    )
+;
+
 # Converts a NERDm Resource to a POD Dataset
 #
 # Input: a NERDm Resource node
@@ -152,8 +193,9 @@ def resource2midaspodds:
     if (.identifier|not) then .identifier = .["@id"] else . end | del(.["@id"]) |
     if (.description|length) > 0 then .description = (.description|join_para)
                                  else .description = ""              end |
-    if .isPartOf and .isPart["@id"] then .isPartOf = .isPartOf["@id"]
-                                    else del(.isPartOf)              end |
+    if .isPartOf     then
+       .isPartOf = (.isPartOf | selectIsPartOf)
+    else del(.isPartOf)                                              end |
     if .references then .references = [ .references[] | select(.location) |
                                         .location ]
                    else del(.references)                             end |

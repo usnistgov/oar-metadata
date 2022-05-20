@@ -12,7 +12,7 @@ set -e
 
 ## These are set by default via _run.sh; if necessary, uncomment and customize
 #
-# PACKAGE_NAME=oar-build
+PACKAGE_NAME=oar-metadata
 # 
 ## list the names of the image directories (each containing a Dockerfile) for
 ## containers to be built.  List them in dependency order (where a latter one

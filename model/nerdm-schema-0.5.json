@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -305,22 +305,18 @@
                         "owl:range": "xsd:anyURI"
                     }
                 },
-
+                
                 "isPartOf": {
-                    "title": "Collections",
-                    "description": "The collections that this dataset formally belongs to",
-                    "notes": [
-                        "This property indicates relation of different resources"
-                    ],
-                    "type": "array",
-                    "items": { "$ref": "#/definitions/ResourceReference" },
+                    "title": "Collection",
+                    "description": "The collection of which the dataset is a subset",
+                    "$ref": "#/definitions/ResourceReference",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Collection",
                         "referenceProperty": "dc:isPartOf"
                     }
                 },
-
+                
                 "language": {
                     "title": "Language",
                     "description": "The primary language used in the dataset",
@@ -627,8 +623,7 @@
                 "npg:Article -- a work that is published in a book, journal, or other periodical",
                 "schema:Book -- a book, typically physically-bound.",
                 "deo:BibliographicReference -- a generic citable reference.  This is considered a superclass of all reference types and the default type when the specific type cannot be determined.",
-                "npg:Document and npg:Dataset should be considered mutually exclusive and should not appear in the same list.  npg:Article and schema:Book should be considered subclasses of npg:document",
-                "In the context of a NERDm Resource record, the @id would identify the reference to the document (i.e. as part of a reference list); use proxyFor to provide an ID for the document itself (e.g. a DOI; highly recommended)"
+                "npg:Document and npg:Dataset should be considered mutually exclusive and should not appear in the same list.  npg:Article and schema:Book should be considered subclasses of npg:document"
             ],
             "allOf": [
                 { "$ref": "#/definitions/RelatedResource" },
@@ -652,7 +647,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [ "@id", "@type" ]
+                    "required": [ "@type", "location" ]
                 }
             ]
         },
@@ -852,7 +847,7 @@
         },
 
         "Topic": {
-            "description": "a container for an identified concept term or proper thing used to describe a resource's subject matter",
+            "description": "a container for an identified concept term or proper thing",
             "notes": [
                 "A concept term refers to a subject or keyword term, like 'magnetism' while a proper thing is a particular instance of a concept that has a name, like the planet 'Saturn' or the person called 'Abraham Lincoln'",
                 "The meaning of concept is that given by the OWL ontology (owl:Concept); the meaning of thing is that given by the SKOS ontology (skos:Thing).  See also the FOAF ontology."
@@ -872,7 +867,7 @@
                         }
                     }
                 },
-                
+
                 "scheme": {
                     "description": "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in.",
                     "type": "string",
