@@ -4,7 +4,7 @@ data to make them available from Python.
 """
 core_schema_base = "https://data.nist.gov/od/dm/nerdm-schema/"
 
-schema_versions = ["v0.5", "v0.4", "v0.3", "v0.2", "v0.1"]
+schema_versions = ["v0.6", "v0.5", "v0.4", "v0.3", "v0.2", "v0.1"]
 core_ver = schema_versions[0]
 pub_ver  = schema_versions[0]
 bib_ver  = schema_versions[0]
