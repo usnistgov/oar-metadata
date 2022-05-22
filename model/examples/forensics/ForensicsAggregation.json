@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -29,7 +29,7 @@
         "forensics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource",
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource",
         "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/Aggregation"
     ],
     "landingPage": "https://www.nist.gov/forensic-science/research-focus-areas",
@@ -110,7 +110,7 @@
             "description": "The search URL here queries all the data which is part of Forensics data collection.",
             "_extensionSchemas": [
                 "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/SearchPage"
             ]
         },
         {
@@ -124,7 +124,7 @@
             "description": "Search URL for the DNA and Biological evidence data collection.",
             "_extensionSchemas": [
                 "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/SearchPage"
             ]
         },
         {
@@ -137,7 +137,7 @@
             "description": "Search URL for the biometrics data collection.",
             "_extensionSchemas": [
                 "https://data.nist.gov/od/dm/nerdm-schema/agg/v0.1#/definitions/DynamicResourceSet",
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/SearchPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/SearchPage"
             ]
         }
 

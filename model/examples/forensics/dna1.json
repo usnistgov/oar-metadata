@@ -1,7 +1,7 @@
 {
     "issued": "2020-04-02T17:05:10.0",
     "revised": "2021-11-29T20:07:49.095147",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
   
     "topic": [
         {
@@ -12,7 +12,7 @@
     ],
     "references": [],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource"
     ],
     "license": "https://www.nist.gov/open/license",
     "landingPage": "https://data.nist.gov/od/id/mds2-2157",
@@ -95,7 +95,7 @@
     "components": [
         {
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Subcollection"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/Subcollection"
             ],
             "@id": "cmps/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit",
             "@type": [
@@ -115,7 +115,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%201.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 1.zip",
             "@type": [
@@ -143,7 +143,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Single%20Source.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Single Source.zip",
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Single Source.zip.sha256",
@@ -172,7 +172,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%201.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 1.zip",
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 1.zip.sha256",
@@ -201,7 +201,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%202.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 2.zip",
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 2.zip.sha256",
@@ -230,7 +230,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%203.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 3.zip",
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 3.zip.sha256",
@@ -259,7 +259,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Readme_SignaturePrep.txt.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Readme_SignaturePrep.txt",
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Readme_SignaturePrep.txt.sha256",
@@ -282,7 +282,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%203.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 3.zip",
             "@type": [
@@ -304,7 +304,7 @@
             "mediaType": "text/plain",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Readme_SignaturePrep.txt",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Readme_SignaturePrep.txt",
             "@type": [
@@ -326,7 +326,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Single%20Source.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Single Source.zip",
             "@type": [
@@ -348,7 +348,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/Verogen%20ForenSeq%20DNA%20Signature%20Prep%20Kit/Signature%20Prep%20DPMB%20Mixture%20Plate%20Run%202.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/Verogen ForenSeq DNA Signature Prep Kit/Signature Prep DPMB Mixture Plate Run 2.zip",
             "@type": [
@@ -360,7 +360,7 @@
         },
         {
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Subcollection"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/Subcollection"
             ],
             "@id": "cmps/PowerSeq%20CRM%20Nested%20System",
             "@type": [
@@ -380,7 +380,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/PowerSeq%20CRM%20Nested%20System/PowerSeq%20CRM%20Single%20Source.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/PowerSeq CRM Nested System/PowerSeq CRM Single Source.zip",
             "@type": [
@@ -408,7 +408,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/PowerSeq%20CRM%20Nested%20System/Readme_PowerSeq%20CRM.txt.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/PowerSeq CRM Nested System/Readme_PowerSeq CRM.txt",
             "@id": "cmps/PowerSeq CRM Nested System/Readme_PowerSeq CRM.txt.sha256",
@@ -437,7 +437,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/PowerSeq%20CRM%20Nested%20System/PowerSeq%20CRM%20Single%20Source.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/PowerSeq CRM Nested System/PowerSeq CRM Single Source.zip",
             "@id": "cmps/PowerSeq CRM Nested System/PowerSeq CRM Single Source.zip.sha256",
@@ -460,7 +460,7 @@
             "mediaType": "text/plain",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/PowerSeq%20CRM%20Nested%20System/Readme_PowerSeq%20CRM.txt",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/PowerSeq CRM Nested System/Readme_PowerSeq CRM.txt",
             "@type": [
@@ -472,7 +472,7 @@
         },
         {
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Subcollection"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/Subcollection"
             ],
             "@id": "cmps/CE-STR Assays",
             "@type": [
@@ -498,7 +498,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/STR%20genotypes_CE.xlsx.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/STR genotypes_CE.xlsx",
             "@id": "cmps/CE-STR Assays/STR genotypes_CE.xlsx.sha256",
@@ -521,7 +521,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Applied%20Biosystems%20Y-Filer%20Plus.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/Applied Biosystems Y-Filer Plus.zip",
             "@type": [
@@ -549,7 +549,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Promega%20PowerPlex%20Fusion%206C.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/Promega PowerPlex Fusion 6C.zip",
             "@id": "cmps/CE-STR Assays/Promega PowerPlex Fusion 6C.zip.sha256",
@@ -572,7 +572,7 @@
             "mediaType": "text/plain",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Readme_CE.txt",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/Readme_CE.txt",
             "@type": [
@@ -600,7 +600,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Promega%20PowerPlex%20Y23.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/Promega PowerPlex Y23.zip",
             "@id": "cmps/CE-STR Assays/Promega PowerPlex Y23.zip.sha256",
@@ -629,7 +629,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Applied%20Biosystems%20Y-Filer%20Plus.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/Applied Biosystems Y-Filer Plus.zip",
             "@id": "cmps/CE-STR Assays/Applied Biosystems Y-Filer Plus.zip.sha256",
@@ -652,7 +652,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Applied%20Biosystems%20GlobalFiler.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/Applied Biosystems GlobalFiler.zip",
             "@type": [
@@ -674,7 +674,7 @@
             "mediaType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/STR%20genotypes_CE.xlsx",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/STR genotypes_CE.xlsx",
             "@type": [
@@ -696,7 +696,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Promega%20PowerPlex%20Y23.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/Promega PowerPlex Y23.zip",
             "@type": [
@@ -724,7 +724,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Applied%20Biosystems%20GlobalFiler.zip.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/Applied Biosystems GlobalFiler.zip",
             "@id": "cmps/CE-STR Assays/Applied Biosystems GlobalFiler.zip.sha256",
@@ -747,7 +747,7 @@
             "mediaType": "application/zip",
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Promega%20PowerPlex%20Fusion%206C.zip",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/DataFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataFile"
             ],
             "@id": "cmps/CE-STR Assays/Promega PowerPlex Fusion 6C.zip",
             "@type": [
@@ -775,7 +775,7 @@
             "downloadURL": "https://data.nist.gov/od/ds/ark:/88434/mds2-2157/CE-STR%20Assays/Readme_CE.txt.sha256",
             "valid": true,
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/ChecksumFile"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/ChecksumFile"
             ],
             "describes": "cmps/CE-STR Assays/Readme_CE.txt",
             "@id": "cmps/CE-STR Assays/Readme_CE.txt.sha256",

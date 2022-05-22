@@ -1,6 +1,6 @@
 {
 
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -21,7 +21,7 @@
         "short tandem repeats"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource"
     ],
     "landingPage": null,
     "title": "NIST Short Tandem Repeat DNA Internet DataBase",

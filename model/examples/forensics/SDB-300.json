@@ -1,5 +1,5 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.0",
@@ -49,7 +49,7 @@
         "forensics"
     ],
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource"
     ],
     "landingPage": "https://data.nist.gov/od/id/6B5200EAC9FB2EB1E0532457068101C91919",
     "title": "NIST Special Database 300 Uncompressed Plain and Rolled Images from Fingerprint Cards",

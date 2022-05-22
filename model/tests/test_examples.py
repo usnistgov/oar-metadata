@@ -26,7 +26,10 @@ class TestExamples(test.TestCase):
         with open(fpath) as fd:
             data = json.load(fd)
 
-        self.val.validate(data, False, True, schemauri)
+        try:
+            self.val.validate(data, False, True, schemauri)
+        except ejs.ValidationError as ex:
+            self.fail(os.path.basename(filename)+": Not Valid!\n"+str(ex))
 
     def test_validate_janaf(self):
         self.validate_file("janaf.json")
@@ -88,7 +91,7 @@ class TestSchemas(test.TestCase):
         self.validate_file("nerdm-rls-schema.json")
 
     def test_agg_nerdm(self):
-        self.validate_file("nerdm-aggregation-schema.json")
+        self.validate_file("nerdm-agg-schema.json")
 
     def test_pod(self):
         self.validate_file("pod-schema.json")

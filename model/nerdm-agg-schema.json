@@ -18,7 +18,7 @@
             ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Resource"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource"
                 },
                 {
                     "type": "object",
@@ -27,7 +27,7 @@
                             "title": "creators",
                             "description": "The individuals that created this aggregation and initially defined its memebership",
                             "type": "array",
-                            "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Person" },
+                            "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/Person" },
                             "uniqueItems": true
                         }
                     }
@@ -66,7 +66,7 @@
             ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/Person"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/Person"
                 },
                 {
                     "type": "object",
@@ -91,7 +91,7 @@
             ],
             "allOf": [
                 {
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/Component"
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component"
                 },
                 {
                     "properties": {

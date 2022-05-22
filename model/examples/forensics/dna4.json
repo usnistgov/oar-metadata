@@ -1,7 +1,7 @@
 {
     "issued": null,
     "revised": "2022-01-26T23:06:35.614936",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#",
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
     "topic": [
         {
             "scheme": "https://data.nist.gov/od/dm/nist-themes-forensics/v1.1",
@@ -36,7 +36,7 @@
     ],
     "firstIssued": "2022-01-26T23:06:35.614936",
     "_extensionSchemas": [
-        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/PublicDataResource"
+        "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource"
     ],
     "landingPage": "https://data.nist.gov/od/id/mds2-2529",
     "annotated": "2022-01-26T23:06:35.614936",
@@ -98,7 +98,7 @@
                 "dcat:Distribution"
             ],
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.5#/definitions/AccessPage"
+                "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/AccessPage"
             ]
         },
         {
