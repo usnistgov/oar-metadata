@@ -71,7 +71,11 @@ or a complex values made up of sub-properties.
   <ul>
     <li> <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span> </li> 
     <li> <span class="Type reference"><a href="#PublicDataResource" title="a resource that can/should have a record in NIST's public data listing (PDL)">PublicDataResource</a></span> </li> 
-    <li> <span class="Type reference"><a href="#DataPublication" title="Data presented by one or more authors as citable publication">DataPublication</a></span> </li>   </ul>  <li> <a href="#sec:Component">Component Types</a> </li>
+    <li> <span class="Type reference"><a href="#DataPublication" title="Data presented by one or more authors as citable publication">DataPublication</a></span> </li> 
+    <li> <span class="Type reference"><a href="#Aggregation" title="a resource which shows a collection of related projects or resources">Aggregation</a></span> </li>
+      <li> <span class="Type reference"><a href="#ScienceInitiative" title="a resource type which represents a science initiative ">Science Initiative</a></span> </li></ul>
+
+    <li> <a href="#sec:Component">Component Types</a> </li>
   <ul>
     <li> <span class="Type reference"><a href="#Component" title="a component of a resource">Component</a></span> </li> 
     <li> <span class="Type reference"><a href="#IncludedResource" title="A reference to another resource (which has its own record) that is a part of this resource">IncludedResource</a></span> </li> 
@@ -94,6 +98,7 @@ or a complex values made up of sub-properties.
     <li> <span class="Type reference"><a href="#Format" title="a description of a file format that a file employs">Format</a></span> </li> 
     <li> <span class="Type reference"><a href="#Person" title="an identification a Person contributing to the publication of a resource">Person</a></span> </li> 
     <li> <span class="Type reference"><a href="#ORCIDpath" title="the format of the path portion of an ORCID identifier (i.e. without the preceding resolver URL base)">ORCIDpath</a></span> </li>   </ul>
+    
 </ul>
 
 <a name="sec:Resource"></a>
@@ -964,6 +969,171 @@ or a complex values made up of sub-properties.
 </div> <!-- end properties section -->
 </div> <!-- end type description -->
 
+
+<a name="Aggregation"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Aggregation</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a resource that can/should have a record in NIST's public data listing (PDL) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DataPublication">DataPublication</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Resource.title" title="Human-readable, descriptive name of the resource">title</a></span>,
+       <span class="Property reference"><a href="#Resource.description" title="Human-readable description (e.g., an abstract) of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Resource.keyword" title="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.">keyword</a></span>,
+       <span class="Property reference"><a href="#Resource.topic" title="Identified tags referring to things or concepts that this resource addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Resource.modified" title="Most recent date on which the dataset was changed, updated or modified.">modified</a></span>,
+       <span class="Property reference"><a href="#Resource.issued" title="Date of formal issuance of the resource">issued</a></span>,
+       <span class="Property reference"><a href="#Resource.publisher" title="The publishing entity and optionally their parent organization(s).">publisher</a></span>,
+       <span class="Property reference"><a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a></span>,
+       <span class="Property reference"><a href="#Resource.accessLevel" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available">accessLevel</a></span>,
+       <span class="Property reference"><a href="#Resource.license" title="A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published">license</a></span>,
+       <span class="Property reference"><a href="#Resource.rights" title="information regarding access or restrictions based on privacy, security, or other policies">rights</a></span>,
+       <span class="Property reference"><a href="#Resource.components" title="a listing of the various component resources, tools, and distributions of this resource">components</a></span>,
+       <span class="Property reference"><a href="#Resource.conformsTo" title="URI used to identify a standardized specification the resource conforms to">conformsTo</a></span>,
+       <span class="Property reference"><a href="#Resource.isPartOf" title="The collection of which the dataset is a subset">isPartOf</a></span>,
+       <span class="Property reference"><a href="#Resource.language" title="The primary language used in the dataset">language</a></span>,
+       <span class="Property reference"><a href="#Resource.landingPage" title="a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.">landingPage</a></span>,
+       <span class="Property reference"><a href="#Resource.references" title="Related documents such as technical information about a dataset, developer documentation, etc.">references</a></span>,
+       <span class="Property reference"><a href="#Resource.theme" title="Main thematic category of the dataset.">theme</a></span>,
+       <span class="Property reference"><a href="#Resource.@id" title="A (primary) unique identifier for the resource">@id</a></span>,
+       <span class="Property reference"><a href="#Resource.doi" title="A Digital Object Identifier (DOI) in non-resolving form.">doi</a></span>,
+       <span class="Property reference"><a href="#Resource.ediid" title="the NIST EDI identifier assigned to the resource">ediid</a></span>,
+       <span class="Property reference"><a href="#Resource.abbrev" title="an abbreviated form of the resource's title">abbrev</a></span>,
+       <span class="Property reference"><a href="#Resource.@type" title="the linked-data class types for this resource">@type</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="Aggregation.creators"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Aggregation">Aggregation</a> type</span> <br />
+<span class="Property heading">creators</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> List or identify person/s or organization/s who are responsible for creating this collection of subresources.</dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> fixed value: "irregular" or text or array </dd>
+</dl>
+
+<a name="Aggregation.aggregation-component"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Aggregation">Aggregation</a> type</span> <br />
+<span class="Property heading">aggregation-component</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> There are sub properties discribing how to get the collection of resources for this aggregation.</dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> fixed value: "irregular" or text or array </dd>
+</dl>
+
+</div> <!-- end property description -->
+
+
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
+<a name="ResearchInititative"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">Research Inititative</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> a resource that can/should have a record in NIST's public data listing (PDL) </dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DataPublication">DataPublication</a></span> </dd>
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Resource" title="a resource (e.g. data collection, service, website or tool) that can participate in a data-driven application">Resource</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Resource.title" title="Human-readable, descriptive name of the resource">title</a></span>,
+       <span class="Property reference"><a href="#Resource.description" title="Human-readable description (e.g., an abstract) of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Resource.keyword" title="Tags (or keywords) help users discover your dataset; please include terms that would be used by technical and non-technical users.">keyword</a></span>,
+       <span class="Property reference"><a href="#Resource.topic" title="Identified tags referring to things or concepts that this resource addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Resource.modified" title="Most recent date on which the dataset was changed, updated or modified.">modified</a></span>,
+       <span class="Property reference"><a href="#Resource.issued" title="Date of formal issuance of the resource">issued</a></span>,
+       <span class="Property reference"><a href="#Resource.publisher" title="The publishing entity and optionally their parent organization(s).">publisher</a></span>,
+       <span class="Property reference"><a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a></span>,
+       <span class="Property reference"><a href="#Resource.accessLevel" title="The degree to which this dataset could be made publicly-available, regardless of whether it has been made available">accessLevel</a></span>,
+       <span class="Property reference"><a href="#Resource.license" title="A pointer to the primary license or non-license (i.e. Public Domain) statement with which the dataset or API has been published">license</a></span>,
+       <span class="Property reference"><a href="#Resource.rights" title="information regarding access or restrictions based on privacy, security, or other policies">rights</a></span>,
+       <span class="Property reference"><a href="#Resource.components" title="a listing of the various component resources, tools, and distributions of this resource">components</a></span>,
+       <span class="Property reference"><a href="#Resource.conformsTo" title="URI used to identify a standardized specification the resource conforms to">conformsTo</a></span>,
+       <span class="Property reference"><a href="#Resource.isPartOf" title="The collection of which the dataset is a subset">isPartOf</a></span>,
+       <span class="Property reference"><a href="#Resource.language" title="The primary language used in the dataset">language</a></span>,
+       <span class="Property reference"><a href="#Resource.landingPage" title="a URL to a human-friendly web page that represents the home or gateway to the resources that are part of this dataset.">landingPage</a></span>,
+       <span class="Property reference"><a href="#Resource.references" title="Related documents such as technical information about a dataset, developer documentation, etc.">references</a></span>,
+       <span class="Property reference"><a href="#Resource.theme" title="Main thematic category of the dataset.">theme</a></span>,
+       <span class="Property reference"><a href="#Resource.@id" title="A (primary) unique identifier for the resource">@id</a></span>,
+       <span class="Property reference"><a href="#Resource.doi" title="A Digital Object Identifier (DOI) in non-resolving form.">doi</a></span>,
+       <span class="Property reference"><a href="#Resource.ediid" title="the NIST EDI identifier assigned to the resource">ediid</a></span>,
+       <span class="Property reference"><a href="#Resource.abbrev" title="an abbreviated form of the resource's title">abbrev</a></span>,
+       <span class="Property reference"><a href="#Resource.@type" title="the linked-data class types for this resource">@type</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="ScienceInititative.investigators"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#Aggregation">Investigators</a> type</span> <br />
+<span class="Property heading">creators</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> List of people or organizations who are responsible for initiative this effort.</dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> fixed value: "irregular" or text or array </dd>
+</dl>
+
+</div> <!-- end property description -->
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
+
 <p>
 
 <a name="sec:Component"></a>
@@ -991,6 +1161,7 @@ or a complex values made up of sub-properties.
   <dd> as the basis for extension type, <span class="Type reference"><a href="#Subcollection">Subcollection</a></span> </dd>
   <dd> as the basis for extension type, <span class="Type reference"><a href="#AccessPage">AccessPage</a></span> </dd>
   <dd> as the basis for extension type, <span class="Type reference"><a href="#API">API</a></span> </dd>
+  <dd> as the basis for extension type, <span class="Type reference"><a href="#DynamicResourceSet">DynamicResourceSet</a></span> </dd>
 </dl><p>
 
 <h4>Properties:</h4>
@@ -1177,9 +1348,75 @@ or a complex values made up of sub-properties.
 </dl>
 </div>
 
+
+
 </div> <!-- end properties section -->
 </div> <!-- end type description -->
 
+<a name="DynamicResourceSet"></a>
+<div class="md_entry md_type">
+<div class="type_body">
+<h3>
+<span class="preheading"><a href="#def:named_type" title="defintion: named type">Named Type</a></span><br />
+<span class="Type heading">DynamicResourceSet</span>
+</h3>
+<hr />
+
+<dl>
+  <dt> <strong>JSON type:</strong> </dt>
+  <dd> object </span>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> A reference to collection of resources which are represented by this resource.</dd>
+  <dt> <strong>Where it is used:</strong> </dt>
+  <dd> as an allowed value type in the <span class="Property reference"><a href="#Resource.isPartOf">isPartOf</a></span> property in the <span class="Type reference"><a href="#Resource">Resource</a></span> type </dd>
+  
+</dl><p>
+
+<h4>Properties:</h4>
+</div>
+
+<div class="md_props">
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#Component" title="a description of a component of a resource">Component</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#Component.@id" title="a (relative) identifier for the distribution">@id</a></span>,
+       <span class="Property reference"><a href="#Component.@type" title="the types of components that this component can be classified as">@type</a></span>,
+       <span class="Property reference"><a href="#Component.title" title="a descriptive title for the component">title</a></span>,
+       <span class="Property reference"><a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a></span>,
+       <span class="Property reference"><a href="#Component.topic" title="Identified tags referring to things or concepts that this component addresses or speaks to">topic</a></span>,
+       <span class="Property reference"><a href="#Component.conformsTo" title="URI used to identify a standardized specification the component conforms to">conformsTo</a></span>
+  </dd>
+</dl>
+</div>
+
+<div class="md_entry md_iprop">
+<dl>
+  <dt> Inherited from <span class="Type reference"><a href="#ResourceReference" title="a reference to another resource that may have an associated ID">ResourceReference</a></span>: </dt>
+  <dd> <span class="Property reference"><a href="#ResourceReference.title" title="the name of the resource being referenced">title</a></span>,
+       <span class="Property reference"><a href="#ResourceReference.proxyFor" title="a local identifier representing this resource">proxyFor</a></span>,
+       <span class="Property reference"><a href="#ResourceReference.resourceType" title="the linked-data class types for the referenced resource">resourceType</a></span>
+  </dd>
+</dl>
+</div>
+
+<a name="DynamicResourceSet.searchURL"></a>
+<div class="md_entry md_prop">
+<h5>
+<span class="preheading"><a href="#def:property" title="definition: property">Property</a> of the
+<a href="#DynamicResourceSet">DynamicResourceSet</a> type</span> <br />
+<span class="Property heading">searchURL</span>
+</h5>
+<hr />
+
+<dl>
+  <dt> <strong>What it represents:</strong> </dt>
+  <dd> q query to be used with search service to get all the resources part of this dynamic set.</dd>
+  <dt> <strong>Value type:</strong> </dt>
+  <dd> text </dd>
+</dl>
+</div> <!-- end properties section -->
+</div> <!-- end type description -->
 <p>
 
 <a name="DataFile"></a>
