@@ -26,7 +26,10 @@ class TestExamples(test.TestCase):
         with open(fpath) as fd:
             data = json.load(fd)
 
-        self.val.validate(data, False, True, schemauri)
+        try:
+            self.val.validate(data, False, True, schemauri)
+        except ejs.ValidationError as ex:
+            self.fail(os.path.basename(filename)+": Not Valid!\n"+str(ex))
 
     def test_validate_janaf(self):
         self.validate_file("janaf.json")
@@ -52,6 +55,11 @@ class TestExamples(test.TestCase):
     def test_validate_ceramicsportal_0_1(self):
         self.validate_file("ceramicsportal-0.1.json")
 
+    def test_validate_forensics_theme(self):
+        samples = [f for f in os.listdir(os.path.join(exdir,"forensics")) if f.endswith(".json")]
+        for samp in samples:
+            self.validate_file(os.path.join("forensics", samp))
+
     def test_validate_pod(self):
         self.validate_file("pod.json", poduri)
 
@@ -75,6 +83,15 @@ class TestSchemas(test.TestCase):
 
     def test_pub_nerdm(self):
         self.validate_file("nerdm-pub-schema.json")
+
+    def test_bib_nerdm(self):
+        self.validate_file("nerdm-bib-schema.json")
+
+    def test_rls_nerdm(self):
+        self.validate_file("nerdm-rls-schema.json")
+
+    def test_agg_nerdm(self):
+        self.validate_file("nerdm-agg-schema.json")
 
     def test_pod(self):
         self.validate_file("pod-schema.json")
