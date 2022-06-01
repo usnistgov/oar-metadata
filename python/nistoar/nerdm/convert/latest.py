@@ -116,6 +116,10 @@ class NERDm2Latest(object):
                             ref['@id'] = ref['refid']
                         del ref['refid']
 
+        if utils.cmp_versions(schver, "0.6") >= 0:
+            if 'isPartOf' in nerdmd and not isinstance(nerdmd['isPartOf'], list):
+                nerdmd['isPartOf'] = [ nerdmd['isPartOf'] ]
+
         # now apply any massagers
         for convention in conv:
             nerdmd = messagers[convention](nerdmd)
