@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#",
+    "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -167,7 +167,7 @@
                 "publisher": {
                     "description": "The publishing entity and optionally their parent organization(s).",
                     "notes": [
-                        "This is a container for a publisher object which groups together the fields, name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the format below."
+                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
                     ],
                     "$ref": "#/definitions/Organization",
                     "asOntology": {
@@ -310,7 +310,7 @@
                     "title": "Collections",
                     "description": "The collections that this dataset formally belongs to",
                     "notes": [
-                        "This property indicates a type of relationship between this and other resources"
+                        "This property indicates relation of different resources"
                     ],
                     "type": "array",
                     "items": { "$ref": "#/definitions/ResourceReference" },
@@ -465,7 +465,10 @@
 
             },
 
-            "required": [ "title", "contactPoint" ]
+            "required": [
+                "title", "description", "landingPage", "publisher", 
+                "contactPoint", "accessLevel"
+            ]
         },
 
         "FlexibleDate": {
@@ -482,11 +485,9 @@
         },
 
         "RelatedResource": {
-            "description": "a resource that is related in some way to a subject resource",
+            "description": "a resource that is related in some way to this resource",
             "notes": [
-                "This serves as a base type for various kinds of references to other resources.  When used as a property value, the property defines a relationship between a subject resource and the resource described by this type",
-                "The object resource is identified by @id (and possibly by proxyFor); the other properties can be provided as a way to provide a view of the related resource without resolving the identifier.  The values of the other properties are typically copies from the refered resource's metadata; however, it is not guaranteed.  In general, the view of this resource provided by these properties represent how the resource should be perceived as part of its relationship with the subject reosurce.",
-                "When the proxyFor property is used, then this related resource description is specifically about its relationship to the subject resource.  The proxyFor value should contain an identifier that is commonly known by outside of the relationship; the @id value, then, refers to the related resource in the context of the relationship.  In the example of a bibliographic reference, the proxyFor property would contain the DOI of the paper or other work, while @id represents its entry in a references list for the subject resource."
+                "This serves as a base type for various kinds of references."
             ],
             "type": "object",
 
@@ -530,30 +531,17 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "abbrev": {
-                    "description": "an abbreviated form of the resource's title",
-                    "notes": [
-                        "this can be used as a label for a compact display or text for a link to this resource",
-                        "this may be helpful for discovery when an abbreviation is included in a free-text search"
-                    ],
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "maxLength": 24
-                    }
-                },
                 "proxyFor": {
-                    "description": "A commonly-known identifier for the resource independent of its relationship to the subject resource",
+                    "description": "a local identifier representing this resource",
                     "notes": [
-                        "This property should be used when the @id is meant to identify the related resource in the context of its relationship (e.g. a paper appearing in a reference list).",
-                        "There are no lexical constraints on what the identifier looks like; this allows for non-URI identifiers."
+                        "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
                     ],
                     "type": "string",
                     "format": "uri",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
-                        "prefLabel": "Identified locally as",
-                        "referenceProperty": "ctlog:localIdentifier"
+                        "prefLabel": "Current Person Information",
+                        "referenceProperty": "ore:proxyFor"
                     }
                 },
                 "location": {
@@ -605,6 +593,31 @@
             ]
         },
 
+        "VersionRelease": {
+            "description": "notes about a versioned release of the resource",
+            "allOf": [
+                { "$ref": "#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating a version of the release of this resource",
+                            "notes": [
+                                "label could contain the same value"
+                            ],
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        }
+                    },
+                    "required": [ "version", "issued" ]
+                }
+            ]
+        },
+
         "BibliographicReference": {
             "description": "a reference to a creative work that provides information or data that is important to this resource.",
             "notes": [
@@ -639,7 +652,7 @@
                             "type": "string"
                         }
                     },
-                    "required": [ "@type", "location" ]
+                    "required": [ "@id", "@type" ]
                 }
             ]
         },
@@ -859,7 +872,7 @@
                         }
                     }
                 },
-
+                
                 "scheme": {
                     "description": "a URI that identifies the controlled vocabulary, registry, or identifier system that the value is defined in.",
                     "type": "string",

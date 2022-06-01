@@ -12,7 +12,7 @@
                 "The base Resource type requires properties, title and contactPoint"
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/Resource" },
                 {
                     "required": [ "description" ]
                 }

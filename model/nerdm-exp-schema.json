@@ -15,7 +15,7 @@
             "properties": {
                 "instrumentsUsed": {
                     "type": "array",
-                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource"  },
+                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource"  },
                     "description": "references to identified instruments, instrument components, or other apparatuses used in the experiment",
                     "notes": [
                         "As references, these are not intended to be complete descriptions of instruments, but would rather contain just summary information displayable in lieu of full descriptions"
@@ -26,7 +26,7 @@
                     }
                 },
                 "isPartOfProjects": {
-                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
+                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
                     "description": "references to an identified projects under which this particular experiment was conducted",
                     "notes": [
                         "In most cases, it is expected that there is only one project associated with an experiment; however, this allows for multiple projects to be referenced."
@@ -55,7 +55,7 @@
                     "notes": [
                         "This value can be an approximate time; if acquisitionStartTime is provided, it should be a conversion of that value to strict ISO-8601 format."
                     ],
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/FlexibleDate",
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/FlexibleDate",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "Start time",
@@ -82,7 +82,7 @@
                     "notes": [
                         "This value can be an approximate time; if acquisitionEndTime is provided, it should be a conversion of that value to strict ISO-8601 format."
                     ],
-                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/FlexibleDate",
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/FlexibleDate",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
                         "prefLabel": "End time",
@@ -96,7 +96,7 @@
         "AcquisitionActivity": {
             "description": "a resource component describing a data acquisition session that is part of an experiment",
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Component" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/Component" },
                 { "$ref": "#/definitions/ExperimentalContext" }
             ]
         },
@@ -104,7 +104,7 @@
         "ExperimentalData": {
             "description": "a data resource describing a data acquisition session that is part of an experiment",
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/PublicDataResource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#/definitions/PublicDataResource" },
                 { "$ref": "#/definitions/ExperimentalContext" }
             ]
         }
