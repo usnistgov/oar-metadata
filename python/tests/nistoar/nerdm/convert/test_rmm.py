@@ -84,7 +84,7 @@ class TestNERDm2RMM(test.TestCase):
 
         with open(pdrrec) as fd:
             nerdm = json.load(fd)
-        self.assertTrue(nerdm['_schema'].endswith("/v0.6#"))
+        self.assertTrue(nerdm['_schema'].endswith("/v0.7#"))
         self.assertNotIn('versionHistory', nerdm)
 
         ing = cvtr.to_rmm(nerdm)
