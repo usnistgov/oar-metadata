@@ -230,6 +230,8 @@ class NERDm2Latest(object):
             byext["exp"] = version or NERDM_CONST.exp_ver
         if "sip" not in byext:
             byext["sip"] = version or NERDM_CONST.sip_ver
+        if "agg" not in byext:
+            byext["agg"] = version or NERDM_CONST.agg_ver
         if "" not in byext:
             byext[""] = defver
 

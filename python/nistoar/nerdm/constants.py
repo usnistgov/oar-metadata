@@ -11,6 +11,7 @@ bib_ver  = schema_versions[0]
 rls_ver  = schema_versions[-3]
 exp_ver  = schema_versions[-1]
 sip_ver  = schema_versions[-1]
+agg_ver  = schema_versions[-2]
 
 def core_schema_uri_for(version):
     """
@@ -52,6 +53,7 @@ BIB_SCHEMA_URI = bib_schema_uri_for(bib_ver)
 RLS_SCHEMA_URI = schema_uri_for(core_schema_base+"rls/", rls_ver)
 EXP_SCHEMA_URI = schema_uri_for(core_schema_base+"exp/", exp_ver)
 SIP_SCHEMA_URI = schema_uri_for(core_schema_base+"sip/", sip_ver)
+AGG_SCHEMA_URI = schema_uri_for(core_schema_base+"agg/", agg_ver)
 
 TAXONOMY_VOCAB_BASE_URI = "https://data.nist.gov/od/dm/nist-themes/"
 TAXONOMY_VOCAB_INIT_URI = "https://www.nist.gov/od/dm/nist-themes/v1.0"
