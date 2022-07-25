@@ -1,10 +1,10 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 #
 # Usage: ingest-taxonomy.py [-V] TAXONOMYFILE
 #
 # Load the taxonomy terms from a file into the MongoDB 'taxonomy' collections.
 #
-from __future__ import print_function
+
 import os, sys, errno, json, re, warnings
 from argparse import ArgumentParser
 
@@ -26,7 +26,7 @@ if 'OAR_PYTHONPATH' in os.environ:
 sys.path.extend(oarpypath.split(os.pathsep))
 try:
     import nistoar
-except ImportError, e:
+except ImportError as e:
     nistoardir = os.path.join(basedir, "python")
     sys.path.append(nistoardir)
     import nistoar
@@ -82,7 +82,7 @@ def main(args):
         try:
             with open(taxfile) as fd:
                 doc = json.load(fd)
-        except ValueError, ex:
+        except ValueError as ex:
             stat = 1
             totres.add(taxfile, [ JSONEncodingError(ex) ])
             if not opts.silent:

@@ -1,0 +1,206 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.2#",
+    "rev": "wd1",
+    "title": "The NERDm extension metadata for describing versions and releases of resources",
+    "description": "These classes extend the base NERDm schema to capture version history.  It defines a special Resource, a ReleaseCollection, that collects all the versions of an evolving resource, as well as an informative resource reference, a ReleaseHistory, to reference that resource.  The ReleasedResource can serve as a base Resource type for resources that are versioned.",
+    "definitions": {
+
+        "ReleasedResource": {
+            "description": "a Resource that can be revised and released under a sequence of versions",
+            "notes": [
+                "The base Resource type requires properties, title and contactPoint"
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource" },
+                { 
+                    "properties": {
+                        "isVersionOf": {
+                            "description": "the ID for the general resource that this resource is a version of",
+                            "notes": [
+                                "This value refers to a notion of the resource that is evolving over time as each version is released and typically should resolve to the last version",
+                                "Set this property if @id is set to a value refering to a specific version"
+                            ],
+                            "type": "string",
+                            "format": "uri"
+                        },
+
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating the version of the release of this resource",
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        },
+
+                        "releaseHistory": {
+                            "title": "Release History",
+                            "description": "a reference to the sequence of releases that this resource is a part of",
+                            "notes": [
+                                "This property may include a listing of the releases that make up the release history"
+                            ],
+                            "$ref": "#/definitions/ReleaseHistory",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Release History",
+                                "referenceProperty": "dc:isPartOf"
+                            }
+                        },
+
+                        "replaces": {
+                            "title": "Replaces",
+                            "description": "a listing of other existing resources that are deprecated by this resource",
+                            "notes": [
+                                "This replicates information provided in the releaseHistory property.  While the latter is preferred for this information, replaces can be added for ease of processing by certain applications."
+                            ],
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
+                                    { "required": [ "@id", "issued" ] }
+                                ]
+                            },
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Replaces",
+                                "referenceProperty": "dc:replaces"
+                            }
+                        },
+
+                        "isReplacedBy": {
+                            "title": "Replaced by",
+                            "description": "another existing resources that should be considered a replacement for this resource",
+                            "notes": [
+                                "This typically refers to a newer version of this resource",
+                                "This value is inferrable from the releaseHistory property.  While the latter is preferred for this information, isReplacedBy can be added for ease of processing by certain applications.",
+                                "This property may be set explicitly when this resource is intended to be replaced by another resource that is not simple a newer version of this resource."
+                            ],
+                            "allOf": [
+                                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
+                                { "required": [ "@id", "issued" ] }
+                            ],
+                            
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Is replaced by",
+                                "referenceProperty": "dc:isReplacedBy"
+                            }
+                        }
+                    },
+                    "required": [ "@id", "publisher", "accessLevel" ]
+                }
+            ]
+        },
+
+        "ReleaseHistory": {
+            "title": "Release History",
+            "description": "a reference to a release history collection that contains all the releases of the resources",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "hasRelease": {
+                            "title": "Releases",
+                            "description": "the list of known releases that are part of this release history collection",
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/Release" }
+                        }
+                    },
+                    "required": [ "@id" ]
+                }
+            ]
+        },
+
+        "Release": { 
+            "title": "Release",
+            "description": "a reference to a release of a RevisableResource",
+            "notes": [
+                "A release entry provides an abbreviated description of one of the versions in series of releases."
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
+                {
+                    "properties": {
+                        "version": {
+                            "title": "Version",
+                            "description": "a string indicating a version of the release of this resource",
+                            "notes": [
+                                "label could contain the same value"
+                            ],
+                            "type": "string",
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Version",
+                                "referenceProperty": "schema:version"
+                            }
+                        },
+                        "status": {
+                            "title": "Status",
+                            "description": "a label indicating the availability status of the release",
+                            "notes": [
+                                "As some releases may disappear or be embargoed, this label is used indicate whether this release is currently available and, if not, why.",
+                                "See ReleaseStatus value documentation for allowed values.  If this property is not provided, the assumed value should 'available'"
+                            ],
+                            "$ref": "#/definitions/ReleaseStatus"
+                        }
+                    },
+                    "required": [ "@id", "version", "issued" ]
+                }
+            ]
+        },
+
+        "ReleaseCollection": {
+            "description": "a special collection that enumerates the different versions available for a particular resouce",
+            "allOf": [ 
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource" },
+                {
+                    "properties": {
+                        "hasRelease": {
+                            "title": "Releases",
+                            "description": "the list of known releases that are part of this release history collection",
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/Release" }
+                        }
+                    },
+                    "required": [ "hasRelease" ]
+                }
+            ]
+        },
+
+        "ReleaseStatus": {
+            "description": "A label indicating a resource's release and availability status",
+            "type": "string",
+            "enum": [ "available", "deprecated", "embargoed", "unavailable", "missing", "removed" ],
+            "valueDocumentation": {
+                "available":  {
+                    "description": "the resource is currently available via its landing page and the links therein as well as via its component links"
+                },
+                "deprecated": {
+                    "description": "the resource is still available; however, the publisher wishes to indicate that the use of the data is no longer recommended"
+                },
+                "embargoed": {
+                    "description": "the resource is currently unavailable but is expected to become available sometime in the future."
+                },
+                "unavailable": {
+                    "description": "the resource is temporarily unavailable, usuallly for known reasons (other than being in an embargoed state)",
+                    "notes": [
+                        "This might be set if the server that provides the resource is going to be down for an extended period of time"
+                    ]
+                },
+                "missing": {
+                    "description": "the resource is unavailable for unknown reasons",
+                    "notes": [
+                        "The publisher may apply the landing page and/or component links are unresponsive for an extended period of time."
+                    ]
+                },
+                "removed": {
+                    "description": "the resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
+                }
+            }
+        }        
+    }
+}

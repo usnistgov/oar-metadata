@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python3
 #
 # record_deps.py -- encode the dependencies of a distribution as JSON object,
 #                   writing it to standard output.
@@ -12,7 +12,6 @@
 # The default package name (oar-sdp) can be over-ridden by the environment
 # variable PACKAGE_NAME
 #
-from __future__ import print_function
 import os, sys, json, re
 from collections import OrderedDict
 

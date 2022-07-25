@@ -8,15 +8,14 @@ from pymongo import MongoClient
 from ejsonschema import ExtValidator
 from ejsonschema import ValidationError, SchemaError, RefResolutionError
 
-from ..exceptions import DatabaseStateError
+from ..exceptions import RMMException, DatabaseStateError
 
 _dburl_re = re.compile(r"^mongodb://(\w+(:\S+)?@)?\w+(\.\w+)*(:\d+)?/\w+$")
 
-class Loader(object):
+class Loader(object, metaclass=ABCMeta):
     """
     an abstract base class for loading data
     """
-    __metaclass__ = ABCMeta
 
     def __init__(self, dburl, collname=None, schemadir=None, log=None):
         """
@@ -121,12 +120,12 @@ class Loader(object):
             coll = self._db[self.coll]
 
             if key:
-                curs = coll.find(key)
-                if curs.count() > 1:
+                count = coll.count_documents(key);
+                if count > 1:
                     # key should have returned no more than 1 record
                     raise DatabaseStateError("unique key query returns "
                                              "multiple records")
-                if curs.count() > 0:
+                if count > 0:
                     # a previous record with matching key exists
                     if onupdate == 'fail':
                         raise RecordIngestError("Existing record with key "
@@ -134,11 +133,16 @@ class Loader(object):
 
                     doload = True
                     if hasattr(onupdate, '__call__'):
-                        doload = onupdate(data, key)
+                        c = coll.find(key)
+                        try:
+                            doload = onupdate(c[0], key)
+                        finally:
+                            c.close()
 
                     if doload:
-                        if onupdate != 'quiet':
-                            msg = "Updating previously loaded record"
+                        if isinstance(onupdate, str) and onupdate != 'quiet':
+                            msg = "Updating previously loaded record into %s: %s" % \
+                                  (self.coll, str(key))
                             if self.log:
                                 self.log.warn(msg)
                             else:
@@ -156,9 +160,9 @@ class Loader(object):
             result = coll.insert_one(data)
             return 1
 
-        except RecordIngestError, ex:
+        except RecordIngestError as ex:
             raise
-        except Exception, ex:
+        except Exception as ex:
             if self.log:
                 self.log.exception("Unexpected loading error: "+str(ex))
                 raise RuntimeError("Unexpected loading error: "+str(ex))
@@ -288,19 +292,15 @@ class LoadLog(object):
                 self._results.append(res)
         return self
 
-class RecordIngestError(Exception):
+class RecordIngestError(RMMException):
     """
-    an exception indicating a failure to load a record
+    an exception indicating a failure to load a record into the RMM
     """
 
     def __init__(self, msg=None, cause=None):
-        if not msg:
-            if cause:
-                msg = str(cause)
-            else:
-                msg = "Unknown Ingest Error"
-        super(RecordIngestError, self).__init__(msg)
-        self.cause = cause
+        if not msg and not cause:
+            msg = "Unknown RMM Ingest Error"
+        super(RecordIngestError, self).__init__(msg, cause)
 
 class JSONEncodingError(RecordIngestError):
     """

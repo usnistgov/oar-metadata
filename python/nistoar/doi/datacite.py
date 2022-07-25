@@ -9,7 +9,7 @@ DataCite services.
 import re
 from collections import OrderedDict, Mapping
 from copy import deepcopy
-from StringIO import StringIO
+from io import StringIO
 import requests
 
 from .utils import strip_DOI, is_DOI
@@ -367,7 +367,7 @@ class JSONAPIError(object):
             out.write(error.get('source','(data)'))
         if 'detail' in error and error['detail']:
             out.write(": ")
-            out.write(error['detail'])
+            out.write(str(error['detail']))
         return out.getvalue()
 
     def explain(self):

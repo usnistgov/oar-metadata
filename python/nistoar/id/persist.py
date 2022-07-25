@@ -214,7 +214,7 @@ class EDIBasedMinter(IDMinter):
         d = int(hexid, 16)
         while d > 0:
             s ^= d % self._div
-            d /= self._div
+            d //= self._div
         return s
 
     def mint(self, data=None):

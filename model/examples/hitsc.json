@@ -1,9 +1,9 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
-    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataPublication" ],
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#/definitions/DataPublication" ],
 
-    "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublishedDataResource" ],
+    "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublicDataResource" ],
     "@id": "ark:/88434/sdp0fjspek353",
     "title": "NIST High Temperature Superconducting Materials Database - SRD 62",
     "version": "1.0",
@@ -26,6 +26,7 @@
         {
             "@id": "ark:/88434/sdp0fjspek352",
             "title": "NIST Ceramics WebBook - SRD 151",
+            "proxyFor": "ark:/88434/sdp0fjspek352",
             "@type": [ "nrdp:Portal", "nrdp:SRD" ]
         }
     ],
@@ -61,7 +62,7 @@
             "label": "User Manual",
             "location": "https://srdata.nist.gov/CeramicDataPortal/Manual/HtsHelper",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#/definitions/DCiteReference"
+                "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.7#/definitions/DCiteReference"
             ]
         }
     ],

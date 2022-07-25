@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 #
 """
 a script that reads taxonomy terms from an Excel spreadsheet and write them 
@@ -71,7 +71,7 @@ def fill(thisrow, lastrow):
     out.reverse()
 
     for i in range(len(out)):
-        if isinstance(out[i], (str, unicode)):
+        if isinstance(out[i], str):
             out[i] = out[i].strip()
         if not out[i] and i < len(lastrow):
             out[i] = lastrow[i]
@@ -87,7 +87,7 @@ def get_header():
         if os.path.exists(taxfile):
             with open(taxfile) as fd:
                 header = json.load(fd, object_pairs_hook=OrderedDict)
-    except Exception, ex:
+    except Exception as ex:
         pass
     
     header['vocab'] = []
