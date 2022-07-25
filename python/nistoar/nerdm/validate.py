@@ -55,7 +55,7 @@ def create_validator(schemadir, forprefix="_"):
     """
     if isinstance(forprefix, Mapping):
         forprefix = get_mdval_flavor(forprefix) or "_"
-    if not isinstance(forprefix, (str, unicode)):
+    if not isinstance(forprefix, str):
         raise TypeError("create_validator: forprefix: not a str or dict")
 
     return ejs.ExtValidator.with_schema_dir(schemadir, forprefix)

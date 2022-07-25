@@ -21,15 +21,15 @@ include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.6#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.7#";
 
 # the NERDm pub schema extension namespace
 #
-def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#";
 
 # the NERDm bib schema extension namespace
 #
-def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#";
+def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.7#";
 
 # the NERDm context location
 #

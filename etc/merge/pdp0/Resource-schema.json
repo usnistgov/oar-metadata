@@ -1,0 +1,5 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://www.nist.gov/od/dm/nerdm-schema/v0.6/Resource#",
+    "$ref": "https://www.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource"
+}

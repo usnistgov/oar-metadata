@@ -13,7 +13,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
                      UpdateWarning, LoadLog)
 from .loader import ValidationError, SchemaError, RefResolutionError
 
-DEF_BASE_SCHEMA = "https://www.nist.gov/od/dm/field-help/v0.1#"
+DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/field-help/v0.1#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/FieldInfo"
 
 COLLECTION_NAME="fields"
@@ -59,7 +59,7 @@ class FieldLoader(Loader):
                       if not provided, the extracted key will be used as 
                       applicable.  
         """
-        if hasattr(fielddata, 'iteritems'):
+        if hasattr(fielddata, 'items'):
             # JSON object
             return self.load_obj(fielddata, validate, results, id)
         elif hasattr(fielddata, '__getitem__'):
@@ -88,7 +88,7 @@ class FieldLoader(Loader):
 
             try:
                 key = { "name": fielddata['name'] }
-            except KeyError, ex:
+            except KeyError as ex:
                 if id is None:
                     id = str({'name': '?'})
                 return results.add(id,
@@ -108,7 +108,7 @@ class FieldLoader(Loader):
 
             try:
                 self.load_data(fielddata, key, self.onupdate)
-            except Exception, ex:
+            except Exception as ex:
                 errs = [ex]
             return results.add(id, errs)
 
@@ -130,7 +130,7 @@ class FieldLoader(Loader):
         with open(filepath) as fd:
             try:
                 data = json.load(fd)
-            except ValueError, ex:
+            except ValueError as ex:
                 if not results:
                     results = self._mkloadlog()
                 return results.add(filepath, [ JSONEncodingError(ex) ])

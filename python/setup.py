@@ -1,6 +1,6 @@
 import glob, os, shutil
-from distutils.core import setup
-from distutils.command.build import build as _build
+from setuptools import setup, find_namespace_packages
+from setuptools.command.build_py import build_py as _build
 
 def set_version():
     try:
@@ -56,18 +56,20 @@ class build(_build):
         _build.run(self)
 
 setup(name='nistoar',
-      version='0.1',
+      version=get_version(),
       description="the NERDm metadata support for nistoar",
       author="Ray Plante",
       author_email="raymond.plante@nist.gov",
       url='https://github.com/usnistgov/oar-metadata',
-      packages=['nistoar', 'nistoar.nerdm', 'nistoar.nerdm.convert', 
-                'nistoar.id', 'nistoar.doi', 'nistoar.doi.resolving',
-                'nistoar.rmm', 'nistoar.rmm.mongo', 'nistoar.rmm.ingest'],
+      packages=find_namespace_packages(exclude=['*.tests', '*.tests.data'], include=['nistoar.*']),
       scripts=[os.path.join("..","scripts",s) for s in 
                ["pdl2resources.py", "ingest-nerdm-res.py",
                 "ingest-field-info.py", "ingest-taxonomy.py",
                 "ingest-uwsgi.py" ]],
-      cmdclass={'build': build}
+      cmdclass={'build_py': build},
+      classifiers=[
+          'Programming Language :: Python :: 3 :: Only'
+      ],
+      zip_safe=False
 )
 

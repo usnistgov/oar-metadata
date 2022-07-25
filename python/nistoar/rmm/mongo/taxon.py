@@ -7,7 +7,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
                      UpdateWarning, LoadLog)
 from .loader import ValidationError, SchemaError, RefResolutionError
 
-DEF_BASE_SCHEMA = "https://www.nist.gov/od/dm/simple-taxonomy/v1.0#"
+DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/simple-taxonomy/v1.0#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Term"
 
 COLLECTION_NAME="taxonomy"
@@ -72,7 +72,7 @@ class TaxonomyLoader(Loader):
                 termdata['parent'] = ""
             try:
                 key = { "term": termdata['term'], "parent": termdata['parent'] }
-            except KeyError, ex:
+            except KeyError as ex:
                 if id is None:
                     id = str({'term': '?'})
                 return results.add(id,
@@ -95,7 +95,7 @@ class TaxonomyLoader(Loader):
 
             try:
                 self.load_data(termdata, key, self.onupdate)
-            except Exception, ex:
+            except Exception as ex:
                 errs = [ex]
             return results.add(id, errs)
 
@@ -113,7 +113,7 @@ class TaxonomyLoader(Loader):
                       if not provided, the extracted key will be used as 
                       applicable.  
         """
-        if hasattr(termdata, 'iteritems'):
+        if hasattr(termdata, 'items'):
             # JSON object
             return self.load_obj(termdata, validate, results, id)
         elif hasattr(termdata, '__getitem__'):
@@ -130,7 +130,7 @@ class TaxonomyLoader(Loader):
         with open(filepath) as fd:
             try:
                 data = json.load(fd)
-            except ValueError, ex:
+            except ValueError as ex:
                 if not results:
                     results = self._mkloadlog()
                 return results.add(filepath, [ JSONEncodingError(ex) ])
