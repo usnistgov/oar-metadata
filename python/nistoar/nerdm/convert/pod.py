@@ -558,7 +558,7 @@ def _doiinfo2reference(info, resolver):
     if tp == 'dataset':
         out['@type'] = ['schema:Dataset']
         out['refType'] = "References"
-    elif tp.startswith('article'):
+    elif tp == 'journal-article' or tp.startswith('article'):
         out['@type'] = ['schema:Article']
         out['refType'] = "IsCitedBy"
     elif tp == 'book':
@@ -617,7 +617,7 @@ def citeproc_author2nerdm_author(author):
         out['affiliation'] = []
         for affil in author['affiliation']:
             outa = OrderedDict()
-            if isinstance(affil, (str, unicode)):
+            if isinstance(affil, str):
                 outa['title'] = affil
             elif 'name' in affil:
                 outa['title'] = affil['name']
@@ -698,7 +698,7 @@ def datacite_creator2nerdm_author(creator):
     # affiliation
     if creator.get('affiliation'):
         out['affiliation'] = []
-        if isinstance(creator.get('affiliation'), (str, unicode)):
+        if isinstance(creator.get('affiliation'), str):
             out['affiliation'].append(
                 OrderedDict( [("@type", "schema:affiliation"),
                               ('title', creator.get('affiliation'))] )

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
-    "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#",
     "rev": "wd1",
     "title": "The JSON Schema for the NIST Extended Resource Data model (NERDm)",
     "description": "A JSON Schema specfying the core NERDm classes",
@@ -164,10 +164,54 @@
                     }
                 },
                 
+                "annotated": {
+                    "title": "Last Annotation Date",
+                    "description": "Date of the last minor update to metadata or other ancillary information that (by itself) did not affect the main content of the resource",
+                    "notes": [
+                        "This will always get updated for both minor and major changes; that is, when the revision date changes, this date will change as well."
+                    ],
+                    "$ref": "#/definitions/FlexibleDate",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Release Date",
+                        "range": "xsd:date"
+                    }
+                },
+
+                "status": {
+                    "description": "A label indicating this resource's release and availability status",
+                    "type": "string",
+                    "notes": [
+                        "This value is meant to flag a resource as perhaps unavailable--temporarily or permanently--with some indication as to why; further explanation could be amended to the resource description.",
+                        "This value is intended to be orthogonal to the accessLevel property.",
+                        "See ReleaseStatus value documentation (from the nerdm-schema/rls schema) for the full set of values recognized by the NIST PDR.  If this property is not provided, the assumed value should 'available'"
+                    ],
+                    "valueDocumentation": {
+                        "available":  {
+                            "description": "the resource is currently available via its landing page and the links therein as well as via its component links"
+                        },
+                        "unavailable": {
+                            "description": "the resource is temporarily unavailable, usuallly for known reasons (other than being in an embargoed state)",
+                            "notes": [
+                                "This might be set if the server that provides the resource is going to be down for an extended period of time"
+                            ]
+                        },
+                        "missing": {
+                            "description": "the resource is unavailable for unknown reasons",
+                            "notes": [
+                                "The publisher may apply the landing page and/or component links are unresponsive for an extended period of time."
+                            ]
+                        },
+                        "removed": {
+                            "description": "the resource was unpublished--that is, intentionally and permanently made unavailable, usually to prevent its use"
+                        }
+                    }
+                },
+                
                 "publisher": {
                     "description": "The publishing entity and optionally their parent organization(s).",
                     "notes": [
-                        "This is a container for a publisher object which groups together the fields: name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization’s hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the below format."
+                        "This is a container for a publisher object which groups together the fields, name and subOrganization. The subOrganization field can also contain a publisher object which allows one to describe an organization's hierarchy. Where greater specificity is desired, include as many levels of publisher as is useful, in ascending order, using the format below."
                     ],
                     "$ref": "#/definitions/Organization",
                     "asOntology": {
@@ -310,7 +354,7 @@
                     "title": "Collections",
                     "description": "The collections that this dataset formally belongs to",
                     "notes": [
-                        "This property indicates relation of different resources"
+                        "This property indicates a type of relationship between this and other resources"
                     ],
                     "type": "array",
                     "items": { "$ref": "#/definitions/ResourceReference" },
@@ -465,10 +509,7 @@
 
             },
 
-            "required": [
-                "title", "description", "landingPage", "publisher", 
-                "contactPoint", "accessLevel"
-            ]
+            "required": [ "title", "contactPoint" ]
         },
 
         "FlexibleDate": {
@@ -485,9 +526,11 @@
         },
 
         "RelatedResource": {
-            "description": "a resource that is related in some way to this resource",
+            "description": "a resource that is related in some way to a subject resource",
             "notes": [
-                "This serves as a base type for various kinds of references."
+                "This serves as a base type for various kinds of references to other resources.  When used as a property value, the property defines a relationship between a subject resource and the resource described by this type",
+                "The object resource is identified by @id (and possibly by proxyFor); the other properties can be provided as a way to provide a view of the related resource without resolving the identifier.  The values of the other properties are typically copies from the refered resource's metadata; however, it is not guaranteed.  In general, the view of this resource provided by these properties represent how the resource should be perceived as part of its relationship with the subject reosurce.",
+                "When the proxyFor property is used, then this related resource description is specifically about its relationship to the subject resource.  The proxyFor value should contain an identifier that is commonly known by outside of the relationship; the @id value, then, refers to the related resource in the context of the relationship.  In the example of a bibliographic reference, the proxyFor property would contain the DOI of the paper or other work, while @id represents its entry in a references list for the subject resource."
             ],
             "type": "object",
 
@@ -531,17 +574,30 @@
                     "type": "string",
                     "minLength": 1
                 },
-                "proxyFor": {
-                    "description": "a local identifier representing this resource",
+                "abbrev": {
+                    "description": "an abbreviated form of the resource's title",
                     "notes": [
-                        "This identifier is expected to point to an up-to-date description of the resource as known to the local system.  The properties associated with that identifier may be different those given in the current record."
+                        "this can be used as a label for a compact display or text for a link to this resource",
+                        "this may be helpful for discovery when an abbreviation is included in a free-text search"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "maxLength": 24
+                    }
+                },
+                "proxyFor": {
+                    "description": "A commonly-known identifier for the resource independent of its relationship to the subject resource",
+                    "notes": [
+                        "This property should be used when the @id is meant to identify the related resource in the context of its relationship (e.g. a paper appearing in a reference list).",
+                        "There are no lexical constraints on what the identifier looks like; this allows for non-URI identifiers."
                     ],
                     "type": "string",
                     "format": "uri",
                     "asOntology": {
                         "@context": "profile-schema-onto.json",
-                        "prefLabel": "Current Person Information",
-                        "referenceProperty": "ore:proxyFor"
+                        "prefLabel": "Identified locally as",
+                        "referenceProperty": "ctlog:localIdentifier"
                     }
                 },
                 "location": {
@@ -589,31 +645,6 @@
                 { "$ref": "#/definitions/RelatedResource" },
                 {
                     "required": [ "title" ]
-                }
-            ]
-        },
-
-        "VersionRelease": {
-            "description": "notes about a versioned release of the resource",
-            "allOf": [
-                { "$ref": "#/definitions/RelatedResource" },
-                {
-                    "properties": {
-                        "version": {
-                            "title": "Version",
-                            "description": "a string indicating a version of the release of this resource",
-                            "notes": [
-                                "label could contain the same value"
-                            ],
-                            "type": "string",
-                            "asOntology": {
-                                "@context": "profile-schema-onto.json",
-                                "prefLabel": "Version",
-                                "referenceProperty": "schema:version"
-                            }
-                        }
-                    },
-                    "required": [ "version", "issued" ]
                 }
             ]
         },

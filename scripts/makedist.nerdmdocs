@@ -10,6 +10,7 @@ execdir=`dirname $0`
 [ "$execdir" = "" -o "$execdir" = "." ] && execdir=$PWD
 PACKAGE_DIR=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 SOURCE_DIR=$PACKAGE_DIR
+alias python=python3
 
 # Update this list with the names of the individual component names
 # 

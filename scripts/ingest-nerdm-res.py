@@ -1,11 +1,11 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 #
-# Usage: ingest-field-info.py [-i START] [-c COUNT] [-V] FIELDDATAFILE
+# Usage: ingest-nerdm-res.py [-VqsU] [-M URL] NERD_FILE_OR_DIR [...]
+# See help details via: ingest-nerdm-res.py -h
 #
-# Load the field information from a file into the MongoDB 'fields' collections.
+# Load NERDm JSON files into the RMM
 #
-from __future__ import print_function
-import os, sys, errno, json, re, warnings
+import os, sys, errno, json, re, warnings, shutil
 from argparse import ArgumentParser
 
 basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +26,7 @@ if 'OAR_PYTHONPATH' in os.environ:
 sys.path.extend(oarpypath.split(os.pathsep))
 try:
     import nistoar
-except ImportError, e:
+except ImportError as e:
     nistoardir = os.path.join(basedir, "python")
     sys.path.append(nistoardir)
     import nistoar
@@ -52,6 +52,10 @@ def define_opts(progname=None):
                         action="store_false",
                         help="do not attempt to validate the records before "+
                              "ingesting them")
+    parser.add_argument('-A', '--archive-records', dest='archdir', metavar="DIR",
+                        action='store', default=None,
+                        help="after successfully loading each record, move the "+
+                             "record file to the archive directory DIR")
     parser.add_argument('-q', '--quiet', dest='quiet', default=False,
                         action="store_true",
                         help="do not print non-fatal status messages")
@@ -64,7 +68,7 @@ def define_opts(progname=None):
     parser.add_argument('-M', '--mongodb-url', metavar='URL',type=str,dest='url',
                         action='store', default="mongodb://mongodb:3333/TestDB",
                         help="the URL to the MongoDB database to load into (in "+
-                             "the form 'mongodb://HOST:PORT/DBNAME'")
+                             "the form 'mongodb://HOST:PORT/DBNAME')")
 
     return parser
 
@@ -73,6 +77,10 @@ def main(args):
     opts = parser.parse_args(args)
     if opts.silent:
         opts.quiet = True
+    if opts.archdir and (not os.path.isdir(opts.archdir) or not os.access(opts.archdir, os.W_OK)):
+        print("{0}: {1}: not a directory with write permission".format(parser.prog, opts.archdir),
+              file=sys.stderr)
+        return 3
 
     stat = 0
     loader = NERDmLoader(opts.url, schemadir)
@@ -85,9 +93,9 @@ def main(args):
         validate = opts.validate
 
         if os.path.isdir(nerdpath):
-            res = load_from_dir(nerdpath, loader, validate)
+            res = load_from_dir(nerdpath, loader, validate, opts.archdir)
         elif os.path.isfile(nerdpath):
-            res = load_from_file(nerdpath, loader, validate)
+            res = load_from_file(nerdpath, loader, validate, opts.archdir)
         elif not os.path.exists(nerdpath):
             res = LoadLog().add(nerdpath, [ "File not found." ])
         else:
@@ -117,11 +125,47 @@ def main(args):
         stat = 2
     return stat
 
-def load_from_dir(dirpath, loader, validate=True):
-    return loader.load_from_dir(dirpath, validate)
+def load_from_dir(dirpath, loader, validate=True, archdir=None):
+    results = LoadLog()
 
-def load_from_file(filepath, loader, validate=True):
-    return loader.load_from_file(filepath, validate)
+    for root, dirs, files in os.walk(dirpath):
+        # don't look in .directorys
+        for i in range(len(dirs)-1, -1, -1):
+            if dirs[i].startswith('.'):
+                del dirs[i]
+
+        for f in files:
+            if f.startswith('.') or not f.endswith('.json'):
+                continue
+            f = os.path.join(root, f) 
+            load_from_file(f, loader, validate, archdir, results)
+                                                  
+    return results
+
+def load_from_file(filepath, loader, validate=True, archdir=None, results=None):
+    with open(filepath) as fd:
+        try:
+            data = json.load(fd)
+        except ValueError as ex:
+            ex = JSONEncodingError(ex)
+            return LoadLog().add(filepath, ex)
+
+    out = loader.load(data, validate=validate, results=results, id=filepath)
+
+    if archdir and out.failure_count == 0:
+        recid = re.sub(r'/.*$', '', re.sub(r'ark:/\d+/', '', data.get('@id','')))
+        if not recid:
+            # should not happen
+            recid = filepath
+        ver = data.get('version', '1.0.0').replace('.', '_')
+        outfile = os.path.join(archdir, "%s-v%s.json" % (os.path.basename(recid), ver))
+
+        # this should not raise errors, but if it does, let it bubble up
+        shutil.move(filepath, outfile)
+            
+    return out
+
+
 
 def fmterrs(errs):
     msgs = str(errs[0]).split("\n")

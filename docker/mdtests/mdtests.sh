@@ -8,7 +8,7 @@ function launch_uwsgi {
     mkdir docker/_docker_ingest_archive
     
     echo starting uwsgi...
-    uwsgi --daemonize docker/_docker_uwsgi.log --plugin python    \
+    uwsgi --daemonize docker/_docker_uwsgi.log --plugin python3   \
           --http-socket :9090 --wsgi-file scripts/ingest-uwsgi.py \
           --set-ph oar_config_file=docker/mdtests/ingest_conf.yml \
           --pidfile /tmp/ingest.pid
