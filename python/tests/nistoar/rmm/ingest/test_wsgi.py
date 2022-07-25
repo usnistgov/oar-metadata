@@ -60,8 +60,7 @@ class TestRMMRecordIngestApp(test.TestCase):
             "db_url": dburl,
             'nerdm_schema_dir': os.path.abspath(schemadir),
             'archive_dir': self.archdir,
-            'post_commit_exec': postcomm + os.path.join(self.archdir, "postcommit.txt") + \
-                                " {db_url} {recid} {recfile}"
+            'post_commit_exec': postcomm + ' ' + self.commitfile + " {db_url} {recid} {recfile}"
         }
 
         try:
@@ -105,6 +104,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertEqual(body[0].decode().strip(), '["nerdm"]')
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_is_ready(self):
         req = {
@@ -116,6 +116,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertEqual(body[0].decode(), 'Service ready\n')
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_auth(self):
         # test rejection when auth key provided but wsgi is not configured to
@@ -293,7 +294,6 @@ class TestRMMRecordIngestApp(test.TestCase):
                 'CONTENT_LENGTH': clen,
                 'wsgi.input': doc
             }
-
             body = self.svc(req, self.start)
 
         archfile = os.path.join(self.archdir, "sdp0fjspek351-v1_0_0.json")

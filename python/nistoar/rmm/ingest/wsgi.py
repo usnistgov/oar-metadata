@@ -371,7 +371,7 @@ class Handler(object):
         run an external executable for further processing after the record is commited to 
         the database (e.g. update an external index)
         """
-        cmd = _mkpostcomm(sel._postexec, recid)
+        cmd = _mkpostcomm(self._postexec, recid)
 
         try:
             log.debug("Executing post-commit script:\n  %s", " ".join(cmd))
