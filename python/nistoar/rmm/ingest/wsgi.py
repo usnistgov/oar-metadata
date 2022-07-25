@@ -6,8 +6,9 @@ necessary for integration into a WSGI server.  It should be replaced with
 a framework-based implementation if any further capabilities are needed.
 """
 
-import os, sys, logging, json, cgi, re
+import os, sys, logging, json, cgi, re, subprocess
 from urlparse import urlsplit, urlunsplit
+from collections import Mapping
 from wsgiref.headers import Headers
 
 from ..mongo.nerdm import (NERDmLoader, LoadLog,
@@ -18,9 +19,38 @@ log = logging.getLogger("RMM").getChild("ingest")
 
 DEF_BASE_PATH = "/"
 
+
 class RMMRecordIngestApp(object):
+    """
+    This is the WSGI implementation of the NERDm record ingest service.  NERDm records submitted to this 
+    service are validated and (if valid) loads them into the RMM.  This service can be configured to also 
+    carry out a post-ingest action; this is leveraged by oar-docker to update the SDP's autocomplete index. 
+
+    This App accepts the following configuration parameters:
+    :param str db_url:     the (MongoDB) URL of the RMM database to load into
+    :param dict db_authn:  the configuration controlling authentication to the database
+    :param str db_authn.user:  the database user name to connect to the database with
+    :param str db_authn.pass:  the database password (corresponding to `db_authn.user`) to authenticate 
+                           to the database with.
+    :param str db_authn.rm_config_loc:  the name of a configuration set to retrieve to load authentication 
+                           in from.  The values found there (which should include `user` and `pass`) will 
+                           be loaded into the `db_authn` configuration.
+    :param str auth_key:   the Bearer token that must be presented as client credentials to the service;
+                           if an incorrect token is included with service requests, the request will 
+                           rejected with a 401 status.  
+    :param str archive_dir  a directory where accepted records should be stored after ingest.
+    :param str|list post_commit_exec:  a string or list of strings that specify a program and its arguments
+                           that should be run after the record is loaded into the database.  If given as 
+                           string, it will be split into a list at its spaces to provide the executable and 
+                           arguments.  The string values an include a words surrounded by braces (e.g.
+                           `{archive_dir}`); those whose word matches a parameter that is part of the 
+                           provided configuration will get substituted with the values of the parameters.  
+    """
 
     def __init__(self, config):
+        """
+        instantiate the service with the provided configuration.
+        """
         self.base_path = config.get('base_path', DEF_BASE_PATH)
         self.dburl = config.get('db_url')
         if not self.dburl:
@@ -83,12 +113,19 @@ class RMMRecordIngestApp(object):
             else:
                 log.info("Authorization key is required of clients via query parameter")
         else:
-            log.warn("No authorization key required of clients")
-        
+            log.warning("No authorization key required of clients")
+
+        # check for post-commit script request
+        self._postexec = config.get('post_commit_exec')
+        if self._postexec:
+            try:
+                self._postexec = _mkpostcomm(self._postexec, '{recid}', **config)
+            except ValueError as ex:
+                raise ConfigurationExcetpion("post_commit_exec contains bad formatting")
 
     def handle_request(self, env, start_resp):
         handler = Handler(self._loaders, env, start_resp,
-                          self.archdir, self._auth)
+                          self.archdir, self._auth, self._postexec)
         return handler.handle()
 
     def __call__(self, env, start_resp):
@@ -98,7 +135,7 @@ app = RMMRecordIngestApp
 
 class Handler(object):
 
-    def __init__(self, loaders, wsgienv, start_resp, archdir, auth=None):
+    def __init__(self, loaders, wsgienv, start_resp, archdir, auth=None, postexec=None):
         self._env = wsgienv
         self._start = start_resp
         self._meth = wsgienv.get('REQUEST_METHOD', 'GET')
@@ -107,6 +144,7 @@ class Handler(object):
         self._msg = "unknown status"
         self._auth = auth
         self._archdir = archdir
+        self._postexec = postexec
 
         self._loaders = loaders
 
@@ -152,7 +190,7 @@ class Handler(object):
             # match the last value provided
             return len(auths) > 0 and self._auth[1] == auths[-1]  
         if len(auths) > 0:
-            log.warn("Authorization key provided, but none has been configured")
+            log.warning("Authorization key provided, but none has been configured")
         return len(auths) == 0
 
     def authorize_via_headertoken(self):
@@ -163,7 +201,7 @@ class Handler(object):
             return len(parts) > 1 and parts[0] == "Bearer" and \
                 self._auth[1] == parts[1]
         if authhdr:
-            log.warn("Authorization key provided, but none has been configured")
+            log.warning("Authorization key provided, but none has been configured")
         return authhdr == ""
 
     def send_unauthorized(self):
@@ -177,13 +215,14 @@ class Handler(object):
         path = path.strip('/')
         if not path:
             try:
-                out = json.dumps(self._loaders.keys()) + '\n'
-            except Exception, ex:
+                out = json.dumps(list(self._loaders.keys())) + '\n'
+            except Exception as ex:
                 log.exception("Internal error: "+str(ex))
                 return self.send_error(500, "Internal error")
 
             self.set_response(200, "Supported Record Types")
             self.add_header('Content-Type', 'application/json')
+            self.add_header('Content-Length', str(len(out)))
             self.end_headers()
             return [out]
         elif path in self._loaders:
@@ -201,7 +240,7 @@ class Handler(object):
             return self.send_error(405, "POST not supported on this resource")
         elif len(steps) == 1:
             if steps[0] == 'nerdm':
-                return self.post_nerdm_record()
+                return self.ingest_nerdm_record()
             else:
                 return self.send_error(403, "new records are not allowed for " +
                                        "submission to this resource")
@@ -253,7 +292,7 @@ class Handler(object):
                                .format(arkid, str(ex)))
         
 
-    def post_nerdm_record(self):
+    def ingest_nerdm_record(self):
         """
         Accept a NERDm record for ingest into the RMM
         """
@@ -261,10 +300,10 @@ class Handler(object):
 
         try:
             clen = int(self._env['CONTENT_LENGTH'])
-        except KeyError, ex:
+        except KeyError as ex:
             log.exception("Content-Length not provided for input record")
             return self.send_error(411, "Content-Length is required")
-        except ValueError, ex:
+        except ValueError as ex:
             log.exception("Failed to parse input JSON record: "+str(e))
             return self.send_error(400, "Content-Length is not an integer")
 
@@ -272,10 +311,10 @@ class Handler(object):
             bodyin = self._env['wsgi.input']
             doc = bodyin.read(clen)
             rec = json.loads(doc)
-        except Exception, ex:
+        except Exception as ex:
             log.exception("Failed to parse input JSON record: "+str(ex))
-            log.warn("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
-                     .format(doc[:75], doc[-20:], len(doc), clen))
+            log.warning("Input document starts...\n{0}...\n...{1} ({2}/{3} chars)"
+                        .format(doc[:75], doc[-20:], len(doc), clen))
             return self.send_error(400,
                                    "Failed to load input record (bad format?): "+
                                    str(ex))
@@ -295,14 +334,15 @@ class Handler(object):
                 self.end_headers()
                 return [ json.dumps([str(e) for e in res.errs]) + '\n' ]
 
-        except RecordIngestError, ex:
+        except RecordIngestError as ex:
             log.exception("Failed to load posted record: "+str(ex))
             self.set_response(400, "Input record is not valid (missing @id)")
             self.add_header('Content-Type', 'application/json')
             self.end_headers()
-            return [ json.dumps([ "Record is missing @id property" ]) + '\n' ]
+            out = json.dumps([ "Record is missing @id property" ]) + '\n'
+            return [ out.encode() ]
 
-        except Exception, ex:
+        except Exception as ex:
             log.exception("Loading error: "+str(ex))
             return self.send_error(500, "Load failure due to internal error")
 
@@ -311,13 +351,65 @@ class Handler(object):
         except Exception as ex:
             log.exception("Commit error: "+str(ex))
 
+        if self._postexec:
+            # run post-commit script
+            try:
+                self.nerdm_post_commit(recid)
+            except Exception as ex:
+                log.exception("Post-commit error: "+str(ex))
+
         log.info("Accepted record %s with @id=%s",
                  rec.get('ediid','?'), rec.get('@id','?'))
         self.set_response(200, "Record accepted")
         self.end_headers()
         return []
-        
-        
+
+    def nerdm_post_commit(self, recid):
+        """
+        run an external executable for further processing after the record is commited to 
+        the database (e.g. update an external index)
+        """
+        cmd = _mkpostcomm(self._postexec, recid, self._archdir)
+
+        try:
+            log.debug("Executing post-commit script:\n  %s", " ".join(cmd))
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            (out, err) = p.communicate()
+            if p.returncode != 0:
+                log.error("Error occurred while running post-commit script:\n"+(err or out))
+        except OSError as ex:
+            log.error("Failed to execute post-commit script:\n  %s\n%s", " ".join(cmd), str(ex))
+        except Exception as ex:
+            log.error("Unexpected failure executing post-commit script:\n  %s\n%s", " ".join(cmd), str(ex))
+
+def _mkpostcomm(cmd, recid='{recid}', archdir=None, recfile=None, **fmtdata):
+    if not isinstance(cmd, (list, tuple)):
+        cmd = cmd.split()
+
+    if fmtdata is None:
+        fmtdata = {}
+    vals = _data4fmt(fmtdata)
+
+    vals['recid'] = recid
+    if recfile is None:
+        recfile = '{recfile}'
+        if archdir:
+            recfile = os.path.join(archdir, re.sub(r'^ark:/\d+/', '', recid)+".json")
+    vals['recfile'] = recfile
+
+    cmd = [arg.format(**vals) for arg in cmd]
+    return cmd
+
+class _ov(object):
+    def __init__(self, d):
+        self.__dict__ = _data4fmt(d)
+
+def _data4fmt(d):
+    d = dict(d)
+    for key in d:
+        if isinstance(d[key], Mapping):
+            d[key] = _ov(d[key])
+    return d
 
 def _get_oar_home():
     home = os.environ.get('OAR_HOME')
@@ -334,7 +426,7 @@ def _get_oar_home():
         if not os.path.exists(os.path.join(home, "etc")):
             home = os.path.dirname(home)
         return home
-    except OSError, ex:
+    except OSError as ex:
         log.exception("OSError while looking for OAR_HOME: "+str(e))
         return None
 

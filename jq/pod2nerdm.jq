@@ -21,11 +21,15 @@ include "urldecode";
 
 # the base NERDm JSON schema namespace
 #
-def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.3#";
+def nerdm_schema:  "https://data.nist.gov/od/dm/nerdm-schema/v0.6#";
 
-# the base NERDm JSON schema namespace
+# the NERDm pub schema extension namespace
 #
-def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#";
+def nerdm_pub_schema:  "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#";
+
+# the NERDm bib schema extension namespace
+#
+def nerdm_bib_schema:  "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#";
 
 # the NERDm context location
 #
@@ -33,7 +37,7 @@ def nerdm_context: "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld";
 
 # where the Datacite Document Reference types are defined
 #
-def dciteRefType: nerdm_schema + "/definitions/DCiteReference";
+def dciteRefType: nerdm_bib_schema + "/definitions/DCiteReference";
 
 # the resource identifier provided on the command line
 #
@@ -166,6 +170,10 @@ def ansc_coll_paths:
     reduce .[] as $ary ([]; .+$ary) | unique
 ;
 
+def shortenDOI:
+    if . then sub("https?://.*doi.org/(doi:)?"; "doi:") else . end
+;
+
 # conversion for a POD-to-NERDm reference node
 #
 # Input: a string containing the reference URL
@@ -174,7 +182,7 @@ def ansc_coll_paths:
 def cvtref:  {
     "@type": ["deo:BibliographicReference"],
     "@id": ("#ref:" + (. | urlpath | sub("^/"; ""))),
-    "refType": "IsReferencedBy",
+    "refType": "IsSupplementTo",
     "location": .,
     "_extensionSchemas": [ dciteRefType ]
 };
@@ -230,7 +238,7 @@ def dist2download:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:DataFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/DataFile" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/DataFile" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -244,7 +252,7 @@ def dist2checksum:
     .["filepath"] = ( .downloadURL | filepath ) |
     .["@type"] = [ "nrdp:ChecksumFile", "nrdp:DownloadableFile", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("cmps/")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/ChecksumFile" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/ChecksumFile" ] |
     .["mediaType"] = "text/plain" |
     .["algorithm"] = { "@type": "Thing", tag: (.filepath|extension) } |
     if .description then . else .["description"] = "SHA-256 checksum value for "+(.filepath|basename|remove_extension) end | 
@@ -284,7 +292,7 @@ def dist2inaccess:
 def dist2accesspage:
     .["@type"] = [ "nrdp:AccessPage", "dcat:Distribution" ] |
     .["@id"] = (. | componentID("#")) |
-    .["_extensionSchemas"] = [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/AccessPage" ] |
+    .["_extensionSchemas"] = [ nerdm_pub_schema + "/definitions/AccessPage" ] |
     if .format then .format = { description: .format } else . end
 ;
 
@@ -294,8 +302,10 @@ def dist2accesspage:
 #
 # Input: a Distribution object
 # Output: a Component object with the detected types given in @type
+# doi:  the "doi:"-prefixed form of the DOI assigned to this records, used to identify
+#       the DOI Access distribution
 #
-def dist2comp: 
+def dist2comp(doi):
     if .downloadURL then
         if (.downloadURL | endswith(".sha256")) then
             dist2checksum
@@ -303,7 +313,7 @@ def dist2comp:
             dist2download
         end
     else if .accessURL then
-        if (.accessURL | test("doi.org")) then
+        if ((.accessURL|shortenDOI) == doi) then
           dist2hidden
         else
           dist2accesspage
@@ -315,7 +325,7 @@ def dist2comp:
 ;
 
 # return the DOI stored in the accessURL, if it exists.  null is returned, if
-# none is found.
+# none is found.   DEPRECATED: DOI passed in via doi property
 #
 # Input: a Distribution object
 # Output:  string: A DOI in in the form of "doi:..."
@@ -506,6 +516,15 @@ def resourceTypes:
     [ isSRD, isPDR, isDCatDS ]
 ;
 
+# Convert a pod status to a NERDm status
+#
+# Input: POD status string or null
+# Output: a NERDm status string
+#
+def cvtstatus:
+    if . == "deactivated" then "removed" else "available" end
+;
+
 # Converts an entire POD Dataset node to a NERDm Resource node
 #
 def podds2resource:
@@ -515,11 +534,12 @@ def podds2resource:
         "_extensionSchemas": [ nerdm_pub_schema + "/definitions/PublicDataResource" ],
         "@type": resourceTypes,
         "@id": resid,
-        "doi": (.distribution + []) | doiFromDist,
+        "doi": .doi | shortenDOI,
         title,
         contactPoint,
         issued,
         modified,
+        status: .status | cvtstatus,
 
         ediid: .identifier,
         landingPage,
@@ -532,6 +552,7 @@ def podds2resource:
         references,
         accessLevel,
         license,
+        rights,
         inventory: [{"forCollection": "", "childCount": 0, "descCount": 0,
                      "byType": [], "childCollections": [] }],
         components: .distribution,
@@ -540,12 +561,14 @@ def podds2resource:
         bureauCode,
         programCode
     } |
+    .doi as $doi | 
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
-    if .components then .components = (.components | map(dist2comp) | insert_subcoll_comps) else del(.components) end |
+    if .components then .components = (.components | map(dist2comp($doi)) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
     if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
     if .topic then . else del(.topic) end |
+    if .rights then . else del(.rights) end |
     if .issued then . else del(.issued) end |
     if .components then .inventory = (.components | inventory_components) else . end |
     if .components and ((.components|map(select(.filepath))|length) > 0) then .dataHierarchy = (.components|hierarchy("")) else . end |

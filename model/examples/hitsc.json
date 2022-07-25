@@ -1,27 +1,34 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.3#",
-    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/DataPublication" ],
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#/definitions/DataPublication" ],
 
     "@type": [ "nrdp:Database", "nrdp:SRD", "nrdp:PublishedDataResource" ],
     "@id": "ark:/88434/sdp0fjspek353",
     "title": "NIST High Temperature Superconducting Materials Database - SRD 62",
     "version": "1.0",
-    "versionHistory": [
+    "status": "awol",
+    "releaseHistory": { 
+        "@id": "ark:/88434/sdp0fjspek353.rel",
+        "hasRelease": [ 
+            {
+                "@id": "ark:/88434/sdp0fjspek353.v1_0",
+                "version": "1.0",
+                "issued": "2015-06-22",
+                "description": "initial release",
+                "status": "unavailable",
+                "location": "https://data.nist.gov/od/id/ark:/88434/sdp0fjspek353.v1_0"
+            }
+        ]
+    },
+    "abbrev": [ "SRD#62" ],
+    "isPartOf": [
         {
-            "version": "1.0",
-            "issued": "2015-06-22",
-            "refid": "ark:/88434/sdp0fjspek353",
-            "description": "initial release"
+            "@id": "ark:/88434/sdp0fjspek352",
+            "title": "NIST Ceramics WebBook - SRD 151",
+            "@type": [ "nrdp:Portal", "nrdp:SRD" ]
         }
     ],
-    "abbrev": [ "SRD#62" ],
-    "isPartOf": {
-        "@id": "ark:/88434/sdp0fjspek352",
-        "title": "NIST Ceramics WebBook - SRD 151",
-        "proxyFor": "ark:/88434/sdp0fjspek352",
-        "@type": [ "nrdp:Portal", "nrdp:SRD" ]
-    },
     "contactPoint": {
         "hasEmail": "mailto:angela.lee@nist.gov",
         "@type": "vcard:Contact",
@@ -48,12 +55,13 @@
     ],
     "references": [
         {
-            "@type": "deo:BibliographicReference",
+            "@type": [ "npg:Article", "schema:Article" ],
+            "@id": "#ref:htshelp",
             "refType": "IsDocumentedBy",
             "label": "User Manual",
             "location": "https://srdata.nist.gov/CeramicDataPortal/Manual/HtsHelper",
             "_extensionSchemas": [
-                "https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/DCiteReference"
+                "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#/definitions/DCiteReference"
             ]
         }
     ],

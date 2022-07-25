@@ -1,7 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from collections import Mapping
-from nistoar.tests import *
+# from nistoar.tests import *
 
 import nistoar.doi.resolving as res
 import nistoar.doi.resolving.common as comm
@@ -14,7 +14,10 @@ medradoi = "10.1392/onix_doi_schema_v1.1"
 cli = ("NIST Open Access for Research", "testing",
        "http://github.com/usnistgov/oar-metadata/",
        "datasupport@nist.gov")
-set_client_info(*cli)
+def setUpModule():
+    set_client_info(*cli)
+def tearDownModule():
+    set_client_info(None, None, None, None)
 
 logger = logging.getLogger("test")
 
@@ -24,7 +27,7 @@ class TestResolving(test.TestCase):
                  "kindly skipping doi service checks")
     def test_resolve_dc(self):
         info = res.resolve(dcdoi, logger=logger)
-        self.assertEqual(info.source, "Datacite")
+        self.assertIn(info.source, ["Datacite", "Crosscite"])
         self.assertTrue(isinstance(info, res.DataciteDOIInfo))
         self.assertIsNotNone(info._data)
         self.assertEqual(info.data['DOI'], dcdoi)

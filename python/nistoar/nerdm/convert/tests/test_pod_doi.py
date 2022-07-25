@@ -3,6 +3,7 @@ from collections import OrderedDict
 
 import nistoar.nerdm.convert.pod as cvt
 from nistoar.doi.resolving import DOIInfo
+from nistoar.nerdm.constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI, BIB_SCHEMA_URI
 
 citeproc_auths = [
     {u'affiliation': [], u'given': u'Carmen', u'family':
@@ -36,6 +37,10 @@ rescfg = {
     "app_url": "http://github.com/usnistgov/oar-metadata/",
     "email": "datasupport@nist.gov"
 }
+
+def setUpModule():
+    import nistoar.doi.resolving.common as res
+    res._client_info = None
 
 class TestConvertAuthors(unittest.TestCase):
 
@@ -262,7 +267,8 @@ class TestConvertReferences(unittest.TestCase):
         self.assertEqual(ref['citation'], 'ibid')
         self.assertIn('_extensionSchemas', ref)
         self.assertTrue(isinstance(ref['_extensionSchemas'], list))
-        self.assertTrue(ref['_extensionSchemas'][0].startswith("https://data.nist.gov/od/dm/nerdm-schema/v0.3#/definitions/"), msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
+        self.assertTrue(ref['_extensionSchemas'][0].startswith(BIB_SCHEMA_URI + "#/definitions/"),
+                        msg="Unexpected extension schema URI: "+ref['_extensionSchemas'][0])
 
 class TestDOIResolver(unittest.TestCase):
 

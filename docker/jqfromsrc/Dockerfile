@@ -7,12 +7,12 @@ RUN apt-get update && \
 WORKDIR /root
 RUN git clone http://github.com/stedolan/jq.git jq-dev && \
     cd jq-dev && \
-    git checkout 6306ac89667cf35f47ddc40aa0630546c57e387f && \
+    git checkout 80052e5275ae8c45b20411eecdd49c945a64a412 && \
     git submodule update --init && \
     autoreconf -fi && \
-    ./configure --with-oniguruma=builtin && \
+    ./configure --with-oniguruma=builtin --disable-docs && \
     make -j8 && \
-    make check && \
+    make check-TESTS && \
     make install
 
 CMD ["bash"]

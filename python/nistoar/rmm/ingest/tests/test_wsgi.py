@@ -7,11 +7,13 @@ from ejsonschema import ExtValidator, SchemaValidator
 from nistoar.tests import *
 from nistoar.rmm.ingest import wsgi
 
-pydir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+testdir = os.path.dirname(os.path.abspath(__file__))
+pydir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(testdir))))
 basedir = os.path.dirname(pydir)
 schemadir = os.path.join(basedir, "model")
 exdir = os.path.join(schemadir, "examples")
 janaffile = os.path.join(exdir, "janaf.json")
+postcomm = os.path.join(testdir, "postcomm.sh")
 
 dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
@@ -53,15 +55,17 @@ class TestRMMRecordIngestApp(test.TestCase):
 
     def setUp(self):
         self.archdir = tmpfiles.mkdir("ingest_archive")
+        self.commitfile = os.path.join(self.archdir, "postcommit.txt")
         self.config = {
             "db_url": dburl,
             'nerdm_schema_dir': os.path.abspath(schemadir),
-            'archive_dir': self.archdir
+            'archive_dir': self.archdir,
+            'post_commit_exec': postcomm + ' ' + self.commitfile + " {db_url} {recid} {recfile}"
         }
 
         try:
             self.svc = wsgi.app(self.config)
-        except Exception, e:
+        except Exception as e:
             self.tearDown()
             raise
         self.resp = []
@@ -92,6 +96,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertEqual(body[0].strip(), '["nerdm"]')
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_is_ready(self):
         req = {
@@ -103,6 +108,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertGreater(len(self.resp), 0)
         self.assertIn("200", self.resp[0])
         self.assertEqual(body[0], 'Service ready\n')
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_auth(self):
         # test rejection when auth key provided but wsgi is not configured to
@@ -201,6 +207,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         body = self.svc(req, self.start)
         self.assertGreater(len(self.resp), 0)
         self.assertIn("404", self.resp[0])
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_bad_post_resource(self):
         with open(janaffile) as doc:
@@ -213,6 +220,7 @@ class TestRMMRecordIngestApp(test.TestCase):
             body = self.svc(req, self.start)
 
         self.assertIn("404", self.resp[0])
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_no_content_length(self):
         with open(janaffile) as doc:
@@ -226,6 +234,7 @@ class TestRMMRecordIngestApp(test.TestCase):
 
         self.assertIn("411", self.resp[0])
         self.assertIn("Content-Length", self.resp[0])
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_bad_content_length(self):
         with open(janaffile) as doc:
@@ -239,7 +248,7 @@ class TestRMMRecordIngestApp(test.TestCase):
             body = self.svc(req, self.start)
 
         self.assertIn("400", self.resp[0])
-
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_bad_post_input(self):
         doc = StringIO('title <a href="http://bad.url">hello world</a>')
@@ -252,6 +261,7 @@ class TestRMMRecordIngestApp(test.TestCase):
 
         body = self.svc(req, self.start)
         self.assertIn("400", self.resp[0])
+        self.assertFalse(os.path.exists(self.commitfile), "Commit file created unexpectedly")
 
     def test_good_post(self):
         client = MongoClient(dburl)
@@ -266,6 +276,7 @@ class TestRMMRecordIngestApp(test.TestCase):
         finally:
             client.close()
         
+        # self.svc = wsgi.app(self.config)
         with open(janaffile) as doc:
             clen = len(doc.read())
         with open(janaffile) as doc:
@@ -282,6 +293,11 @@ class TestRMMRecordIngestApp(test.TestCase):
         self.assertTrue(os.path.isfile(archfile))
 
         self.assertIn("200", self.resp[0])
+        self.assertTrue(os.path.isfile(self.commitfile), "Failed to create commit file")
+        with open(self.commitfile) as fd:
+            content = fd.read()
+        self.assertIn("sdp0fjspek351", content)
+        self.assertIn("mongodb:", content)
         
         client = MongoClient(dburl)
         try:
@@ -305,6 +321,40 @@ class TestArchive(test.TestCase):
 
     def tearDown(self):
         tmpfiles.clean()
+
+    def test_mkpostcomm(self):
+        commexec = "echo {recfile} goober {recid} {file}"
+        commexec = wsgi._mkpostcomm(commexec, file="/tmp/gurn.txt")
+        self.assertTrue(isinstance(commexec, list), "Output is not a list")
+        self.assertEqual(len(commexec), 5)
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "{recfile}")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "{recid}")
+
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5555", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "{recfile}")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5556", "/tmp", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gurn.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "/tmp/mds2-5556.json")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
+        commexec = "echo {recfile} goober {recid} {file}"
+        commexec = wsgi._mkpostcomm(commexec, "mds2-5555", "/tmp", file="/tmp/gary.txt")
+        self.assertEqual(commexec[4], "/tmp/gary.txt")
+        self.assertEqual(commexec[0], "echo")
+        self.assertEqual(commexec[1], "/tmp/mds2-5555.json")
+        self.assertEqual(commexec[2], "goober")
+        self.assertEqual(commexec[3], "mds2-5555")
+
         
     def test_nerdm_archive_cache(self):
         with open(janaffile) as fd:

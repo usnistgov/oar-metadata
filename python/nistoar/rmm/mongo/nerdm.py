@@ -7,7 +7,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
                      UpdateWarning, LoadLog)
 from .loader import ValidationError, SchemaError, RefResolutionError
 
-DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.1#"
+DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
 
 COLLECTION_NAME="record"

@@ -109,7 +109,7 @@ def orcid2nameid:
 # Input:  NERDm affiliation object
 # Output: datacite affiliation string
 #
-def affil2simpleaffil:
+def affil2affilname:
     if .subunits then
         (.title + ", " + (.subunits | join(", ")))
     else
@@ -124,7 +124,7 @@ def affil2simpleaffil:
 #
 def affil2affil:
     {
-        affiliation: affil2simpleaffil,
+        name: affil2affilname,
         affiliationIdentifier: (
             if (.["@id"]|not) and .title == "NIST" then "grid:NIST" else .["@id"] end
         ),
@@ -137,7 +137,7 @@ def affil2affil:
         (.affiliationIdentifier = (.affiliationIdentifier|sub("ror:";"https://ror.org/"))|
          .affiliationIdentifierScheme = "ROR")
     elif (.affiliationIdentifer == "grid.94225.38" or
-          (.affiliation | contains("National Institute of Standards and Technology")) or
+          (.name | contains("National Institute of Standards and Technology")) or
           (.affiliationIdentifier == "grid:NIST"))
     then
         (.affiliationIdentifier = "https://ror.org/05xpvk416" |
@@ -353,6 +353,20 @@ def make_ispartof_rel:
     end
 ;
 
+# convert a replacedBy object into an IsObsoletedBy relation
+#
+def make_obsoletedby_rel:
+    if (. and .["@id"] and (.["@id"] | contains("doi"))) then
+      {
+        relatedIdentifier: .["@id"],
+        relatedIdentifierType: "DOI",
+        relationType: "isObsoletedBy"
+      }
+    else
+      empty
+    end
+;
+
 # convert a reference object into a related identifier object
 #
 def make_ref_rel:
@@ -429,7 +443,8 @@ def resource2datacite:
       relatedIdentifiers: [
         (
           (.isPartOf | make_ispartof_rel),
-          (.references | if (.) then (.[] | make_ref_rel) else empty end)
+          (.references | if (.) then (.[] | make_ref_rel) else empty end),
+          (.isReplacedBy | make_obsoletedby_rel)
         )
       ],
       language: "en-US"

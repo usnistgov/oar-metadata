@@ -1,5 +1,8 @@
 # Metadata Support for the OAR Open Data Platform (via NERDm)
 
+[![main branch status](https://github.com/usnistgov/oar-metadata/actions/workflows/main.yml/badge.svg)](https://github.com/usnistgov/oar-metadata/actions/workflows/main.yml)
+[![integration branch status](https://github.com/usnistgov/oar-metadata/actions/workflows/integration.yml/badge.svg)](https://github.com/usnistgov/oar-metadata/actions/workflows/integration.yml)
+
 This package provides support for metadata across the different
 components of the OAR Open Data Platform.  At the core of this support
 is the NERD model; this package includes its JSON Schema and Linked

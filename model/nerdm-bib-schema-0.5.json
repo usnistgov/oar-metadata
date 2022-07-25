@@ -1,0 +1,134 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$extensionSchemas": ["https://www.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.5#",
+    "rev": "wd1",
+    "title": "The NERDm extension metadata for bibliographic information",
+    "description": "This schema extends NERDm's BibliographicReference to provide more specific ways to describe scholory references.",
+    "definitions": {
+
+        "DCiteRefType": {
+            "description": "a bibliographical reference type with a defined set of values that are drawn from the DataCite Metadata Schema's relationType",
+            "notes": [
+                "The values are defined to be identical to (or more specific than) the corresponding terms in the DataCite Metadata Schema",
+                "The subset of defined here are those that are considered most applicable to data resources provided by the NIST Public Data Repository (PDR) and for which the PDR may recognize and provide special handling for."
+            ],
+            "type": "string",
+            "enum": [ "IsDocumentedBy", "IsSupplementTo", "IsSupplementedBy",
+                      "IsCitedBy", "Cites", "IsReviewedBy",
+                      "IsReferencedBy", "References",
+                      "IsSourceOf", "IsDerivedFrom",
+                      "IsNewVersionOf", "IsPreviousVersionOf" ],
+            "valueDocumentation": {
+                "IsDocumentedBy": {
+                    "description": "The referenced document provides documentation of this resource.",
+                    "notes": [
+                        "This type should be applied to the reference that provides the best, most complete, or otherwise most preferred description of how the data in this resource was created.",
+                        "This resource is expected to be or include a human-readable document."
+                    ]
+                },
+                "IsSupplementTo": {
+                    "description": "The referenced document is a supplement to this resource.",
+                    "notes": [
+                        "A supplement typically refers to data that is closely associated with a journal article that serves as the primary description of how the data was taken and what results were extracted from them.",
+                        "This resource is expected to be or include a human-readable document.",
+                        "The resource is usually considered the primary reference for this data resource"
+                    ]
+                },
+                "IsSupplementedBy": {
+                    "description": "The referenced document (or dataset) is a supplement to this resource.",
+                    "notes": [
+                        "This can be applied to refer to other datasets that may have resulted from the same experimental/observational activity but which might be considered less central of useful to other, e.g. calibration data."
+                    ]
+                },
+                "IsCitedBy": {
+                    "description": "The referenced document cites the resource in some way.",
+                    "notes": [
+                        "This relationship indicates is lighter than IsReferenceBy: the referenced document may discuss this resource without drawing on and using data or information from this resource."
+                    ]
+                },
+                "Cites": {
+                    "description": "This resource cites the referenced document.",
+                    "notes": [
+                        "Human readable descriptions can refer to this type of resource via its label, e.g. '...previous research [Smith98; Jones10]...'",
+                        "Like IsCitedBy, the relationship indicated is lighter than References: this resource makes reference to the referenced resource in discussion without necessarily drawing on and using data or information from that resource."
+                    ]
+                },
+                "IsReviewedBy": {
+                    "description": "The referenced document reviews this resource.",
+                    "notes": [
+                        "This is a lighter relationship than the resource property, describedBy; the latter refers to a document that is the primary, detailed description and/or analysis of this resource"
+                    ]
+                },
+                "IsReferencedBy": {
+                    "description": "The resource is used as a source of information by the referenced document.",
+                    "notes": [
+                    ]
+                },
+                "References": {
+                    "description": "The referenced document is used as a source of information by the resource.",
+                    "notes": [
+                        "This type is provided as a general purpose reference to documents or data that are indirectly relate to this one",
+                        "This type is recommend for references provided for citations in the textual description (e.g. the description property) of this resource."
+                    ]
+                },
+                "IsSourceOf": {
+                    "description": "The resource is the source of upon which the referenced resource is based.",
+                    "notes": [
+                        "In other words, the referenced document is derived from the resource.",
+                        "This is a stronger relationship than 'References'"
+                    ]
+                },
+                "IsDerivedFrom": {
+                    "description": "The referenced document is the source upon which the resource is based.",
+                    "notes": [
+                        "In other words, the resource is derived from the referenced document.",
+                        "This is a stronger relationship than 'IsReferencedBy'"
+                    ]
+                },
+                "IsNewVersionOf": {
+                    "description": "The referenced resource is a previous version of this resource.",
+                    "notes": [
+                        "This usually means that the referenced resource is deprecated by this one."
+                    ]
+                },
+                "IsPreviousVersionOf": {
+                    "description": "The referenced resource is a newer version of this resource.",
+                    "notes": [
+                        "This usually means that the referenced resource deprecates this one."
+                    ]
+                },
+                "IsVariantOf": {
+                    "description": "The referenced resource contains the content of this resource in a different form.",
+                    "notes": [
+                        "As an example, the referenced resource may be based on the same raw data but calibrated differently."
+                    ]
+                }
+            }
+        },
+
+        "DCiteReference": {
+            "description": "a bibliographical reference with a controlled vocabulary for its reference type (refType)",
+            "notes": [
+                "Note that some refType values are specifically for references of type npg:Document:  'isDocumentedBy', 'isReviewedBy'; 'isSupplementTo' typically labels a reference of type npg:Document",
+                "Use 'isSupplementTo' or 'isDocumentedBy' to indicate documents that provide the most comprehensive explanation of the contents of the resource.  'isSupplementTo' is preferred when the document presents results drawn from the data.  List these documents in order of importance (as the first one will be exported as the 'describedBy' document when converted to the POD schema).",
+                "It is recommended that such multiple classifications of the same reference should be avoided."
+            ],
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.5#/definitions/BibliographicReference" },
+                {
+                    "properties": {
+                        "refType": {
+                            "description": "a term indicating the nature of the relationship between this resource and the one being referenced",
+                            "notes": [
+                                "Note that with this term, the subject of relationship is the resource described by this NERDm record and the object is the referenced resource given by the @id property in this node.  Although this violates the JSON-LD semantics that properties in this node should describe what's given with the local @id--the referenced resource, in this case--it is more consistant with their use in the DataCite schema."
+                            ],
+                            "$ref": "#/definitions/DCiteRefType"
+                        }
+                    },
+                    "required": [ "refType" ]
+                }
+            ]
+        }
+    }
+}
