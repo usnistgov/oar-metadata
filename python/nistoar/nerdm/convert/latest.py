@@ -110,11 +110,13 @@ class NERDm2Latest(object):
 
         if utils.cmp_versions(schver, "0.1") >= 0:
             if 'references' in nerdmd:
-                for ref in nerdmd['references']:
+                for i, ref in enumerate(nerdmd['references']):
                     if 'refid' in ref:
                         if '@id' not in ref:
                             ref['@id'] = ref['refid']
                         del ref['refid']
+                    if not ref.get('@id'):
+                        ref['@id'] = "#ref-%d" % i
 
         if utils.cmp_versions(schver, "0.6") >= 0:
             if 'isPartOf' in nerdmd and not isinstance(nerdmd['isPartOf'], list):
