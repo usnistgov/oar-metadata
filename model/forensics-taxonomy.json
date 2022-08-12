@@ -16,12 +16,6 @@
         },
         {
             "parent": "Forensics",
-            "term": "Digital evidence",
-            "level": 2,
-            "since": "1.0"
-        },
-        {
-            "parent": "Forensics",
             "term": "Digital and multimedia evidence",
             "level": 2
         },
@@ -53,27 +47,22 @@
             "level": 2
         },
         {
-            "parent": "Forensics",
-            "term": "Digital Evidence",
-            "level": 2
-        },
-        {
-            "parent": "Forensics: Digital Evidence",
+            "parent": "Forensics: Digital and multimedia evidence",
             "term": "NSRL",
             "level": 3
         },
         {
-            "parent": "Forensics: Digital Evidence",
+            "parent": "Forensics: Digital and multimedia evidence",
             "term": "CFTT",
             "level": 3
         },
         {
-            "parent": "Forensics: Digital Evidence",
+            "parent": "Forensics: Digital and multimedia evidence",
             "term": "CFreds",
             "level": 3
         },
         {
-            "parent": "Forensics: Digital Evidence",
+            "parent": "Forensics: Digital and multimedia evidence",
             "term": "TBD",
             "level": 3
         },
