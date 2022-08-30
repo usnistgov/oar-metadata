@@ -181,6 +181,57 @@ class TestNERDm2Latest(test.TestCase):
         latest.update_nerdm_schema(nerdmd)
         self.assertEqual(nerdmd['_schema'], const.CORE_SCHEMA_URI)
 
+    def test_update_nerdm_schema_01DCiteDocRef(self):
+        defver = "v1.0"
+        byext = {
+            "http://example.com/anext/": "v0.1",
+            "pub":  "v1.2",
+            "bib":  "v0.8",
+            "":     "v2.2"
+        }
+        cvtr = latest.NERDm2Latest(defver=defver, byext=byext)
+
+        nerdmd = {
+            "$schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.3",
+            "foo": {
+                "$extensionSchemas": [ "http://example.com/anext/v88#goob",
+                          "http://goober.com/foop/v99#big" ],
+                "blah": "snooze"
+            },
+            "bar": {
+                "hank": "aaron",
+                "tex": {
+                    "$extensionSchemas": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#Contact",
+                    "blah": "blah"
+                },
+                "$extensionSchemas": []
+            },
+            "references": [
+                {
+                    'location': 'https://tinyurl.com/asdf',
+                    "$extensionSchemas": [
+                        "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/BibliographicReference",
+                        "https://data.nist.gov/od/dm/nerdm-schema/v0.1#/definitions/DCiteDocumentReference"
+                    ]
+                }
+            ]
+        }
+
+        data = cvtr.update_nerdm_schema(nerdmd)
+        self.assertEqual(data['$schema'], 
+                         "https://data.nist.gov/od/dm/nerdm-schema/v2.2")
+        self.assertEqual(nerdmd['$schema'], "https://data.nist.gov/od/dm/nerdm-schema/v0.3")
+        self.assertEqual(data['foo']['$extensionSchemas'], 
+                         [ "http://example.com/anext/v0.1#goob",
+                           "http://goober.com/foop/v99#big" ])
+        self.assertEqual(data['bar']['tex']['$extensionSchemas'], 
+                     "https://data.nist.gov/od/dm/nerdm-schema/pub/v1.2#Contact")
+        self.assertEqual(data['bar']['$extensionSchemas'], [])
+        self.assertEqual(data['references'][0]['$extensionSchemas'][0],
+                         "https://data.nist.gov/od/dm/nerdm-schema/v2.2#/definitions/BibliographicReference")
+        self.assertEqual(data['references'][0]['$extensionSchemas'][1],
+                         "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.8#/definitions/DCiteReference")
+
     def test_create_release_history(self):
         cvtr = latest.NERDm2Latest()
         nerdm = {
