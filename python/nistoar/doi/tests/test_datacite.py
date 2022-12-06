@@ -112,10 +112,26 @@ class TestJSONAPIError(test.TestCase):
         self.assertEqual(je.edata[0]['title'], "Dr.")
 
         msg = je.message()
-        self.assertEqual(msg, "Dr.: Tuesdays (plus other errors)")
+        self.assertEqual(msg, "Not funny")
         self.assertEqual(je.explain(), "DOI service error: Not funny (420)\nDetails:\n  Dr.: Tuesdays\n  NoNo: Don't do that\n  your mom: It's really bad")
+        
+    def test_def_errdata_no_defmsg(self):
+        edata = [
+            { "title": "Dr.",  "detail": "Tuesdays",      "source": "for fiber"},
+            { "title": "NoNo", "detail": "Don't do that", "source": "devil"},
+            { "detail": "It's really bad", "source": "your mom" }
+        ]
+        je = dc.JSONAPIError(edata, None, 420)
+        self.assertEqual(je.code, 420)
+        self.assertIsNone(je.defmsg)
+        self.assertEqual(len(je.edata), 3)
+        self.assertEqual(je.edata[0]['title'], "Dr.")
 
-class TestDOIStateError(test.TestCase):
+        msg = je.message()
+        self.assertEqual(msg, "Dr.: Tuesdays (plus other errors)")
+        self.assertEqual(je.explain(), "DOI service error\nDetails:\n  Dr.: Tuesdays\n  NoNo: Don't do that\n  your mom: It's really bad")
+
+class TestDOIErrors(test.TestCase):
     resolver = "https://api.datacite.fake/dois"
     
     def test_simple(self):
@@ -138,6 +154,25 @@ class TestDOIStateError(test.TestCase):
         self.assertEqual(len(ex.errdata), 2)
 
         msg = dc.JSONAPIError(ex.errdata, str(ex)).explain().split("\n")
+        self.assertEqual(len(msg), 4)
+        self.assertEqual(msg[1], "Details:")
+        self.assertEqual(msg[2], "  Big problem!")
+        self.assertEqual(msg[3], "  (minor problem)")
+
+    def test_resolver_error(self):
+        errs = [
+            { 'title': "Big problem!" },
+            { 'title': "(minor problem)" }
+        ]
+        errdata = dc.JSONAPIError(errs, "Resolver error")._()
+        
+        ex = dc.DOIResolverError("10.18454/goob", self.resolver, 400, **errdata)
+        self.assertEqual(str(ex), "Resolver error")
+        self.assertEqual(ex.doi, "10.18454/goob")
+        self.assertEqual(ex.resolver, self.resolver)
+        self.assertTrue(isinstance(ex.errdata, dc.JSONAPIError))
+
+        msg = ex.errdata.explain().split("\n")
         self.assertEqual(len(msg), 4)
         self.assertEqual(msg[1], "Details:")
         self.assertEqual(msg[2], "  Big problem!")
