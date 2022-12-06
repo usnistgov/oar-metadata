@@ -300,7 +300,7 @@ class DOIClientException(DOIResolutionException):
     """
     An exception during DOI resolution traceable to client input
     """
-    def __init__(self, doi, resolver=None, message=None, errdata=None):
+    def __init__(self, doi, resolver=None, message=None, errdata=None, cause=None):
         """
         initialize the exception
 
@@ -316,7 +316,7 @@ class DOIClientException(DOIResolutionException):
         """
         if not message:
             message = "Unknown client error during DOI resolution of " + doi
-        super(DOIClientException, self).__init__(message, doi, resolver, errdata)
+        super(DOIClientException, self).__init__(message, doi, resolver, cause, errdata)
 
 
 class DOIDoesNotExist(DOIClientException):

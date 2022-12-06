@@ -115,6 +115,35 @@ class TestJSONAPIError(test.TestCase):
         self.assertEqual(msg, "Dr.: Tuesdays (plus other errors)")
         self.assertEqual(je.explain(), "DOI service error: Not funny (420)\nDetails:\n  Dr.: Tuesdays\n  NoNo: Don't do that\n  your mom: It's really bad")
 
+class TestDOIStateError(test.TestCase):
+    resolver = "https://api.datacite.fake/dois"
+    
+    def test_simple(self):
+        ex = dc.DOIStateError("10.18454/goob", self.resolver, "ready", "not ready")
+        self.assertEqual(str(ex), "not ready")
+        self.assertEqual(ex.doi, "10.18454/goob")
+        self.assertEqual(ex.resolver, self.resolver)
+        self.assertIsNone(ex.errdata)
+
+    def test_with_errdata(self):
+        errs = [
+            { 'title': "Big problem!" },
+            { 'title': "(minor problem)" }
+        ]
+        ex = dc.DOIStateError("10.18454/goob", self.resolver, "ready", "not ready", errs)
+        self.assertEqual(str(ex), "not ready")
+        self.assertEqual(ex.doi, "10.18454/goob")
+        self.assertEqual(ex.resolver, self.resolver)
+        self.assertTrue(isinstance(ex.errdata, list))
+        self.assertEqual(len(ex.errdata), 2)
+
+        msg = dc.JSONAPIError(ex.errdata, str(ex)).explain().split("\n")
+        self.assertEqual(len(msg), 4)
+        self.assertEqual(msg[1], "Details:")
+        self.assertEqual(msg[2], "  Big problem!")
+        self.assertEqual(msg[3], "  (minor problem)")
+        
+
 class TestDataCiteDOIClient(test.TestCase):
     defargs = { "publisher": "NIST", "url": "", "title": "", "special": "yes" }
 
