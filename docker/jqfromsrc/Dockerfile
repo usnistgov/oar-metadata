@@ -1,4 +1,4 @@
-From oar-metadata/pymongo
+From oar-metadata/pymongo-py2
 
 RUN apt-get update && \
     apt-get install -y libonig-dev curl build-essential libtool zip \
