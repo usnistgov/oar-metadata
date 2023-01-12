@@ -34,6 +34,6 @@ setup_build
 log_intro   # record start of build into log
 
 for container in $BUILD_IMAGES; do 
-    echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container | logit
-    docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container 2>&1 | logit
+    echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/${container}-py2 $container | logit
+    docker build $BUILD_OPTS -t $PACKAGE_NAME/${container}-py2 $container 2>&1 | logit
 done

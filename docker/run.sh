@@ -56,5 +56,5 @@ while [ "$1" != "" ]; do
 done
 
 
-echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
-exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
+echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests-py2 $cmd "${args[@]}"
+exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests-py2 $cmd "${args[@]}"

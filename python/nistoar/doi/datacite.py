@@ -354,6 +354,9 @@ class JSONAPIError(object):
                 self.edata = [ { "title": "Unknown error" } ]
 
     def message(self):
+        if self.defmsg:
+            return self.defmsg
+
         out = self._format_error(self.edata[0])
         if len(self.edata) > 1:
             out += " (plus other errors)"
