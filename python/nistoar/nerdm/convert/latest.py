@@ -257,10 +257,14 @@ class NERDm2Latest(object):
         self._upd_schema_ver_on_node(nerdmd, mtc+"extensionSchemas", matchrs, defver)
 
         # correct to start using bib extension if needed
+        _dcreftype_re = re.compile("#/definitions/DCiteDocumentRef")
         if any(mtc+"extensionSchemas" in r for r in nerdmd.get('references',[])):
             for ref in nerdmd['references']:
                 for i, ext in enumerate(ref.get(mtc+"extensionSchemas", [])):
                     if ext.startswith(NERDM_CONST.core_schema_base+"v") and '#/definitions/DCite' in ext:
+                        ref[mtc+"extensionSchemas"][i] = _dcreftype_re.sub("#/definitions/DCiteRef",
+                                                                           ref[mtc+"extensionSchemas"][i])
+                        ext = ref[mtc+"extensionSchemas"][i]
                         ref[mtc+"extensionSchemas"][i] = NERDM_CONST.core_schema_base+"bib/" + byext['bib'] + \
                                                          ext[ext.index('#'):]
 
