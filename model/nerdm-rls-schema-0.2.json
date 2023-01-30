@@ -1,19 +1,16 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.3#",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/rls/v0.2#",
     "rev": "wd1",
     "title": "The NERDm extension metadata for describing versions and releases of resources",
-    "description": "These classes extend the base NERDm schema to capture version history.  It defines a special Resource, a ReleaseCollection, that collects all the versions of an evolving resource, as well as an informative resource reference, a ReleaseHistory, to reference that resource.  The ReleasedResource can serve as a base Resource type for resources that are versioned.",
+    "description": "These classes extend the based NERDm schema to capture version history.  It defines a special Resource, a ReleaseCollection, that collects all the versions of an evolving resource, as well as an informative resource reference, a ReleaseHistory, to reference that resource.  The ReleasedResource can serve as a base Resource type for resources that are versioned.",
     "definitions": {
 
         "ReleasedResource": {
             "description": "a Resource that can be revised and released under a sequence of versions",
-            "notes": [
-                "The base Resource type requires properties, title and contactPoint"
-            ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/Resource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource" },
                 { 
                     "properties": {
                         "isVersionOf": {
@@ -60,7 +57,7 @@
                             "type": "array",
                             "items": {
                                 "allOf": [
-                                    { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
+                                    { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
                                     { "required": [ "@id", "issued" ] }
                                 ]
                             },
@@ -80,7 +77,7 @@
                                 "This property may be set explicitly when this resource is intended to be replaced by another resource that is not simple a newer version of this resource."
                             ],
                             "allOf": [
-                                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
+                                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
                                 { "required": [ "@id", "issued" ] }
                             ],
                             
@@ -90,8 +87,7 @@
                                 "referenceProperty": "dc:isReplacedBy"
                             }
                         }
-                    },
-                    "required": [ "@id", "publisher", "accessLevel" ]
+                    }
                 }
             ]
         },
@@ -100,7 +96,7 @@
             "title": "Release History",
             "description": "a reference to a release history collection that contains all the releases of the resources",
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
                 {
                     "properties": {
                         "hasRelease": {
@@ -122,7 +118,7 @@
                 "A release entry provides an abbreviated description of one of the versions in series of releases."
             ],
             "allOf": [
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/RelatedResource" },
                 {
                     "properties": {
                         "version": {
@@ -156,7 +152,7 @@
         "ReleaseCollection": {
             "description": "a special collection that enumerates the different versions available for a particular resouce",
             "allOf": [ 
-                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/Resource" },
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.6#/definitions/Resource" },
                 {
                     "properties": {
                         "hasRelease": {
