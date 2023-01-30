@@ -300,34 +300,41 @@ include "nerdm2datacite"; make_formats
 #
 include "nerdm2datacite"; make_ispartof_rel
 { "@id": "doi:10.18434/spd0fjpek351", "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
-{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "IsPartOf" }
 
 #--------------
 # testing make_ispartof_rel
 #
 include "nerdm2datacite"; make_ispartof_rel
 { "@id": "http://doi.org/10.18434/spd0fjpek351", "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
-{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "IsPartOf" }
 
 #--------------
 # testing make_ispartof_rel
 #
 include "nerdm2datacite"; make_ispartof_rel
 { "location": "http://dx.doi.org/10.18434/spd0fjpek351", "title": "Hello!"}
-{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "isPartOf" }
+{ "relatedIdentifier": "https://doi.org/10.18434/spd0fjpek351", "relatedIdentifierType": "DOI", "relationType": "IsPartOf" }
 
 #--------------
 # testing make_ispartof_rel
 #
 include "nerdm2datacite"; make_ispartof_rel
 { "@id": "ark:/88434/jres0-1", "location": "http://jres.nist.gov/10.18434/spd0fjpek351", "title": "Hello!"}
-{ "relatedIdentifier": "http://jres.nist.gov/10.18434/spd0fjpek351", "relatedIdentifierType": "URL", "relationType": "isPartOf" }
+{ "relatedIdentifier": "http://jres.nist.gov/10.18434/spd0fjpek351", "relatedIdentifierType": "URL", "relationType": "IsPartOf" }
 
 #--------------
-# testing make_ispartof_rel:  should return an empty result
+# testing make_ispartof_rel:  should a PDR URL
 #
 include "nerdm2datacite"; make_ispartof_rel
 { "@id": "ark:/88434/jres0-1", "title": "Hello!"}
+{ "relatedIdentifier": "https://data.nist.gov/od/id/ark:/88434/jres0-1", "relatedIdentifierType": "URL", "relationType": "IsPartOf" }
+
+#--------------
+# testing make_ispartof_rel:  should return an empty result (because the ID is unrecognized)
+#
+include "nerdm2datacite"; make_ispartof_rel
+{ "@id": "ark:/88888/jres0-1", "title": "Hello!"}
 
 # Line above must be empty
 

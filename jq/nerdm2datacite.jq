@@ -336,20 +336,25 @@ def make_ispartof_rel:
       {
         relatedIdentifier: .["@id"] | todoiurl,
         relatedIdentifierType: "DOI",
-        relationType: "isPartOf"
+        relationType: "IsPartOf"
       }
-    elif (.location) then
-      {
-        relatedIdentifier: (.location | todoiurl),
-        relationType: "isPartOf"
-      } |
-      if (.relatedIdentifier | test("^https?://(dx.)?doi.org/")) then
-          (.relatedIdentifierType = "DOI")
-      else
-          (.relatedIdentifierType = "URL")
-      end
     else
-      empty
+      if ((.location|not) and .["@id"] and (.["@id"] | contains("ark:/88434/"))) then
+        .location = "https://data.nist.gov/od/id/" + .["@id"]
+      end |
+      if (.location) then
+        {
+          relatedIdentifier: (.location | todoiurl),
+          relationType: "IsPartOf"
+        } |
+        if (.relatedIdentifier | test("^https?://(dx.)?doi.org/")) then
+            (.relatedIdentifierType = "DOI")
+        else
+            (.relatedIdentifierType = "URL")
+        end
+      else
+        empty
+      end
     end
 ;
 
@@ -442,7 +447,7 @@ def resource2datacite:
       ],
       relatedIdentifiers: [
         (
-          (.isPartOf | make_ispartof_rel),
+          (.isPartOf | if (.) then (.[] | make_ispartof_rel) else empty end),
           (.references | if (.) then (.[] | make_ref_rel) else empty end),
           (.isReplacedBy | make_obsoletedby_rel)
         )
