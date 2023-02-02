@@ -1,7 +1,7 @@
 """
 load NERDm records into the RMM's MongoDB database
 """
-import json, os, sys
+import json, os, sys, warnings
 from collections import Mapping
 
 from .loader import (Loader, RecordIngestError, JSONEncodingError,
@@ -98,6 +98,21 @@ class NERDmLoader(_NERDmRenditionLoader):
     class LatestLoader(_NERDmRenditionLoader):
         def __init__(self, dburl, schemadir, log=None):
             super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, schemadir, log)
+
+        def load_data(self, data, key=None, onupdate='quiet'):
+            added = super().load_data(data, key, onupdate)
+            if added:
+                # initialize the metrics collections as needed
+                try:
+                    init_metrics_for(self._db, data)
+                except Exception as ex:
+                    msg = "Failure detected while initializing Metric data for %s: %s" % \
+                        (data.get("@id", "unknown record"), str(ex))
+                    if self.log:
+                        self.log.warning(msg)
+                    else:
+                        warnings.warn(msg, UpdateWarning)
+            return added
 
     class ReleaseSetLoader(_NERDmRenditionLoader):
         def __init__(self, dburl, schemadir, log=None):
@@ -266,3 +281,18 @@ class NERDmLoader(_NERDmRenditionLoader):
             
         return results
 
+def init_metrics_for(db, nerdm):
+    """
+    initialize the metrics-related collections for dataset described in the given NERDm record
+    as needed.  
+
+    This function assumes that the given NERDm record is the latest description of the dataset.
+    It should not be called with NERDm records describing earlier versions of the dataset.  
+
+    :param Database db:  the MongoDB Database instance the contains the metrics collections.  
+                         This instance will have come from a MongoDB client that is already 
+                         connected to a backend server.
+    :param dict  nerdm:  the NERDm record to initialize for.
+    """
+    # replace this with the actual implementation
+    raise NotImplementedError("init_metrics_for() not implemented")
