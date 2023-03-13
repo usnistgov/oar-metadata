@@ -6,7 +6,7 @@ used by the OAR framework.
 The centerpiece of this module is the :py:class:`Version` class which allow a version string to be 
 compared for sorting or to be incremented.  
 """
-import re
+import re, typing
 
 __all__ = [ "Version", "OARVersion", "cmp_versions", "cmp_oar_versions" ]
 
@@ -77,6 +77,8 @@ def cmp_versions(ver1: str, ver2: str) -> int:
     elif a == b:
         return 0
     return +1
+
+OARVersion = typing.NewType("OARVersion", Version)
 
 class OARVersion(Version):
     """
@@ -180,7 +182,7 @@ class OARVersion(Version):
 
         return self
 
-    def trivial_incr(self):
+    def trivial_incr(self) -> OARVersion:
         """
         increment the third field of the version representing a metadata or other trivial change
         in the document it is assinged to.
@@ -189,7 +191,7 @@ class OARVersion(Version):
         """
         return increment_level(2)
         
-    def minor_incr(self):
+    def minor_incr(self) -> OARVersion:
         """
         increment the third field of the version representing a data or other minor change
         in the document it is assinged to.
@@ -198,7 +200,7 @@ class OARVersion(Version):
         """
         return self.increment_field(1)
 
-    def major_incr(self):
+    def major_incr(self) -> OARVersion:
         """
         increment the third field of the version representing a major change
         in the document it is assinged to.
@@ -207,7 +209,7 @@ class OARVersion(Version):
         """
         return self.increment_field(0)
 
-    def drop_suffix(self):
+    def drop_suffix(self) -> OARVersion:
         """
         remove the suffix from this version
         :returns:  self, allowing for chaining with, say, :py:meth:`incrment_field`.
