@@ -153,7 +153,7 @@ class OARVersion(Version):
     def __str__(self):
         return self._vs + self._sfx
 
-    def increment_field(self, pos: int):
+    def increment_field(self, pos: int) -> OARVersion:
         """
         increment the field of the version at a given position.  If this version has a suffix
         indicative of a draft (see :py:meth:`is_draft`), the suffix will be dropped. 
@@ -161,6 +161,8 @@ class OARVersion(Version):
                          change field positions relative to the end (i.e. -1 increments the last field).
                          If the ``pos`` indicates a position beyond the current number of fields, the 
                          version fields will be padded with zeros up to that position before incrementing.
+        :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
+                   :rtype: OARVersion
         :raises IndexError: if th
         """
         if pos >= len(self.fields):
@@ -176,32 +178,43 @@ class OARVersion(Version):
         if self.is_draft():
             self.drop_suffix()
 
+        return self
+
     def trivial_incr(self):
         """
         increment the third field of the version representing a metadata or other trivial change
         in the document it is assinged to.
+        :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
+                   :rtype: OARVersion
         """
-        increment_level(2)
+        return increment_level(2)
         
     def minor_incr(self):
         """
         increment the third field of the version representing a data or other minor change
         in the document it is assinged to.
+        :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
+                   :rtype: OARVersion
         """
-        self.increment_field(1)
+        return self.increment_field(1)
 
     def major_incr(self):
         """
         increment the third field of the version representing a major change
         in the document it is assinged to.
+        :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
+                   :rtype: OARVersion
         """
-        self.increment_field(0)
+        return self.increment_field(0)
 
     def drop_suffix(self):
         """
         remove the suffix from this version
+        :returns:  self, allowing for chaining with, say, :py:meth:`incrment_field`.
+                   :rtype: OARVersion
         """
         self._sfx = ''
+        return self
 
 def cmp_oar_versions(ver1: str, ver2: str) -> int:
     """
