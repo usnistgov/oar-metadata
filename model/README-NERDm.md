@@ -31,7 +31,7 @@ recognized.
 
 The NERDm data model is based around the concept of resource, semantically equivalent to a schema.org
 Resource, and as in schema.org, there can be different types of resources, such as data sets and
-software.  A NERDm document indicates what types the resource qualifies as via the JSON-LD "@type"
+software.  A NERDm document indicates what types the resource qualifies as via the JSON-LD `@type`
 property.  All NERDm Resources are described by metadata terms from the core NERDm schema; however,
 different resource types can by describe by additional metadata properties (often drawing on particular
 NERDm extension schemas).  A Resource can contain Components of various types (including
@@ -50,7 +50,7 @@ is intended to ensure unambiguous conversion of NERDm documents into those schem
   * [nerdm-rls-schema.json](nerdm-rls-schema.json) -- an extension schema that defines types that help
     describe different versions or releases of resources.
   * [nerdm-bib-schema.json](nerdm-bib-schema.json) -- an extension schema that defines types for richer
-    descriptions of bibliographic references.  In particular, this enables more closer interoperability
+    descriptions of bibliographic references.  In particular, this enables closer interoperability
     with DataCite metadata.
   * [nerdm-agg-schema.json](nerdm-agg-schema.json) -- an extension schema that defines different types of
     data collections or aggregations that are important to the NIST Public Data Repository.
