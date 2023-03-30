@@ -8,11 +8,12 @@ digital data sets and collections, but also software, digital services, web site
 digital twins.  It was created to serve as the internal metadata format used by the NIST Public Data
 Repository and Science Portal to drive rich presentations on the web and to enable discovery; however, it
 was also designed to enable programmatic access to resources and their metadata by external users.
-Interoperability was also a key design aim: the schemas are defined using the JSON Schema standard,
-metadata are encoded as JSON-LD, and their semantics are tied to community ontologies, with an emphasis
-on DCAT and the US federal Project Open Data (POD) models.  Finally, extensibility is also central to its
-design: the schemas are composed of a central core schema and various extension schemas.  New extensions
-to support richer metadata concepts can be added over time without breaking existing applications.
+Interoperability was also a key design aim: the schemas are defined using the JSON Schema standard [1, 2,
+3], metadata are encoded as JSON-LD [4, 5], and their semantics are tied to community ontologies, with an
+emphasis on DCAT [6] and the US federal Project Open Data (POD) [7] models.  Finally, extensibility is also
+central to its design: the schemas are composed of a central core schema and various extension schemas.
+New extensions to support richer metadata concepts can be added over time without breaking existing
+applications. 
 
 ### About Validation
 
@@ -44,8 +45,9 @@ is intended to ensure unambiguous conversion of NERDm documents into those schem
 
 As of this writing, the Core NERDm schema and its framework stands at version 0.7 and is compatible with
 the "draft-04" version of JSON Schema.  Version 1.0 is projected to be released in 2023.  In that
-release, the NERDm schemas will be updated to the "draft2020" version of JSON Schema.  Other improvements
-will include stronger support for RDF and the Linked Data Platform through its support of JSON-LD.
+release, the NERDm schemas will be updated to the "draft2020" version of JSON Schema [2, 3].  Other
+improvements will include stronger support for RDF and the Linked Data Platform through its support of
+JSON-LD [5]. 
 
 ## Key Links
 
@@ -57,31 +59,31 @@ will include stronger support for RDF and the Linked Data Platform through its s
        extensions. All files with names of the form, "*-schema*.json" are JSON Schema definition files; those
        that do not include a version in the file name represent the latest versions. The latest version of the
        core schema is called `nerdm-schema.json`, and schemas with names of the form,
-       `nerdm-`_[ext]_`-schema.json`, contain extension schemas. All NERDm schemas here are documented
+       "nerdm-[ext]_-schema.json", contain extension schemas. All NERDm schemas here are documented
        internally, including semantic definitions of all terms. </dd>
 
   <dt> ejsonschema: Software for Validating JSON supporting extension schemas <br/>
-       <a href="">
-       </a> </dt>
+       <a href="https://github.com/usnistgov/ejsonschema">
+       https://github.com/usnistgov/ejsonschema</a> </dt>
   <dd> This software repository provides Python software that extends the community software library,
        python-jsonschema
        (<a href="https://github.com/python-jsonschema/jsonschema">https://github.com/python-jsonschema/jsonschema</a>)
        to support NERDm's extension framework. Use the scripts/validate script to validate NERDm
-       documents on the command line. (Type `validate -h` for more information.) </dd>
+       documents on the command line. (Type <code>validate -h</code> for more information.) </dd>
 
   <dt> Example NERDm Documents <br/>
-       <a href="">
-       </a> </dt>
+       <a href="https://github.com/usnistgov/oar-metadata/tree/integration/model/examples">
+       https://github.com/usnistgov/oar-metadata/tree/integration/model/examples</a> </dt>
   <dd> This folder contains example NERDm documents that illustrate the NERDm data model and use of
        extension schemas. These all can be validated using the ejsonschema validate script. </dd>
 
   <dt> NERDm Support Software <br/>
-       <a href="">
-       </a> </dt>
-  <dd> This software repository includes a Python package, `nistoar.nerdm`, that aids in creating and
-       handling NERDm documents. In particular, it includes converters that convert NERDm instances into
-       other formats (like POD, schema.org, and DCAT). It can also transform NERDm documents conforming
-       to earlier versions of the schemas to that of the latest versions. </dd>
+       <a href="https://github.com/usnistgov/oar-metadata">
+       https://github.com/usnistgov/oar-metadata</a> </dt>
+  <dd> This software repository includes a Python package, <code>nistoar.nerdm</code>, that aids in 
+       creating and handling NERDm documents. In particular, it includes converters that convert NERDm 
+       instances into other formats (like POD, schema.org, and DCAT). It can also transform NERDm 
+       documents conforming to earlier versions of the schemas to that of the latest versions. </dd>
 </dl>
 
 ## References
