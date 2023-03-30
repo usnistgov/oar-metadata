@@ -41,6 +41,25 @@ Through the NERDm extension system, domain-specific metadata can be included at 
 component level.  The direct semantic and syntactic connections to the DCAT, POD, and schema.org schemas
 is intended to ensure unambiguous conversion of NERDm documents into those schemas.
 
+### NERDm Schemas
+
+  * [nerdm-schema.json](nerdm-schema.json) -- the Core NERDm schema that includes definitions of the
+    base `Resource` and `Component` types
+  * [nerdm-pub-schema.json](nerdm-pub-schema.json) -- an extension schema that define different kinds 
+    of resource publications.
+  * [nerdm-rls-schema.json](nerdm-rls-schema.json) -- an extension schema that defines types that help
+    describe different versions or releases of resources.
+  * [nerdm-bib-schema.json](nerdm-bib-schema.json) -- an extension schema that defines types for richer
+    descriptions of bibliographic references.  In particular, this enables more closer interoperability
+    with DataCite metadata.
+  * [nerdm-agg-schema.json](nerdm-agg-schema.json) -- an extension schema that defines different types of
+    data collections or aggregations that are important to the NIST Public Data Repository.
+  * [nerdm-exp-schema.json](nerdm-exp-schema.json) -- an extension schema that defines types for
+    describing experimental data and their context.
+  * [nerdm-sip-schema.json](nerdm-sip-schema.json) -- an extension schema used by the NIST Public Data
+    Repository to describe an Submission Information Package (SIP).  
+    
+
 ### Status and Future
 
 As of this writing, the Core NERDm schema and its framework stands at version 0.7 and is compatible with
@@ -82,7 +101,7 @@ JSON-LD [5].
        https://github.com/usnistgov/oar-metadata</a> </dt>
   <dd> This software repository includes a Python package, <code>nistoar.nerdm</code>, that aids in 
        creating and handling NERDm documents. In particular, it includes converters that convert NERDm 
-       instances into other formats (like POD, schema.org, and DCAT). It can also transform NERDm 
+       instances into other formats (like POD, schema.org, DataCite and DCAT). It can also transform NERDm 
        documents conforming to earlier versions of the schemas to that of the latest versions. </dd>
 </dl>
 
