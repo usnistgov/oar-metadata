@@ -41,10 +41,10 @@ while [ "$1" != "" ]; do
 done
 
 [ "$INSTALL_DIR" = "/usr/local" ] && {
-    true ${PY_LIBDIR:=$INSTALL_DIR/lib/python2.7/dist-packages}
+    true ${PY_LIBDIR:=$INSTALL_DIR/lib/python3.8/dist-packages}
 }
 [ "$INSTALL_DIR" = "/usr" ] && {
-    true ${PY_LIBDIR:=$INSTALL_DIR/lib/python2.7}
+    true ${PY_LIBDIR:=$INSTALL_DIR/lib/python3.8}
 }
 
 true ${ETC_DIR:=$INSTALL_DIR/etc}
