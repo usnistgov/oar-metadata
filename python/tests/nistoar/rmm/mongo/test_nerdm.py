@@ -1,3 +1,4 @@
+
 import pdb, os, json, urllib.parse, warnings, logging
 import unittest as test
 from pymongo import MongoClient
@@ -33,6 +34,12 @@ class TestNERDmLoader(test.TestCase):
         if not hasattr(client, 'get_database'):
             client.get_database = client.get_default_database
         db = client.get_database()
+        if "recordMetrics" in db.list_collection_names():
+            db.drop_collection("recordMetrics")
+        if "fileMetrics" in db.list_collection_names():
+            db.drop_collection("fileMetrics")    
+        db.create_collection("recordMetrics")
+        db.create_collection("fileMetrics")
         if "record" in db.list_collection_names():
             db.drop_collection("record")
         if "versions" in db.list_collection_names():
@@ -187,11 +194,13 @@ class TestNERDmLoader(test.TestCase):
 
         self.ldr.connect()
         database = self.ldr._db
-
         nerdm.init_metrics_for(database, rec)
-
+        c = self.ldr._client.get_database().recordMetrics.find()
+        self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
+        c = self.ldr._client.get_database().fileMetrics.find()
+        self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         # replace this with checks of successful loading into the database
-        self.fail("Tests not implemented")
+        #self.fail("Tests not implemented")
         
 
         

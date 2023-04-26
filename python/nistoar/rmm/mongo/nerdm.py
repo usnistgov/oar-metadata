@@ -1,6 +1,7 @@
 """
 load NERDm records into the RMM's MongoDB database
 """
+# import pandas as pd
 import json, os, sys, warnings
 from collections import Mapping
 
@@ -294,5 +295,72 @@ def init_metrics_for(db, nerdm):
                          connected to a backend server.
     :param dict  nerdm:  the NERDm record to initialize for.
     """
-    # replace this with the actual implementation
-    raise NotImplementedError("init_metrics_for() not implemented")
+    #Convert nderm dict to an array of dict
+    #nerdm_use = [nerdm]
+    
+    record_collection_fields = { 
+                                "first_time_logged": None, 
+                                "last_time_logged": None,
+                                "total_size_download":0,
+                                "success_get":0,
+                                "number_users":0,
+                                "record_download":0, 
+                                "ip_list":[]}
+    
+    #Record fields to be copied
+    record_fields = ['pdrid', 'ediid']
+    
+    files_collection_fields = {
+                        "success_get" : 0, 
+                        "failure_get" : 0, 
+                        "datacart_or_client" : 0,
+                        "download_size" : 0,
+                        "number_users" : 0,
+                        "ip_list": [],
+                        "first_time_logged" : None,
+                        "last_time_logged" : None,
+                        }
+    
+    nerdm['pdrid'] = nerdm.pop('@id')
+    records = {}
+    #Copy fields
+    for field in record_fields:
+        records[field] = nerdm[field]
+        
+     #Initialize record fields
+    for col in record_collection_fields.keys():
+        if col not in records.keys():
+            records[col] = record_collection_fields[col]
+    print("RecordsMetrics Creation") 
+    db["recordMetrics"].insert_one(records)
+    
+    
+    #Get files from record components
+    files = flatten_records(nerdm, record_fields, files_collection_fields)
+    print("FileMetrics Creation")
+    db["fileMetrics"].insert_many(files)
+    
+
+def flatten_records(record, record_fields, initialize_fields):
+    files = []
+    keys_to_keep = ['filepath', 'size']
+    
+    for component in record['components']:
+        #Get file information
+        file_dict = {}
+        if 'filepath' in component.keys():
+            for key in keys_to_keep:
+                if key in component.keys():
+                    file_dict[key] = component[key]
+        if 'size' in file_dict.keys():
+            file_dict['filesize'] = file_dict.pop('size')
+        else:
+            file_dict['filesize'] = 0
+        #Get record information
+        for key in record_fields:
+            file_dict[key] = record[key]
+        #Initialize other fields
+        for key in initialize_fields.keys():
+            file_dict[key] = initialize_fields[key]
+        files.append(file_dict)
+    return files
