@@ -109,7 +109,9 @@ class Loader(object, metaclass=ABCMeta):
                             warning will be issued.  If set to 'fail', an 
                             exception will be raised.  If it is a function, it 
                             will be executed before loading the new data.  It 
-                            should take data and key as arguments; it should 
+                            should take data and key as arguments where data will
+                            previously saved record and key will be the MongoDB 
+                            that was used to select it; this function should 
                             return True if the new data should then be loaded
                             or False if it should not.  
         """
