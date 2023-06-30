@@ -1,0 +1,112 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/exp/v0.1#",
+    "rev": "wd1",
+    "title": "The NERDm extension metadata for describing data and other resources resulting from research experiments",
+    "description": "This extension schema defines extension metadata for describing data, collections, tools and other resources related to an experiment process.  It can capture the context and details of that process.  It supports a model where an experiment is made up of one or more data-producing activities.  The output of an experiment can be published as a Resource.",
+    "definitions": {
+
+        "ExperimentalContext": {
+            "description": "properties of an experimental process or result",
+            "notes": [
+                "This type can be used to augment an arbitrary object with metadata about an experiment"
+            ],
+            "properties": {
+                "instrumentsUsed": {
+                    "type": "array",
+                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource"  },
+                    "description": "references to identified instruments, instrument components, or other apparatuses used in the experiment",
+                    "notes": [
+                        "As references, these are not intended to be complete descriptions of instruments, but would rather contain just summary information displayable in lieu of full descriptions"
+                    ],
+                    "asOntology": {
+                        "preflabel": "Project",
+                        "referenceProperty": "modsci:ScientificInstrument"
+                    }
+                },
+                "isPartOfProjects": {
+                    "items": { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/RelatedResource" },
+                    "description": "references to an identified projects under which this particular experiment was conducted",
+                    "notes": [
+                        "In most cases, it is expected that there is only one project associated with an experiment; however, this allows for multiple projects to be referenced."
+                    ],
+                    "asOntology": {
+                        "preflabel": "Project",
+                        "referenceProperty": "dc:isPartOf"
+                    }
+                },
+                "acquisitionStartTime": {
+                    "description": "an (epoch) timestamp for the start of data acquisition",
+                    "notes": [
+                        "As a float, this value is by default taken as an epoch time in decimal seconds (i.e. seconds since midnight, Jan 1, 1970); however, a local time standard may used; in this case, use hasAcquisitionStart to provide an interoperable ISO-8601 format value",
+                        "This property assumes a model of an experiment that is made up of multiple acquisition activities.  When this property is used to describe an activity, it represents the start of that particular activity; when used to describe an experiment, it represents a start of the experiment as a whole or, more specifically, the start of the earliest acquisition activity that is part of the experiment."
+                    ],
+                    "type": "number",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Start time",
+                        "range": "xsd:decimal",
+                        "referenceProperty": "w3t:hasBeginning"
+                    }                                        
+                },
+                "hasAcquisitionStart": {
+                    "description": "a nominal start time of data acquisition for this experiement or acquisition activity in ISO-8601 format",
+                    "notes": [
+                        "This value can be an approximate time; if acquisitionStartTime is provided, it should be a conversion of that value to strict ISO-8601 format."
+                    ],
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/FlexibleDate",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Start time",
+                        "range": "xsd:date",
+                        "referenceProperty": "w3t:hasBeginning"
+                    }                    
+                },
+                "acquisitionEndTime": {
+                    "description": "an (epoch) timestamp for the end of data acquisition",
+                    "notes": [
+                        "As a float, this value is by default taken as an epoch time in decimal seconds (i.e. seconds since midnight, Jan 1, 1970); however, a local time standard may used; in this case, use hasAcquisitionEnd to provide an interoperable ISO-8601 format value",
+                        "This property assumes a model of an experiment that is made up of multiple acquisition activities.  When this property is used to describe an activity, it represents the end of that particular activity; when used to describe an experiment, it represents the end of the experiment as a whole or, more specifically, the start of the latest acquisition activity that is part of the experiment."
+                    ],
+                    "type": "number",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "Start time",
+                        "range": "xsd:decimal",
+                        "referenceProperty": "w3t:hasEnd"
+                    }                                        
+                },
+                "hasAcquisitionEnd": {
+                    "description": "a nominal end time of data acquisition for this experiement or acquisition activity in ISO-8601 format",
+                    "notes": [
+                        "This value can be an approximate time; if acquisitionEndTime is provided, it should be a conversion of that value to strict ISO-8601 format."
+                    ],
+                    "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/FlexibleDate",
+                    "asOntology": {
+                        "@context": "profile-schema-onto.json",
+                        "prefLabel": "End time",
+                        "range": "xsd:date",
+                        "referenceProperty": "w3t:hasEnd"
+                    }                    
+                }
+            }
+        },
+
+        "AcquisitionActivity": {
+            "description": "a resource component describing a data acquisition session that is part of an experiment",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#/definitions/Component" },
+                { "$ref": "#/definitions/ExperimentalContext" }
+            ]
+        },
+
+        "ExperimentalData": {
+            "description": "a data resource describing a data acquisition session that is part of an experiment",
+            "allOf": [
+                { "$ref": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#/definitions/PublicDataResource" },
+                { "$ref": "#/definitions/ExperimentalContext" }
+            ]
+        }
+    }
+}
