@@ -299,6 +299,8 @@ def init_metrics_for(db, nerdm):
     #nerdm_use = [nerdm]
     
     record_collection_fields = { 
+                                "pdrid": None,
+                                "ediid":None, 
                                 "first_time_logged": None, 
                                 "last_time_logged": None,
                                 "total_size_download":0,
@@ -311,14 +313,18 @@ def init_metrics_for(db, nerdm):
     record_fields = ['pdrid', 'ediid']
     
     files_collection_fields = {
+                         "pdrid": None,
+                        "ediid":None, 
+                        "filesize": 0,
                         "success_get" : 0, 
                         "failure_get" : 0, 
                         "datacart_or_client" : 0,
-                        "download_size" : 0,
+                        "total_size_download": 0,
                         "number_users" : 0,
                         "ip_list": [],
                         "first_time_logged" : None,
                         "last_time_logged" : None,
+                        "downloadURL": None
                         }
     
     nerdm['pdrid'] = nerdm.pop('@id')
@@ -343,7 +349,7 @@ def init_metrics_for(db, nerdm):
 
 def flatten_records(record, record_fields, initialize_fields):
     files = []
-    keys_to_keep = ['filepath', 'size']
+    keys_to_keep = ['filepath', 'size', 'downloadURL']
     
     for component in record['components']:
         #Get file information
@@ -356,6 +362,9 @@ def flatten_records(record, record_fields, initialize_fields):
             file_dict['filesize'] = file_dict.pop('size')
         else:
             file_dict['filesize'] = 0
+            
+        if 'downloadURL' not in component.keys():
+                file_dict['downloadURL'] = ''
         #Get record information
         for key in record_fields:
             file_dict[key] = record[key]
@@ -364,3 +373,4 @@ def flatten_records(record, record_fields, initialize_fields):
             file_dict[key] = initialize_fields[key]
         files.append(file_dict)
     return files
+
