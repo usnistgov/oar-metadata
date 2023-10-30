@@ -63,7 +63,7 @@ function setup_build {
 function cp_ca_certs_to {
     # assuming we are in the docker dir
     [ \! -d cacerts ] || {
-        crts=`echo cacerts/*.crt 2> /dev/null`
+        crts=`compgen -G 'cacerts/*.crt' || true`
         [ -z "$crts" ] || {
             echo "${prog}: installing CA certs from docker/cacerts"
             for cont in $@; do
