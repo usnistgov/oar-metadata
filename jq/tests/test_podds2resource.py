@@ -3,9 +3,11 @@
 import os, unittest, json, subprocess as subproc, types, pdb
 import ejsonschema as ejs
 
-nerdm = "https://data.nist.gov/od/dm/nerdm-schema/v0.6#"
-nerdmpub = "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.6#"
-nerdmbib = "https://data.nist.gov/od/dm/nerdm-schema/bib/v0.6#"
+from nistoar.nerdm import constants as cnsts
+
+nerdm = cnsts.CORE_SCHEMA_URI+'#'
+nerdmpub = cnsts.PUB_SCHEMA_URI+'#'
+nerdmbib = cnsts.BIB_SCHEMA_URI+'#'
 datadir = os.path.join(os.path.dirname(__file__), "data")
 janaffile = os.path.join(datadir, "janaf_pod.json")
 corrfile =  os.path.join(datadir, "CORR-DATA.json")
@@ -32,8 +34,8 @@ class TestJanaf(unittest.TestCase):  #
                           {"@base": "ark:ID"} ])
                           
     def test_schema(self):
-        self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.6#")
+        self.assertEquals(self.out['_schema'], nerdm)
+
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
@@ -148,8 +150,8 @@ class TestCORR(unittest.TestCase):  #
                           {"@base": "ark:ID"} ])
                           
     def test_schema(self):
-        self.assertEquals(self.out['_schema'],
-                          "https://data.nist.gov/od/dm/nerdm-schema/v0.6#")
+        self.assertEquals(self.out['_schema'], nerdm)
+
     def test_extsch(self):
         
         exts = self.out['_extensionSchemas']
