@@ -1,6 +1,6 @@
 FROM oar-metadata/jqfromsrc:latest
 
-RUN apt-get update && apt-get install -y unzip uwsgi uwsgi-src \
+RUN apt-get update && apt-get install -y unzip uwsgi uwsgi-src bison \
                                          uuid-dev libcap-dev libpcre3-dev python3-distutils
 RUN PYTHON=python3.8 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python38" && \
     mv python38_plugin.so /usr/lib/uwsgi/plugins/python38_plugin.so && \
