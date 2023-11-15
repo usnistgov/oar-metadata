@@ -2,6 +2,11 @@
 Utility functions and classes for interrogating and manipulating NERDm metadata objects
 """
 import re
+import jsonpath_ng as jp
+from collections.abc import Mapping, Sequence
+from typing import Union, List
+
+from nistoar.base.config import hget
 
 META_PREFIXES = "_$"
 
@@ -180,4 +185,49 @@ def cmp_versions(ver1, ver2):
     elif a == b:
         return 0
     return +1
+
+_doc_properties = "title description asOntology notes comments valueDocumentation equivalentTo".split()
+def declutter_schema(schema: Mapping, post2020: bool=False):
+    """
+    remove documentation nodes from a JSON Schema object in situ
+    """
+    for prop in _doc_properties:
+        if prop in schema:
+            del schema[prop]
+
+    if "properties" in schema:
+        for prop in schema['properties']:
+            declutter_schema(schema['properties'][prop])
+
+    deftag = "definitions" if not post2020 else "$definitions"
+    if deftag in schema:
+        for defname in schema[deftag]:
+            declutter_schema(schema[deftag][defname])
+
+def unrequire_props_in(schema: Mapping, locations: Union[str, List[str]], post2020: bool=False):
+    """
+    remove ``"required"`` fields at the specified locations from within the given JSON Schema.
+
+    The provided locations should point to schema definitions within the given schema dictionary.
+    This function will remove the ``"required"`` property within the located schema (if it exists) 
+    as well as any found within ``"allOf"``, ``"anyOf"``, or ``"oneOf"`` properties.  
+    
+    :param dict        schema:  a dictionary representing a JSON Schema 
+    :param str|list locations:  slash-delimited paths to an internal schema that contains a required.  
+                                An example might be "definitions/Resource".  An empty string indicates 
+                                 the top-level processa 
+    """
+    if isinstance(locations, str):
+        locations = [ locations ]
+
+    for loc in locations:
+        subsch = hget(schema, loc)
+        if subsch and isinstance(subsch, Mapping):
+            if "required" in subsch:
+                del subsch["required"]
+            for seq in "allOf anyOf oneOf".split():
+                if seq in subsch and isinstance(subsch[seq], Sequence):
+                    for itm in subsch[seq]:
+                        unrequire_props_in(itm, "$", post2020)
+                    
 

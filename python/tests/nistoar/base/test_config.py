@@ -1,10 +1,14 @@
 import os, sys, pdb, shutil, logging, json, re, importlib
 import unittest as test
+from pathlib import Path
 from nistoar.testing import *
 
 import nistoar.base.config as config
 
-datadir = os.path.join(os.path.dirname(__file__), "data")
+testdir = Path(__file__).resolve().parents[0]
+datadir = str(testdir / "data")
+basedir = testdir.parents[3]
+schemadir = basedir / 'model'
 tmpd = None
 
 def setUpModule():
@@ -70,6 +74,29 @@ class TestConfig(test.TestCase):
                                         'patty': "duke" })
         self.assertEqual(out['zub'], 'dub')
         self.assertEqual(out['tell'], {"a": 1})
+
+    def test_hget_jp(self):
+        with open(schemadir/'nerdm-schema.json') as fd:
+            schema = json.load(fd)
+
+        self.assertEqual(config.hget_jp(schema, "definitions.Resource.properties.title.title"), "Title")
+        self.assertEqual(config.hget_jp(schema, "definitions.ResourceReference.allOf[1].required"), ["title"])
+
+        self.assertIsNone(config.hget_jp(schema, "definitions.goober.title"))
+        self.assertEqual(config.hget_jp(schema, "definitions.goober.title", "Dr."), "Dr.")
+        with self.assertRaises(KeyError):
+            config.hget_jp(schema, "definitions.goober.title", config.RAISE)
+
+        with self.assertRaises(KeyError):
+            config.hget_jp(schema, "definitions.ResourceReference.allOf[23].required", config.RAISE)
+
+        # make sure results are not copies of the original
+        ressch = config.hget_jp(schema, "definitions.Resource")
+        self.assertIn("required", ressch)
+        del ressch['required']
+        with self.assertRaises(KeyError):
+            config.hget_jp(schema, "definitions.Resource.required", config.RAISE)
+
 
 class TestLogConfig(test.TestCase):
 
