@@ -199,7 +199,7 @@ def declutter_schema(schema: Mapping, post2020: bool=False):
         for prop in schema['properties']:
             declutter_schema(schema['properties'][prop])
 
-    deftag = "definitions" if not post2020 else "$definitions"
+    deftag = "definitions" if not post2020 else "$defs"
     if deftag in schema:
         for defname in schema[deftag]:
             declutter_schema(schema[deftag][defname])
