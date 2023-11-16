@@ -204,6 +204,12 @@ def declutter_schema(schema: Mapping, post2020: bool=False):
         for defname in schema[deftag]:
             declutter_schema(schema[deftag][defname])
 
+    for seq in "allOf anyOf oneOf".split():
+        if seq in schema:
+            for itm in schema[seq]:
+                declutter_schema(itm)
+
+
 def unrequire_props_in(schema: Mapping, locations: Union[str, List[str]], post2020: bool=False):
     """
     remove ``"required"`` fields at the specified locations from within the given JSON Schema.
@@ -230,4 +236,32 @@ def unrequire_props_in(schema: Mapping, locations: Union[str, List[str]], post20
                     for itm in subsch[seq]:
                         unrequire_props_in(itm, "$", post2020)
                     
+
+def loosen_schema(schema: Mapping, directives: Mapping, opts=None):
+    """
+    apply the given loosening directive to the given JSON Schema.  The directives is a 
+    dictionary describes what to do with the following properties (the directives) supported:
+
+    ``derequire``
+         a list of type definitions within the schema from which the required property 
+         should be removed (via :py:func:`~nistoar.nerdm.utils.unrequire_props_in`).  Each
+         type name listed will be assumed to be an item under the "definitions" node in the 
+         schema this directive is applied to.
+    ``dedocument``
+         a boolean indicating whether the documentation annotations should be removed from 
+         the schema.  If not set, the default is determined by opts.dedoc if opts is given or
+         True, otherwise.  
+
+    :param dict schema:      the schema document as a JSON Schema schema dictionary
+    :param dict directives:  the dictionary of directives to apply
+    :param opt:              an options object (containing scripts command-line options)
+    """
+    if directives.get("dedocument", True):
+        declutter_schema(schema)
+
+    p2020 = directives.get("post2020")
+    deftag = "$defs" if p2020 else "definitions"
+
+    dereqtps = [ deftag+'.'+t for t in directives.get("derequire", []) ]
+    unrequire_props_in(schema, dereqtps, p2020)
 

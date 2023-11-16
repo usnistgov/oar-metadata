@@ -1,6 +1,7 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
 from pathlib import Path
+from collections import OrderedDict
 
 from nistoar.nerdm import utils
 from nistoar.nerdm import constants as const
@@ -189,6 +190,46 @@ class TestUtils(test.TestCase):
         self.assertTrue(not utils.hget(schema, "definitions.Topic.required"))
         self.assertTrue(not utils.hget(schema, "definitions.Organization.required"))
         
+    def test_loosen_schema(self):
+        with open(schemadir/"nerdm-schema.json") as fd:
+            schema = json.load(fd, object_pairs_hook=OrderedDict)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
+        utils.loosen_schema(schema, {"derequire": ["Resource"], "dedocument": True})
+        
+        self.assertTrue(not utils.hget(schema, "title"))
+        self.assertTrue(not utils.hget(schema, "description"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Organization.description"))
+
+    def test_loosen_schema_no_dedoc(self):
+        with open(schemadir/"nerdm-schema.json") as fd:
+            schema = json.load(fd, object_pairs_hook=OrderedDict)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
+        utils.loosen_schema(schema, {"derequire": ["Resource"], "dedocument": False})
+        
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
 
     
 class TestVersion(test.TestCase):
