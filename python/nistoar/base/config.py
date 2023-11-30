@@ -7,6 +7,8 @@ import requests
 from collections.abc import Mapping
 from urllib.parse import urlparse
 
+import jsonpath_ng as jp
+
 from . import OARException
 
 oar_home = None
@@ -475,4 +477,27 @@ def lookup_config_server(serverport):
     service.
     """
     raise NotImplementedError()
+
+NO_VALUE=NotImplemented
+RAISE=NO_VALUE
+def hget_jp(obj: Mapping, path: str, default=None):
+    """
+    return the first value from within a hierarchical dictionary (e.g. JSON or config structure) 
+    that corresponds to a given location path.  The location path is JSONPath-compliant string 
+    (https://goessner.net/articles/JsonPath/).  This function is intended for use with paths that 
+    uniquely locate data--i.e. resolve to only one value.
+    :param dict obj:   the dictionary to search for a matching value.
+    :param str path:   a string indicating the location of the value to return.  This should be 
+                       a JSONPath-compliant string (where the initial "$." is optional)
+    :raises KeyError:  if default is not provide (i.e. is RAISE) and the path does not resolve to 
+                       an existing location.
+    """
+    try:
+        return jp.parse(path).find(obj)[0].value
+    except IndexError:
+        if default is RAISE:
+            raise KeyError(path)
+        return default
+
+hget = hget_jp
 

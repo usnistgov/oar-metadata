@@ -78,8 +78,8 @@ echo '+' PACKAGE_NAME=$PACKAGE_NAME
 echo '+' version=$version
 
 # build the components
+# set -x
 installdir=$BUILD_DIR/docs
-set -x
 mkdir -p $installdir
 
 # export schema files

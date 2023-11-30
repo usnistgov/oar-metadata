@@ -1,8 +1,14 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
+from pathlib import Path
+from collections import OrderedDict
 
 from nistoar.nerdm import utils
 from nistoar.nerdm import constants as const
+
+testdir = Path(__file__).resolve().parents[0]
+basedir = testdir.parents[3]
+schemadir = basedir / 'model'
 
 class TestUtils(test.TestCase):
 
@@ -100,6 +106,131 @@ class TestUtils(test.TestCase):
         self.assertEqual(utils.cmp_versions(utils.get_nerdm_schema_version(data), "0.5"), 1)
         self.assertEqual(utils.cmp_versions(utils.get_nerdm_schema_version(data), "2.5"), -1)
         self.assertEqual(utils.cmp_versions(utils.get_nerdm_schema_version(data), "1.3"), 0)
+
+    def test_declutter_schema(self):
+        with open(schemadir/'nerdm-schema.json') as fd:
+            schema = json.load(fd)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.asOntology"))
+
+        utils.declutter_schema(schema)
+
+        self.assertFalse(utils.hget(schema, "title"))
+        self.assertFalse(utils.hget(schema, "description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.title"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.notes"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.properties.title.title"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.properties.title.notes"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.properties.title.description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.properties.title.asOntology"))
+    
+    def test_declutter_schema_post2020(self):
+        with open(schemadir/'nerdm-schema.json') as fd:
+            schema = json.load(fd)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.asOntology"))
+
+        utils.declutter_schema(schema, True)
+
+        # the file is not post-2020 compliant, so only the top level documentation will be found
+        self.assertFalse(utils.hget(schema, "title"))
+        self.assertFalse(utils.hget(schema, "description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertFalse(utils.hget(schema, "definitions.Resource.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.title"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.notes"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.properties.title.asOntology"))
+
+    def test_unrequire_props_in(self):
+        with open(schemadir/'nerdm-schema.json') as fd:
+            schema = json.load(fd)
+
+        self.assertTrue(utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.ResourceReference.allOf[1].required"))
+        self.assertTrue(utils.hget(schema, "definitions.Topic.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+
+        utils.unrequire_props_in(schema, "definitions.Resource")
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.ResourceReference.allOf[1].required"))
+        self.assertTrue(utils.hget(schema, "definitions.Topic.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+
+        utils.unrequire_props_in(schema, ["definitions.ResourceReference"])
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.ResourceReference.allOf[1].required"))
+        self.assertTrue(utils.hget(schema, "definitions.Topic.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+
+        utils.unrequire_props_in(schema, ["definitions.Resource",
+                                          "definitions.Topic",
+                                          "goober",
+                                          "definitions.Organization"])
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.ResourceReference.allOf[1].required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Topic.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Organization.required"))
+        
+    def test_loosen_schema(self):
+        with open(schemadir/"nerdm-schema.json") as fd:
+            schema = json.load(fd, object_pairs_hook=OrderedDict)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
+        utils.loosen_schema(schema, {"derequire": ["Resource"], "dedocument": True})
+        
+        self.assertTrue(not utils.hget(schema, "title"))
+        self.assertTrue(not utils.hget(schema, "description"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(not utils.hget(schema, "definitions.Organization.description"))
+
+    def test_loosen_schema_no_dedoc(self):
+        with open(schemadir/"nerdm-schema.json") as fd:
+            schema = json.load(fd, object_pairs_hook=OrderedDict)
+
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
+        utils.loosen_schema(schema, {"derequire": ["Resource"], "dedocument": False})
+        
+        self.assertTrue(utils.hget(schema, "title"))
+        self.assertTrue(utils.hget(schema, "description"))
+        self.assertTrue(not utils.hget(schema, "definitions.Resource.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Resource.description"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.required"))
+        self.assertTrue(utils.hget(schema, "definitions.Organization.description"))
+
+
     
 class TestVersion(test.TestCase):
 

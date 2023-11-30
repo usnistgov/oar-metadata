@@ -11,7 +11,7 @@ RUN update-alternatives --install /usr/lib/uwsgi/plugins/python3_plugin.so \
 
 RUN python -m pip install "setuptools<66.0.0"
 RUN python -m pip install json-spec jsonschema==2.4.0 requests \
-                          pytest==4.6.5 filelock crossrefapi pyyaml
+                          pytest==4.6.5 filelock crossrefapi pyyaml jsonpath_ng
 RUN python -m pip install --no-dependencies jsonmerge==1.3.0 
 
 WORKDIR /root
