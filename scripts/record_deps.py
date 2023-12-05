@@ -12,7 +12,7 @@
 # The default package name (oar-sdp) can be over-ridden by the environment
 # variable PACKAGE_NAME
 #
-import os, sys, json, re
+import os, sys, json, re, traceback as tb
 from collections import OrderedDict
 
 prog = os.path.basename(sys.argv[0])
@@ -80,17 +80,23 @@ def ejschemadep():
 
 def jmergedep():
     import jsonmerge
-    eggre = re.compile(r'^jsonmerge-(.*)\.egg-info$')
+    eggre = re.compile(r'^jsonmerge-(.*)\.egg')
     modfile = jsonmerge.__file__
     libdir = os.path.dirname(os.path.dirname(modfile))
     vers="(unknown)"
-    try:
-        egginfo = [d for d in os.listdir(libdir) if eggre.match(d)]
-        if len(egginfo) > 0:
-            m = eggre.match(egginfo[0])
-            vers = m.group(1)
-    except Exception as ex:
-        tb.print_exc()
+    m = eggre.match(os.path.basename(libdir))
+    if m:
+        # zipped egg
+        vers = m.group(1)
+    else:
+        # it's the dist-packages dir; look for the egg-info file
+        try:
+            egginfo = [d for d in os.listdir(libdir) if eggre.match(d)]
+            if len(egginfo) > 0:
+                m = eggre.match(egginfo[0])
+                vers = m.group(1)
+        except Exception as ex:
+            tb.print_exc()
     return OrderedDict([
         ("name", "jsonmerge"),
         ("version", vers)

@@ -33,6 +33,11 @@ setup_build
 
 log_intro   # record start of build into log
 
+# install CA certs into containers that can use them
+if { echo $BUILD_IMAGES | grep -qs pymongo; }; then
+    cp_ca_certs_to pymongo
+fi
+
 for container in $BUILD_IMAGES; do 
     echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container | logit
     docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container 2>&1 | logit
