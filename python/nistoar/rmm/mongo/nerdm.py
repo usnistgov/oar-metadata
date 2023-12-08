@@ -297,7 +297,6 @@ def init_metrics_for(db, nerdm):
     """
     #Convert nderm dict to an array of dict
     #nerdm_use = [nerdm]
-    
     record_collection_fields = { 
                                 "pdrid": None,
                                 "ediid":None, 
@@ -313,7 +312,7 @@ def init_metrics_for(db, nerdm):
     record_fields = ['pdrid', 'ediid']
     
     files_collection_fields = {
-                         "pdrid": None,
+                        "pdrid": None,
                         "ediid":None, 
                         "filesize": 0,
                         "success_get" : 0, 
@@ -326,8 +325,8 @@ def init_metrics_for(db, nerdm):
                         "last_time_logged" : None,
                         "downloadURL": None
                         }
-    
     nerdm['pdrid'] = nerdm.pop('@id')
+   
     records = {}
     #Copy fields
     for field in record_fields:
@@ -337,13 +336,11 @@ def init_metrics_for(db, nerdm):
     for col in record_collection_fields.keys():
         if col not in records.keys():
             records[col] = record_collection_fields[col]
-    print("RecordsMetrics Creation") 
     db["recordMetrics"].insert_one(records)
     
     
     #Get files from record components
     files = flatten_records(nerdm, record_fields, files_collection_fields)
-    print("FileMetrics Creation")
     db["fileMetrics"].insert_many(files)
     
 
@@ -370,7 +367,8 @@ def flatten_records(record, record_fields, initialize_fields):
             file_dict[key] = record[key]
         #Initialize other fields
         for key in initialize_fields.keys():
-            file_dict[key] = initialize_fields[key]
-        files.append(file_dict)
+            if(key not in file_dict.keys()):
+                file_dict[key] = initialize_fields[key]          
+        files.append(file_dict)   
     return files
 
