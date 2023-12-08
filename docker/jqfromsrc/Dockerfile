@@ -2,7 +2,7 @@ From oar-metadata/pymongo
 
 RUN apt-get update && \
     apt-get install -y libonig-dev curl build-essential libtool zip \
-                       unzip autoconf git
+                       unzip autoconf git bison
 RUN pip install pipenv
 
 WORKDIR /root
