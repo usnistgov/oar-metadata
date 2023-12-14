@@ -10,6 +10,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
 from .loader import ValidationError, SchemaError, RefResolutionError
 from nistoar.nerdm import utils
 from nistoar.nerdm.convert.rmm import NERDmForRMM
+import pdb
 
 DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
@@ -336,11 +337,14 @@ def init_metrics_for(db, nerdm):
     for col in record_collection_fields.keys():
         if col not in records.keys():
             records[col] = record_collection_fields[col]
-    db["recordMetrics"].insert_one(records)
-    
+    if(db["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
+        db["recordMetrics"].insert_one(records)
     
     #Get files from record components
     files = flatten_records(nerdm, record_fields, files_collection_fields)
+    current_files = db["fileMetrics"].find({"ediid": nerdm["ediid"]})
+    pdb.set_trace()
+    
     db["fileMetrics"].insert_many(files)
     
 
