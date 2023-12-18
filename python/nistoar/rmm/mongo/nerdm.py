@@ -10,7 +10,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
 from .loader import ValidationError, SchemaError, RefResolutionError
 from nistoar.nerdm import utils
 from nistoar.nerdm.convert.rmm import NERDmForRMM
-import pdb
+
 
 DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
@@ -298,6 +298,7 @@ def init_metrics_for(db, nerdm):
     """
     #Convert nderm dict to an array of dict
     #nerdm_use = [nerdm]
+    
     record_collection_fields = { 
                                 "pdrid": None,
                                 "ediid":None, 
@@ -313,7 +314,7 @@ def init_metrics_for(db, nerdm):
     record_fields = ['pdrid', 'ediid']
     
     files_collection_fields = {
-                        "pdrid": None,
+                         "pdrid": None,
                         "ediid":None, 
                         "filesize": 0,
                         "success_get" : 0, 
@@ -326,8 +327,8 @@ def init_metrics_for(db, nerdm):
                         "last_time_logged" : None,
                         "downloadURL": None
                         }
+    
     nerdm['pdrid'] = nerdm.pop('@id')
-   
     records = {}
     #Copy fields
     for field in record_fields:
@@ -342,10 +343,13 @@ def init_metrics_for(db, nerdm):
     
     #Get files from record components
     files = flatten_records(nerdm, record_fields, files_collection_fields)
+    files_to_update = []
     current_files = db["fileMetrics"].find({"ediid": nerdm["ediid"]})
-    pdb.set_trace()
-    
-    db["fileMetrics"].insert_many(files)
+    current_files_filepaths = [x["filepath"] for x in current_files]
+    for file_item in files:
+        if file_item['filepath'] not in current_files_filepaths:
+            files_to_update.append(file_item)
+    db["fileMetrics"].insert_many(files_to_update)
     
 
 def flatten_records(record, record_fields, initialize_fields):
@@ -371,8 +375,7 @@ def flatten_records(record, record_fields, initialize_fields):
             file_dict[key] = record[key]
         #Initialize other fields
         for key in initialize_fields.keys():
-            if(key not in file_dict.keys()):
-                file_dict[key] = initialize_fields[key]          
-        files.append(file_dict)   
+            file_dict[key] = initialize_fields[key]
+        files.append(file_dict)
     return files
 

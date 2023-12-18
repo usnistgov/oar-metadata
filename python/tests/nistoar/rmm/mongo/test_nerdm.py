@@ -188,8 +188,7 @@ class TestNERDmLoader(test.TestCase):
     def test_init_metrics_for(self):
         with open(pdrfile) as fd:
             rec = json.load(fd)
-            
-        # print(" **** TEST ****", rec)    
+
         # this record has files in it
         self.assertTrue(any(['/od/ds/' in f.get('downloadURL','') for f in rec.get('components',[])]))
 
@@ -199,7 +198,6 @@ class TestNERDmLoader(test.TestCase):
         c = self.ldr._client.get_database().recordMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         c = self.ldr._client.get_database().fileMetrics.find()
-        # print(" TEST ****", c[0])
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         # replace this with checks of successful loading into the database
         #self.fail("Tests not implemented")
