@@ -338,31 +338,42 @@ def init_metrics_for(db, nerdm):
     for col in record_collection_fields.keys():
         if col not in records.keys():
             records[col] = record_collection_fields[col]
+    
     if(db["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
         db["recordMetrics"].insert_one(records)
     
     #Get files from record components
-    files = flatten_records(nerdm, record_fields, files_collection_fields)
+    files = flatten_records(nerdm, files_collection_fields)
     files_to_update = []
+    
     current_files = db["fileMetrics"].find({"ediid": nerdm["ediid"]})
     current_files_filepaths = [x["filepath"] for x in current_files]
     for file_item in files:
-        if file_item['filepath'] not in current_files_filepaths:
-            files_to_update.append(file_item)
-    db["fileMetrics"].insert_many(files_to_update)
+        if 'filepath' in file_item.keys():
+            if file_item['filepath'] not in current_files_filepaths:
+                files_to_update.append(file_item)
+                
+    if len(files_to_update)>0:            
+        db["fileMetrics"].insert_many(files_to_update)
     
-
-def flatten_records(record, record_fields, initialize_fields):
+# This takes a nerdm record and collect the files related data from components.
+# Inputs are record=nerdm to be updated
+# initialize fields=fileMetrics fields to be updated
+def flatten_records(record, initialize_fields):
     files = []
-    keys_to_keep = ['filepath', 'size', 'downloadURL']
-    
+    keys_to_keep = ['filepath', 'size', 'downloadURL', 'ediid', '@id']
     for component in record['components']:
-        #Get file information
         file_dict = {}
-        if 'filepath' in component.keys():
+        #Initialize  fields
+        for key in initialize_fields.keys():
+            file_dict[key] = initialize_fields[key]
+        #Get file information
+
+        if 'filepath' in component.keys():            
             for key in keys_to_keep:
                 if key in component.keys():
                     file_dict[key] = component[key]
+
         if 'size' in file_dict.keys():
             file_dict['filesize'] = file_dict.pop('size')
         else:
@@ -370,12 +381,10 @@ def flatten_records(record, record_fields, initialize_fields):
             
         if 'downloadURL' not in component.keys():
                 file_dict['downloadURL'] = ''
-        #Get record information
-        for key in record_fields:
-            file_dict[key] = record[key]
-        #Initialize other fields
-        for key in initialize_fields.keys():
-            file_dict[key] = initialize_fields[key]
+
+        file_dict['pdrid'] = record['pdrid']
+        file_dict['ediid'] = record['ediid']
+        
         files.append(file_dict)
     return files
 

@@ -199,6 +199,7 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         c = self.ldr._client.get_database().fileMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
+        self.assertEqual(c[0]['filepath'], "NIST_NPL_InterlabData2019.csv.sha256")
         # replace this with checks of successful loading into the database
         #self.fail("Tests not implemented")
         
