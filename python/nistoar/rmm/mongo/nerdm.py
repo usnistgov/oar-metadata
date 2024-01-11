@@ -1,7 +1,8 @@
 """
 load NERDm records into the RMM's MongoDB database
 """
-import json, os, sys
+# import pandas as pd
+import json, os, sys, warnings
 from collections import Mapping
 
 from .loader import (Loader, RecordIngestError, JSONEncodingError,
@@ -9,6 +10,7 @@ from .loader import (Loader, RecordIngestError, JSONEncodingError,
 from .loader import ValidationError, SchemaError, RefResolutionError
 from nistoar.nerdm import utils
 from nistoar.nerdm.convert.rmm import NERDmForRMM
+
 
 DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
@@ -98,6 +100,21 @@ class NERDmLoader(_NERDmRenditionLoader):
     class LatestLoader(_NERDmRenditionLoader):
         def __init__(self, dburl, schemadir, log=None):
             super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, schemadir, log)
+
+        def load_data(self, data, key=None, onupdate='quiet'):
+            added = super().load_data(data, key, onupdate)
+            if added:
+                # initialize the metrics collections as needed
+                try:
+                    init_metrics_for(self._db, data)
+                except Exception as ex:
+                    msg = "Failure detected while initializing Metric data for %s: %s" % \
+                        (data.get("@id", "unknown record"), str(ex))
+                    if self.log:
+                        self.log.warning(msg)
+                    else:
+                        warnings.warn(msg, UpdateWarning)
+            return added
 
     class ReleaseSetLoader(_NERDmRenditionLoader):
         def __init__(self, dburl, schemadir, log=None):
@@ -265,4 +282,109 @@ class NERDmLoader(_NERDmRenditionLoader):
             results = self._mkloadlog()
             
         return results
+
+def init_metrics_for(db, nerdm):
+    """
+    initialize the metrics-related collections for dataset described in the given NERDm record
+    as needed.  
+
+    This function assumes that the given NERDm record is the latest description of the dataset.
+    It should not be called with NERDm records describing earlier versions of the dataset.  
+
+    :param Database db:  the MongoDB Database instance the contains the metrics collections.  
+                         This instance will have come from a MongoDB client that is already 
+                         connected to a backend server.
+    :param dict  nerdm:  the NERDm record to initialize for.
+    """
+    #Convert nderm dict to an array of dict
+    #nerdm_use = [nerdm]
+    
+    record_collection_fields = { 
+                                "pdrid": None,
+                                "ediid":None, 
+                                "first_time_logged": None, 
+                                "last_time_logged": None,
+                                "total_size_download":0,
+                                "success_get":0,
+                                "number_users":0,
+                                "record_download":0, 
+                                "ip_list":[]}
+    
+    #Record fields to be copied
+    record_fields = ['pdrid', 'ediid']
+    
+    files_collection_fields = {
+                         "pdrid": None,
+                        "ediid":None, 
+                        "filesize": 0,
+                        "success_get" : 0, 
+                        "failure_get" : 0, 
+                        "datacart_or_client" : 0,
+                        "total_size_download": 0,
+                        "number_users" : 0,
+                        "ip_list": [],
+                        "first_time_logged" : None,
+                        "last_time_logged" : None,
+                        "downloadURL": None
+                        }
+    
+    nerdm['pdrid'] = nerdm.pop('@id')
+    records = {}
+    #Copy fields
+    for field in record_fields:
+        records[field] = nerdm[field]
+        
+     #Initialize record fields
+    for col in record_collection_fields.keys():
+        if col not in records.keys():
+            records[col] = record_collection_fields[col]
+    
+    if(db["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
+        db["recordMetrics"].insert_one(records)
+    
+    #Get files from record components
+    files = flatten_records(nerdm, files_collection_fields)
+    files_to_update = []
+    
+    current_files = db["fileMetrics"].find({"ediid": nerdm["ediid"]})
+    current_files_filepaths = [x["filepath"] for x in current_files]
+    for file_item in files:
+        if 'filepath' in file_item.keys():
+            if file_item['filepath'] not in current_files_filepaths:
+                files_to_update.append(file_item)
+                
+    if len(files_to_update)>0:            
+        db["fileMetrics"].insert_many(files_to_update)
+    
+# This takes a nerdm record and collect the files related data from components.
+# Inputs are record=nerdm to be updated
+# initialize fields=fileMetrics fields to be updated
+def flatten_records(record, initialize_fields):
+    files = []
+    keys_to_keep = ['filepath', 'size', 'downloadURL', 'ediid', '@id']
+    for component in record['components']:
+        file_dict = {}
+        #Initialize  fields
+        for key in initialize_fields.keys():
+            file_dict[key] = initialize_fields[key]
+        #Get file information
+
+        if 'filepath' in component.keys():            
+            for key in keys_to_keep:
+                if key in component.keys():
+                    file_dict[key] = component[key]
+
+        if 'size' in file_dict.keys():
+            file_dict['filesize'] = file_dict.pop('size')
+        else:
+            file_dict['filesize'] = 0
+            
+        if 'downloadURL' not in component.keys():
+                file_dict['downloadURL'] = ''
+
+        file_dict['pdrid'] = record['pdrid']
+        file_dict['ediid'] = record['ediid']
+        
+        files.append(file_dict)
+    return files
 
