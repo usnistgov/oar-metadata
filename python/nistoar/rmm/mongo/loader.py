@@ -84,7 +84,7 @@ class Loader(object, metaclass=ABCMeta):
                 self._client = None
                 self._db = None
         
-    def load_data(self, data, key=None, onupdate='quiet'):
+    def load_data(self, data, key=None, onupdate='quiet') -> int:
         """
         load the given data document into the configured MongoDB collection.
 
@@ -114,6 +114,9 @@ class Loader(object, metaclass=ABCMeta):
                             that was used to select it; this function should 
                             return True if the new data should then be loaded
                             or False if it should not.  
+        :return:  the number of database records added; 0 is returned if implementation
+                  decides that it is not necessary to load any records
+                  :rtype: int
         """
         try:
             if not self._client:
