@@ -1,3 +1,4 @@
+
 import pdb, os, json, urllib.parse, warnings, logging
 import unittest as test
 from pymongo import MongoClient
@@ -11,6 +12,7 @@ basedir = os.path.dirname(pydir)
 schemadir = os.path.join(basedir, "model")
 exdir = os.path.join(schemadir, "examples")
 janaffile = os.path.join(exdir, "janaf.json")
+pdrfile = os.path.join(exdir, "mds2-2106.json")
 
 dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
@@ -32,6 +34,12 @@ class TestNERDmLoader(test.TestCase):
         if not hasattr(client, 'get_database'):
             client.get_database = client.get_default_database
         db = client.get_database()
+        if "recordMetrics" in db.list_collection_names():
+            db.drop_collection("recordMetrics")
+        if "fileMetrics" in db.list_collection_names():
+            db.drop_collection("fileMetrics")    
+        db.create_collection("recordMetrics")
+        db.create_collection("fileMetrics")
         if "record" in db.list_collection_names():
             db.drop_collection("record")
         if "versions" in db.list_collection_names():
@@ -176,6 +184,25 @@ class TestNERDmLoader(test.TestCase):
         self.assertEqual(c[0]['@id'], 'ark:/88434/sdp0fjspek351')
         self.assertEqual(self.ldr._client.get_database().versions.count_documents({}), 1)
         self.assertEqual(self.ldr._client.get_database().releasesets.count_documents({}), 1)
+
+    def test_init_metrics_for(self):
+        with open(pdrfile) as fd:
+            rec = json.load(fd)
+
+        # this record has files in it
+        self.assertTrue(any(['/od/ds/' in f.get('downloadURL','') for f in rec.get('components',[])]))
+
+        self.ldr.connect()
+        database = self.ldr._db
+        nerdm.init_metrics_for(database, rec)
+        c = self.ldr._client.get_database().recordMetrics.find()
+        self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
+        c = self.ldr._client.get_database().fileMetrics.find()
+        self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
+        self.assertEqual(c[0]['filepath'], "NIST_NPL_InterlabData2019.csv.sha256")
+        # replace this with checks of successful loading into the database
+        #self.fail("Tests not implemented")
+        
 
         
             
