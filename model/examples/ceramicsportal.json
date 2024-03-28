@@ -1,7 +1,7 @@
 {
     "@context": "https://data.nist.gov/od/dm/nerdm-pub-context.jsonld",
-    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.3#",
-    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.3#/definitions/DataPublication" ],
+    "_schema": "https://data.nist.gov/od/dm/nerdm-schema/v0.7#",
+    "_extensionSchemas": [ "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.8#/definitions/DataPublication" ],
 
     "@type": [ "nrdp:Portal", "nrdp:SRD", "nrdp:PublishedDataResource" ],
     "@id": "ark:/88434/sdp0fjspek352",
@@ -106,6 +106,18 @@
         "name": "National Institute of Standards and Technology"
     },
     "language": [ "en" ],
+    "responsibleOrganization": [
+        {
+            "@type": [ "org:Organization" ],
+            "title": "National Institute of Standards and Technology (NIST)",
+            "@id": "https://ror.org/05xpvk416#61/640",
+            "subunits": [
+                "Materials Measurement Laboratory",
+                "Office of Data and Informatics",
+                "Data Services"
+            ]
+        }
+    ],
     "bureauCode": [
         "006:55"
     ],
