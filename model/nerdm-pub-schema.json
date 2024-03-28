@@ -1,8 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
-    "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.8#",
-    "rev": "wd1",
+    "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#",
+    "rev": "wd2",
     "title": "The NERDm extension metadata for Public Data",
     "description": "These classes extend the based NERDm schema to different types of published data",
     "definitions": {
