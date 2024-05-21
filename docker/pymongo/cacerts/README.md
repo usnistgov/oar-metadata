@@ -10,3 +10,4 @@ containers, allowing them to safely connect to those external sites.
 
 Be sure the certificates are in PEM format and include a .crt file extension.
 
+Do not remove this README file; doing so may cause a Docker build faiure.

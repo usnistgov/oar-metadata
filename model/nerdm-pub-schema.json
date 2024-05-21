@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
     "$extensionSchemas": ["https://data.nist.gov/od/dm/enhanced-json-schema/v0.1#"],
     "id": "https://data.nist.gov/od/dm/nerdm-schema/pub/v0.7#",
-    "rev": "wd1",
+    "rev": "wd2",
     "title": "The NERDm extension metadata for Public Data",
     "description": "These classes extend the based NERDm schema to different types of published data",
     "definitions": {
@@ -49,6 +49,22 @@
                             }
                         },
                 
+                        "responsibleOrganization": {
+                            "description": "The organizations that are responsible for the work resulting in this resource, from either a supervisory or funding role",
+                            "notes": [
+                                "Similar to bureauCode and programCode, this attribute allows, say, an organization to select resources that they sponsored or otherwise oversaw."
+                            ],
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Affiliation"
+                            },
+                            "asOntology": {
+                                "@context": "profile-schema-onto.json",
+                                "prefLabel": "Responsible Organization",
+                                "referenceProperty": "cpmeta:hasResponsibleOrganization"
+                            } 
+                        },
+
                         "bureauCode": {
                             "title": "Bureau Code",
                             "description": "an identifier provided by the OMB Circular A-11, Appendix C that identifies the originating federal agency",
