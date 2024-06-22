@@ -17,7 +17,8 @@ The RMM includes three relevant collections:
                        as a version-specific ID.
 """
 import re
-from collections import OrderedDict, Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 from urllib.parse import urljoin
 from copy import deepcopy
 

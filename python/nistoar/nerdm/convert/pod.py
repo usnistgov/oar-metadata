@@ -2,7 +2,8 @@
 Classes and functions for converting from and to the NERDm schema
 """
 import os, json, re
-from collections import OrderedDict, Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 
 from ... import jq
 from ...doi import resolve, is_DOI

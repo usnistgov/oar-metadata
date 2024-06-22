@@ -7,7 +7,8 @@ DataCite DOIs with a focus on creating them and updating their metadata via
 DataCite services.  
 """
 import re
-from collections import OrderedDict, Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 from copy import deepcopy
 from io import StringIO
 import requests

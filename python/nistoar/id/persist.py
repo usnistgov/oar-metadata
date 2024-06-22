@@ -4,7 +4,8 @@ its IDs and related data to a file on disk.  This implementation provides
 locking to prevent two processes from acquiring the same ID.
 """
 import os, logging, json
-from collections import Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 from copy import deepcopy
 from .minter import IDRegistry, IDMinter, NoidMinter, NIST_ARK_NAAN
 import pynoid as noid, filelock
