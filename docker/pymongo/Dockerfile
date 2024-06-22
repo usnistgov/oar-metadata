@@ -1,4 +1,4 @@
-# This provides the base support for Python 3.8 and MongoDB 4.4 
+# This provides the base support for Python 3.10 and MongoDB 7.0
 
 FROM mongo:7.0-jammy
 # VOLUME /data
