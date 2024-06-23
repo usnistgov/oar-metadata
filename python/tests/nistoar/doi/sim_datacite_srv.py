@@ -1,7 +1,8 @@
 import json, os, sys, re, hashlib, json, logging, random
 from datetime import datetime
 from wsgiref.headers import Headers
-from collections import OrderedDict, Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 from copy import deepcopy
 from urllib.parse import parse_qs
 

@@ -1,6 +1,6 @@
 import os, sys, pdb, shutil, logging, json
 import unittest as test
-from collections import Mapping
+from collections.abc import Mapping
 # from nistoar.tests import *
 
 import nistoar.doi.resolving.crossref as res

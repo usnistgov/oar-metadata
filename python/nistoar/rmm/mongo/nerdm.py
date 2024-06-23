@@ -3,7 +3,8 @@ load NERDm records into the RMM's MongoDB database
 """
 # import pandas as pd
 import json, os, sys, warnings
-from collections import Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 
 from .loader import (Loader, RecordIngestError, JSONEncodingError,
                      UpdateWarning, LoadLog)
