@@ -2,7 +2,8 @@
 Module for converting a NERDm record to the latest schema versions.  
 """
 import re
-from collections import OrderedDict, Mapping
+from collections import OrderedDict
+from collections.abc import Mapping
 from copy import deepcopy
 from urllib.parse import urlparse
 

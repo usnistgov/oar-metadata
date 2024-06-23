@@ -1,5 +1,5 @@
 import unittest, pdb, os, json
-from collections import Mapping
+from collections.abc import Mapping
 
 import ejsonschema as ejs
 
