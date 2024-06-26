@@ -1,4 +1,4 @@
-FROM oar-metadata/jqfromsrc:latest
+FROM oar-metadata/jq
 
 RUN apt-get update && apt-get install -y unzip uwsgi uwsgi-src \
                                          uuid-dev libcap-dev libpcre3-dev python3-distutils

@@ -11,7 +11,6 @@ RUN git clone http://github.com/stedolan/jq.git jq-dev && \
     git checkout a9f97e9e61a910a374a5d768244e8ad63f407d3e && \
     git submodule update --init && \
     autoreconf -fi && \
-    (cd docs && pipenv install) && \
     ./configure --with-oniguruma=builtin && \
     make -j8 && \
     make check-TESTS && \
