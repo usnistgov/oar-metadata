@@ -1,4 +1,4 @@
-FROM oar-metadata/jqfromsrc-py2:latest
+FROM oar-metadata/jq-py2:latest
 
 RUN apt-get update && apt-get install -y python python-pip python-dev unzip \
                                          uwsgi uwsgi-plugin-python python-yaml
