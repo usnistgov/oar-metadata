@@ -12,6 +12,29 @@ true ${SOURCE_DIR:=$base}
 true ${INSTALL_DIR:=/usr/local}
 ##########
 
+function help {
+    echo ${prog} -- install software from this repository
+    cat <<EOF
+
+This script installs the authbroker software as a package into a given 
+or system location.  By default, this location is /usr/local/authbroker; 
+below this directory, directories like "bin" and "lib/python" will be 
+created and loaded up.
+
+Usage:  $prog [OPTION ...] 
+
+Options:
+   --install-dir DIR    Install the softwared below an arbitrary location 
+                        (other than the default, /usr/local/authbroker).
+   --prefix DIR         An alias for --intall-dir
+   --source-dir DIR     The directory containing the source code, overriding 
+                        the default being the directory containing the 
+                        scripts subdirectory where this script resides.
+   --dir DIR            An alieas for --source-dir
+
+EOF
+}
+
 # handle command line options
 while [ "$1" != "" ]; do 
   case "$1" in
@@ -28,6 +51,10 @@ while [ "$1" != "" ]; do
     -d|--dir|--source-dir)
         shift
         SOURCE_DIR=$1
+        ;;
+    -h|--help)
+        help
+        exit 0
         ;;
     -*)
         echo "$prog: unsupported option:" $1
