@@ -122,7 +122,10 @@ class TestLogConfig(test.TestCase):
         cfg = {
             'logdir': tmpd,
             'logfile': logfile,
-            'loglevel': 'DEBUG'
+            'loglevel': 'DEBUG',
+            'loglevelsfor': {
+                'pymongo': 'INFO'
+            }
         }
 
         self.logfile = os.path.join(tmpd, logfile)
@@ -132,11 +135,17 @@ class TestLogConfig(test.TestCase):
         self.assertEqual(config.global_logdir, tmpd)
         self.assertEqual(config.global_logfile, self.logfile)
 
+        self.assertEqual(self.rootlog.getEffectiveLevel(), logging.DEBUG-1)
+        self.assertEqual(config._log_handler.level, logging.DEBUG)
+        self.assertEqual(logging.getLogger("pymongo").getEffectiveLevel(), logging.INFO)
+
         self.rootlog.warning('Oops')
         self.assertTrue(os.path.exists(self.logfile))
         with open(self.logfile) as fd:
             words = fd.read()
         self.assertIn("Oops", words)
+
+
         
     def test_abs(self):
         self.logfile = os.path.join(tmpd, "cfgfile.log")
