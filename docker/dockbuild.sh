@@ -18,7 +18,10 @@ PACKAGE_NAME=oar-metadata
 ## containers to be built.  List them in dependency order (where a latter one
 ## depends the former ones).  
 #
-DOCKER_IMAGE_DIRS="pymongo jq ejsonschema mdtests"
+# NOTE: ejsonschema is tag provided for backward compatibility; other repos that
+#       build their docker images on those of oar-metadata should build on "mdenv".
+#
+DOCKER_IMAGE_DIRS="pymongo jq mdenv ejsonschema mdtests"
 
 . $codedir/oar-build/_dockbuild.sh
 
@@ -38,7 +41,13 @@ if { echo $BUILD_IMAGES | grep -qs pymongo; }; then
     cp_ca_certs_to pymongo
 fi
 
-for container in $BUILD_IMAGES; do 
-    echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container | logit
-    docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container 2>&1 | logit
+for container in $BUILD_IMAGES; do
+    if [ "$container" != "ejsonschema" ]; then
+        echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container | logit
+        docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container 2>&1 | logit
+    else
+        # provided for backward compatibility (to oar-pdr-py, oar-auth-py)
+        echo '+' docker tag $PACKAGE_NAME/mdenv $PACKAGE_NAME/$container
+        docker tag $PACKAGE_NAME/mdenv $PACKAGE_NAME/$container
+    fi
 done
