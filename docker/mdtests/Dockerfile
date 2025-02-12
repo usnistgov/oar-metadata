@@ -1,4 +1,4 @@
-FROM oar-metadata/ejsonschema
+FROM oar-metadata/mdenv
 
 RUN apt-get update && apt-get install -y zip wget git
 COPY verify-asc.sh /usr/local/bin
