@@ -8,6 +8,8 @@ RUN PYTHON=python3 uwsgi --build-plugin "/usr/src/uwsgi/plugins/python python3" 
 
 RUN update-alternatives --install /usr/lib/uwsgi/plugins/python_plugin.so \
     python_plugin.so /usr/lib/uwsgi/plugins/python3_plugin.so 1
+COPY mdenv-uwsgi.ini /usr/share/uwsgi/conf/mdenv.ini
+ENV OAR_UWSGI_OPTS="--ini /usr/share/uwsgi/conf/mdenv.ini"
 
 RUN python -m pip install "setuptools<66.0.0"
 RUN python -m pip install json-spec jsonschema==2.4.0 requests \

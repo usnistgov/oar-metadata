@@ -1,11 +1,14 @@
 import os, pdb, sys, json, requests, logging, time, re, hashlib, shutil
 import unittest as test
 
+from nistoar.testing import uwsgi
 import nistoar.doi.datacite as dc
 
 testdir = os.path.dirname(os.path.abspath(__file__))
 datadir = os.path.join(testdir, 'data')
 basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(testdir))))
+
+uwsgiopts = uwsgi.get_ini_option()
 
 port = 9091
 baseurl = "http://localhost:{0}/dois".format(port)
@@ -28,9 +31,9 @@ def startService():
     pidfile = os.path.join(tdir,"simsrv"+str(srvport)+".pid")
     
     wpy = "python/tests/nistoar/doi/sim_datacite_srv.py"
-    cmd = "uwsgi --daemonize {0} --plugin python3 --http-socket :{1} " \
-          "--wsgi-file {2} --pidfile {3} --set-ph prefixes={4}"
-    cmd = cmd.format(os.path.join(tdir,"simsrv.log"), srvport,
+    cmd = "uwsgi --daemonize {0} {1} --http-socket :{2} " \
+          "--wsgi-file {3} --pidfile {4} --set-ph prefixes={5} > /dev/null 2>&1"
+    cmd = cmd.format(os.path.join(tdir,"simsrv.log"), uwsgiopts, srvport,
                      os.path.join(basedir, wpy), pidfile, ",".join(prefixes))
 #    print(cmd)
     os.system(cmd)
