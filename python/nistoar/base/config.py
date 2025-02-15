@@ -153,7 +153,7 @@ def configure_log(logfile: str=None, level: int=None, format: str=None, config: 
         level = _log_levels_byname.get(str(level), level)
     if not isinstance(level, int):
         raise ConfigurationException("Unrecognized loglevel value: "+str(level))
-    
+
     if not format:
         format = config.get('logformat', LOG_FORMAT)
     frmtr = logging.Formatter(format)
@@ -180,6 +180,14 @@ def configure_log(logfile: str=None, level: int=None, format: str=None, config: 
     if level >= logging.DEBUG:
         logging.getLogger("filelock").setLevel(level+10)
 
+    # config can set levels on a per-logname basis
+    if config.get("loglevelsfor") and isinstance(config.get("loglevelsfor"), Mapping):
+        for lognm, level in config.get("loglevelsfor", {}).items():
+            if not isinstance(level, int):
+                level = _log_levels_byname.get(str(level), level)
+            if isinstance(level, int):
+                logging.getLogger(lognm).setLevel(level)
+    
     if addstderr:
         if not isinstance(addstderr, str):
             addstderr = format
