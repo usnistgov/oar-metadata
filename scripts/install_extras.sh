@@ -48,6 +48,8 @@ uwsgipath=`which uwsgi`
         cfgfile=osinstalled.ini
     fi
     [ -z "$cfgfile" ] || {
+        [ \! -f "$ETC_DIR/uwsgi/oar_uwsgi.ini" ] || \
+            rm "$ETC_DIR/uwsgi/oar_uwsgi.ini"
         echo \(cd $ETC_DIR/uwsgi \&\& ln -s $cfgfile oar_uwsgi.ini\)
         (cd $ETC_DIR/uwsgi && ln -s $cfgfile oar_uwsgi.ini)
     }
