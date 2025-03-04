@@ -35,11 +35,10 @@ mkdir -p $BINDIR
 # No extra scripts at this time
 
 # install uwsgi config files
-#mkdir -p $ETC_DIR/uwsgi
 echo tar cf - uwsgi \| \(cd $ETC_DIR \&\& tar xf -\)
-(cd $SOURCE_DIR/etc && (tar cf - --exclude-backups --exclude=README\* uwsgi | (cd $ETC_DIR && tar xf -)))
+(cd $SOURCE_DIR/etc && tar cf - --exclude=README\* uwsgi) | (cd $ETC_DIR && tar xf -)
 echo
-uwsgipath=`which uwsgi`
+uwsgipath=`which uwsgi` || true
 [ -z "$uwsgipath" ] || {
     cfgfile=
     if [ "$uwsgipath" == "/usr/local/bin/uwsgi" ]; then
