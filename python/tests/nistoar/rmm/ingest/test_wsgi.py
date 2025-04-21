@@ -59,6 +59,7 @@ class TestRMMRecordIngestApp(test.TestCase):
             self.resp.append("{0}: {1}".format(head[0], head[1]))
 
     def setUp(self):
+      
         self.archdir = tmpfiles.mkdir("ingest_archive")
         self.commitfile = os.path.join(self.archdir, "postcommit.txt")
         self.config = {

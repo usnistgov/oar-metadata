@@ -77,13 +77,14 @@ class Loader(object, metaclass=ABCMeta):
 
         self._db = self._client.get_database()
 
-        self._client_metrics = MongoClient(self._dburl_metrics)
+        if(self._dburl_metrics != None):
+            self._client_metrics = MongoClient(self._dburl_metrics)
 
-          # the proper method to use depends on pymongo version
-        if not hasattr(self._client_metrics, 'get_database'):
-            self._client_metrics.get_database = self._client_metrics.get_default_database
+            # the proper method to use depends on pymongo version
+            if not hasattr(self._client_metrics, 'get_database'):
+                self._client_metrics.get_database = self._client_metrics.get_default_database
         
-        self._db_metrics = self._client_metrics.get_database()
+            self._db_metrics = self._client_metrics.get_database()
 
     def disconnect(self):
         """
@@ -92,12 +93,14 @@ class Loader(object, metaclass=ABCMeta):
         if self._client:
             try:
                 self._client.close()
-                self._client_metrics.close()
+                if(self._dburl_metrics != None):
+                    self._client_metrics.close()
             finally:
                 self._client = None
                 self._db = None
-                self._client_metrics = None
-                self._db_metrics = None
+                if(self._dburl_metrics != None):
+                    self._client_metrics = None
+                    self._db_metrics = None
         
     def load_data(self, data, key=None, onupdate='quiet') -> int:
         """

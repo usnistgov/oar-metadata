@@ -24,7 +24,7 @@ class FieldLoader(Loader):
     database.
     """
 
-    def __init__(self, dburl, schemadir, onupdate='quiet', log=None,
+    def __init__(self, dburl, metrics_dburl, schemadir, onupdate='quiet', log=None,
                  defschema=DEF_SCHEMA):
         """
         create the loader.  
@@ -42,7 +42,7 @@ class FieldLoader(Loader):
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(FieldLoader, self).__init__(dburl, COLLECTION_NAME, schemadir, log)
+        super(FieldLoader, self).__init__(dburl, metrics_dburl, COLLECTION_NAME, schemadir, log)
         self._schema = defschema
         self.onupdate = onupdate
 

@@ -58,7 +58,7 @@ class TestNERDmLoader(test.TestCase):
             db.drop_collection("versions")
         if "releasesets" in db.list_collection_names():
             db.drop_collection("releasesets")
-        self.tearDownMetrics(self)
+        self.tearDownMetrics()
 
     def test_ctor(self):
         self.assertEqual(self.ldr.coll, "versions")
@@ -206,11 +206,11 @@ class TestNERDmLoader(test.TestCase):
         self.assertTrue(any(['/od/ds/' in f.get('downloadURL','') for f in rec.get('components',[])]))
 
         self.ldr.connect()
-        database = self.ldr._db
+        database = self.ldr._db_metrics
         nerdm.init_metrics_for(database, rec)
-        c = self.ldr._client.get_database().recordMetrics.find()
+        c = self.ldr._client_metrics.get_database().recordMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
-        c = self.ldr._client.get_database().fileMetrics.find()
+        c = self.ldr._client_metrics.get_database().fileMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         self.assertEqual(c[0]['filepath'], "NIST_NPL_InterlabData2019.csv.sha256")
         # replace this with checks of successful loading into the database

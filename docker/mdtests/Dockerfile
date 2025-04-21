@@ -33,7 +33,7 @@ RUN grep -Pqs ":${devuid}:\d+:" /etc/passwd || \
             --gid $devuid --uid $devuid $devuser
 
 ENV MONGO_TESTDB_URL mongodb://localhost/testdb
-ENV MONGO_METRICS_TESTDB_URL mongodb://localhost/MetricsDB
+ENV MONGO_METRICS_TESTDB_URL mongodb://localhost/metricsdb
 ENV PYTHONPATH /dev/oar-metadata/python
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh

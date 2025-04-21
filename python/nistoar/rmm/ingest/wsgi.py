@@ -104,7 +104,7 @@ class RMMRecordIngestApp(object):
                                self.schemadir)
 
         self._loaders = {}
-        self._loaders['nerdm'] = NERDmLoader(self.dburl,self.metrics_dburl,self.schemadir,
+        self._loaders['nerdm'] = NERDmLoader(self.dburl,self.metrics_dburl, self.schemadir,
                                              onupdate='quiet', log=log)
 
         authkey = config.get('auth_key')
