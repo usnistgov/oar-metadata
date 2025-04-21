@@ -18,6 +18,11 @@ dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
     dburl = os.environ.get('MONGO_TESTDB_URL')
 
+metrics_dburl = None 
+if os.environ.get('MONGO_METRICS_TESTDB_URL'):
+    from pymongo import MongoClient
+    metrics_dburl = os.environ.get('MONGO_METRICS_TESTDB_URL')
+
 assert os.path.exists(schemadir), schemadir
 
 # logger = logging.getLogger("test")
@@ -27,26 +32,34 @@ assert os.path.exists(schemadir), schemadir
 class TestNERDmLoader(test.TestCase):
 
     def setUp(self):
-        self.ldr = nerdm.NERDmLoader(dburl, schemadir)
+        self.ldr = nerdm.NERDmLoader(dburl,metrics_dburl, schemadir)
 
-    def tearDown(self):
-        client = MongoClient(dburl)
-        if not hasattr(client, 'get_database'):
-            client.get_database = client.get_default_database
-        db = client.get_database()
+
+    def tearDownMetrics(self):
+        client_metrics = MongoClient(metrics_dburl)
+        if not hasattr(client_metrics, 'get_database'):
+            client_metrics.get_database = client_metrics.get_default_database
+        db = client_metrics.get_database()
         if "recordMetrics" in db.list_collection_names():
             db.drop_collection("recordMetrics")
         if "fileMetrics" in db.list_collection_names():
             db.drop_collection("fileMetrics")    
         db.create_collection("recordMetrics")
         db.create_collection("fileMetrics")
+
+    def tearDown(self):
+        client = MongoClient(dburl)
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "record" in db.list_collection_names():
             db.drop_collection("record")
         if "versions" in db.list_collection_names():
             db.drop_collection("versions")
         if "releasesets" in db.list_collection_names():
             db.drop_collection("releasesets")
-        
+        self.tearDownMetrics(self)
+
     def test_ctor(self):
         self.assertEqual(self.ldr.coll, "versions")
 

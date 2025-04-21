@@ -53,6 +53,11 @@ class RMMRecordIngestApp(object):
         """
         self.base_path = config.get('base_path', DEF_BASE_PATH)
         self.dburl = config.get('db_url')
+        self.metrics_dburl = config.get('metrics_db_url')
+
+        if not self.metrics_dburl:
+            log.error("Config param not set: metrics_db_url")
+            raise ConfigurationException("Config param not set: metrics_db_url")
         if not self.dburl:
             log.error("Config param not set: db_url")
             raise ConfigurationException("Config param not set: db_url")
@@ -99,7 +104,7 @@ class RMMRecordIngestApp(object):
                                self.schemadir)
 
         self._loaders = {}
-        self._loaders['nerdm'] = NERDmLoader(self.dburl, self.schemadir,
+        self._loaders['nerdm'] = NERDmLoader(self.dburl,self.metrics_dburl,self.schemadir,
                                              onupdate='quiet', log=log)
 
         authkey = config.get('auth_key')

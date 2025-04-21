@@ -17,7 +17,7 @@ class Loader(object, metaclass=ABCMeta):
     an abstract base class for loading data
     """
 
-    def __init__(self, dburl, collname=None, schemadir=None, log=None):
+    def __init__(self, dburl, dburl_metrics, collname=None, schemadir=None, log=None):
         """
         create the loader.  Validation will always be skipped if a schemadir
         is not provided.
@@ -38,6 +38,7 @@ class Loader(object, metaclass=ABCMeta):
                              "'mongodb://[USER:PASS@]HOST[:PORT]/DBNAME'): "+
                              dburl)
         self._dburl = dburl
+        self._dburl_metrics = dburl_metrics
         self.coll = collname
         self.log = log
 
@@ -46,6 +47,9 @@ class Loader(object, metaclass=ABCMeta):
 
         self._client = None
         self._db = None
+
+        self._client_metrics = None
+        self._db_metrics = None
 
     def validate(self, data, schemauri=None, strict=True):
         """
@@ -73,6 +77,14 @@ class Loader(object, metaclass=ABCMeta):
 
         self._db = self._client.get_database()
 
+        self._client_metrics = MongoClient(self._dburl_metrics)
+
+          # the proper method to use depends on pymongo version
+        if not hasattr(self._client_metrics, 'get_database'):
+            self._client_metrics.get_database = self._client_metrics.get_default_database
+        
+        self._db_metrics = self._client_metrics.get_database()
+
     def disconnect(self):
         """
         close the connection to the database.
@@ -80,9 +92,12 @@ class Loader(object, metaclass=ABCMeta):
         if self._client:
             try:
                 self._client.close()
+                self._client_metrics.close()
             finally:
                 self._client = None
                 self._db = None
+                self._client_metrics = None
+                self._db_metrics = None
         
     def load_data(self, data, key=None, onupdate='quiet') -> int:
         """
