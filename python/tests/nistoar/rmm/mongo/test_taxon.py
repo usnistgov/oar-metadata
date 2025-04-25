@@ -37,7 +37,7 @@ class TestTaxonomyDocs(test.TestCase):
 class TestTaxonomyLoader(test.TestCase):
 
     def setUp(self):
-        self.ldr = taxon.TaxonomyLoader(dburl, schemadir)
+        self.ldr = taxon.TaxonomyLoader(dburl,None, schemadir)
 
     def tearDown(self):
         client = MongoClient(dburl)

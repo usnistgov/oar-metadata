@@ -25,7 +25,7 @@ class _NERDmRenditionLoader(Loader):
     a base class for loading a rendition of a NERDm record into one of the data collections holding 
     NERDm metadata (record, versions, releaseSets)
     """
-    def __init__(self, collection_name, dburl, schemadir, log=None, defschema=DEF_SCHEMA):
+    def __init__(self, collection_name, dburl, metrics_dburl, schemadir, log=None, defschema=DEF_SCHEMA):
         """
         create the loader.  
 
@@ -39,8 +39,11 @@ class _NERDmRenditionLoader(Loader):
                                issued via the warnings module.  
         :param str defschema:  the URI for the schema to validated new records 
                                against by default. 
+        :param str metrics_dburl the url for mongodb database for Metrics collections, 
+                                it is optional
+
         """
-        super(_NERDmRenditionLoader, self).__init__(dburl, collection_name, schemadir, log)
+        super(_NERDmRenditionLoader, self).__init__(dburl, metrics_dburl,collection_name, schemadir, log )
         self._schema = defschema
 
     def _get_upd_key(self, nerdm):
@@ -99,15 +102,15 @@ class NERDmLoader(_NERDmRenditionLoader):
     """
 
     class LatestLoader(_NERDmRenditionLoader):
-        def __init__(self, dburl, schemadir, log=None):
-            super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, schemadir, log)
+        def __init__(self, dburl,metrics_dburl, schemadir, log=None):
+            super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, metrics_dburl, schemadir, log)
 
         def load_data(self, data, key=None, onupdate='quiet'):
             added = super().load_data(data, key, onupdate)
             if added:
                 # initialize the metrics collections as needed
                 try:
-                    init_metrics_for(self._db, data)
+                    init_metrics_for(self._db_metrics, data)
                 except Exception as ex:
                     msg = "Failure detected while initializing Metric data for %s: %s" % \
                         (data.get("@id", "unknown record"), str(ex))
@@ -118,11 +121,11 @@ class NERDmLoader(_NERDmRenditionLoader):
             return added
 
     class ReleaseSetLoader(_NERDmRenditionLoader):
-        def __init__(self, dburl, schemadir, log=None):
-            super(NERDmLoader.ReleaseSetLoader, self).__init__(RELEASES_COLLECTION_NAME, dburl, schemadir, log)
+        def __init__(self, dburl, metrics_dburl, schemadir, log=None):
+            super(NERDmLoader.ReleaseSetLoader, self).__init__(RELEASES_COLLECTION_NAME, dburl, metrics_dburl,schemadir, log)
 
 
-    def __init__(self, dburl, schemadir, onupdate='quiet', log=None, defschema=DEF_SCHEMA):
+    def __init__(self, dburl, metrics_dburl, schemadir, onupdate='quiet', log=None, defschema=DEF_SCHEMA):
         """
         create the loader.  
 
@@ -139,11 +142,11 @@ class NERDmLoader(_NERDmRenditionLoader):
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(NERDmLoader, self).__init__(VERSIONS_COLLECTION_NAME, dburl, schemadir, log, defschema)
+        super(NERDmLoader, self).__init__(VERSIONS_COLLECTION_NAME, dburl, metrics_dburl, schemadir, log, defschema)
         self.onupdate = onupdate
 
-        self.lateloadr = self.LatestLoader(dburl, schemadir, log)
-        self.relloadr  = self.ReleaseSetLoader(dburl, schemadir, log)
+        self.lateloadr = self.LatestLoader(dburl,metrics_dburl, schemadir, log)
+        self.relloadr  = self.ReleaseSetLoader(dburl, metrics_dburl,schemadir, log)
         self.tormm = NERDmForRMM(log, schemadir)
 
     def connect(self):
@@ -155,6 +158,13 @@ class NERDmLoader(_NERDmRenditionLoader):
         self.lateloadr._db = self._db
         self.relloadr._client = self._client
         self.relloadr._db = self._db
+
+        self.lateloadr._client_metrics = self._client_metrics
+        self.lateloadr._db_metrics = self._db_metrics
+
+        
+
+        
         
     def disconnect(self):
         """
@@ -284,7 +294,7 @@ class NERDmLoader(_NERDmRenditionLoader):
             
         return results
 
-def init_metrics_for(db, nerdm):
+def init_metrics_for(db_metrics, nerdm):
     """
     initialize the metrics-related collections for dataset described in the given NERDm record
     as needed.  
@@ -340,14 +350,14 @@ def init_metrics_for(db, nerdm):
         if col not in records.keys():
             records[col] = record_collection_fields[col]
     
-    if(db["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
-        db["recordMetrics"].insert_one(records)
+    if(db_metrics["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
+        db_metrics["recordMetrics"].insert_one(records)
     
     #Get files from record components
     files = flatten_records(nerdm, files_collection_fields)
     files_to_update = []
     
-    current_files = db["fileMetrics"].find({"ediid": nerdm["ediid"]})
+    current_files = db_metrics["fileMetrics"].find({"ediid": nerdm["ediid"]})
     current_files_filepaths = [x["filepath"] for x in current_files]
     for file_item in files:
         if 'filepath' in file_item.keys():
@@ -355,7 +365,7 @@ def init_metrics_for(db, nerdm):
                 files_to_update.append(file_item)
                 
     if len(files_to_update)>0:            
-        db["fileMetrics"].insert_many(files_to_update)
+        db_metrics["fileMetrics"].insert_many(files_to_update)
     
 # This takes a nerdm record and collect the files related data from components.
 # Inputs are record=nerdm to be updated
