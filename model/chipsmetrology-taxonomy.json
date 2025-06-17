@@ -1,0 +1,810 @@
+{
+    "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v1.0",
+    "@id": "https://data.nist.gov/od/dm/nist-themes-chipsmetrology/v1.0",
+    "title": "The NIST Research Theme Chips Metrology Taxonomy",
+    "version": "1.0",
+    "description": "terms for tagging resources with research themes",
+    "label": "ChipsMetrology",
+    "vocab": [
+        {
+            "term": "Materials Research",
+            "level": 1
+        },
+        {
+            "term": "Microelectronics",
+            "level": 1
+        },
+        {
+            "term": "Advanced Packaging",
+            "level": 1
+        },
+        {
+            "term": "Manufacturing",
+            "level": 1
+        },
+        {
+            "term": "Supply Chain",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "term": "Metrology",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Semiconductor",
+            "level": 2,
+            "since": "1.0"
+        },
+        {            
+            "parent": "Materials Research: Semiconductor",
+            "term": "Organic Semiconductor",
+            "level": 3,
+            "since": "1.0"
+        },
+        {            
+            "parent": "Materials Research: Semiconductor",
+            "term": "Si",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor",
+            "term": "WBG Semiconductor",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor: WBG Semiconductor",
+            "term": "GaN",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor: WBG Semiconductor",
+            "term": "SiC",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor: WBG Semiconductor",
+            "term": "AlGaN",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor: WBG Semiconductor",
+            "term": "AlN",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Semiconductor: WBG Semiconductor",
+            "term": "AlScN",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Superconductor",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Thermoelectric",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Piezo/Magneto/Electro-Hybrid",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Process Gas",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Piezo/Magneto/Electro-Hybrid",
+            "term": "Piezoelectric",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Piezo/Magneto/Electro-Hybrid",
+            "term": "Ferroelectric",
+            "level": 3,
+            "since": "1.0"
+    },        
+        {
+            "parent": "Materials Research: Piezo/Magneto/Electro-Hybrid",
+            "term": "Magnetostrictive",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Dielectric and Insulator",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "SiO2",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "Topological",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "Si3N4",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "HfO2",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "Low-k",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Dielectric and Insulator",
+            "term": "High-k",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "2D Material",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Structure and Geometry",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Structure and Geometry",
+            "term": "Periodic",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Structure and Geometry",
+            "term": "Geometric",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research",
+            "term": "Device Material",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "Ag",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "Sapphire",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "Al2O3",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "Au",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "Pt",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
+            "term": "W",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Electronic Device",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device",
+            "term": "GaN",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device",
+            "term": "ll-Vl",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device",
+            "term": "High-power Devices",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device",
+            "term": "WBG devices",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device",
+            "term": "Transistor",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device: Transistor",
+            "term": "GAA",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device: Transistor",
+            "term": "FinFET",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device: Transistor",
+            "term": "CMOS",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device: Transistor",
+            "term": "CFET",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Electronic Device: Transistor",
+            "term": "MOSFET",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Photonic Device",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Phononic Device",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Phononic Device",
+            "term": "BAW",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Phononic Device",
+            "term": "SAW",
+            "level": 3,
+            "since": "1.0"
+        },            
+        {
+            "parent": "Microelectronics",
+            "term": "Magnetic Device",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Magnetic Device",
+            "term": "Ferrite",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Magnetic Device",
+            "term": "MRAM",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Mechanical Device",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Mechanical Device",
+            "term": "MEMS",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Mechanical Device",
+            "term": "Strain MEMS",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Component",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics: Component",
+            "term": "Polymer",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "Chipset",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microelectronics",
+            "term": "PCB",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Materials and Substrates",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: Materials and Substrates",
+            "term": "TSV",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "BEOL",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Wire bonding",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Solder",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Dicing",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Flip-chip Processes",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Adhesive",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: BEOL",
+            "term": "Interconnect",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Photonics and Connectors",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging: Photonics and Connectors",
+            "term": "Interconnect",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Equipment Tools and Processes",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Power Delivery and Thermal Management",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Chiplet",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Advanced Packaging",
+            "term": "Reliability",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Processes",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes",
+            "term": "Lithography",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes",
+            "term": "Inspection",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes",
+            "term": "Deposition",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes: Deposition",
+            "term": "Gas Flow Control",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes",
+            "term": "Etching",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes: Etching",
+            "term": "Gas Flow Control",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing: Processes",
+            "term": "Polishing",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Digital Twin",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology",
+            "term": "Computational Technique",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Computational Technique",
+            "term": "Simulation",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Computational Technique",
+            "term": "Modeling",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Computational Technique",
+            "term": "AI/ML",
+            "level": 3,
+            "since": "1.0"
+        },	
+        {
+            "parent": "Metrology",
+            "term": "Experimental Technique",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Electrical",
+            "level": 3,
+            "since": "1.0"
+        },	
+        {
+            "parent": "Metrology: Experimental Technique: Electrical",
+            "term": "DC",
+            "level": 4,
+            "since": "1.0"
+        },	
+        {
+            "parent": "Metrology: Experimental Technique: Electrical",
+            "term": "High-Frequency",
+            "level": 4,
+            "since": "1.0"
+        },	
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Diffraction and Scattering",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Diffraction and Scattering",
+            "term": "X-ray",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Diffraction and Scattering",
+            "term": "EBSD",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Interferometry",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Resonant Processes",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Mechanical Testing",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Thermal",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Thermal",
+            "term": "Calorimetry",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Thermal",
+            "term": "Thermoreflectance",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Rheology",
+            "level": 3,
+            "since": "1.0"
+        },		
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Imaging",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Imaging",
+            "term": "Optical Microscopy",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique: Imaging",
+            "term": "Electron Microscopy",
+            "level": 4,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Spectroscopy",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Experimental Technique",
+            "term": "Cryogenics",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology",
+            "term": "Instrumentation",
+            "level": 2,
+            "since": "1.0"
+        },   
+        {
+            "parent": "Metrology: Instrumentation",
+            "term": "Microscope",
+            "level": 3,
+            "since": "1.0"
+        },   
+        {
+            "parent": "Metrology: Instrumentation: Microscope",
+            "term": "Electron",
+            "level": 4,
+            "since": "1.0"
+        },  
+        {
+            "parent": "Metrology: Instrumentation: Microscope",
+            "term": "Scanning Probe",
+            "level": 4,
+            "since": "1.0"
+        },  
+        {
+            "parent": "Metrology: Instrumentation: Microscope",
+            "term": "Optical",
+            "level": 4,
+            "since": "1.0"
+        },  
+        {
+            "parent": "Metrology: Instrumentation: Microscope",
+            "term": "X-ray",
+            "level": 4,
+            "since": "1.0"
+        },  
+        {
+            "parent": "Metrology: Instrumentation",
+            "term": "Beamline",
+            "level": 3,
+            "since": "1.0"
+        },   
+        {
+            "parent": "Metrology: Instrumentation: Beamline",
+            "term": "Neutron",
+            "level": 4,
+            "since": "1.0"
+        },   
+        {
+            "parent": "Metrology: Instrumentation: Beamline",
+            "term": "Synchrotron",
+            "level": 4,
+            "since": "1.0"
+        },   
+        {
+            "parent": "Metrology",
+            "term": "Measurement",
+            "level": 2,
+            "since": "1.0"
+        },    
+        {
+            "parent": "Metrology: Measurement",
+            "term": "Phase Diagram",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Measurement",
+            "term": "On-wafer",
+            "level": 3,
+            "since": "1.0"
+        }, 
+        {
+            "parent": "Metrology: Measurement",
+            "term": "S-parameter",
+            "level": 3,
+            "since": "1.0"
+        }, 
+        {
+            "parent": "Metrology: Measurement",
+            "term": "Strain",
+            "level": 3,
+            "since": "1.0"
+        }, 
+        {
+            "parent": "Metrology: Measurement",
+            "term": "Dimensional",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology",
+            "term": "Grand Challenge",
+            "level": 2,
+            "since": "1.0"
+        },    
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "1-Metrology for Materials Purity, Properties, and Provenance",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "2-Advanced Metrology for Future Microelectronics Manufacturing",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "3-Enabling Metrology for Integrating Components in Advanced Packaging",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "4-Modeling and Simulating Semiconductor Materials, Designs, and Components",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "5-Modeling and Simulating Semiconductor Manufacturing Processes",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "6-Standardizing New Materials, Processes, and Equipment for Microelectronics",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Metrology: Grand Challenge",
+            "term": "7-Metrology to Enhance Security and Provenance of Microelectronic-based Components and Products",
+            "level": 3,
+            "since": "1.0"
+        }
+    ]
+}
