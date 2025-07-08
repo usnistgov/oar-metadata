@@ -4,193 +4,181 @@
     "title": "The NIST Research Theme Forensics Taxonomy",
     "version": "1.0",
     "description": "terms for tagging resources with research themes",
+    "label": "Forensics",
     "vocab": [
         {
-            "parent": "Forensics",
             "term": "Ballistics",
             "level": 1
         },
         {
-            "parent": "Forensics",
             "term": "Digital and multimedia evidence",
             "level": 1
         },
         {
-            "parent": "Forensics",
             "term": "DNA and biological evidence",
             "level": 1
         },
         {
-            "parent": "Forensics",
             "term": "Drugs and toxicology",
             "level": 1
         },
         {
-            "parent": "Forensics",
             "term": "Fingerprints and pattern evidence",
             "level": 1,
             "since": "1.0"
         },
         {
-            "parent": "Forensics",
             "term": "Pattern evidence",
             "level": 1,
             "deprecatedSince": "1.0"
         },
         {
-            "parent": "Forensics",
             "term": "Trace evidence",
             "level": 1
         },
         {
-            "parent": "Forensics: Digital and multimedia evidence",
+            "parent": "Digital and multimedia evidence",
             "term": "NSRL",
             "level": 2
         },
         {
-            "parent": "Forensics: Digital and multimedia evidence",
+            "parent": "Digital and multimedia evidence",
             "term": "CFTT",
             "level": 2
         },
         {
-            "parent": "Forensics: Digital and multimedia evidence",
+            "parent": "Digital and multimedia evidence",
             "term": "CFreds",
             "level": 2
         },
         {
-            "parent": "Forensics: Digital and multimedia evidence",
+            "parent": "Digital and multimedia evidence",
             "term": "TBD",
             "level": 2
         },
         {
-            "parent": "Forensics",
             "term": "Forensics Genetics DNA",
             "level": 1
         },
         {
-            "parent": "Forensics",
             "term": "Biometrics",
             "level": 1
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Face",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Iris",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Voice (speech, speaker)",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Palm",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Gait",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Hand Geometry",
             "level": 2,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Veins",
             "level": 2,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics",
+            "parent": "Biometrics",
             "term": "Fingerprints",
             "level": 2,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics: Fingerprints",
+            "parent": "Biometrics: Fingerprints",
             "term": "Rolled",
             "level": 3,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics: Fingerprints",
+            "parent": "Biometrics: Fingerprints",
             "term": "Plain",
             "level": 3,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics: Fingerprints",
+            "parent": "Biometrics: Fingerprints",
             "term": "Latent",
             "level": 3,
             "since": "2.0"
         },
         {
-            "parent": "Forensics: Biometrics: Fingerprints",
+            "parent": "Biometrics: Fingerprints",
             "term": "Contactless",
             "level": 3,
             "since": "2.0"
         },
         {
-            "parent": "Forensics",
             "term": "Drugs and Toxins",
             "level": 1
         },
         {
-            "parent": "Forensics: Drugs and Toxins",
+            "parent": "Drugs and Toxins",
             "term": "Mass spec drugs of abuse",
             "level": 2
         },
         {
-            "parent": "Forensics",
             "term": "Trace",
             "level": 1
         },
         {
-            "parent": "Forensics: Trace",
+            "parent": "Trace",
             "term": "Explosives",
             "level": 2
         },
         {
-            "parent": "Forensics: Trace",
+            "parent": "Trace",
             "term": "Chemicals",
             "level": 2
         },
         {
-            "parent": "Forensics: Trace",
+            "parent": "Trace",
             "term": "Arson Chemicals",
             "level": 2
         },
         {
-            "parent": "Forensics",
             "term": "Firearms and Toolmarks ",
             "level": 1
         },
         {
-            "parent": "Forensics: Firearms and Toolmarks",
+            "parent": "Firearms and Toolmarks",
             "term": "Ballistics toolmarks database",
             "level": 2
         },
         {
-            "parent": "Forensics",
             "term": "Statistics",
             "level": 1
         },
         {
-            "parent": "Forensics: Statistics",
+            "parent": "Statistics",
             "term": "Uncertainty",
             "level": 2
         }
