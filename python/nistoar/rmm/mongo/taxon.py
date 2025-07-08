@@ -17,7 +17,7 @@ class TaxonomyLoader(Loader):
     a class for validating and loading the SDP taxonomy into the Mongo database.
     """
 
-    def __init__(self, dburl, metrics_dburl, schemadir, onupdate='quiet', log=None,
+    def __init__(self, dburl, schemadir, onupdate='quiet', log=None,
                  defschema=DEF_SCHEMA):
         """
         create the loader.  
@@ -35,8 +35,7 @@ class TaxonomyLoader(Loader):
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(TaxonomyLoader, self).__init__(dburl, metrics_dburl,COLLECTION_NAME,
-                                             schemadir, log)
+        super(TaxonomyLoader, self).__init__(dburl, COLLECTION_NAME, schemadir, log)
         self._schema = defschema
         self.onupdate = onupdate
 

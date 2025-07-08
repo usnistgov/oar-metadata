@@ -39,7 +39,7 @@ class TestFieldsDocs(test.TestCase):
 class TestFieldLoader(test.TestCase):
 
     def setUp(self):
-        self.ldr = fields.FieldLoader(dburl, None, schemadir)
+        self.ldr = fields.FieldLoader(dburl, schemadir)
 
     def tearDown(self):
         client = MongoClient(dburl)

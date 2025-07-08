@@ -12,6 +12,7 @@ from .loader import ValidationError, SchemaError, RefResolutionError
 from nistoar.nerdm import utils
 from nistoar.nerdm.convert.rmm import NERDmForRMM
 
+from pymongo import MongoClient
 
 DEF_BASE_SCHEMA = "https://data.nist.gov/od/dm/nerdm-schema/v0.5#"
 DEF_SCHEMA = DEF_BASE_SCHEMA + "/definitions/Resource"
@@ -25,11 +26,12 @@ class _NERDmRenditionLoader(Loader):
     a base class for loading a rendition of a NERDm record into one of the data collections holding 
     NERDm metadata (record, versions, releaseSets)
     """
-    def __init__(self, collection_name, dburl, metrics_dburl, schemadir, log=None, defschema=DEF_SCHEMA):
+    def __init__(self, collection_name, dburl, schemadir, log=None, defschema=DEF_SCHEMA):
         """
         create the loader.  
 
-        :param str collection_name
+        :param str collection_name:  the name of the primary collection this 
+                               loader will be accessing
         :param str dburl:      the URL of MongoDB database in the form,
                                'mongodb://HOST:PORT/DBNAME' 
         :param str schemadir:  the path to a directory containing the JSON 
@@ -39,11 +41,8 @@ class _NERDmRenditionLoader(Loader):
                                issued via the warnings module.  
         :param str defschema:  the URI for the schema to validated new records 
                                against by default. 
-        :param str metrics_dburl the url for mongodb database for Metrics collections, 
-                                it is optional
-
         """
-        super(_NERDmRenditionLoader, self).__init__(dburl, metrics_dburl,collection_name, schemadir, log )
+        super(_NERDmRenditionLoader, self).__init__(dburl, collection_name, schemadir, log)
         self._schema = defschema
 
     def _get_upd_key(self, nerdm):
@@ -102,9 +101,47 @@ class NERDmLoader(_NERDmRenditionLoader):
     """
 
     class LatestLoader(_NERDmRenditionLoader):
-        def __init__(self, dburl,metrics_dburl, schemadir, log=None):
-            super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, metrics_dburl, schemadir, log)
+        def __init__(self, dburl, schemadir, metrics_dburl=None, log=None):
+            super(NERDmLoader.LatestLoader, self).__init__(LATEST_COLLECTION_NAME, dburl, schemadir, log)
 
+            self._dburl_metrics = metrics_dburl   # if None, will use the client attached to self._dburl
+
+            self._client_metrics = None
+            self._db_metrics = None
+
+        def connect(self):
+            super().connect()
+            self.connect_metrics()
+            
+        def connect_metrics(self):
+            # set up metrics connection, too
+            if self._dburl_metrics:
+                self._client_metrics = MongoClient(self._dburl_metrics)
+
+                # the proper method to use depends on pymongo version
+                if not hasattr(self._client_metrics, 'get_database'):
+                    self._client_metrics.get_database = self._client_metrics.get_default_database
+        
+                self._db_metrics = self._client_metrics.get_database()
+            else:
+                self._db_metrics = self._db
+
+
+        def disconnect(self):
+            try:
+                self.disconnect_metrics()
+            finally:
+                super().disconnect()
+
+        def diconnect_metrics(self):
+            try:
+                if self._client_metrics:
+                    self._client_metrics.close()
+            finally:
+                self._client_metrics = None
+                self._db_metrics = None
+
+            
         def load_data(self, data, key=None, onupdate='quiet'):
             added = super().load_data(data, key, onupdate)
             if added:
@@ -121,11 +158,13 @@ class NERDmLoader(_NERDmRenditionLoader):
             return added
 
     class ReleaseSetLoader(_NERDmRenditionLoader):
-        def __init__(self, dburl, metrics_dburl, schemadir, log=None):
-            super(NERDmLoader.ReleaseSetLoader, self).__init__(RELEASES_COLLECTION_NAME, dburl, metrics_dburl,schemadir, log)
+        def __init__(self, dburl, schemadir, log=None):
+            super(NERDmLoader.ReleaseSetLoader, self).__init__(RELEASES_COLLECTION_NAME, dburl,
+                                                               schemadir, log)
 
 
-    def __init__(self, dburl, metrics_dburl, schemadir, onupdate='quiet', log=None, defschema=DEF_SCHEMA):
+    def __init__(self, dburl, schemadir, metrics_dburl=None, onupdate='quiet',
+                 log=None, defschema=DEF_SCHEMA):
         """
         create the loader.  
 
@@ -133,6 +172,11 @@ class NERDmLoader(_NERDmRenditionLoader):
                               'mongodb://HOST:PORT/DBNAME' 
         :param schemadir str:  the path to a directory containing the JSON 
                             schemas needed to validate the input JSON data.
+        :param metrics_dburl str:  the URL of MongoDB database used for metrics data, 
+                              if different from the NERDm database, in the form,
+                              'mongodb://HOST:PORT/DBNAME'.  If not provided, it 
+                              will be assumed that metrics and NERDm data are stored 
+                              in the same database.
         :param onupdate:    a string or function that controls reactions to 
                             the need to update an existing record; see 
                             documentation for load_data().
@@ -142,11 +186,11 @@ class NERDmLoader(_NERDmRenditionLoader):
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(NERDmLoader, self).__init__(VERSIONS_COLLECTION_NAME, dburl, metrics_dburl, schemadir, log, defschema)
+        super(NERDmLoader, self).__init__(VERSIONS_COLLECTION_NAME, dburl, schemadir, log, defschema)
         self.onupdate = onupdate
 
-        self.lateloadr = self.LatestLoader(dburl,metrics_dburl, schemadir, log)
-        self.relloadr  = self.ReleaseSetLoader(dburl, metrics_dburl,schemadir, log)
+        self.lateloadr = self.LatestLoader(dburl, schemadir, metrics_dburl, log)
+        self.relloadr  = self.ReleaseSetLoader(dburl, schemadir, log)
         self.tormm = NERDmForRMM(log, schemadir)
 
     def connect(self):
@@ -156,25 +200,24 @@ class NERDmLoader(_NERDmRenditionLoader):
         super(NERDmLoader, self).connect()
         self.lateloadr._client = self._client
         self.lateloadr._db = self._db
+        self.lateloadr.connect_metrics()
         self.relloadr._client = self._client
         self.relloadr._db = self._db
 
-        self.lateloadr._client_metrics = self._client_metrics
-        self.lateloadr._db_metrics = self._db_metrics
-
-        
-
-        
-        
     def disconnect(self):
         """
         close the connection to the database.
         """
         try:
-            super(NERDmLoader, self).disconnect()
+            self.lateloadr.disconnect_metrics()
         finally:
-            self.lateloadr._client = None
-            self.relloadr._db = None
+            try:
+                super(NERDmLoader, self).disconnect()
+            finally:
+                self.lateloadr._client = None
+                self.lateloadr._db = None
+                self.relloadr._client = None
+                self.relloadr._db = None
 
     def _get_upd_key(self, nerdm):
         return { "@id": nerdm['@id'], "version": nerdm.get('version', '1.0.0') }
@@ -350,7 +393,7 @@ def init_metrics_for(db_metrics, nerdm):
         if col not in records.keys():
             records[col] = record_collection_fields[col]
     
-    if(db_metrics["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None):
+    if db_metrics["recordMetrics"].find_one({"ediid": nerdm["ediid"]}) is None:
         db_metrics["recordMetrics"].insert_one(records)
     
     #Get files from record components

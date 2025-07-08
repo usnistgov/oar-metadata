@@ -22,7 +22,6 @@ if os.environ.get('MONGO_TESTDB_URL'):
     dburl = os.environ.get('MONGO_TESTDB_URL')
 
 if os.environ.get('MONGO_METRICS_TESTDB_URL'):
-    from pymongo import MongoClient
     metrics_dburl = os.environ.get('MONGO_METRICS_TESTDB_URL')
 
 assert os.path.exists(schemadir), schemadir
