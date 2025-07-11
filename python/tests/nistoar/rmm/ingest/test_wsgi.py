@@ -16,9 +16,13 @@ janaffile = os.path.join(exdir, "janaf.json")
 postcomm = os.path.join(testdir, "postcomm.sh")
 
 dburl = None
+metrics_dburl = None 
 if os.environ.get('MONGO_TESTDB_URL'):
     from pymongo import MongoClient
     dburl = os.environ.get('MONGO_TESTDB_URL')
+
+if os.environ.get('MONGO_METRICS_TESTDB_URL'):
+    metrics_dburl = os.environ.get('MONGO_METRICS_TESTDB_URL')
 
 assert os.path.exists(schemadir), schemadir
 
@@ -54,10 +58,12 @@ class TestRMMRecordIngestApp(test.TestCase):
             self.resp.append("{0}: {1}".format(head[0], head[1]))
 
     def setUp(self):
+      
         self.archdir = tmpfiles.mkdir("ingest_archive")
         self.commitfile = os.path.join(self.archdir, "postcommit.txt")
         self.config = {
             "db_url": dburl,
+            "metrics_db_url": metrics_dburl,
             'nerdm_schema_dir': os.path.abspath(schemadir),
             'archive_dir': self.archdir,
             'post_commit_exec': postcomm + ' ' + self.commitfile + " {db_url} {recid} {recfile}"
@@ -87,6 +93,8 @@ class TestRMMRecordIngestApp(test.TestCase):
             db.drop_collection("fields")
         tmpfiles.clean()
         
+
+
     def test_ctor(self):
         self.assertTrue(self.svc.dburl.startswith("mongodb://"))
 

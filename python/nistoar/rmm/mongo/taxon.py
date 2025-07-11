@@ -35,8 +35,7 @@ class TaxonomyLoader(Loader):
         :param defschema str:  the URI for the schema to validated new records 
                                against by default. 
         """
-        super(TaxonomyLoader, self).__init__(dburl, COLLECTION_NAME,
-                                             schemadir, log)
+        super(TaxonomyLoader, self).__init__(dburl, COLLECTION_NAME, schemadir, log)
         self._schema = defschema
         self.onupdate = onupdate
 
