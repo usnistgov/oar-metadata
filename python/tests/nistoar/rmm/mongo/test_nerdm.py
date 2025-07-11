@@ -18,6 +18,10 @@ dburl = None
 if os.environ.get('MONGO_TESTDB_URL'):
     dburl = os.environ.get('MONGO_TESTDB_URL')
 
+metrics_dburl = None 
+if os.environ.get('MONGO_METRICS_TESTDB_URL'):
+    metrics_dburl = os.environ.get('MONGO_METRICS_TESTDB_URL')
+
 assert os.path.exists(schemadir), schemadir
 
 # logger = logging.getLogger("test")
@@ -27,26 +31,35 @@ assert os.path.exists(schemadir), schemadir
 class TestNERDmLoader(test.TestCase):
 
     def setUp(self):
-        self.ldr = nerdm.NERDmLoader(dburl, schemadir)
+        self.ldr = nerdm.NERDmLoader(dburl, schemadir, metrics_dburl)
 
-    def tearDown(self):
-        client = MongoClient(dburl)
-        if not hasattr(client, 'get_database'):
-            client.get_database = client.get_default_database
-        db = client.get_database()
+
+    def tearDownMetrics(self):
+        client_metrics = MongoClient(metrics_dburl)
+        if not hasattr(client_metrics, 'get_database'):
+            client_metrics.get_database = client_metrics.get_default_database
+        db = client_metrics.get_database()
         if "recordMetrics" in db.list_collection_names():
             db.drop_collection("recordMetrics")
         if "fileMetrics" in db.list_collection_names():
             db.drop_collection("fileMetrics")    
         db.create_collection("recordMetrics")
         db.create_collection("fileMetrics")
+
+    def tearDown(self):
+        client = MongoClient(dburl)
+        if not hasattr(client, 'get_database'):
+            client.get_database = client.get_default_database
+        db = client.get_database()
         if "record" in db.list_collection_names():
             db.drop_collection("record")
         if "versions" in db.list_collection_names():
             db.drop_collection("versions")
         if "releasesets" in db.list_collection_names():
             db.drop_collection("releasesets")
-        
+        if metrics_dburl:
+            self.tearDownMetrics()
+
     def test_ctor(self):
         self.assertEqual(self.ldr.coll, "versions")
 
@@ -193,11 +206,11 @@ class TestNERDmLoader(test.TestCase):
         self.assertTrue(any(['/od/ds/' in f.get('downloadURL','') for f in rec.get('components',[])]))
 
         self.ldr.connect()
-        database = self.ldr._db
+        database = self.ldr.lateloadr._db_metrics
         nerdm.init_metrics_for(database, rec)
-        c = self.ldr._client.get_database().recordMetrics.find()
+        c = self.ldr.lateloadr._client_metrics.get_database().recordMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
-        c = self.ldr._client.get_database().fileMetrics.find()
+        c = self.ldr.lateloadr._client_metrics.get_database().fileMetrics.find()
         self.assertEqual(c[0]['pdrid'], 'ark:/88434/mds2-2106')
         self.assertEqual(c[0]['filepath'], "NIST_NPL_InterlabData2019.csv.sha256")
         # replace this with checks of successful loading into the database
