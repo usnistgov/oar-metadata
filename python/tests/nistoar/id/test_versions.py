@@ -166,6 +166,66 @@ class TestOARVersion(test.TestCase):
         self.assertEqual(util.cmp_oar_versions("1.0.1beta", "1.0.12beta"),   -1)
         self.assertEqual(util.cmp_oar_versions("1.0.12+", "1.0.12beta"),     -1)
 
+    def test_increment_field(self):
+        ver = util.OARVersion("3.3.5.9")
+        self.assertEqual(str(ver), "3.3.5.9")
+        ver.increment_field(3)
+        self.assertEqual(str(ver), "3.3.5.10")
+        ver.increment_field(-1)
+        self.assertEqual(str(ver), "3.3.5.11")
+        ver.increment_field(2)
+        self.assertEqual(str(ver), "3.3.6.0")
+        ver.increment_field(0)
+        self.assertEqual(str(ver), "4.0.0.0")
+        ver.increment_field(-1)
+        self.assertEqual(str(ver), "4.0.0.1")
+        ver.increment_field(-4)
+        self.assertEqual(str(ver), "5.0.0.0")
+        
+    def test_trivial_incr(self):
+        ver = util.OARVersion("1.0")
+        ver.trivial_incr()
+        self.assertEqual(str(ver), "1.0.1")
+        ver.trivial_incr()
+        self.assertEqual(str(ver), "1.0.2")
+        
+        ver = util.OARVersion("1.0.9")
+        ver.trivial_incr()
+        self.assertEqual(str(ver), "1.0.10")
+
+        ver = util.OARVersion("1.0.3.5")
+        ver.trivial_incr()
+        self.assertEqual(str(ver), "1.0.4.0")
+
+        ver = util.OARVersion("1.0.3rc5")
+        ver.trivial_incr()
+        self.assertEqual(str(ver), "1.0.4rc5")
+        ver.trivial_incr().drop_suffix()
+        self.assertEqual(str(ver), "1.0.5")
+
+    def test_minor_incr(self):
+        ver = util.OARVersion("1.0")
+        ver.minor_incr()
+        self.assertEqual(str(ver), "1.1")
+
+        ver = util.OARVersion("1.0.1")
+        ver.minor_incr()
+        self.assertEqual(str(ver), "1.1.0")
+
+    def test_major_incr(self):
+        ver = util.OARVersion("13")
+        ver.major_incr()
+        self.assertEqual(str(ver), "14")
+
+        ver = util.OARVersion("2.3")
+        ver.major_incr()
+        self.assertEqual(str(ver), "3.0")
+
+        ver = util.OARVersion("1.0.1")
+        ver.major_incr()
+        self.assertEqual(str(ver), "2.0.0")
+        
+        
                     
                          
 if __name__ == '__main__':

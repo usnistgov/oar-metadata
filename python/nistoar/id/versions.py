@@ -165,17 +165,20 @@ class OARVersion(Version):
                          version fields will be padded with zeros up to that position before incrementing.
         :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
                    :rtype: OARVersion
-        :raises IndexError: if th
+        :raises IndexError: if ``pos`` is less than -1 times the number of fields in the version
         """
+        origpos = pos
+        if pos < 0:
+            pos = len(self.fields) + pos
+        if pos < 0:
+            raise IndexError(origpos)
         if pos >= len(self.fields):
             for i in range(len(self.fields), pos+1):
                 self.fields.append(0)
-        elif pos < -1*len(self.fields):
-            raise IndexError(pos)
 
         self.fields[pos] += 1
         for i in range(pos+1, len(self.fields)):
-            self.field[i] = 0
+            self.fields[i] = 0
         self._vs = '.'.join([str(f) for f in self.fields])
         if self.is_draft():
             self.drop_suffix()
@@ -189,7 +192,7 @@ class OARVersion(Version):
         :returns:  self, allowing for chaining with, say, :py:meth:`drop_suffix`.
                    :rtype: OARVersion
         """
-        return increment_level(2)
+        return self.increment_field(2)
         
     def minor_incr(self) -> OARVersion:
         """
