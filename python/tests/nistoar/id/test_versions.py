@@ -181,6 +181,9 @@ class TestOARVersion(test.TestCase):
         self.assertEqual(str(ver), "4.0.0.1")
         ver.increment_field(-4)
         self.assertEqual(str(ver), "5.0.0.0")
+
+        with self.assertRaises(IndexError):
+            ver.increment_field(-10)
         
     def test_trivial_incr(self):
         ver = util.OARVersion("1.0")
