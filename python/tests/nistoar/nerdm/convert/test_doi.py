@@ -1,7 +1,7 @@
 import unittest, pdb, os, json
 from collections import OrderedDict
 
-import nistoar.nerdm.convert.pod as cvt
+import nistoar.nerdm.convert.doi as cvt
 import nistoar.doi.resolving.common as res
 from nistoar.doi.resolving import DOIInfo
 from nistoar.nerdm.constants import CORE_SCHEMA_URI, PUB_SCHEMA_URI, BIB_SCHEMA_URI
