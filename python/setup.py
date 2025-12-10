@@ -66,6 +66,7 @@ setup(name='nistoar',
                ["pdl2resources.py", "ingest-nerdm-res.py",
                 "ingest-field-info.py", "ingest-taxonomy.py",
                 "ingest-code.py",
+                "ingest-papers.py",
                 "ingest-uwsgi.py" ]],
       cmdclass={'build_py': build},
       classifiers=[
