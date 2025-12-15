@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #
-# Usage: ingest-patents.py [-M URL] [--input FILE] [--no-drop] [-q] [-s]
+# Usage: ingest-patents.py [-M URL] [--no-drop] [-q] [-s]
 #
 import os, sys, json, logging
 from argparse import ArgumentParser
@@ -11,7 +11,7 @@ basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 oarpypath = os.path.join(basedir, "python")
 if 'OAR_HOME' in os.environ:
     basedir = os.environ['OAR_HOME']
-    oarpypath = os.path.join(basedir, "lib", "python") +":"+ \
+    oarpypath = os.path.join(basedir, "lib", "python") + ":" + \
                 os.path.join(basedir, "python")
 if 'OAR_PYTHONPATH' in os.environ:
     oarpypath = os.environ['OAR_PYTHONPATH']
@@ -20,16 +20,11 @@ sys.path.extend(oarpypath.split(os.pathsep))
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("ingest-patents")
 
-DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../products/patents.json")
-
 def define_opts(progname=None):
     parser = ArgumentParser(progname, None,
-        "ingest patents metadata into the RMM", None)
-    parser.add_argument('--input', metavar='FILE', dest='infile',
-                        default=DEF_INPUT,
-                        help="Path to patents JSON (default: patents.json alongside this script)")
+        "ingest patents metadata into the RMM (reads patents.json from ../products/patents.json)", None)
     parser.add_argument('-M', '--mongodb-url', metavar='URL', type=str, dest='url',
-                        default="mongodb://mongodb:3333/TestDB",
+                        action='store', default="mongodb://mongodb:3333/TestDB",
                         help="MongoDB URL (e.g., mongodb://HOST:PORT/DBNAME)")
     parser.add_argument('--no-drop', dest='drop', default=True,
                         action='store_false',
@@ -59,13 +54,22 @@ def main(args):
     if opts.silent:
         opts.quiet = True
 
-    if not os.path.isfile(opts.infile):
+    # Strictly look for products/patents.json in the repo root
+    infile = os.path.join(basedir, "products", "patents.json")
+    
+    if not os.path.exists(infile):
         if not opts.silent:
-            print(f"{parser.prog}: input file not found: {opts.infile}", file=sys.stderr)
+            print(
+                f"{parser.prog}: patents.json not found at {infile}",
+                file=sys.stderr
+            )
         return 1
 
+    if not opts.quiet:
+        print(f"Using input file: {infile}")
+
     try:
-        with open(opts.infile) as fd:
+        with open(infile) as fd:
             patents = json.load(fd)
     except Exception as ex:
         if not opts.silent:
