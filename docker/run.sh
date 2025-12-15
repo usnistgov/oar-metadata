@@ -22,6 +22,10 @@ ti=
 
 distvol=
 distdir=
+prodvol=
+proddir="${codedir}/products"          # default products dir on host
+mkdir -p "$proddir"
+prodvol="-v ${proddir}:/app/products"  # default mount into container
 cmd=
 args=()
 while [ "$1" != "" ]; do
@@ -41,6 +45,19 @@ while [ "$1" != "" ]; do
             distvol="-v ${distdir}:/app/dist"
             args=(${args[@]} "--dist-dir=/app/dist")
             ;;
+        --products-dir)
+            shift
+            proddir="$1"
+            mkdir -p $proddir
+            proddir=`(cd $proddir > /dev/null 2>&1; pwd)`
+            prodvol="-v ${proddir}:/app/products"
+            ;;
+        --products-dir=*)
+            proddir=`echo $1 | sed -e 's/[^=]*=//'`
+            mkdir -p $proddir
+            proddir=`(cd $proddir > /dev/null 2>&1; pwd)`
+            prodvol="-v ${proddir}:/app/products"
+            ;;
         -*)
             args=(${args[@]} $1)
             ;;
@@ -55,6 +72,5 @@ while [ "$1" != "" ]; do
     shift
 done
 
-
-echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
-exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
+echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol $prodvol oar-metadata/mdtests $cmd "${args[@]}"
+exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol $prodvol oar-metadata/mdtests $cmd "${args[@]}"

@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 #
-# Usage: ingest-papers.py [-M URL] [--input FILE] [--no-drop] [-q] [-s]
+# Usage: ingest-patents.py [-M URL] [--input FILE] [--no-drop] [-q] [-s]
 #
 import os, sys, json, logging
 from argparse import ArgumentParser
@@ -18,22 +18,22 @@ if 'OAR_PYTHONPATH' in os.environ:
 sys.path.extend(oarpypath.split(os.pathsep))
 
 logging.basicConfig(level=logging.INFO)
-log = logging.getLogger("ingest-papers")
+log = logging.getLogger("ingest-patents")
 
-DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "papers.json")
+DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "patents.json")
 
 def define_opts(progname=None):
     parser = ArgumentParser(progname, None,
-        "ingest papers metadata into the RMM", None)
+        "ingest patents metadata into the RMM", None)
     parser.add_argument('--input', metavar='FILE', dest='infile',
                         default=DEF_INPUT,
-                        help="Path to patents/papers JSON (default: papers.json alongside this script)")
+                        help="Path to patents JSON (default: patents.json alongside this script)")
     parser.add_argument('-M', '--mongodb-url', metavar='URL', type=str, dest='url',
                         default="mongodb://mongodb:3333/TestDB",
                         help="MongoDB URL (e.g., mongodb://HOST:PORT/DBNAME)")
     parser.add_argument('--no-drop', dest='drop', default=True,
                         action='store_false',
-                        help="Do not drop the existing 'papers' collection before ingest")
+                        help="Do not drop the existing 'patents' collection before ingest")
     parser.add_argument('-q', '--quiet', dest='quiet', default=False,
                         action="store_true",
                         help="suppress non-fatal status messages")
@@ -66,30 +66,30 @@ def main(args):
 
     try:
         with open(opts.infile) as fd:
-            papers = json.load(fd)
+            patents = json.load(fd)
     except Exception as ex:
         if not opts.silent:
             print(f"{parser.prog}: failed to read JSON: {ex}", file=sys.stderr)
         return 1
 
-    if not isinstance(papers, list):
+    if not isinstance(patents, list):
         if not opts.silent:
-            print(f"{parser.prog}: expected a JSON array of papers", file=sys.stderr)
+            print(f"{parser.prog}: expected a JSON array of patents", file=sys.stderr)
         return 1
 
     client = MongoClient(opts.url)
     db = client.get_database()
     try:
         if opts.drop:
-            db.drop_collection("papers")
+            db.drop_collection("patents")
             if not opts.quiet:
-                print("Dropped existing 'papers' collection")
-        db.papers.create_index([("$**", "text")])
-        db.papers.create_index([("Descriptive Title", 1)])
-        db.papers.create_index([("Patent #", 1)])
-        db.papers.create_index([("Laboratory 1", 1)])
-        db.papers.create_index([("Status", 1)])
-        db.papers.create_index([("File Date", 1)])
+                print("Dropped existing 'patents' collection")
+        db.patents.create_index([("$**", "text")])
+        db.patents.create_index([("Descriptive Title", 1)])
+        db.patents.create_index([("Patent #", 1)])
+        db.patents.create_index([("Laboratory 1", 1)])
+        db.patents.create_index([("Status", 1)])
+        db.patents.create_index([("File Date", 1)])
     except Exception as ex:
         if not opts.silent:
             print(f"{parser.prog}: failed initializing collection/index: {ex}", file=sys.stderr)
@@ -97,17 +97,17 @@ def main(args):
         return 1
 
     success = 0
-    for rec in papers:
+    for rec in patents:
         try:
             rec = normalize_dates(rec)
-            db.papers.insert_one(rec)
+            db.patents.insert_one(rec)
             success += 1
         except Exception as ex:
             log.error("Failed to ingest record: %s", ex)
 
     client.close()
     if not opts.quiet:
-        print(f"Ingested {success} papers out of {len(papers)}")
+        print(f"Ingested {success} patents out of {len(patents)}")
     return 0 if success else 1
 
 if __name__ == '__main__':
