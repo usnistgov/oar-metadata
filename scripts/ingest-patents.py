@@ -20,7 +20,7 @@ sys.path.extend(oarpypath.split(os.pathsep))
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("ingest-patents")
 
-DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "patents.json")
+DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../products/patents.json")
 
 def define_opts(progname=None):
     parser = ArgumentParser(progname, None,
