@@ -7,7 +7,10 @@ from argparse import ArgumentParser
 from datetime import datetime
 from pymongo import MongoClient
 
-basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Save the repo root BEFORE basedir gets overwritten by OAR_HOME
+repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+basedir = repo_root
 oarpypath = os.path.join(basedir, "python")
 if 'OAR_HOME' in os.environ:
     basedir = os.environ['OAR_HOME']
@@ -55,7 +58,7 @@ def main(args):
         opts.quiet = True
 
     # Strictly look for products/patents.json in the repo root
-    infile = os.path.join(basedir, "products", "patents.json")
+    infile = os.path.join(repo_root, "products", "patents.json")
     
     if not os.path.exists(infile):
         if not opts.silent:
