@@ -204,12 +204,12 @@ class TestFieldLoader(test.TestCase):
 
     def test_load_from_file(self):
         res = self.ldr.load_from_file(flddatafile)
-        self.assertEqual(res.attempt_count, 28)
-        self.assertEqual(res.success_count, 28)
+        self.assertEqual(res.attempt_count, 30)
+        self.assertEqual(res.success_count, 30)
         self.assertEqual(res.failure_count, 0)
         
         self.assertTrue(res.succeeded({'name': "title"}))
-        self.assertEqual(self.ldr._client.get_database().fields.count_documents({}), 28)
+        self.assertEqual(self.ldr._client.get_database().fields.count_documents({}), 30)
         c = self.ldr._client.get_database().fields.find({'name':'title'})
         self.assertEqual(c[0]['type'], 'string')
         self.assertIn('searchable', c[0]['tags'])

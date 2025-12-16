@@ -95,6 +95,24 @@
         }
     },
     {
+        "name": "annotated",
+        "type": "string",
+        "label": "Modified",
+        "tags": [ "filterable", "searchable" ],
+        "tips": {
+            "search": "The date that the contents or metadata of a resource was last modified"
+        }
+    },
+    {
+        "name": "firstIssued",
+        "type": "string",
+        "label": "Released",
+        "tags": [ "filterable", "searchable" ],
+        "tips": {
+            "search": "The date a resource was released for the first time"
+        }
+    },
+    {
         "name": "ediid",
         "type": "string",
         "label": "The EDI's assigned identifier",
