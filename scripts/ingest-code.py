@@ -73,7 +73,8 @@ def transform_release(release):
         "status": release.get("status", ""),
         "laborHours": release.get("laborHours", 0),
         "tags": release.get("tags", []),
-        "vcs": release.get("vcs", "")
+        "vcs": release.get("vcs", ""),
+        "@type": "CodeRepository"
     }
 
 def main(args):
