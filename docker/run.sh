@@ -22,6 +22,7 @@ ti=
 
 distvol=
 distdir=
+prodvol="-v ${codedir}/products:/dev/oar-metadata/products"
 cmd=
 args=()
 while [ "$1" != "" ]; do
@@ -56,5 +57,5 @@ while [ "$1" != "" ]; do
 done
 
 
-echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
-exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol oar-metadata/mdtests $cmd "${args[@]}"
+echo '+' docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol $prodvol oar-metadata/mdtests $cmd "${args[@]}"
+exec docker run $ti --rm -v $codedir:/dev/oar-metadata $distvol $prodvol oar-metadata/mdtests $cmd "${args[@]}"
