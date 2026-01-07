@@ -20,14 +20,12 @@ sys.path.extend(oarpypath.split(os.pathsep))
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("ingest-patents")
 
-DEF_INPUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../products/patents.json")
-
 def define_opts(progname=None):
     parser = ArgumentParser(progname, None,
         "ingest patents metadata into the RMM", None)
     parser.add_argument('--input', metavar='FILE', dest='infile',
-                        default=DEF_INPUT,
-                        help="Path to patents JSON (default: patents.json alongside this script)")
+                        required=True,
+                        help="Path to patents JSON file (required)")
     parser.add_argument('-M', '--mongodb-url', metavar='URL', type=str, dest='url',
                         default="mongodb://mongodb:3333/TestDB",
                         help="MongoDB URL (e.g., mongodb://HOST:PORT/DBNAME)")
