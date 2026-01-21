@@ -57,6 +57,7 @@ def transform_release(release):
         "repositoryURL": release.get("repositoryURL", ""),
         "homepageURL": release.get("homepageURL", ""),
         "downloadURL": release.get("downloadURL", ""),
+        "@type": ["CodeRepository"],
         "languages": release.get("languages", []),
         "contact": {
             "email": release.get("contact", {}).get("email", ""),
