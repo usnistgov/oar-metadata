@@ -137,7 +137,7 @@ def main(args):
             db.drop_collection("patents")
             if not opts.quiet:
                 print("Dropped existing 'patents' collection")
-        db.patents.create_index([("$**", "text")])
+        db.patents.create_index([("$**", "text")], language_override="_lang")
         db.patents.create_index([("title", 1)])
         db.patents.create_index([("@id", 1)])
         db.patents.create_index([("keyword", 1)])
