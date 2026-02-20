@@ -226,7 +226,7 @@ def _configure_log(logfile: str=None, level: int=None, format: str=None, config:
         return fromcfg.get("handlers", {}).get(name)
 
     if not config:
-        confit = {}
+        config = {}
     if not logfile and (not config.get('logserver') or config.get('logfile')):
         logfile = config.get('logfile', 'pdr.log')
 
@@ -343,74 +343,6 @@ def configure_log(logfile: str=None, level: int=None, format: str=None, config: 
     """
     _configure_log(logfile, level, format, config, addstderr)
     logging.warning("Use of configure_log() is deprecated; use configure_logging()")
-
-    # global global_logdir
-    # global global_logfile
-    # if not config:
-    #     config = {}
-    # if not logfile:
-    #     logfile = config.get('logfile', 'pdr.log')
-
-    # if not os.path.isabs(logfile):
-    #     # The log directory can be set either from the configuration or via
-    #     # the OAR_LOG_DIR environment variable; the former takes precedence
-    #     deflogdir = os.path.join(oar_home,'var','logs')
-    #     logdir = config.get('logdir', determine_default_logdir())
-    #     global_logdir = logdir
-    #     logfile = os.path.join(logdir, logfile)
-    #     if not os.path.exists(os.path.dirname(logfile)):
-    #         os.makedirs(os.path.dirname(logfile))
-    # global_logfile = logfile
-    
-    # if level is None:
-    #     level = config.get('loglevel', logging.DEBUG)
-    # if not isinstance(level, int):
-    #     level = _log_levels_byname.get(str(level), level)
-    # if not isinstance(level, int):
-    #     raise ConfigurationException("Unrecognized loglevel value: "+str(level))
-
-    # if not format:
-    #     format = config.get('logformat', LOG_FORMAT)
-    # frmtr = logging.Formatter(format)
-
-    # global _log_handler
-    # rootlogger = logging.getLogger()
-    # if _log_handler:
-    #     rootlogger.removeHandler(_log_handler)
-    #     if hasattr(_log_handler, 'close'):
-    #         _log_handler.close()
-    #     _log_handler = None
-    # _log_handler = logging.FileHandler(logfile)
-    # _log_handler.setLevel(level)
-    # _log_handler.setFormatter(frmtr)
-    # rootlogger.addHandler(_log_handler)
-    # rootlogger.setLevel(logging.DEBUG-1)
-
-    # # jsonmerge is way too chatty at the DEBUG level
-    # if level >= logging.DEBUG:
-    #     jmlevel = max(level, logging.INFO)
-    #     logging.getLogger("jsonmerge").setLevel(jmlevel)
-
-    # # filelock is one level too chatty
-    # if level >= logging.DEBUG:
-    #     logging.getLogger("filelock").setLevel(level+10)
-
-    # # config can set levels on a per-logname basis
-    # if config.get("loglevelsfor") and isinstance(config.get("loglevelsfor"), Mapping):
-    #     for lognm, level in config.get("loglevelsfor", {}).items():
-    #         if not isinstance(level, int):
-    #             level = _log_levels_byname.get(str(level), level)
-    #         if isinstance(level, int):
-    #             logging.getLogger(lognm).setLevel(level)
-    
-    # if addstderr:
-    #     if not isinstance(addstderr, str):
-    #         addstderr = format
-    #     handler = logging.StreamHandler(sys.stderr)
-    #     handler.setLevel(logging.ERROR)
-    #     handler.setFormatter(logging.Formatter(addstderr))
-    #     rootlogger.addHandler(handler)
-    #     rootlogger.error("FYI: Writing log messages to %s",logfile)
 
 def determine_default_logdir():
     out = os.environ.get('OAR_LOG_DIR', os.path.join(oar_home, 'var', 'logs'))
