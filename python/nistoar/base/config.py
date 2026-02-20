@@ -204,7 +204,7 @@ _logging_defaults = {
             "class": "logging.StreamHandler",
             "formatter": "console",
             "level": "ERROR",
-            "stream": sys.stderr
+            "stream": "ext://sys.stderr"
         }
     },
     "loggers": {
@@ -268,6 +268,7 @@ def _configure_log(logfile: str=None, level: int=None, format: str=None, config:
         global_logfile = logfile
 
     if addstderr:
+        fmttrs['console'] = deepcopy(get_formatter("console"))
         hndlrs['console'] = deepcopy(get_handler("console"))
             
     logcfg = {
