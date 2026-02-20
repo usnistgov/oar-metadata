@@ -90,7 +90,10 @@ def load_from_file(configfile: str) -> Mapping:
             # YAML format
             return yaml.safe_load(fd)
 
-LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s: %(message)s"
+FILE_LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s: %(message)s"
+CONSOLE_LOG_FORMAT = "%(name)s: %(levelname)s %(message)s"
+SERVER_LOG_FORMAT = "%(asctime)s (%(process)d) %(name)s %(levelname)s: %(message)s"
+LOG_FORMAT = FILE_LOG_FORMAT
 global_logdir = None         # this is set when configure_log() is run
 global_logfile = None        # this is set when configure_log() is run
 _log_levels_byname = {
@@ -184,10 +187,10 @@ _logging_defaults = {
     "version": 1,
     "formatters": {
         "file": {
-            "format": LOG_FORMAT
+            "format": FILE_LOG_FORMAT
         },
         "console": {
-            "format": "%(name)s: %(levelname)s %(message)s"
+            "format": CONSOLE_LOG_FORMAT
         }
     },
     "handlers": {

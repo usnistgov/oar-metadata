@@ -157,8 +157,9 @@ def main(prog, args, cfg=None):
     cfg.setdefault('logfile', 'logserver.log')
     if opts.logfile:
         cfg['logfile'] = opts.logfile
+    cfg.setdefault('logformat', config.SERVER_LOG_FORMAT)
 
-    config.configure_log(config=cfg)
+    config.configure_logging(cfg)
     pidfile = determine_pidfile(opts.pidfile)
     if opts.stop:
         return stop_server(pidfile)
