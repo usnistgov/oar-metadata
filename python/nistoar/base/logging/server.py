@@ -20,6 +20,9 @@ from .. import config
 from ..config import ConfigurationException
 
 APP_NAME = "LogServer"
+serverlog = logging.getLogger(APP_NAME)
+def _trace(msg, *args, **kwargs):
+    serverlog.log(config.TRACE, msg, *args, **kwargs)
 
 class LogRecordStreamHandler(socketserver.BaseRequestHandler):
     """
@@ -43,7 +46,7 @@ class LogRecordStreamHandler(socketserver.BaseRequestHandler):
             while len(chunk) < slen:
                 chunk = chunk + self.request.recv(slen - len(chunk))
             obj = self.unPickle(chunk)
-            logging.info("sending message")
+            _trace("sending message")
             record = logging.makeLogRecord(obj)
             self.handleLogRecord(record)
 
@@ -80,7 +83,7 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
 
     def serve_forever(self, poll_interval=0.5):
         now = datetime.now().isoformat()
-        logging.getLogger(APP_NAME).info("Starting Log Server at %s", now)
+        serverlog.info("Starting Log Server at %s", now)
         super().serve_forever(poll_interval)
 
 def define_options(progname):
@@ -160,6 +163,7 @@ def main(prog, args, cfg=None):
     cfg.setdefault('logformat', config.SERVER_LOG_FORMAT)
 
     config.configure_logging(cfg)
+    
     pidfile = determine_pidfile(opts.pidfile)
     if opts.stop:
         return stop_server(pidfile)
@@ -170,7 +174,6 @@ def main(prog, args, cfg=None):
     return 0
 
 def stop_server(pidfile):
-    log = logging.getLogger(APP_NAME)
     if not os.path.isfile(pidfile):
         print(f"{APP_NAME}: No server found to be running ({pidfile} not found)",
               file=sys.stderr)
