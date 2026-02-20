@@ -20,9 +20,8 @@ from .. import config
 from ..config import ConfigurationException
 
 APP_NAME = "LogServer"
-serverlog = logging.getLogger(APP_NAME)
 def _trace(msg, *args, **kwargs):
-    serverlog.log(config.TRACE, msg, *args, **kwargs)
+    logging.getLogger(APP_NAME).log(config.TRACE, msg, *args, **kwargs)
 
 class LogRecordStreamHandler(socketserver.BaseRequestHandler):
     """
@@ -73,17 +72,18 @@ class LogRecordSocketReceiver(socketserver.ThreadingTCPServer):
     """
 
     allow_reuse_address = True
+    logname = APP_NAME
 
     def __init__(self,
                  host='localhost',
                  port=logging.handlers.DEFAULT_TCP_LOGGING_PORT,
                  handler=LogRecordStreamHandler):
         socketserver.ThreadingTCPServer.__init__(self, (host, port), handler)
-        self.logname = None
+        self.log = logging.getLogger(self.logname)
 
     def serve_forever(self, poll_interval=0.5):
         now = datetime.now().isoformat()
-        serverlog.info("Starting Log Server at %s", now)
+        self.log.info("Starting Log Server at %s", now)
         super().serve_forever(poll_interval)
 
 def define_options(progname):
