@@ -96,8 +96,10 @@ SERVER_LOG_FORMAT = "%(asctime)s (%(process)d) %(name)s %(levelname)s: %(message
 LOG_FORMAT = FILE_LOG_FORMAT
 global_logdir = None         # this is set when configure_log() is run
 global_logfile = None        # this is set when configure_log() is run
+TRACE = logging.DEBUG - 2
 _log_levels_byname = {
     "NOTSET":   logging.NOTSET,
+    "TRACE":    TRACE,
     "DEBUG":    logging.DEBUG,
     "NORM":     15,
     "NORMAL":   15,
