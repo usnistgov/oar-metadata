@@ -1,8 +1,8 @@
 {
     "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v1.0",
-    "@id": "https://data.nist.gov/od/dm/nist-themes-chipsmetrology/v2.0",
+    "@id": "https://data.nist.gov/od/dm/nist-themes-chipsmetrology/v1.0",
     "title": "The NIST Research Theme Chips Metrology Taxonomy",
-    "version": "2.0",
+    "version": "1.0",
     "description": "terms for tagging resources with research themes",
     "label": "ChipsMetrology",
     "vocab": [
@@ -171,20 +171,8 @@
             "since": "1.0"
         },
         {
-            "parent": "Materials Research: Dielectric and Insulator",
-            "term": "Al2O3",
-            "level": 3,
-            "since": "1.0"
-        },
-        {
             "parent": "Materials Research",
             "term": "2D Material",
-            "level": 2,
-            "since": "1.0"
-        },
-        {
-            "parent": "Materials Research",
-            "term": "Nanoparticle",
             "level": 2,
             "since": "1.0"
         },
@@ -208,42 +196,42 @@
         },
         {
             "parent": "Materials Research",
-            "term": "Magnetic",
+            "term": "Device Material",
             "level": 2,
             "since": "1.0"
         },
         {
-            "parent": "Materials Research",
-            "term": "Metal",
-            "level": 2,
-            "since": "1.0"
-        },
-        {
-            "parent": "Materials Research: Metal",
+            "parent": "Materials Research: Device Material",
             "term": "Ag",
             "level": 3,
             "since": "1.0"
         },
         {
-            "parent": "Materials Research: Metal",
-            "term": "Cu",
+            "parent": "Materials Research: Device Material",
+            "term": "Sapphire",
             "level": 3,
             "since": "1.0"
         },
         {
-            "parent": "Materials Research: Metal",
+            "parent": "Materials Research: Device Material",
+            "term": "Al2O3",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials Research: Device Material",
             "term": "Au",
             "level": 3,
             "since": "1.0"
         },
         {
-            "parent": "Materials Research: Metal",
+            "parent": "Materials Research: Device Material",
             "term": "Pt",
             "level": 3,
             "since": "1.0"
         },
         {
-            "parent": "Materials Research: Metal",
+            "parent": "Materials Research: Device Material",
             "term": "W",
             "level": 3,
             "since": "1.0"
@@ -644,18 +632,6 @@
             "level": 4,
             "since": "1.0"
         },
-        {
-            "parent": "Metrology: Experimental Technique",
-            "term": "Scanning Probe",
-            "level": 3,
-            "since": "1.0"
-        },     
-        {
-            "parent": "Metrology: Experimental Technique: Scanning Probe",
-            "term": "AFM",
-            "level": 4,
-            "since": "1.0"
-        },     
         {
             "parent": "Metrology: Experimental Technique",
             "term": "Rheology",
