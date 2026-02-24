@@ -18,6 +18,13 @@
         },
         {
             "parent": "Advanced Communications",
+            "term": "Optical communications",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Physics: Optical physics and communications"
+        },
+        {
+            "parent": "Advanced Communications",
             "term": "Quantum communications",
             "level": 2
         },
@@ -102,6 +109,12 @@
             "since": "2.0"
         },
         {
+            "parent": "Bioscience: Bioeconomy",
+            "term": "Biological data",
+            "level": 3,
+            "since": "2.0"
+        },
+        {
             "parent": "Bioscience",
             "term": "Bioimaging",
             "level": 2,
@@ -132,6 +145,19 @@
         },
         {
             "parent": "Bioscience",
+            "term": "Biomolecular Characterization",
+            "level": 2,
+            "since": "1.1",
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Bioscience",
+            "term": "Bioprocessing",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Bioscience",
             "term": "Biosecurity",
             "level": 2,
             "since": "2.0"
@@ -153,6 +179,12 @@
             "term": "Nucleic acid sequence screening",
             "level": 3,
             "since": "2.0"
+        },
+        {
+            "parent": "Bioscience",
+            "term": "Cell biology",
+            "level": 2,
+            "deprecatedSince": "2.0"
         },
         {
             "parent": "Bioscience",
@@ -208,8 +240,21 @@
         },
         {
             "parent": "Bioscience",
+            "term": "Genomic measurements",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Bioscience: Genomics"
+        },
+        {
+            "parent": "Bioscience",
             "term": "Glycomics",
             "level": 2
+        },
+        {
+            "parent": "Bioscience",
+            "term": "Lipidomics",
+            "level": 2,
+            "deprecatedSince": "1.1"
         },
         {
             "parent": "Bioscience",
@@ -224,6 +269,13 @@
         {
             "term": "Buildings and Construction",
             "level": 1
+        },
+        {
+            "parent": "Buildings and Construction",
+            "term": "Air conditioning equipment and heating",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Buildings and Construction: Heating, ventilation, and air conditioning equipment"
         },
         {
             "parent": "Buildings and Construction",
@@ -363,6 +415,12 @@
             "level": 2
         },
         {
+            "parent": "Electronics",
+            "term": "Thin-film electronics",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
             "term": "Energy",
             "level": 1
         },
@@ -476,14 +534,40 @@
         },
         {
             "parent": "Forensics",
+            "term": "Ballistics",
+            "level": 2
+        },
+        {
+            "parent": "Forensics",
             "term": "Digital evidence",
             "level": 2,
             "since": "1.1"
         },
         {
             "parent": "Forensics",
+            "term": "Digital and multimedia evidence",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Forensics: Digital evidence"
+        },
+        {
+            "parent": "Forensics",
+            "term": "DNA and biological evidence",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Forensics: Forensic Genetics"
+        },
+        {
+            "parent": "Forensics",
             "term": "Drugs and toxicology",
             "level": 2
+        },
+        {
+            "parent": "Forensics",
+            "term": "Fingerprints and pattern evidence",
+            "level": 2,
+            "since": "1.1",
+            "deprecatedSince": "2.0"
         },
         {
             "parent": "Forensics",
@@ -525,6 +609,13 @@
         },
         {
             "parent": "Health",
+            "term": "Cell therapies",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Health: Cell and gene therapy"
+        },
+        {
+            "parent": "Health",
             "term": "Clinical diagnostics",
             "level": 2
         },
@@ -552,6 +643,12 @@
         },
         {
             "parent": "Health",
+            "term": "Medical imaging",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Health",
             "term": "Medical microbiome",
             "level": 2
         },
@@ -562,6 +659,32 @@
         },
         {
             "parent": "Health",
+            "term": "Pharmaceuticals",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Health",
+            "term": "Precision medicine",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Health",
+            "term": "Radiation therapies",
+            "level": 2,
+            "deprecatedSince": "1.1"
+        },
+        {
+            "parent": "Health",
+            "term": "Regenerative medicine",
+            "level": 2,
+            "since": "1.1",
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Health: Regenerative medicine and advanced therapy"
+        },
+        {
+            "parent": "Health",
             "term": "Regenerative medicine and advanced therapy",
             "level": 2,
             "since": "2.0"
@@ -569,6 +692,13 @@
         {
             "term": "Information Technology",
             "level": 1
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Artificial Intelligence",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Artificial Intelligence"
         },
         {
             "parent": "Information Technology",
@@ -604,6 +734,41 @@
             "parent": "Information Technology: Cyber-physical systems",
             "term": "Smart cities",
             "level": 3
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Cybersecurity",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Information Technology: Cybersecurity and Privacy"
+        },
+        {
+            "parent": "Information Technology: Cybersecurity",
+            "term": "Access control",
+            "level": 3,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Information Technology: Cybersecurity: Identity and access management"
+        },
+        {
+            "parent": "Information Technology: Cybersecurity",
+            "term": "Configuration and vulnerability management",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Information Technology: Cybersecurity and Privacy: Configuration and vulnerability management"
+        },
+        {
+            "parent": "Information Technology: Cybersecurity",
+            "term": "Cryptography",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Information Technology: Cybersecurity and Privacy: Cryptography"
+        },
+        {
+            "parent": "Information Technology: Cybersecurity",
+            "term": "Risk management",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Information Technology: Cybersecurity and Privacy: Risk management"
         },
         {
             "parent": "Information Technology",
@@ -683,6 +848,13 @@
             "level": 3
         },
         {
+            "parent": "Information Technology: Data and informatics",
+            "term": "Video analytics",
+            "level": 3,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Information Technology: Video analytics"
+        },
+        {
             "parent": "Information Technology",
             "term": "Digital Twins",
             "level": 2,
@@ -698,6 +870,27 @@
             "term": "Health IT",
             "level": 2,
             "since": "1.1"
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Identity and access management",
+            "level": 2,
+            "since": "1.1",
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Identity management",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Information Technology: Identity and access management"
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Internet of Things",
+            "level": 2,
+            "deprecatedSince": "1.1",
+            "deprecatedBy": "Information Technology: Internet of Things (IoT)"
         },
         {
             "parent": "Information Technology",
@@ -733,6 +926,13 @@
         },
         {
             "parent": "Information Technology: Networking",
+            "term": "Network modeling",
+            "level": 3,
+            "deprecatedSince": "1.0",
+            "deprecatedBy": "Information Technology: Networking: Network Modeling and Analysis"
+        },
+        {
+            "parent": "Information Technology: Networking",
             "term": "Network Modeling and Analysis",
             "level": 3,
             "since": "1.0"
@@ -754,6 +954,13 @@
             "term": "Next Generation Networks",
             "level": 3,
             "deprecatedSince": "1.0"
+        },
+        {
+            "parent": "Information Technology",
+            "term": "Privacy",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Information Technology: Cybersecurity and Privacy"
         },
         {
             "parent": "Information Technology: Networking",
@@ -816,6 +1023,19 @@
         },
         {
             "parent": "Manufacturing",
+            "term": "Biomanufacturing",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Bioscience: Biomanufacturing"
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Exports",
+            "level": 2,
+            "deprecatedSince": "1.1"
+        },
+        {
+            "parent": "Manufacturing",
             "term": "Factory communications",
             "level": 2
         },
@@ -828,6 +1048,12 @@
             "parent": "Manufacturing",
             "term": "Interoperability in manufacturing",
             "level": 2
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Lean manufacturing",
+            "level": 2,
+            "deprecatedSince": "1.1"
         },
         {
             "parent": "Manufacturing",
@@ -891,7 +1117,7 @@
             "since": "1.1"
         },
         {
-            "parent": "Manufacturing: Robotics in manufacturing",
+            "parent": "Manufacturing: Robotics",
             "term": "manipulation",
             "level": 3
         },
@@ -901,14 +1127,71 @@
             "level": 3
         },
         {
-            "parent": "Manufacturing: Robotics in manufacturing",
+            "parent": "Manufacturing: Robotics",
             "term": "Navigation / actuation / control",
             "level": 3
         },
         {
-            "parent": "Manufacturing: Robotics in manufacturing",
+            "parent": "Manufacturing: Robotics",
             "term": "Sensing and perception",
             "level": 3
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Robotics in manufacturing",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Agility and adaptability",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Agility and adaptability"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Collaborative robots",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Collaborative robots"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Dexterous grasping",
+            "level": 3,
+            "since": "1.1",
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Dexterous grasping"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Industrial autonomous vehicles",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Industrial autonomous vehicles"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Mobile manipulators",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Mobile manipulators"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Navigation / actuation / control",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Navigation / actuation / control"
+        },
+        {
+            "parent": "Manufacturing: Robotics in manufacturing",
+            "term": "Sensing and perception",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Manufacturing: Robotics: Sensing and perception"
         },
         {
             "parent": "Manufacturing",
@@ -934,6 +1217,12 @@
             "parent": "Manufacturing",
             "term": "Technology commercialization",
             "level": 2
+        },
+        {
+            "parent": "Manufacturing",
+            "term": "Work force",
+            "level": 2,
+            "deprecatedSince": "1.0"
         },
         {
             "term": "Materials",
@@ -963,6 +1252,12 @@
             "parent": "Materials: Materials characterization",
             "term": "Composition and structure",
             "level": 3
+        },
+        {
+            "parent": "Materials: Materials characterization",
+            "term": "Magnetic properties",
+            "level": 3,
+            "deprecatedSince": "2.0"
         },
         {
             "parent": "Materials: Materials characterization",
@@ -1034,6 +1329,12 @@
         },
         {
             "parent": "Metrology",
+            "term": "Acoustic/vibration metrology",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Metrology",
             "term": "Amount of substance",
             "level": 2
         },
@@ -1046,6 +1347,12 @@
             "parent": "Metrology",
             "term": "Electrical/electromagnetic metrology",
             "level": 2
+        },
+        {
+            "parent": "Metrology",
+            "term": "Environmental metrology",
+            "level": 2,
+            "deprecatedSince": "1.1"
         },
         {
             "parent": "Metrology",
@@ -1250,6 +1557,13 @@
         },
         {
             "parent": "Physics",
+            "term": "Optical physics",
+            "level": 2,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Physics: Optical physics and communications"
+        },
+        {
+            "parent": "Physics",
             "term": "Optical physics and communications",
             "level": 2
         },
@@ -1299,6 +1613,12 @@
         },
         {
             "parent": "Public Safety",
+            "term": "Physical security",
+            "level": 2,
+            "deprecatedSince": "2.0"
+        },
+        {
+            "parent": "Public Safety",
             "term": "Public safety communications research",
             "level": 2
         },
@@ -1306,6 +1626,27 @@
             "parent": "Public Safety",
             "term": "Response robots",
             "level": 2
+        },
+        {
+            "parent": "Public Safety: Response robots",
+            "term": "Aerial",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Public Safety: Response robots"
+        },
+        {
+            "parent": "Public Safety: Response robots",
+            "term": "Aquatic and underwater",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Public Safety: Response robots"
+        },
+        {
+            "parent": "Public Safety: Response robots",
+            "term": "Ground",
+            "level": 3,
+            "deprecatedSince": "2.0",
+            "deprecatedBy": "Public Safety: Response robots"
         },
         {
             "term": "Resilience",
@@ -1333,6 +1674,13 @@
             "term": "Disaster and failure studies",
             "level": 2,
             "since": "1.0"
+        },
+        {
+            "parent": "Resilience",
+            "term": "Disaster resilience",
+            "level": 2,
+            "deprecatedSince": "1.0",
+            "deprecatedBy": "Resilience: Disaster and failure studies"
         },
         {
             "parent": "Resilience",
@@ -1367,6 +1715,12 @@
             "parent": "Standards",
             "term": "Conformity assessment",
             "level": 2
+        },
+        {
+            "parent": "Standards",
+            "term": "Commercial standards",
+            "level": 2,
+            "deprecatedSince": "1.1"
         },
         {
             "parent": "Standards",
@@ -1421,6 +1775,12 @@
             "parent": "Transportation",
             "term": "Automotive",
             "level": 2
+        },
+        {
+            "parent": "Transportation",
+            "term": "Rail",
+            "level": 2,
+            "deprecatedSince": "2.0"
         }
     ]
 }
