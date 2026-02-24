@@ -1,6 +1,6 @@
 {
-    "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v2.0",
-    "@id": "https://data.nist.gov/od/dm/nist-themes/v1.1",
+    "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v1.0",
+    "@id": "https://data.nist.gov/od/dm/nist-themes/v2.0",
     "title": "The NIST Research Theme Taxonomy",
     "version": "2.0",
     "released": "2025-08",
