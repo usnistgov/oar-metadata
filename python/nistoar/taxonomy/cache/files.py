@@ -82,6 +82,8 @@ class FileTaxonomyCache(TaxonomyCache):
         """
         super(FileTaxonomyCache, self).__init__(log)
         self.src = Path(source)
+        if not self.src.exists():
+            raise ValueError(f"{str(self.src)}: file or directory not found")
         self.patt = pattern
         self._tx = None
         self.reload()
@@ -173,7 +175,7 @@ class FileTaxonomyCache(TaxonomyCache):
             data = _load_file(locfile, "taxonomy location")
         except (IOError, ValueError) as ex:
             self._warn(str(ex))
-            return None
+            raise
         except Exception as ex:
             if self.log:
                 log.exception(ex)
@@ -187,7 +189,11 @@ class FileTaxonomyCache(TaxonomyCache):
 
         basedir = data.get('baseDirectory')
         if not basedir:
-            basedir = locfile.parents[0]
+            basedir = locfile.parents[0].resolve()
+        else:
+            basedir = Path(basedir)
+            if not basedir.is_absolute():
+                basedir = locfile.parents[0] / basedir
 
         if out is None:
             out = {}

@@ -5,7 +5,7 @@ from .base import *
 from .simple import SimpleTaxonomy
 from .cache.files import FileTaxonomyCache
 
-OAR_TAXON_FILE_PATTERN = r'.*-taxonomy.*'
+OAR_TAXON_FILE_PATTERN = r'.*taxonomy.*'
 
 def open_taxonomy_cache(taxondir: str, log: Logger=None):
     """
