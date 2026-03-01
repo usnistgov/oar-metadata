@@ -18,7 +18,7 @@ cp $schemafiles $SCHEMA_DIR
 tlocs="$SOURCE_DIR/model/taxonomyLocations-by-patt.yml"
 if [ -f "$tlocs" ]; then
     cp $tlocs $SCHEMA_DIR
-    SCHEMA_DIR=$SCHEMA_DIR $execdir/install_taxlocfile.py
+    SCHEMA_DIR=$SCHEMA_DIR PYTHONPATH=$PY_LIBDIR $execdir/install_taxlocfile.py
 fi
 
 # install the jq modules
