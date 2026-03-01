@@ -109,13 +109,13 @@ class SimpleTaxonomy(Taxonomy):
     def about(self) -> Mapping:
         return deepcopy(self._meta)
 
-    def about_term(self, label: str) -> Mapping:
-        return self._bylabel.get(label)
-
     def get(self, termid: str) -> Mapping:
         if termid.startswith(self.id):
             termid = termid[len(self.id):]
         return self._byid.get(termid)
+
+    def match_label(self, label: str) -> Mapping:
+        return self._bylabel.get(label)
 
     def terms(self) -> Iterator[Mapping]:
         return self._byid.values()

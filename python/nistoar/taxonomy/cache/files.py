@@ -62,7 +62,7 @@ class FileTaxonomyCache(TaxonomyCache):
               (str) optional. the date the taxonomy was released
        
     """
-    LOCATION_FILE_BASE = "taxonomyLocation"
+    LOCATION_FILE_BASE = "taxonomyLocations"
 
     def __init__(self, source: str, pattern: str=None, log: Logger=None):
         """

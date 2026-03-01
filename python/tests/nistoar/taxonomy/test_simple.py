@@ -58,7 +58,7 @@ class TaxonomyTest(test.TestCase):
     def test_get(self):
         tax = simple.SimpleTaxonomy.from_file(taxfile)
 
-        term = tax.about_term("Bioscience: Biomaterials")
+        term = tax.match_label("Bioscience: Biomaterials")
         self.assertTrue(isinstance(term, Mapping))
         self.assertEqual(term['label'], "Bioscience: Biomaterials")
         self.assertEqual(term['level'], 2)
@@ -73,7 +73,7 @@ class TaxonomyTest(test.TestCase):
         self.assertTrue(tax.equivalent(term, term2))
         self.assertTrue(tax.equivalent(term2, term))
 
-        term = tax.about_term("Bioscience")
+        term = tax.match_label("Bioscience")
         self.assertEqual(term['label'], "Bioscience")
         self.assertEqual(term['level'], 1)
         self.assertNotIn('parent', term)
@@ -88,9 +88,9 @@ class TaxonomyTest(test.TestCase):
         self.assertTrue(tax.is_narrower_than_or_equiv(term2, term))
         self.assertTrue(not tax.is_narrower_than_or_equiv(term, term2))
 
-        self.assertIsNotNone(tax.about_term("Materials"))
-        self.assertIsNotNone(tax.about_term("Materials: Materials characterization"))
-        term = tax.about_term("Materials: Materials characterization: Thermal properties")
+        self.assertIsNotNone(tax.match_label("Materials"))
+        self.assertIsNotNone(tax.match_label("Materials: Materials characterization"))
+        term = tax.match_label("Materials: Materials characterization: Thermal properties")
         self.assertIsNotNone(term)
         self.assertEqual(term['label'],
                          "Materials: Materials characterization: Thermal properties")
@@ -108,8 +108,8 @@ class TaxonomyTest(test.TestCase):
         self.assertTrue(not tax.is_narrower_than_or_equiv(term2, term))
         self.assertTrue(not tax.is_narrower_than_or_equiv(term, term2))
         
-        self.assertIsNone(tax.about_term("Health: Cancer"))
-        self.assertIsNone(tax.about_term("Cancer"))
+        self.assertIsNone(tax.match_label("Health: Cancer"))
+        self.assertIsNone(tax.match_label("Cancer"))
 
     def test_iter(self):
         tax = simple.SimpleTaxonomy.from_file(taxfile)
@@ -119,7 +119,7 @@ class TaxonomyTest(test.TestCase):
         self.assertTrue(all('term' in t for t in tax.terms()))
         self.assertTrue(all('level' in t for t in tax.terms()))
         self.assertEqual(len(list(tax.terms())), tax.count())
-        mat = tax.about_term("Materials")
+        mat = tax.match_label("Materials")
         matly = [t for t in tax.terms() if tax.is_narrower_than_or_equiv(t, mat)]
         self.assertTrue(all(t['label'].startswith('Materials') for t in matly))
         self.assertEqual(  len([t for t in matly if t['level'] == 1]), 1)

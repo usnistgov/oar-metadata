@@ -40,18 +40,20 @@ class Taxonomy(ABC):
         raise NotImplemented()
 
     @abstractmethod
-    def about_term(self, label: str) -> Mapping:
+    def match_label(self, label: str) -> Mapping:
         """
-        returns a dictionary of information about a term given its prefered label
+        returns the definition of term in this taxonomy given its given its prefered label
+        :rtype: dict
         """
         raise NotImplemented()
 
     @abstractmethod
     def get(self, termid: str) -> Mapping:
         """
-        returns a dictionary of information about a term given its URI identifier.  The 
+        returns the definition of term in this taxonomy given its URI identifier.  The 
         termid can either be the absolute, globally-unique ID or one relative to this 
         taxonomy's identifier.  
+        :rtype: dict
         """
         raise NotImplemented()
 

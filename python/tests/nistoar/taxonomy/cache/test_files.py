@@ -71,7 +71,7 @@ class FilesTaxonomyCacheTest(test.TestCase):
         tax = cache.load_taxonomy(NIST_THEMES_URI_BASE+'v2.0')
         self.assertTrue(isinstance(tax, files.Taxonomy))
         self.assertEqual(tax.id, NIST_THEMES_URI_BASE+'v2.0')
-        self.assertTrue(tax.about_term('Bioscience'))
+        self.assertTrue(tax.match_label('Bioscience'))
 
     def test_export(self):
         cache = files.FileTaxonomyCache(taxdir, r"^theme-taxonomy.*")
