@@ -15,7 +15,11 @@ mkdir -p $SCHEMA_DIR
 schemafiles=`ls -d $SOURCE_DIR/model/*.json{,ld} | grep -v nerdm-fields-help`
 echo cp $schemafiles $SCHEMA_DIR
 cp $schemafiles $SCHEMA_DIR
-echo
+tlocs="$SOURCE_DIR/model/taxonomyLocations-by-patt.yml"
+if [ -f "$tlocs" ]; then
+    cp $tlocs $SCHEMA_DIR
+    SCHEMA_DIR=$SCHEMA_DIR $execdir/install_taxlocfile.py
+fi
 
 # install the jq modules
 mkdir -p $JQ_LIBDIR
