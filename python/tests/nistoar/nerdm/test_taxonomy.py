@@ -14,7 +14,7 @@ class TestResearchTopicsTaxonomy(unittest.TestCase):
         self.tax = taxon.ResearchTopicsTaxonomy.from_schema_dir(schemadir)
 
     def test_ctor(self):
-        self.assertEqual(self.tax.data['version'], "1.1")
+        self.assertEqual(self.tax.data['version'], "2.0")
         self.assertIsNotNone(self.tax.taillu)
         self.assertIsNotNone(self.tax.fulllu)
         self.assertIn('Bioscience', self.tax.taillu)
@@ -73,7 +73,7 @@ class TestResearchTopicsTaxonomy(unittest.TestCase):
         topics = self.tax.themes2topics(themes)
         
         self.assertEqual(len(topics), len(themes))
-        self.assertEqual(topics[0]['tag'], "Physics: Optical physics")
+        self.assertEqual(topics[0]['tag'], "Physics: Optical physics and communications")
         self.assertTrue(topics[0].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
 
         self.assertEqual(topics[1]['tag'], "Goober and the Peas")
@@ -89,7 +89,7 @@ class TestResearchTopicsTaxonomy(unittest.TestCase):
         term = self.tax.match_theme("Biomaterials", False)
         topic = term.as_topic()
         self.assertEqual(topic['@type'], "Concept")
-        self.assertEqual(topic['scheme'], "https://data.nist.gov/od/dm/nist-themes/v1.1")
+        self.assertEqual(topic['scheme'], "https://data.nist.gov/od/dm/nist-themes/v2.0")
         self.assertEqual(topic['tag'], "Bioscience: Biomaterials")
         
         

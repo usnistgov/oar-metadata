@@ -85,14 +85,14 @@ class TestPODds2Res(unittest.TestCase):
 
         self.assertIn('topic', res)
         self.assertEqual(len(res['topic']), len(res['theme']))
-        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics")
-        self.assertEqual(res['theme'][0], "Physics: Optical physics")
+        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics and communications")
+        self.assertEqual(res['theme'][0], "Physics: Optical physics and communications")
         
         cvtr.fix_themes = False
         res = cvtr.convert_data(data, "ark:ID")
         self.assertIn('topic', res)
         self.assertEqual(len(res['topic']), len(res['theme']))
-        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics")
+        self.assertEqual(res['topic'][0]['tag'], "Physics: Optical physics and communications")
         self.assertEqual(res['theme'][0], "optical physics")
 
     def test_themes2topics(self):
@@ -109,7 +109,7 @@ class TestPODds2Res(unittest.TestCase):
         data['topic'] = cvtr.themes2topics(data['theme'])
         self.assertEqual(len(data['topic']), len(data['theme']))
         self.assertEqual(data['theme'][0], "Optical physics")
-        self.assertEqual(data['topic'][0]['tag'], "Physics: Optical physics")
+        self.assertEqual(data['topic'][0]['tag'], "Physics: Optical physics and communications")
         self.assertTrue(data['topic'][0].get('scheme').startswith("https://data.nist.gov/od/dm/nist-themes/"))
 
         self.assertEqual(data['topic'][1]['tag'], "Goober and the Peas")
@@ -135,7 +135,7 @@ class TestPODds2Res(unittest.TestCase):
         themes = cvtr.topics2themes(data['topic'])
 
         self.assertEqual(len(themes), len(data['topic']))
-        self.assertEqual(themes[0], "Physics: Optical physics")
+        self.assertEqual(themes[0], "Physics: Optical physics and communications")
         self.assertEqual(themes[1], "Goober and the Peas")
         self.assertEqual(themes[2], "Bioscience")
         self.assertEqual(themes[3], "Chemistry")
@@ -143,7 +143,7 @@ class TestPODds2Res(unittest.TestCase):
         themes = cvtr.topics2themes(data['topic'], False)
 
         self.assertEqual(len(themes), len(data['topic'])-1)
-        self.assertEqual(themes[0], "Physics: Optical physics")
+        self.assertEqual(themes[0], "Physics: Optical physics and communications")
         self.assertEqual(themes[1], "Bioscience")
         self.assertEqual(themes[2], "Chemistry")
 
@@ -151,7 +151,7 @@ class TestPODds2Res(unittest.TestCase):
         data['topic'][0]['scheme'] = re.sub('data', 'www', data['topic'][0]['scheme'])
         themes = cvt.topics2themes(data['topic'], False) # as a module function
         self.assertEqual(len(themes), len(data['topic'])-1)
-        self.assertEqual(themes[0], "Physics: Optical physics")
+        self.assertEqual(themes[0], "Physics: Optical physics and communications")
         
 
     def test_massage_themes(self):
@@ -168,7 +168,7 @@ class TestPODds2Res(unittest.TestCase):
         cvtr.massage_themes(data)
 
         self.assertEqual(len(data['theme']), len(data['topic']))
-        self.assertEqual(data['theme'][0], "Physics: Optical physics")
+        self.assertEqual(data['theme'][0], "Physics: Optical physics and communications")
         self.assertEqual(data['theme'][1], "Goober and the Peas")
         self.assertEqual(data['theme'][2], "Bioscience")
         self.assertEqual(data['theme'][3], "Chemistry")
