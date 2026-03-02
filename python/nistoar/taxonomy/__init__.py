@@ -1,5 +1,39 @@
 """
 classes and functions that assist with using terms from taxonomies
+
+This module provides implementations for finding and accessing multiple taxonomies.  In 
+particular, it provides the facilities to load a taxonomy's definitions and use that 
+information to match terms and even test broader and narrower relationships.  
+
+The module is designed to handle taxonomy definitions from multiple sources and using 
+multiple formats and schemas.  (At this writing, only the OAR-specific "simple" schema
+loaded from files is supported.)
+
+The module is build around two key classes: :py:class:`~nistoar.taxonomy.base.Taxonomy` and 
+:py:class:`~nistoar.taxonomy.base.TaxonomyCache`.  The latter is used to discover and register 
+all taxonomies available to the system.  From that class, one can open up a taxonomy as a 
+:py:class:`~nistoar.taxonomy.base.Taxonomy` instance given its identifier string.  With a 
+:py:class:`~nistoar.taxonomy.base.Taxonomy` instance in hand, one can access specific terms 
+in the taxonomy either via its identifier or its prefered label.  
+
+The simplest way to initiate a :py:class:`~nistoar.taxonomy.base.TaxonomyCache` is via the 
+function, :py:func:`nistoar.taxonomy.open_taxonomy_cache`: 
+
+.. code-block::
+   :caption: Example use of the taxonomy module
+
+   import os
+   from pathlib import Path
+   from nistoar import taxonomy
+   from nistoar.midas.dap.service.mds3 import NIST_THEMES  # the NIST research topics taxonomy URI
+
+   taxdir = Path(os.environ['OAR_HOME']) / "etc" / "schemas"
+   cache = taxonomy.open_taxonomy_cache(taxdir)
+   taxon = cache.open_taxonomy(NIST_THEMES)
+   biosci = taxon.match_label("Bioscience")
+
+See the :py:class:`Taxonomy documentation <nistoar.taxonomy.base.Taxonomy>` for more on what 
+you can do with a taxonomy.
 """
 from .base import *
 from .simple import SimpleTaxonomy
