@@ -9,7 +9,7 @@ from nistoar.taxonomy import simple
 testdir = Path(__file__).parents[0]
 basedir = testdir.parents[3]
 taxdir = basedir / 'model'
-ymlconf = basedir / 'docker' / 'ingestservice' / 'ingest_config.yml'
+ymlconf = basedir / 'docker' / 'mdtests' / 'ingest_conf.yml'
 taxfile = taxdir / 'theme-taxonomy.json'
 
 class TaxonomyTest(test.TestCase):
