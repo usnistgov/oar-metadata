@@ -980,7 +980,7 @@
         {
             "parent": "Information Technology: Software research",
             "term": "Software testing",
-            "Level": 3,
+            "level": 3,
             "since": "2.0"
         },
         {

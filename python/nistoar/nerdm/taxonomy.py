@@ -1,5 +1,9 @@
 """
-module for matching terms from the NIST research topic taxonomy
+module for matching terms from the NIST research topic taxonomy.  This is deprecated 
+by the :py:mod:`nistoar.taxonomy` module.  
+
+See the use of the deprecated :py:class:`ResearchTopicsTaxonomy` in 
+:py:class:`nistoar.nerdm.convert.pod.PODds2Res` (which is also deprecated).  
 """
 import os, re, json
 from collections import OrderedDict
