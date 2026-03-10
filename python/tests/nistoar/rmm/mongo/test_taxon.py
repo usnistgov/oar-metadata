@@ -233,13 +233,13 @@ class TestTaxonomyLoader(test.TestCase):
 
     def test_load_from_file(self):
         res = self.ldr.load_from_file(taxdatafile)
-        self.assertEqual(res.attempt_count, 249)
-        self.assertEqual(res.success_count, 249)
+        self.assertEqual(res.attempt_count, 277)
+        self.assertEqual(res.success_count, 277)
         self.assertEqual(res.failure_count, 0)
 
         key = {'term': "Advanced Communications", "parent": ""}
         self.assertTrue(res.succeeded(key))
-        self.assertEqual(self.ldr._client.get_database().taxonomy.count_documents({}), 249)
+        self.assertEqual(self.ldr._client.get_database().taxonomy.count_documents({}), 277)
         c = self.ldr._client.get_database().taxonomy.find(key)
         self.assertEqual(c[0]['level'], 1)
         

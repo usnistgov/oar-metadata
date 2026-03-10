@@ -1,0 +1,577 @@
+{
+    "_schema": "https://data.nist.gov/od/dm/simple-taxonomy/v1.0",
+    "@id": "https://data.nist.gov/od/dm/nist-themes-additivemanufacturing/v1.0",
+    "title": "The NIST Research Theme Additive Manufacturing Taxonomy",
+    "version": "1.0",
+    "description": "terms for tagging resources with research themes",
+    "label":"Additive Manufacturing",
+    "vocab": [
+        {
+            "term": "Materials",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Metals",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Polymers",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Ceramics",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Cementitious",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Composites",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Materials",
+            "term": "Biomaterials",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Build Process",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Machine performance",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Feedstock characterization",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Process mapping",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Powder bed fusion",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process: Powder bed fusion",
+            "term": "Laser",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process: Powder bed fusion",
+            "term": "e-beam",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Directed energy deposition",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process: Directed energy deposition",
+            "term": "Laser wire",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process: Directed energy deposition",
+            "term": "Laser powder",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process: Directed energy deposition",
+            "term": "Wire arc",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Vat photopolymerization",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Material extrusion",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Direct ink writing",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Binder jetting",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Material jetting",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Build Process",
+            "term": "Sheet lamination",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Post-build Process",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process",
+            "term": "Annealing",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process",
+            "term": "Hot isostatic pressing",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process",
+            "term": "Curing",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process",
+            "term": "Machining",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process: Machining",
+            "term": "Electric discharge machining",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process: Machining",
+            "term": "Milling",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process: Machining",
+            "term": "Surface machining",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Post-build Process",
+            "term": "Grinding",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Microstructure",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microstructure",
+            "term": "In-situ characterization",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microstructure",
+            "term": "Ex-situ characterization",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Microstructure",
+            "term": "Microstructure analysis",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Properties",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Mechanical",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Composition",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Residual stress",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Rheology",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Thermal / kinetic",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Corrosion",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Electromagnetic",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Optical",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Surface topography",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Properties",
+            "term": "Surface roughness",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Performance",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Performance",
+            "term": "Fatigue",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Performance",
+            "term": "Fracture",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Performance",
+            "term": "Part corrosion",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Performance",
+            "term": "Geometric accuracy",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Characterization Approach",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "In-situ",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: In-situ",
+            "term": "Build process",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: In-situ",
+            "term": "Post-build process",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Ex-situ",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Microscopy",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: Microscopy",
+            "term": "Optical",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: Microscopy",
+            "term": "Electron",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Diffraction",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: Diffraction",
+            "term": "X-ray",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: Diffraction",
+            "term": "Neutron",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach: Diffraction",
+            "term": "Electron",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "X-ray computed tomography",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Small-angle scattering",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Mechanical Testing",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Fractography",
+            "level": 2,
+            "since":"1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Serial sectioning",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Dimensional metrology",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Contour method",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Profilometry",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Rheometry",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Spectroscopy",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Thermography",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Contact thermometry",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Composition analysis",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Radiography",
+            "level": 2,
+            "since": "1.0"   
+        },
+        {
+            "parent": "Characterization Approach",
+            "term": "Machine vision",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Computation and Analysis",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Process simulation",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Material simulation",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Property simulation",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Performance simulation",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Data-driven modeling",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis: Data-driven modeling",
+            "term": "Real-time feedback",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis: Data-driven modeling",
+            "term": "Surrogate models",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis: Data-driven modeling",
+            "term": "Image analysis",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Uncertainty quantification",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Microstructural analysis",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Multimodal data analysis",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis: Multimodal data analysis",
+            "term": "Multimodal registration",
+            "level": 3,
+            "since": "1.0"
+        },
+        {
+            "parent": "Computation and Analysis",
+            "term": "Digital twins",
+            "level": 2,
+            "since": "1.0"
+        },
+        {
+            "term": "Collaboration",
+            "level": 1,
+            "since": "1.0"
+        },
+        {
+            "parent": "Collaboration",
+            "term": "AM-Bench",
+            "level": 2,
+            "since": "1.0"
+        }
+    ]
+}
