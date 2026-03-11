@@ -12,6 +12,7 @@ bagit>=1.6.3,<2.0
 fs>=2.0.21
 jsonpatch
 jsonpath_ng
+psutil
 ejsonschema @ https://github.com/usnistgov/ejsonschema/archive/master.zip
 pynoid @ https://github.com/RayPlante/pynoid/archive/master.zip
 multibag @ https://github.com/usnistgov/multibag-py/archive/0.3.zip

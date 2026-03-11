@@ -101,8 +101,19 @@ class TestConfig(test.TestCase):
 class TestLogConfig(test.TestCase):
 
     def resetLogfile(self):
-        if config._log_handler:
-            self.rootlog.removeHandler(config._log_handler)
+        reset = {
+            "version": 1,
+            "disable_existing_loggers": True,
+            "root": {
+                "level": logging.DEBUG,
+                "handlers": []
+            }
+        }
+        logging.config.dictConfig(reset)
+        config.global_logdir = None
+        config.global_logfile = None
+        self.assertEqual(len(logging.getLogger().handlers), 0)
+        
         if self.logfile and os.path.exists(self.logfile):
             os.remove(self.logfile)
         self.logfile = None
@@ -136,7 +147,9 @@ class TestLogConfig(test.TestCase):
         self.assertEqual(config.global_logfile, self.logfile)
 
         self.assertEqual(self.rootlog.getEffectiveLevel(), logging.DEBUG-1)
-        self.assertEqual(config._log_handler.level, logging.DEBUG)
+        self.assertEqual(len(self.rootlog.handlers), 1)
+        self.assertEqual(self.rootlog.handlers[0].level, logging.DEBUG)
+
         self.assertEqual(logging.getLogger("pymongo").getEffectiveLevel(), logging.INFO)
 
         self.rootlog.warning('Oops')
@@ -145,7 +158,70 @@ class TestLogConfig(test.TestCase):
             words = fd.read()
         self.assertIn("Oops", words)
 
+    def test_configure_logging_backcompat(self):
+        logfile = "cfgd.log"
+        cfg = {
+            'logdir': tmpd,
+            'logfile': logfile,
+            'loglevel': 'DEBUG',
+            'loglevelsfor': {
+                'pymongo': 'INFO'
+            }
+        }
 
+        self.logfile = os.path.join(tmpd, logfile)
+        self.assertFalse(os.path.exists(self.logfile))
+
+        config.configure_logging(cfg)
+        self.assertEqual(config.global_logdir, tmpd)
+        self.assertEqual(config.global_logfile, self.logfile)
+
+        self.assertEqual(self.rootlog.getEffectiveLevel(), logging.DEBUG-1)
+        self.assertEqual(len(self.rootlog.handlers), 1)
+        self.assertEqual(self.rootlog.handlers[0].level, logging.DEBUG)
+
+        self.assertEqual(logging.getLogger("pymongo").getEffectiveLevel(), logging.INFO)
+
+        self.rootlog.warning('Oops')
+        self.assertTrue(os.path.exists(self.logfile))
+        with open(self.logfile) as fd:
+            words = fd.read()
+        self.assertIn("Oops", words)
+
+    def test_configure_logging_logserver1(self):
+        rootlog = logging.getLogger()
+        self.assertEqual(len(rootlog.handlers), 0)
+
+        cfg = {
+            'logserver': 'localhost',
+            'loglevel': 'INFO'
+        }
+        config.configure_logging(cfg)
+
+        self.assertEqual(len(rootlog.handlers), 1)
+        self.assertTrue(isinstance(rootlog.handlers[0], logging.handlers.SocketHandler))
+        self.assertEqual(rootlog.handlers[0].level, logging.INFO)
+        self.assertEqual(rootlog.handlers[0].host, 'localhost')
+        self.assertEqual(rootlog.handlers[0].port,
+                         logging.handlers.DEFAULT_TCP_LOGGING_PORT)
+
+        cfg['logfile'] = "goob.log"
+        config.configure_logging(cfg)
+
+        self.assertEqual(len(rootlog.handlers), 2)
+        self.assertTrue(isinstance(rootlog.handlers[0], logging.handlers.SocketHandler))
+        self.assertEqual(rootlog.handlers[0].level, logging.INFO)
+        self.assertEqual(rootlog.handlers[0].host, 'localhost')
+        self.assertEqual(rootlog.handlers[0].port,
+                         logging.handlers.DEFAULT_TCP_LOGGING_PORT)
+        self.assertTrue(isinstance(rootlog.handlers[1], logging.FileHandler))
+
+        config.configure_logging({})
+
+        self.assertEqual(len(rootlog.handlers), 1)
+        self.assertTrue(isinstance(rootlog.handlers[0], logging.FileHandler))
+        self.assertEqual(rootlog.handlers[0].level, logging.DEBUG)
+        
         
     def test_abs(self):
         self.logfile = os.path.join(tmpd, "cfgfile.log")
@@ -155,7 +231,11 @@ class TestLogConfig(test.TestCase):
 
         self.assertFalse(os.path.exists(self.logfile))
         config.configure_log(logfile=self.logfile, config=cfg)
-        self.rootlog.warning('Oops')
+        rootlog = logging.getLogger()
+        self.assertEqual(len(rootlog.handlers), 1)
+        self.assertTrue(isinstance(rootlog.handlers[0], logging.FileHandler))
+        
+        rootlog.warning('Oops')
         self.assertTrue(os.path.exists(self.logfile))
         
 class TestConfigService(test.TestCase):
