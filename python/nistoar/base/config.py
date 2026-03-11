@@ -2,10 +2,12 @@
 Utilities for obtaining configuration data for services
 """
 
-import os, sys, logging, json, yaml, time, re
+import os, sys, json, yaml, time, re
+import logging, logging.handlers, logging.config
 import requests
 from collections.abc import Mapping
 from urllib.parse import urlparse
+from copy import deepcopy
 
 import jsonpath_ng as jp
 
@@ -88,12 +90,16 @@ def load_from_file(configfile: str) -> Mapping:
             # YAML format
             return yaml.safe_load(fd)
 
-LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s: %(message)s"
-_log_handler = None
+FILE_LOG_FORMAT = "%(asctime)s %(name)s %(levelname)s: %(message)s"
+CONSOLE_LOG_FORMAT = "%(name)s: %(levelname)s %(message)s"
+SERVER_LOG_FORMAT = "%(asctime)s (%(process)d) %(name)s %(levelname)s: %(message)s"
+LOG_FORMAT = FILE_LOG_FORMAT
 global_logdir = None         # this is set when configure_log() is run
 global_logfile = None        # this is set when configure_log() is run
+TRACE = logging.DEBUG - 2
 _log_levels_byname = {
     "NOTSET":   logging.NOTSET,
+    "TRACE":    TRACE,
     "DEBUG":    logging.DEBUG,
     "NORM":     15,
     "NORMAL":   15,
@@ -105,6 +111,207 @@ _log_levels_byname = {
 }
 NORMAL = _log_levels_byname["NORMAL"]
 
+def configure_logging(config: Mapping, addstderr=False):
+    """
+    configure logging for an OAR application using parameters from the given configuration 
+    dictionary.  Additional function arguments will over-ride the configuration.
+
+    This function deprecates :py:func:`configure_log` to be more driven by the configuration
+    dictionary.  (See also :py:func:`configure_file_logging`.)
+
+    The given configuration dictionary should conform to on of two schemas.  First, if the 
+    dictionary includes ``logging``, it will be taken as configuration dictionary supported 
+    by the standard Python logging.config module function, ``dictConfig()``; all other 
+    logging parameters will be ignored--except ``logdir``.  If the latter is also provided,
+    then any non-absolute filename destinations will be treated as relative to the value
+    of ``logdir``.  
+
+    Alternatively, the configuration can contain the following parameters:
+
+    ``logserver``:
+        (str) *optional*.  Log messages should be sent to a logging service at the location
+        given by this value, of the form HOST:PORT.
+    ``logfile``:
+        (str) *optional*.  Log messages should be sent to a file with this name.  If the 
+        given path is non-absolute, it will be interpreted as relative to the value of 
+        ``logdir``.  Note that normally, this is not set if ``logserver`` is specified, 
+        but it is allowed.  
+    ``logdir``
+        (str) *optional*.  The directory that should contain log files whose paths are not 
+        specified as absolute.  
+    ``loglevel``
+        (str or int) *optional*.  The logging level to apply to the log-server and
+        file output handlers.  If given as a string, it should correspond to one of the 
+        standard logging module level labels; in addition, "NORMAL" and "NOTSET" are 
+        also supported.  
+    ``loglevelsfor``
+        (dict) *optional*.  Logging level filters to apply to named loggers.  This can 
+        be used to quiet (or louden) messages from third-party modules.  Each key is a 
+        logger name, and the value is a string or integer level.  
+
+    :param dict config:  a configuration dictionary to draw logging configuration
+                         values from.  
+    :param addstderr:    If True, send ERROR and more severe messages 
+                         to the standard error stream (default: False).  If 
+                         provided as a str, it is the formatting string for 
+                         messages sent to standard error.
+                         :type  addstderr:    bool or str
+    """
+    global global_logdir
+    global global_logfile
+
+    if config.get('logging'):
+        logcfg = config['logging']
+
+        # if logdir is set, make log filenames relative to it
+        global_logdir = config.get('logdir', determine_default_logdir())
+        if global_logdir:
+            logcfg = deepcopy(logcfg)
+            if not os.path.exists(global_logdir):
+                os.makedirs(global_logdir)
+            for hdlr in logging.get('handlers', {}).values():
+                if not isinstace(hdlr, Mapping):
+                    continue
+                if hdlr.get('filename') and not os.path.isabs(hdlr['filename']):
+                    hdlr['filename'] = os.path.join(global_logdir, hdlr['filename'])
+        
+        logging.dictConfig(logcfg)
+
+        ignored = [p for p in "logfile loglevel logformat loglevelsfor".split() if p in config]
+        if ignored:
+            logging.warn("Config parameter logging causes these parameters to be ignored:\n  "+
+                         "  \n".join(ignored))
+
+    else:
+        _configure_log(config=config)
+
+_logging_defaults = {
+    "version": 1,
+    "formatters": {
+        "file": {
+            "format": FILE_LOG_FORMAT
+        },
+        "console": {
+            "format": CONSOLE_LOG_FORMAT
+        }
+    },
+    "handlers": {
+        "file": {
+            "class": "logging.FileHandler",
+            "formatter": "file"
+        },
+        "logserver": {
+            "class": "logging.handlers.SocketHandler",
+            "host": "localhost",
+            "port":  logging.handlers.DEFAULT_TCP_LOGGING_PORT
+        },
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "console",
+            "level": "ERROR",
+            "stream": "ext://sys.stderr"
+        }
+    },
+    "loggers": {
+    }
+}
+
+def _configure_log(logfile: str=None, level: int=None, format: str=None, config: Mapping=None,
+                   addstderr=False):
+    global global_logdir
+    global global_logfile
+    def get_formatter(name, fromcfg=_logging_defaults):
+        return fromcfg.get("formatters", {}).get(name)
+    def get_handler(name, fromcfg=_logging_defaults):
+        return fromcfg.get("handlers", {}).get(name)
+
+    if not config:
+        config = {}
+    if not logfile and (not config.get('logserver') or config.get('logfile')):
+        logfile = config.get('logfile', 'pdr.log')
+
+    if level is None:
+        level = config.get('loglevel', logging.DEBUG)
+    if not isinstance(level, int):
+        level = _log_levels_byname.get(str(level), level)
+    if not isinstance(level, int):
+        raise ConfigurationException("Unrecognized loglevel value: "+str(level))
+
+    if not format:
+        format = config.get('logformat', LOG_FORMAT)
+
+    fmttrs = { "file": deepcopy(get_formatter("file")) }
+    if format:
+        fmttrs["file"]["format"] = format
+
+    hndlrs = { }
+    if config.get('logserver'):
+        hndlrs['logserver'] = deepcopy(get_handler('logserver'))
+        hostport = config['logserver'].split(':')
+        hndlrs['logserver']['host'] = hostport[0]
+        if len(hostport) > 1:
+            hndlrs['logserver']['port'] = hostport[1]
+        hndlrs['logserver']['level'] = level
+
+    elif not logfile:
+        logfile = config.get('logfile', 'pdr.log')
+
+    if logfile:
+        # Note: you probably don't want both logserver and logfile specified
+
+        if not os.path.isabs(logfile):
+            # The log directory can be set either from the configuration or via
+            # the OAR_LOG_DIR environment variable; the former takes precedence
+            global_logdir = config.get('logdir', determine_default_logdir())
+            logfile = os.path.join(global_logdir, logfile)
+            if not os.path.exists(os.path.dirname(logfile)):
+                os.makedirs(os.path.dirname(logfile))
+
+        hndlrs['file'] = deepcopy(get_handler("file"))
+        hndlrs['file']['filename'] = logfile
+        hndlrs['file']['level'] = level
+        global_logfile = logfile
+
+    if addstderr:
+        fmttrs['console'] = deepcopy(get_formatter("console"))
+        hndlrs['console'] = deepcopy(get_handler("console"))
+            
+    logcfg = {
+        "version": 1,
+        "formatters": fmttrs,
+        "handlers": hndlrs,
+        "root": {
+            "level": logging.DEBUG-1
+        },
+        "loggers": {}
+    }
+
+    _quiet_loggers(logcfg['loggers'], config.get('loglevelsfor'), level, True)
+
+    logcfg['root']['handlers'] = list(logcfg['handlers'].keys())
+
+    logging.config.dictConfig(logcfg)
+
+
+def _quiet_loggers(lgscfg, levelsfor, deflev, auto=True):
+
+    if levelsfor and isinstance(levelsfor, Mapping):
+        for lognm, level in levelsfor.items():
+            if not isinstance(level, int):
+                level = _log_levels_byname.get(str(level), level)
+            if isinstance(level, int):
+                lgscfg[lognm] = { "level": level }
+
+    if auto:
+        # jsonmerge is way too chatty at the DEBUG level
+        if deflev >= logging.DEBUG:
+            jmlevel = max(deflev, logging.INFO)
+            lgscfg["jsonmerge"] = { "level": jmlevel }
+
+        # filelock is one level too chatty
+        if deflev >= logging.DEBUG:
+            lgscfg["filelock"] = { "level": deflev+10 }
+
 def configure_log(logfile: str=None, level: int=None, format: str=None, config: Mapping=None,
                   addstderr=False):
     """
@@ -112,8 +319,13 @@ def configure_log(logfile: str=None, level: int=None, format: str=None, config: 
     as necessary.  These can be provided explicitly or provided via the 
     configuration; the former takes precedence.  
 
+    This function is deprecated by :py:function:`configure_logging`.
+
     If this is called a second time, it will first close the previously opened logfile, 
     reconfigure the logging to given inputs.  
+
+    See :py:func:`configure_logging` for a description of the configuration parameters looked 
+    for.  
 
     :param str logfile:  the path to the output logfile.  If given as a relative
                          path, it will be assumed that it is relative to a 
@@ -129,73 +341,8 @@ def configure_log(logfile: str=None, level: int=None, format: str=None, config: 
                          messages sent to standard error.
     :type  addstderr:    bool or str
     """
-    global global_logdir
-    global global_logfile
-    if not config:
-        config = {}
-    if not logfile:
-        logfile = config.get('logfile', 'pdr.log')
-
-    if not os.path.isabs(logfile):
-        # The log directory can be set either from the configuration or via
-        # the OAR_LOG_DIR environment variable; the former takes precedence
-        deflogdir = os.path.join(oar_home,'var','logs')
-        logdir = config.get('logdir', determine_default_logdir())
-        global_logdir = logdir
-        logfile = os.path.join(logdir, logfile)
-        if not os.path.exists(os.path.dirname(logfile)):
-            os.makedirs(os.path.dirname(logfile))
-    global_logfile = logfile
-    
-    if level is None:
-        level = config.get('loglevel', logging.DEBUG)
-    if not isinstance(level, int):
-        level = _log_levels_byname.get(str(level), level)
-    if not isinstance(level, int):
-        raise ConfigurationException("Unrecognized loglevel value: "+str(level))
-
-    if not format:
-        format = config.get('logformat', LOG_FORMAT)
-    frmtr = logging.Formatter(format)
-
-    global _log_handler
-    rootlogger = logging.getLogger()
-    if _log_handler:
-        rootlogger.removeHandler(_log_handler)
-        if hasattr(_log_handler, 'close'):
-            _log_handler.close()
-        _log_handler = None
-    _log_handler = logging.FileHandler(logfile)
-    _log_handler.setLevel(level)
-    _log_handler.setFormatter(frmtr)
-    rootlogger.addHandler(_log_handler)
-    rootlogger.setLevel(logging.DEBUG-1)
-
-    # jsonmerge is way too chatty at the DEBUG level
-    if level >= logging.DEBUG:
-        jmlevel = max(level, logging.INFO)
-        logging.getLogger("jsonmerge").setLevel(jmlevel)
-
-    # filelock is one level too chatty
-    if level >= logging.DEBUG:
-        logging.getLogger("filelock").setLevel(level+10)
-
-    # config can set levels on a per-logname basis
-    if config.get("loglevelsfor") and isinstance(config.get("loglevelsfor"), Mapping):
-        for lognm, level in config.get("loglevelsfor", {}).items():
-            if not isinstance(level, int):
-                level = _log_levels_byname.get(str(level), level)
-            if isinstance(level, int):
-                logging.getLogger(lognm).setLevel(level)
-    
-    if addstderr:
-        if not isinstance(addstderr, str):
-            addstderr = format
-        handler = logging.StreamHandler(sys.stderr)
-        handler.setLevel(logging.ERROR)
-        handler.setFormatter(logging.Formatter(addstderr))
-        rootlogger.addHandler(handler)
-        rootlogger.error("FYI: Writing log messages to %s",logfile)
+    _configure_log(logfile, level, format, config, addstderr)
+    logging.warning("Use of configure_log() is deprecated; use configure_logging()")
 
 def determine_default_logdir():
     out = os.environ.get('OAR_LOG_DIR', os.path.join(oar_home, 'var', 'logs'))

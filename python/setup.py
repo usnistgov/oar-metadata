@@ -65,7 +65,7 @@ setup(name='nistoar',
       scripts=[os.path.join("..","scripts",s) for s in 
                ["pdl2resources.py", "ingest-nerdm-res.py",
                 "ingest-field-info.py", "ingest-taxonomy.py",
-                "ingest-uwsgi.py" ]],
+                "ingest-uwsgi.py", "logserver" ]],
       cmdclass={'build_py': build},
       classifiers=[
           'Programming Language :: Python :: 3 :: Only'

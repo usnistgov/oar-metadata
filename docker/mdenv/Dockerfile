@@ -13,7 +13,7 @@ ENV OAR_UWSGI_OPTS="--ini /usr/share/uwsgi/conf/mdenv.ini"
 
 RUN python -m pip install --upgrade "setuptools>=61.0.0,<66.0.0" pip
 RUN apt-get remove -y python3-setuptools
-RUN python -m pip install json-spec jsonschema==2.4.0 requests \
+RUN python -m pip install json-spec jsonschema==2.4.0 requests psutil \
                           pytest==4.6.5 filelock crossrefapi pyyaml jsonpath_ng
 RUN python -m pip install --no-dependencies jsonmerge==1.3.0 
 
