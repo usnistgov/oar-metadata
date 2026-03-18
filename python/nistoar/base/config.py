@@ -6,6 +6,7 @@ import os, sys, json, yaml, time, re
 import logging, logging.handlers, logging.config
 import requests
 from collections.abc import Mapping
+from collections import ChainMap
 from urllib.parse import urlparse
 from copy import deepcopy
 
@@ -174,8 +175,8 @@ def configure_logging(config: Mapping, addstderr=False):
                     continue
                 if hdlr.get('filename') and not os.path.isabs(hdlr['filename']):
                     hdlr['filename'] = os.path.join(global_logdir, hdlr['filename'])
-        
-        logging.dictConfig(logcfg)
+
+        logging.dictConfig(ChainMap(logcfg, {"disable_existing_loggers": False}))
 
         ignored = [p for p in "logfile loglevel logformat loglevelsfor".split() if p in config]
         if ignored:
@@ -287,6 +288,7 @@ def _configure_log(logfile: str=None, level: int=None, format: str=None, config:
     }
 
     _quiet_loggers(logcfg['loggers'], config.get('loglevelsfor'), level, True)
+    logcfg["disable_existing_loggers"] = False
 
     logcfg['root']['handlers'] = list(logcfg['handlers'].keys())
 
