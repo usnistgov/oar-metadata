@@ -17,6 +17,7 @@ sys.path.insert(0, str(PIPELINE_ROOT / "python"))
 from nerdm_pipeline import (  # noqa: E402
     build_doc_model,
     build_guide_index,
+    load_curated_data,
     render_full_guide_html,
     render_type_index_html,
     render_type_section_html,
@@ -28,6 +29,7 @@ from nerdm_pipeline.fragments import (  # noqa: E402
 from nerdm_pipeline.io import load_json, write_json, write_text  # noqa: E402
 from nerdm_pipeline.schema_artifacts import build_schema_artifact  # noqa: E402
 from nerdm_pipeline.validate import (  # noqa: E402
+    raise_for_html_validation_errors,
     validate_css_files,
     validate_generated_html,
     validate_model_contract,
@@ -51,6 +53,8 @@ def main() -> None:
     header = _resolve(args.header)
     footer = _resolve(args.footer)
     nerdm_schema = _resolve(args.nerdm_schema)
+    schema_layers_path = _resolve(args.schema_layers)
+    record_examples_path = _resolve(args.record_examples)
 
     print("Building documentation model")
     model = build_doc_model(load_json(source))
@@ -63,6 +67,18 @@ def main() -> None:
     guide_index = build_guide_index(model)
     write_json(index_output, guide_index)
 
+    print("Loading curated guide data")
+    curated_data = load_curated_data(
+        schema_layers_path=str(schema_layers_path),
+        record_examples_path=str(record_examples_path),
+        model=model,
+    )
+    write_json(preview_dir / "nerdm-schema-layers.json", curated_data["schemaLayers"])
+    write_json(
+        preview_dir / "nerdm-record-examples.json",
+        curated_data["recordExamples"],
+    )
+
     print("Rendering full guide preview")
     schema_artifact = build_schema_artifact(load_json(nerdm_schema))
     full_guide_html = render_full_guide_html(
@@ -73,6 +89,8 @@ def main() -> None:
         header_html=header.read_text(encoding="utf-8"),
         footer_html=footer.read_text(encoding="utf-8"),
         schema_artifact=schema_artifact,
+        schema_layers=curated_data["schemaLayers"],
+        record_examples=curated_data["recordExamples"],
     )
     write_text(full_guide_output, full_guide_html)
 
@@ -92,7 +110,7 @@ def main() -> None:
 
     print("Checking generated HTML")
     html_result = validate_generated_html(full_guide_output)
-    _raise_if_html_failed(html_result)
+    raise_for_html_validation_errors(html_result)
 
     print("Checking generated CSS")
     css_issues = validate_css_files(
@@ -107,10 +125,10 @@ def main() -> None:
 
     print("")
     print("Preview build complete")
-    print(f"  Model: {model_output.relative_to(REPO_ROOT)}")
-    print(f"  Index: {index_output.relative_to(REPO_ROOT)}")
-    print(f"  Full guide: {full_guide_output.relative_to(REPO_ROOT)}")
-    print(f"  JS test guide: {enhanced_guide_output.relative_to(REPO_ROOT)}")
+    print(f"  Model: {_display_path(model_output)}")
+    print(f"  Index: {_display_path(index_output)}")
+    print(f"  Full guide: {_display_path(full_guide_output)}")
+    print(f"  JS test guide: {_display_path(enhanced_guide_output)}")
     print(f"  Types: {guide_index['counts']['types']}")
     print(f"  Properties: {guide_index['counts']['properties']}")
     print(f"  HTML IDs: {html_result.id_count}")
@@ -203,6 +221,16 @@ def _parse_args() -> argparse.Namespace:
         default="model/nerdm-schema.json",
         help="Current NERDm JSON Schema path",
     )
+    parser.add_argument(
+        "--schema-layers",
+        default="etc/help/nerdm-guide-pipeline/data/schema-layers.json",
+        help="Curated schema layers JSON path",
+    )
+    parser.add_argument(
+        "--record-examples",
+        default="etc/help/nerdm-guide-pipeline/data/record-examples.json",
+        help="Curated record examples JSON path",
+    )
     return parser.parse_args()
 
 
@@ -213,30 +241,18 @@ def _resolve(path: str) -> Path:
     return REPO_ROOT / candidate
 
 
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.relative_to(REPO_ROOT))
+    except ValueError:
+        return str(path)
+
+
 def _with_enhancement_script(html: str, script_href: str) -> str:
+    """Attach optional local JavaScript after the CSP-safe preview is written."""
+
     script = f'  <script src="{script_href}" defer></script>\n'
     return html.replace("</body>", f"{script}</body>")
-
-
-def _raise_if_html_failed(html_result) -> None:
-    failures: list[str] = []
-
-    if html_result.duplicate_ids:
-        failures.append(
-            "Duplicate IDs:\n  " + "\n  ".join(html_result.duplicate_ids)
-        )
-    if html_result.unresolved_fragments:
-        failures.append(
-            "Unresolved fragment links:\n  "
-            + "\n  ".join(html_result.unresolved_fragments)
-        )
-    if html_result.csp_issues:
-        failures.append(
-            "CSP-sensitive markup:\n  " + "\n  ".join(html_result.csp_issues)
-        )
-
-    if failures:
-        raise RuntimeError("\n\n".join(failures))
 
 
 if __name__ == "__main__":

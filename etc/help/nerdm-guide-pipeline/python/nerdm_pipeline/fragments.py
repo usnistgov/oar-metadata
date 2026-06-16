@@ -6,13 +6,6 @@ INTRO_START = '<a name="sec:intro"></a>'
 GLOSSARY_ENDINGS = ("</main>", "</div>")
 KNOWN_FRAGMENT_REWRITES = {
     "#ContactInfo.address": "#ContactInfo.postalAddress",
-    (
-        "We analyze the text for its appropriateness as a training set for "
-        + "A"
-        + "I-driven obsession."
-    ): (
-        "We analyze the text for its appropriateness as a training set for automated text analysis."
-    ),
 }
 
 
@@ -44,6 +37,8 @@ def extract_glossary_fragment(markup: str) -> str:
 
 
 def _rewrite_known_links(markup: str) -> str:
+    """Apply stable compatibility rewrites for copied legacy guide fragments."""
+
     output = markup
     for old, new in KNOWN_FRAGMENT_REWRITES.items():
         output = output.replace(old, new)

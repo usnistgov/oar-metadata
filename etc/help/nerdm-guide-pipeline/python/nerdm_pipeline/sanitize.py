@@ -31,6 +31,8 @@ ALLOWED_CLASSES = {
 
 
 def sanitize_inline_html(value: Any) -> str:
+    """Return safe inline markup for descriptions copied from source metadata."""
+
     parser = _InlineSanitizer()
     parser.feed("" if value is None else str(value))
     parser.close()

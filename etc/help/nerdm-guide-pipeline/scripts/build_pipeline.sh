@@ -71,6 +71,8 @@ resolve_path() {
   esac
 }
 
+# Treat a trailing slash or existing directory as a request to keep the default
+# tarball filename at that destination.
 destination_path() {
   local dest="$1"
   local source="$2"

@@ -16,7 +16,9 @@ from nerdm_pipeline.io import load_json, write_text  # noqa: E402
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Render a standalone Named Types index review page."
+    )
     parser.add_argument("--index", required=True, help="Path to guide index JSON")
     parser.add_argument("--output", required=True, help="Output HTML path")
     parser.add_argument(

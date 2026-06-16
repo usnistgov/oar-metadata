@@ -73,6 +73,8 @@ def _order_types(
     types: list[dict[str, Any]],
     groups: list[dict[str, str]],
 ) -> list[dict[str, Any]]:
+    """Keep configured type groups first while preserving source order in groups."""
+
     group_order = {group["id"]: index for index, group in enumerate(groups)}
     return [
         item
@@ -140,6 +142,8 @@ def _property_doc(
     inherited_from: dict[str, str] | None,
     source_pointer: str,
 ) -> dict[str, Any]:
+    """Return the normalized model record for an owned or inherited property."""
+
     property_name = str(prop.get("name") or "")
     source_type = str(prop.get("parent") or owner)
     description = _string_list(prop.get("description"))
@@ -152,6 +156,9 @@ def _property_doc(
         "value": _value_descriptor(prop.get("type") or {}),
         "description": description,
         "brief": _text(prop.get("brief") or _first(description)),
+        # Inherited properties link back to the original declaring type. This
+        # avoids duplicate anchors when several child types inherit the same
+        # parent property.
         "anchor": (
             _anchor(owner, property_name)
             if inherited_from is None
@@ -300,6 +307,8 @@ def _anchor(type_name: str, property_name: str | None = None) -> str:
 
 
 def _render_template(value: Any) -> str:
+    """Render the small template objects used by the legacy view JSON."""
+
     if value is None:
         return ""
     if isinstance(value, str):

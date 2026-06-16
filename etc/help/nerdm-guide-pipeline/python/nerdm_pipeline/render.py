@@ -77,15 +77,15 @@ def render_type_index_html(
             f'  <link rel="stylesheet" href="{escape(stylesheet)}">',
             "</head>",
             "<body>",
-            '  <main class="prototype-shell nerdm-docs nerdm-article">',
-            '    <section class="type-index-prototype" aria-labelledby="type-index-title">',
-            '      <header class="type-index-prototype__header">',
+            '  <main class="preview-shell nerdm-docs nerdm-article">',
+            '    <section class="type-index-view" aria-labelledby="type-index-title">',
+            '      <header class="type-index-view__header">',
             "        <div>",
-            '          <p class="type-index-prototype__eyebrow">NERDm reference</p>',
+            '          <p class="type-index-view__eyebrow">NERDm reference</p>',
             '          <h1 id="type-index-title">Named Types</h1>',
             "        </div>",
             "      </header>",
-            '      <div class="type-index-prototype__groups">',
+            '      <div class="type-index-view__groups">',
             group_markup,
             "      </div>",
             "    </section>",
@@ -163,7 +163,7 @@ def render_type_section_html(
             f'  <link rel="stylesheet" href="{escape(stylesheet)}">',
             "</head>",
             "<body>",
-            '  <main class="prototype-shell">',
+            '  <main class="preview-shell">',
             _render_type_article(type_doc),
             "  </main>",
             "</body>",
@@ -190,6 +190,8 @@ def render_full_guide_html(
     header_html: str = "",
     footer_html: str = "",
     schema_artifact: dict[str, str] | None = None,
+    schema_layers: dict[str, Any] | None = None,
+    record_examples: dict[str, Any] | None = None,
 ) -> str:
     """Render a standalone static preview for the full generated guide."""
 
@@ -201,6 +203,8 @@ def render_full_guide_html(
         intro_html=intro_html,
         glossary_html=glossary_html,
         schema_artifact=schema_artifact,
+        schema_layers=schema_layers,
+        record_examples=record_examples,
     ).rstrip()
 
     return "\n".join(
@@ -213,6 +217,8 @@ def render_full_guide_html(
             "  <title>NERDm Reader's Guide</title>",
             '  <link rel="alternate" type="application/json" href="nerdm-guide-index.json" title="NERDm Guide Index">',
             '  <link rel="alternate" type="application/json" href="nerdm-doc-model.json" title="NERDm Documentation Model">',
+            '  <link rel="alternate" type="application/json" href="nerdm-schema-layers.json" title="NERDm Schema Layers">',
+            '  <link rel="alternate" type="application/json" href="nerdm-record-examples.json" title="NERDm Record Examples">',
             '  <link rel="alternate" type="application/schema+json" href="../nerdm-schema/nerdm-schema.json" title="NERDm JSON Schema">',
             '  <link rel="stylesheet" href="/css/font-awesome.min.css">',
             f'  <link rel="stylesheet" href="{escape(stylesheet)}">',
@@ -235,6 +241,8 @@ def render_guide_body_html(
     intro_html: str = "",
     glossary_html: str = "",
     schema_artifact: dict[str, str] | None = None,
+    schema_layers: dict[str, Any] | None = None,
+    record_examples: dict[str, Any] | None = None,
 ) -> str:
     """Render the oar-docker runtime body fragment for the generated guide."""
 
@@ -243,6 +251,7 @@ def render_guide_body_html(
     sections = _render_reference_sections(
         model,
         guide_index,
+        schema_layers=schema_layers,
         duplicate_property_ids=duplicate_property_ids,
         available_fragment_ids=fragment_ids,
     )
@@ -258,6 +267,8 @@ def render_guide_body_html(
                 model,
                 guide_index,
                 schema_artifact=schema_artifact,
+                schema_layers=schema_layers,
+                record_examples=record_examples,
             ),
             "      </aside>",
             '      <main class="nerdm-article nerdm-guide-content" id="nerdm-main">',
@@ -273,6 +284,7 @@ def render_guide_body_html(
                 "Glossary",
                 glossary_html,
             ),
+            _render_record_examples_section(record_examples),
             "      </main>",
             "    </div>",
             "",
@@ -314,11 +326,15 @@ def _render_guide_hero(model: dict[str, Any], guide_index: dict[str, Any]) -> st
     )
 
 def _runtime_header_fragment(header_html: str) -> str:
+    """Use the oar-docker header when present, otherwise open the content shell."""
+
     fragment = header_html.strip()
     return fragment if fragment else '<div id="content">'
 
 
 def _runtime_footer_fragment(footer_html: str) -> str:
+    """Use the oar-docker footer when present, otherwise close the content shell."""
+
     fragment = footer_html.strip()
     return fragment if fragment else "</div>"
 
@@ -327,9 +343,12 @@ def _render_reference_sections(
     model: dict[str, Any],
     guide_index: dict[str, Any],
     *,
+    schema_layers: dict[str, Any] | None,
     duplicate_property_ids: set[str],
     available_fragment_ids: set[str],
 ) -> str:
+    """Render the generated reference section and its curated companion content."""
+
     type_by_id = {item["id"]: item for item in model["types"]}
     group_sections = "\n".join(
         _render_type_group_section(
@@ -348,6 +367,7 @@ def _render_reference_sections(
             "            <p>Reference</p>",
             '            <h2 id="named-types-reference-title">NERDm Reference</h2>',
             "          </div>",
+            _render_schema_layers_section(schema_layers),
             '          <div class="nerdm-subsection-heading nerdm-subsection-heading--reference nerdm-subsection-heading--types">',
             '            <h3 id="named-types-index">Named Types</h3>',
             "          </div>",
@@ -390,6 +410,8 @@ def _render_type_group_section(
 
 
 def _render_hand_authored_fragment(section_id: str, label: str, markup: str) -> str:
+    """Wrap existing guide prose so it can sit beside generated reference HTML."""
+
     if not markup.strip():
         return ""
 
@@ -403,6 +425,8 @@ def _render_hand_authored_fragment(section_id: str, label: str, markup: str) -> 
 
 
 def _inject_fragment_carets(markup: str) -> str:
+    """Match copied details summaries to the generated accordion controls."""
+
     replacements = {
         '<summary class="annotated-example__summary">JSON syntax example</summary>':
             f'<summary class="annotated-example__summary">'
@@ -516,15 +540,15 @@ def _render_type_index_panel(guide_index: dict[str, Any]) -> str:
 
     return "\n".join(
         [
-            '        <details class="type-index type-index-prototype" id="schema-reference" aria-labelledby="type-index-title" open>',
-            '          <summary class="type-index__header type-index-prototype__header">',
+            '        <details class="type-index type-index-view" id="schema-reference" aria-labelledby="type-index-title" open>',
+            '          <summary class="type-index__header type-index-view__header">',
             "            <div>",
             '              <h2 id="type-index-title">Type Index</h2>',
             "            </div>",
             f"            {DETAIL_CARET}",
             "          </summary>",
             _render_type_index_filter(guide_index),
-            '          <div class="type-index-prototype__groups">',
+            '          <div class="type-index-view__groups">',
             group_markup,
             "          </div>",
             "        </details>",
@@ -537,7 +561,7 @@ def _render_type_index_filter(guide_index: dict[str, Any]) -> str:
 
     return "\n".join(
         [
-            '          <div class="type-index-prototype__tools nerdm-enhancement" data-nerdm-enhancement="type-index-filter" hidden>',
+            '          <div class="type-index-view__tools nerdm-enhancement" data-nerdm-enhancement="type-index-filter" hidden>',
             '            <label class="type-index-filter__label" for="type-index-filter-input">Filter types</label>',
             '            <div class="type-index-filter__field">',
             f'              <span class="type-index-filter__search-icon" aria-hidden="true">{SEARCH_ICON}</span>',
@@ -555,7 +579,6 @@ def _render_guide_toc(guide_index: dict[str, Any]) -> str:
     reference_items = "\n".join(
         _render_guide_toc_type_group(group) for group in guide_index["groups"]
     )
-    type_count = guide_index["counts"]["types"]
 
     return "\n".join(
         [
@@ -577,6 +600,7 @@ def _render_guide_toc(guide_index: dict[str, Any]) -> str:
             '                <a class="nerdm-toc-section__title" href="#named-types-reference">NERDm Reference</a>',
             "              </div>",
             '              <ol class="nerdm-toc-section__groups">',
+            '                <li><a class="nerdm-toc-link nerdm-toc-link--subtle" href="#schema-layers">Schema layers</a></li>',
             '                <li><a class="nerdm-toc-link nerdm-toc-link--subtle" href="#named-types-index">Named Types</a></li>',
             reference_items,
             "              </ol>",
@@ -584,6 +608,11 @@ def _render_guide_toc(guide_index: dict[str, Any]) -> str:
             '            <li class="nerdm-toc-section">',
             '              <div class="nerdm-toc-section__header nerdm-toc-section__header--glossary">',
             '                <a class="nerdm-toc-section__title" href="#sec:glossary">Glossary</a>',
+            "              </div>",
+            "            </li>",
+            '            <li class="nerdm-toc-section">',
+            '              <div class="nerdm-toc-section__header nerdm-toc-section__header--examples">',
+            '                <a class="nerdm-toc-section__title" href="#record-examples">Examples</a>',
             "              </div>",
             "            </li>",
             "          </ol>",
@@ -598,9 +627,15 @@ def _render_data_artifacts_card(
     guide_index: dict[str, Any],
     *,
     schema_artifact: dict[str, str] | None = None,
+    schema_layers: dict[str, Any] | None = None,
+    record_examples: dict[str, Any] | None = None,
 ) -> str:
+    """Render links to the machine-readable artifacts shipped with the guide."""
+
     model_version = model.get("modelVersion", "")
     index_version = guide_index.get("indexVersion", "")
+    schema_layers_version = (schema_layers or {}).get("version", "")
+    record_examples_version = (record_examples or {}).get("version", "")
     schema_item = {
         "label": "NERDm JSON Schema",
         "href": "../nerdm-schema/nerdm-schema.json",
@@ -637,6 +672,24 @@ def _render_data_artifacts_card(
                 "types, properties, descriptions, inheritance, and anchors."
             ),
         },
+        {
+            "label": "Schema layers",
+            "href": "nerdm-schema-layers.json",
+            "version": _artifact_version(schema_layers_version),
+            "description": (
+                "Curated layer data showing how the core NERDm schema and "
+                "public-data extension relate to named types."
+            ),
+        },
+        {
+            "label": "Record examples",
+            "href": "nerdm-record-examples.json",
+            "version": _artifact_version(record_examples_version),
+            "description": (
+                "Curated examples from the NIST records service used by the "
+                "examples section."
+            ),
+        },
         schema_item,
     ]
     items = "\n".join(_render_data_artifact_item(item) for item in artifacts)
@@ -651,6 +704,177 @@ def _render_data_artifacts_card(
             items,
             "          </ul>",
             "        </section>",
+        ]
+    )
+
+
+def _render_schema_layers_section(data: dict[str, Any] | None) -> str:
+    """Render the curated overview of core and extension schema layers."""
+
+    if not data or not data.get("layers"):
+        return ""
+
+    layers = "\n".join(_render_schema_layer(layer) for layer in data["layers"])
+    chains = "\n".join(_render_schema_chain(chain) for chain in data.get("chains") or [])
+    chain_block = (
+        "\n".join(
+            [
+                '            <div class="schema-chain-panel">',
+                "              <h4>How NERDm types build on each other</h4>",
+                '              <p>Read each row left to right. The row title names a common record or component shape; the type cards show the base schema type, any extension type, and the most specific type used for that shape.</p>',
+                '              <dl class="schema-chain-legend" aria-label="Extension chain legend">',
+                "                <div><dt>Base type</dt><dd>Defines the generic NERDm shape.</dd></div>",
+                "                <div><dt>Extension type</dt><dd>Adds public-data behavior.</dd></div>",
+                "                <div><dt>Specific type</dt><dd>Names the concrete record or component pattern.</dd></div>",
+                "              </dl>",
+                '              <div class="schema-chain-list">',
+                chains,
+                "              </div>",
+                '              <p class="schema-chain-panel__examples">Want to see these patterns in real metadata? <a href="#record-examples">Jump to curated record examples</a>.</p>',
+                "            </div>",
+            ]
+        )
+        if chains
+        else ""
+    )
+
+    return "\n".join(
+        [
+            '          <div class="nerdm-subsection-heading nerdm-subsection-heading--reference nerdm-subsection-heading--types">',
+            f'            <h3 id="schema-layers">{escape(data.get("title") or "Schema layers")}</h3>',
+            "          </div>",
+            '          <section class="schema-layers" aria-labelledby="schema-layers">',
+            f'            <p class="schema-layers__intro">{escape(data.get("description") or "")}</p>',
+            '            <div class="schema-layer-grid">',
+            layers,
+            "            </div>",
+            chain_block,
+            "          </section>",
+        ]
+    )
+
+
+def _render_schema_layer(layer: dict[str, Any]) -> str:
+    type_items = "\n".join(
+        _render_schema_layer_type(item) for item in layer.get("types") or []
+    )
+    artifact = str(layer.get("artifact") or "")
+    artifact_markup = (
+        f'              <code>{escape(artifact)}</code>' if artifact else ""
+    )
+
+    return "\n".join(
+        [
+            '              <article class="schema-layer-card">',
+            '                <header class="schema-layer-card__header">',
+            f'                  <h4>{escape(layer.get("label") or layer.get("id") or "Schema layer")}</h4>',
+            artifact_markup,
+            "                </header>",
+            f'                <p>{escape(layer.get("summary") or "")}</p>',
+            '                <p class="schema-layer-card__list-label">Representative named types</p>',
+            '                <ul class="schema-layer-types">',
+            type_items,
+            "                </ul>",
+            "              </article>",
+        ]
+    )
+
+
+def _render_schema_layer_type(item: dict[str, Any]) -> str:
+    name = str(item.get("name") or "")
+    return (
+        '<li>'
+        f'<a href="#{escape(name)}">{escape(name)}</a>'
+        "</li>"
+    )
+
+
+def _render_schema_chain(chain: dict[str, Any]) -> str:
+    type_names = [str(name) for name in chain.get("types") or []]
+    type_links = "\n".join(
+        _render_schema_chain_type(name, index, len(type_names))
+        for index, name in enumerate(type_names)
+    )
+    return "\n".join(
+        [
+            '                <div class="schema-chain">',
+            f'                  <h5>{escape(chain.get("label") or "Extension path")}</h5>',
+            '                  <ol>',
+            type_links,
+            "                  </ol>",
+            "                </div>",
+        ]
+    )
+
+
+def _render_schema_chain_type(name: str, index: int, count: int) -> str:
+    if index == 0:
+        role = "Base type"
+    elif index == count - 1:
+        role = "Specific type"
+    else:
+        role = "Extension type"
+
+    return "\n".join(
+        [
+            "                  <li>",
+            f'                    <span class="schema-chain__role">{escape(role)}</span>',
+            f'                    <a href="#{escape(name)}">{escape(name)}</a>',
+            "                  </li>",
+        ]
+    )
+
+
+def _render_record_examples_section(data: dict[str, Any] | None) -> str:
+    """Render curated examples that show NERDm types in live record patterns."""
+
+    if not data or not data.get("examples"):
+        return ""
+
+    cards = "\n".join(_render_record_example_card(item) for item in data["examples"])
+    return "\n".join(
+        [
+            '        <section class="record-examples-section" id="record-examples" aria-labelledby="record-examples-title">',
+            '          <div class="nerdm-section-heading nerdm-section-heading--examples">',
+            "            <p>Examples</p>",
+            f'            <h2 id="record-examples-title">{escape(data.get("title") or "NERDm record examples")}</h2>',
+            "          </div>",
+            f'          <p class="record-examples-section__intro">{escape(data.get("description") or "")}</p>',
+            '          <div class="record-example-grid">',
+            cards,
+            "          </div>",
+            "        </section>",
+        ]
+    )
+
+
+def _render_record_example_card(item: dict[str, Any]) -> str:
+    types = "\n".join(
+        f'              <a href="#{escape(str(name))}">{escape(str(name))}</a>'
+        for name in item.get("types") or []
+    )
+    features = "\n".join(
+        f"              <li>{escape(str(feature))}</li>"
+        for feature in item.get("features") or []
+    )
+    return "\n".join(
+        [
+            '            <article class="record-example-card">',
+            '              <p class="record-example-card__label">'
+            f'{escape(item.get("label") or "Record example")}</p>',
+            f'              <h3>{escape(item.get("title") or "")}</h3>',
+            f'              <p>{escape(item.get("summary") or "")}</p>',
+            '              <div class="record-example-card__types" aria-label="NERDm types shown">',
+            types,
+            "              </div>",
+            '              <ul class="record-example-card__features">',
+            features,
+            "              </ul>",
+            '              <div class="record-example-card__actions">',
+            f'                <a href="{escape(item.get("recordUrl") or "")}" target="_blank" rel="noopener noreferrer">JSON record</a>',
+            f'                <a href="{escape(item.get("landingPageUrl") or "")}" target="_blank" rel="noopener noreferrer">Landing page</a>',
+            "              </div>",
+            "            </article>",
         ]
     )
 
@@ -676,7 +900,7 @@ def _render_data_artifact_item(item: dict[str, str]) -> str:
     return "\n".join(
         [
             '            <li class="nerdm-data-artifact">',
-            f'              <a class="nerdm-data-artifact__link" href="{href}">',
+            f'              <a class="nerdm-data-artifact__link" href="{href}" target="_blank" rel="noopener noreferrer">',
             f'                <span class="nerdm-data-artifact__label">{label}</span>',
             '                <span class="nerdm-data-artifact__meta">',
             '                  <span class="nerdm-data-artifact__format">JSON</span>',
@@ -1002,6 +1226,8 @@ def _render_property_card(
 
 
 def _property_card_id(prop: dict[str, Any], duplicate_property_ids: set[str]) -> str:
+    """Return a unique DOM ID for property rows that share a model property ID."""
+
     inherited = prop.get("inheritedFrom")
     if inherited is None or prop["id"] not in duplicate_property_ids:
         return prop["id"]
@@ -1023,6 +1249,8 @@ def _duplicate_property_ids(model: dict[str, Any]) -> set[str]:
 
 
 def _fragment_ids(model: dict[str, Any], duplicate_property_ids: set[str]) -> set[str]:
+    """Return generated IDs used to keep intra-page links resolvable."""
+
     fragments = {
         "guide-title",
         "schema-reference",

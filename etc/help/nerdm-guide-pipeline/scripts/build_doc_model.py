@@ -16,7 +16,9 @@ from nerdm_pipeline.io import load_json, write_json  # noqa: E402
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Build the NERDm documentation model from nerdm-view.json."
+    )
     parser.add_argument("--source", required=True, help="Path to nerdm-view.json")
     parser.add_argument("--output", required=True, help="Output model JSON path")
     args = parser.parse_args()

@@ -19,6 +19,7 @@ sys.path.insert(0, str(PIPELINE_ROOT / "python"))
 from nerdm_pipeline import (  # noqa: E402
     build_doc_model,
     build_guide_index,
+    load_curated_data,
     render_guide_body_html,
 )
 from nerdm_pipeline.fragments import (  # noqa: E402
@@ -28,6 +29,7 @@ from nerdm_pipeline.fragments import (  # noqa: E402
 from nerdm_pipeline.io import load_json, write_json, write_text  # noqa: E402
 from nerdm_pipeline.schema_artifacts import build_schema_artifact  # noqa: E402
 from nerdm_pipeline.validate import (  # noqa: E402
+    raise_for_html_validation_errors,
     validate_css_files,
     validate_generated_html,
     validate_model_contract,
@@ -54,6 +56,8 @@ def main() -> None:
     help_css_output = package_doc_dir / "helpview.css"
     type_index_css_output = package_doc_dir / "type-index.css"
     type_section_css_output = package_doc_dir / "type-section.css"
+    schema_layers_output = package_doc_dir / "nerdm-schema-layers.json"
+    record_examples_output = package_doc_dir / "nerdm-record-examples.json"
 
     print("Building documentation model")
     model = build_doc_model(load_json(source))
@@ -62,6 +66,13 @@ def main() -> None:
     print("Building structured guide index")
     guide_index = build_guide_index(model)
 
+    print("Loading curated guide data")
+    curated_data = load_curated_data(
+        schema_layers_path=str(_resolve(args.schema_layers)),
+        record_examples_path=str(_resolve(args.record_examples)),
+        model=model,
+    )
+
     print("Rendering runtime guide body")
     schema_artifact = build_schema_artifact(
         load_json(model_source_dir / "nerdm-schema.json")
@@ -69,11 +80,15 @@ def main() -> None:
     guide_body = render_guide_body_html(
         model,
         guide_index,
-        intro_html=extract_intro_fragment(_resolve(args.intro).read_text(encoding="utf-8")),
+        intro_html=extract_intro_fragment(
+            _resolve(args.intro).read_text(encoding="utf-8")
+        ),
         glossary_html=extract_glossary_fragment(
             _resolve(args.glossary).read_text(encoding="utf-8")
         ),
         schema_artifact=schema_artifact,
+        schema_layers=curated_data["schemaLayers"],
+        record_examples=curated_data["recordExamples"],
     )
 
     print("Writing runtime package files")
@@ -81,13 +96,15 @@ def main() -> None:
     write_text(body_output, guide_body)
     write_json(model_output, model)
     write_json(index_output, guide_index)
+    write_json(schema_layers_output, curated_data["schemaLayers"])
+    write_json(record_examples_output, curated_data["recordExamples"])
     write_text(help_css_output, _runtime_helpview_css(render_dir))
     write_text(type_index_css_output, _runtime_css(render_dir / "type-index.css"))
     write_text(type_section_css_output, _runtime_css(render_dir / "type-section.css"))
 
     print("Checking runtime HTML")
     html_result = validate_generated_html(body_output)
-    _raise_if_html_failed(html_result)
+    raise_for_html_validation_errors(html_result)
 
     print("Checking runtime CSS")
     css_issues = validate_css_files(
@@ -105,6 +122,8 @@ def main() -> None:
         type_section_css_output,
         index_output,
         model_output,
+        schema_layers_output,
+        record_examples_output,
     ]
     _write_tarball(tarball, output_dir, package_files)
 
@@ -156,6 +175,16 @@ def _parse_args() -> argparse.Namespace:
         help="Source directory containing current schema and JSON-LD context files",
     )
     parser.add_argument(
+        "--schema-layers",
+        default="etc/help/nerdm-guide-pipeline/data/schema-layers.json",
+        help="Curated schema layers JSON path",
+    )
+    parser.add_argument(
+        "--record-examples",
+        default="etc/help/nerdm-guide-pipeline/data/record-examples.json",
+        help="Curated record examples JSON path",
+    )
+    parser.add_argument(
         "--output-dir",
         default="etc/help/nerdm-guide-pipeline/dist/nerdm-docs",
         help="Runtime package staging directory",
@@ -187,11 +216,15 @@ def _runtime_helpview_css(render_dir: Path) -> str:
 
 
 def _runtime_css(path: Path) -> str:
+    """Return CSS suitable for the oar-docker package."""
+
     text = path.read_text(encoding="utf-8")
-    return text.replace("/* prototype */", "").rstrip() + "\n"
+    return text.replace("/* preview-only */", "").rstrip() + "\n"
 
 
 def _write_support_docs(model_source_dir: Path, package_root: Path) -> list[Path]:
+    """Copy schema and JSON-LD files required by the published docs route."""
+
     package_root.mkdir(parents=True, exist_ok=True)
     outputs: list[Path] = []
 
@@ -224,6 +257,8 @@ def _copy_file(source: Path, output: Path) -> None:
 
 
 def _install_schema(source: Path, package_root: Path) -> tuple[Path, Path]:
+    """Copy one schema file and create the version alias used by oar-docker."""
+
     schema = load_json(source)
     identifier = schema.get("@id") or schema.get("id")
     if not isinstance(identifier, str) or "/od/dm/" not in identifier:
@@ -252,27 +287,6 @@ def _write_tarball(tarball: Path, package_root: Path, package_files: list[Path])
     with tarfile.open(tarball, "w:gz") as archive:
         for path in package_files:
             archive.add(path, arcname=path.relative_to(package_root))
-
-
-def _raise_if_html_failed(html_result) -> None:
-    failures: list[str] = []
-
-    if html_result.duplicate_ids:
-        failures.append(
-            "Duplicate IDs:\n  " + "\n  ".join(html_result.duplicate_ids)
-        )
-    if html_result.unresolved_fragments:
-        failures.append(
-            "Unresolved fragment links:\n  "
-            + "\n  ".join(html_result.unresolved_fragments)
-        )
-    if html_result.csp_issues:
-        failures.append(
-            "CSP-sensitive markup:\n  " + "\n  ".join(html_result.csp_issues)
-        )
-
-    if failures:
-        raise RuntimeError("\n\n".join(failures))
 
 
 if __name__ == "__main__":

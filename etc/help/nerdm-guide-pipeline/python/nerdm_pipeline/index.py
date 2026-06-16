@@ -10,6 +10,8 @@ MODEL_PATH = "nerdm-doc-model.json"
 
 
 def build_guide_index(model: dict[str, Any]) -> dict[str, Any]:
+    """Return the small lookup artifact used by navigation and integrations."""
+
     anchors = _canonical_anchor_records(model)
     inherited_references = _inherited_reference_records(model)
 
@@ -102,6 +104,8 @@ def _compact_property(prop: dict[str, Any]) -> dict[str, Any]:
 
 
 def _canonical_anchor_records(model: dict[str, Any]) -> list[dict[str, Any]]:
+    """List anchors that own a visible section in the rendered guide."""
+
     records: list[dict[str, Any]] = []
 
     for group in model["typeGroups"]:
@@ -140,6 +144,8 @@ def _canonical_anchor_records(model: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def _inherited_reference_records(model: dict[str, Any]) -> list[dict[str, Any]]:
+    """List inherited properties whose canonical anchors live on parent types."""
+
     records: list[dict[str, Any]] = []
 
     for item in model["types"]:

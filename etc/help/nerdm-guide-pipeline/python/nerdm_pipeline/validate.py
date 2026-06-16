@@ -26,6 +26,8 @@ class HtmlValidationResult:
 
 
 class _GuideHtmlInspector(HTMLParser):
+    """Collect anchors, same-page links, and CSP-sensitive constructs."""
+
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
         self.ids: list[str] = []
@@ -142,6 +144,25 @@ def validate_generated_html(path: str | Path) -> HtmlValidationResult:
         id_count=len(inspector.ids),
         fragment_link_count=len(inspector.fragment_links),
     )
+
+
+def raise_for_html_validation_errors(result: HtmlValidationResult) -> None:
+    """Raise a build error when generated HTML validation found blocking issues."""
+
+    failures: list[str] = []
+
+    if result.duplicate_ids:
+        failures.append("Duplicate IDs:\n  " + "\n  ".join(result.duplicate_ids))
+    if result.unresolved_fragments:
+        failures.append(
+            "Unresolved fragment links:\n  "
+            + "\n  ".join(result.unresolved_fragments)
+        )
+    if result.csp_issues:
+        failures.append("CSP-sensitive markup:\n  " + "\n  ".join(result.csp_issues))
+
+    if failures:
+        raise RuntimeError("\n\n".join(failures))
 
 
 def validate_css_files(paths: list[str | Path]) -> list[str]:

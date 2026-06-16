@@ -16,7 +16,9 @@ from nerdm_pipeline.io import load_json, write_text  # noqa: E402
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Render a standalone review page for one NERDm named type."
+    )
     parser.add_argument("--model", required=True, help="Path to doc model JSON")
     parser.add_argument("--type", required=True, help="NERDm type name to render")
     parser.add_argument("--output", required=True, help="Output HTML path")

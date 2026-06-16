@@ -1,0 +1,105 @@
+{
+  "version": "0.1",
+  "title": "Schema layers",
+  "description": "NERDm starts with core resource and component types, then adds extension types for public data records and data publications.",
+  "layers": [
+    {
+      "id": "core",
+      "label": "Core NERDm schema",
+      "summary": "Defines the base Resource and Component shapes plus shared supporting named types.",
+      "artifact": "model/nerdm-schema.json",
+      "types": [
+        {
+          "name": "Resource",
+          "role": "resource root"
+        },
+        {
+          "name": "Component",
+          "role": "component root"
+        },
+        {
+          "name": "RelatedResource",
+          "role": "relationship base"
+        },
+        {
+          "name": "ResourceReference",
+          "role": "resource link"
+        },
+        {
+          "name": "ContactInfo",
+          "role": "contact object"
+        },
+        {
+          "name": "Organization",
+          "role": "organization object"
+        }
+      ]
+    },
+    {
+      "id": "public-data",
+      "label": "Public Data extension",
+      "summary": "Adds publication, distribution, file, access-page, and contributor types used by public data records.",
+      "artifact": "model/nerdm-pub-schema.json",
+      "types": [
+        {
+          "name": "PublicDataResource",
+          "role": "public record"
+        },
+        {
+          "name": "DataPublication",
+          "role": "citable publication"
+        },
+        {
+          "name": "DownloadableFile",
+          "role": "download base"
+        },
+        {
+          "name": "DataFile",
+          "role": "data file"
+        },
+        {
+          "name": "Subcollection",
+          "role": "file group"
+        },
+        {
+          "name": "AccessPage",
+          "role": "access route"
+        },
+        {
+          "name": "Person",
+          "role": "author"
+        },
+        {
+          "name": "Affiliation",
+          "role": "organization link"
+        }
+      ]
+    }
+  ],
+  "chains": [
+    {
+      "label": "Public data record",
+      "types": [
+        "Resource",
+        "PublicDataResource",
+        "DataPublication"
+      ]
+    },
+    {
+      "label": "Downloadable data file",
+      "types": [
+        "Component",
+        "DownloadableFile",
+        "DataFile"
+      ]
+    },
+    {
+      "label": "Search access page",
+      "types": [
+        "Component",
+        "AccessPage",
+        "SearchPage"
+      ]
+    }
+  ]
+}

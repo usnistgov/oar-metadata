@@ -16,7 +16,9 @@ from nerdm_pipeline.io import load_json, write_json  # noqa: E402
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Build the compact guide index from a documentation model."
+    )
     parser.add_argument("--model", required=True, help="Path to doc model JSON")
     parser.add_argument("--output", required=True, help="Output index JSON path")
     args = parser.parse_args()

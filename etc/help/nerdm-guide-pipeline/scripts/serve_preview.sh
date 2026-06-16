@@ -92,6 +92,8 @@ choose_asset_root() {
   die "could not find oar-docker asset root; pass --asset-root"
 }
 
+# Keep staged preview files disposable while serving shared static assets from
+# either a local oar-docker checkout or the checked-in runtime reference copy.
 stage_symlink() {
   local source="$1"
   local target="$2"
@@ -107,6 +109,8 @@ stage_preview() {
   local index_file="$preview_dir/nerdm-guide-index.json"
   local model_file="$preview_dir/nerdm-doc-model.json"
   local source_html="$preview_dir/index.html"
+  local schema_layers_file="$preview_dir/nerdm-schema-layers.json"
+  local record_examples_file="$preview_dir/nerdm-record-examples.json"
   local asset_root
 
   if [[ "$ENHANCED" -eq 1 ]]; then
@@ -116,6 +120,8 @@ stage_preview() {
   [[ -f "$source_html" ]] || die "missing preview HTML: $source_html"
   [[ -f "$index_file" ]] || die "missing guide index: $index_file"
   [[ -f "$model_file" ]] || die "missing documentation model: $model_file"
+  [[ -f "$schema_layers_file" ]] || die "missing schema layers data: $schema_layers_file"
+  [[ -f "$record_examples_file" ]] || die "missing record examples data: $record_examples_file"
 
   asset_root="$(choose_asset_root)"
 
@@ -128,6 +134,8 @@ stage_preview() {
   cp "$render_dir/type-section.css" "$SERVE_DIR/"
   cp "$index_file" "$SERVE_DIR/nerdm-guide-index.json"
   cp "$model_file" "$SERVE_DIR/nerdm-doc-model.json"
+  cp "$schema_layers_file" "$SERVE_DIR/nerdm-schema-layers.json"
+  cp "$record_examples_file" "$SERVE_DIR/nerdm-record-examples.json"
 
   if [[ "$ENHANCED" -eq 1 ]]; then
     cp "$render_dir/nerdm-guide.enhancements.js" "$SERVE_DIR/"
