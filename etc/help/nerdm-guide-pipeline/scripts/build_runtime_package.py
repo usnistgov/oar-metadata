@@ -56,7 +56,6 @@ def main() -> None:
     help_css_output = package_doc_dir / "helpview.css"
     type_index_css_output = package_doc_dir / "type-index.css"
     type_section_css_output = package_doc_dir / "type-section.css"
-    schema_layers_output = package_doc_dir / "nerdm-schema-layers.json"
     record_examples_output = package_doc_dir / "nerdm-record-examples.json"
 
     print("Building documentation model")
@@ -68,7 +67,6 @@ def main() -> None:
 
     print("Loading curated guide data")
     curated_data = load_curated_data(
-        schema_layers_path=str(_resolve(args.schema_layers)),
         record_examples_path=str(_resolve(args.record_examples)),
         model=model,
     )
@@ -87,7 +85,6 @@ def main() -> None:
             _resolve(args.glossary).read_text(encoding="utf-8")
         ),
         schema_artifact=schema_artifact,
-        schema_layers=curated_data["schemaLayers"],
         record_examples=curated_data["recordExamples"],
     )
 
@@ -96,7 +93,6 @@ def main() -> None:
     write_text(body_output, guide_body)
     write_json(model_output, model)
     write_json(index_output, guide_index)
-    write_json(schema_layers_output, curated_data["schemaLayers"])
     write_json(record_examples_output, curated_data["recordExamples"])
     write_text(help_css_output, _runtime_helpview_css(render_dir))
     write_text(type_index_css_output, _runtime_css(render_dir / "type-index.css"))
@@ -122,7 +118,6 @@ def main() -> None:
         type_section_css_output,
         index_output,
         model_output,
-        schema_layers_output,
         record_examples_output,
     ]
     _write_tarball(tarball, output_dir, package_files)
@@ -173,11 +168,6 @@ def _parse_args() -> argparse.Namespace:
         "--model-source-dir",
         default="model",
         help="Source directory containing current schema and JSON-LD context files",
-    )
-    parser.add_argument(
-        "--schema-layers",
-        default="etc/help/nerdm-guide-pipeline/data/schema-layers.json",
-        help="Curated schema layers JSON path",
     )
     parser.add_argument(
         "--record-examples",

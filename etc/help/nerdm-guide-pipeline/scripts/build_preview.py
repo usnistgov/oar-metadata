@@ -53,7 +53,6 @@ def main() -> None:
     header = _resolve(args.header)
     footer = _resolve(args.footer)
     nerdm_schema = _resolve(args.nerdm_schema)
-    schema_layers_path = _resolve(args.schema_layers)
     record_examples_path = _resolve(args.record_examples)
 
     print("Building documentation model")
@@ -69,11 +68,9 @@ def main() -> None:
 
     print("Loading curated guide data")
     curated_data = load_curated_data(
-        schema_layers_path=str(schema_layers_path),
         record_examples_path=str(record_examples_path),
         model=model,
     )
-    write_json(preview_dir / "nerdm-schema-layers.json", curated_data["schemaLayers"])
     write_json(
         preview_dir / "nerdm-record-examples.json",
         curated_data["recordExamples"],
@@ -89,7 +86,6 @@ def main() -> None:
         header_html=header.read_text(encoding="utf-8"),
         footer_html=footer.read_text(encoding="utf-8"),
         schema_artifact=schema_artifact,
-        schema_layers=curated_data["schemaLayers"],
         record_examples=curated_data["recordExamples"],
     )
     write_text(full_guide_output, full_guide_html)
@@ -220,11 +216,6 @@ def _parse_args() -> argparse.Namespace:
         "--nerdm-schema",
         default="model/nerdm-schema.json",
         help="Current NERDm JSON Schema path",
-    )
-    parser.add_argument(
-        "--schema-layers",
-        default="etc/help/nerdm-guide-pipeline/data/schema-layers.json",
-        help="Curated schema layers JSON path",
     )
     parser.add_argument(
         "--record-examples",

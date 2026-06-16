@@ -9,51 +9,19 @@ from .io import load_json
 
 def load_curated_data(
     *,
-    schema_layers_path: str,
     record_examples_path: str,
     model: dict[str, Any],
 ) -> dict[str, Any]:
     """Return validated curated data for optional rendered guide sections."""
 
-    schema_layers = load_json(schema_layers_path)
     record_examples = load_json(record_examples_path)
     type_names = {item["name"] for item in model["types"]}
 
-    _validate_schema_layers(schema_layers, type_names)
     _validate_record_examples(record_examples, type_names)
 
     return {
-        "schemaLayers": schema_layers,
         "recordExamples": record_examples,
     }
-
-
-def _validate_schema_layers(data: dict[str, Any], type_names: set[str]) -> None:
-    """Ensure all curated layer references point to generated type records."""
-
-    errors: list[str] = []
-
-    if not isinstance(data.get("layers"), list):
-        errors.append("schema layers must include a layers list")
-    else:
-        for layer in data["layers"]:
-            label = str(layer.get("label") or layer.get("id") or "unknown layer")
-            for item in layer.get("types") or []:
-                name = str(item.get("name") or "")
-                if name not in type_names:
-                    errors.append(f"{label}: unknown type {name}")
-
-    if not isinstance(data.get("chains"), list):
-        errors.append("schema layers must include a chains list")
-    else:
-        for chain in data["chains"]:
-            label = str(chain.get("label") or "unknown chain")
-            for name in chain.get("types") or []:
-                if str(name) not in type_names:
-                    errors.append(f"{label}: unknown type {name}")
-
-    if errors:
-        raise ValueError("Invalid schema layer data:\n  " + "\n  ".join(errors))
 
 
 def _validate_record_examples(data: dict[str, Any], type_names: set[str]) -> None:
