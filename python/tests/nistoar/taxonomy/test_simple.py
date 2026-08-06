@@ -136,6 +136,75 @@ class TaxonomyTest(test.TestCase):
         self.assertNotIn('@id', data)
         self.assertTrue(data.get('id'))
         self.assertTrue(data.get('schema'))
+
+    def make_content(self):
+        # a minimal taxonomy that exercises the deprecated-term branch.  The
+        # shipped model files do not carry lastSupported or pre-set term ids, so
+        # this path was never covered by the other tests.
+        return {
+            "@id": "https://example.gov/taxon/v2.0",
+            "_schema": simple.SimpleTaxonomy.SCHEMA_URI,
+            "title": "Test taxonomy",
+            "vocab": [
+                { "term": "Physics", "level": 1 },
+                { "parent": "Physics", "term": "Optics", "level": 2 },
+                # a term that already carries an explicit id (the loop must not
+                # assume it has to mint one)
+                { "parent": "Physics", "term": "Acoustics", "level": 2,
+                  "id": "https://example.gov/taxon/v2.0#Physics%3A%20Acoustics" },
+                # deprecated but still supported under an earlier version
+                { "parent": "Physics", "term": "Old optics", "level": 2,
+                  "deprecatedSince": "2.0", "lastSupported": "1.1" },
+                # deprecated with no lastSupported -> should be dropped
+                { "parent": "Physics", "term": "Gone", "level": 2,
+                  "deprecatedSince": "2.0" },
+            ]
+        }
+
+    def test_include_deprecated(self):
+        tax = simple.SimpleTaxonomy._from_content(self.make_content(), incl_depr=True)
+
+        # the live and deprecated-but-supported terms are present; the fully
+        # dropped one is not
+        self.assertIsNotNone(tax.match_label("Physics"))
+        self.assertIsNotNone(tax.match_label("Physics: Optics"))
+        self.assertIsNotNone(tax.match_label("Physics: Acoustics"))
+        self.assertIsNone(tax.match_label("Physics: Gone"))
+
+        depr = tax.match_label("Physics: Old optics")
+        self.assertIsNotNone(depr)
+        # the deprecated term keeps the version it was last supported in
+        self.assertIn("/v1.1", depr['id'])
+        self.assertEqual(tax.count(), 4)
+
+    def test_exclude_deprecated(self):
+        tax = simple.SimpleTaxonomy._from_content(self.make_content())  # incl_depr defaults to False
+
+        self.assertIsNotNone(tax.match_label("Physics"))
+        self.assertIsNotNone(tax.match_label("Physics: Optics"))
+        self.assertIsNotNone(tax.match_label("Physics: Acoustics"))
+        self.assertIsNone(tax.match_label("Physics: Old optics"))
+        self.assertIsNone(tax.match_label("Physics: Gone"))
+        self.assertEqual(tax.count(), 3)
+
+    def test_term_with_preset_id_first(self):
+        # if the very first vocab term already carries an id, the loop must not
+        # rely on an id-fragment computed by an earlier iteration
+        content = {
+            "@id": "https://example.gov/taxon/v2.0",
+            "_schema": simple.SimpleTaxonomy.SCHEMA_URI,
+            "title": "Test taxonomy",
+            "vocab": [
+                { "term": "Acoustics", "level": 1,
+                  "id": "https://example.gov/taxon/v2.0#Acoustics" },
+            ]
+        }
+        tax = simple.SimpleTaxonomy._from_content(content)
+        self.assertEqual(tax.count(), 1)
+        term = tax.match_label("Acoustics")
+        self.assertIsNotNone(term)
+        self.assertEqual(term['id'], "https://example.gov/taxon/v2.0#Acoustics")
+        self.assertIsNotNone(tax.get(term['id']))
         
         
 
