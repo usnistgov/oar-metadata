@@ -38,7 +38,7 @@ class SimpleTaxonomy(Taxonomy):
     def _parse_content(cls, content) -> Mapping:
 
         if not content.get("@id"):
-            raise ValueError(f"{tfile}: Missing taxonomy identifier (@id)")
+            raise ValueError("Missing taxonomy identifier (@id)")
         content['id'] = content['@id']
         del content['@id']
 
@@ -52,7 +52,8 @@ class SimpleTaxonomy(Taxonomy):
     @classmethod
     def _summary_from(cls, content: Mapping) -> Mapping:
         content = cls._parse_content(content)
-        del content['vocab']
+        if 'vocab' in content:
+            del content['vocab']
         return content
 
     def __init__(self, taxdata: Mapping, incl_depr: bool=False):
