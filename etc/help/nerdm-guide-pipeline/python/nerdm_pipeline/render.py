@@ -297,17 +297,17 @@ def _render_guide_hero(model: dict[str, Any], guide_index: dict[str, Any]) -> st
     return "\n".join(
         [
             '      <header class="nerdm-hero nerdm-guide-hero" aria-labelledby="guide-title">',
-            '        <p class="nerdm-kicker nerdm-guide-hero__eyebrow">NIST metadata reference</p>',
+            '        <p class="nerdm-kicker nerdm-guide-hero__eyebrow">NIST metadata documentation</p>',
             '        <h1 id="guide-title" class="nerdm-guide-title">'
-            '<span class="nerdm-term">NERDm</span>: '
-            '<span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--n">N</span>IST</span> '
-            '<span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--e">E</span>xtensible</span> '
-            '<span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--r">R</span>esource</span> '
-            '<span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--d">D</span>ata</span> '
-            '<span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--m">m</span>odel</span>.'
+            '<span class="nerdm-term">NERDm</span>: the '
+            '<span class="nerdm-acronym-word">NIST</span> '
+            '<span class="nerdm-acronym-word">Extensible</span> '
+            '<span class="nerdm-acronym-word">Resource</span> '
+            '<span class="nerdm-acronym-word">Data</span> '
+            '<span class="nerdm-acronym-word">model</span>.'
             "</h1>",
             '        <p class="nerdm-dek nerdm-guide-hero__brief">'
-            "A guide to NERDm records, named types, properties, and JSON "
+            "A readers' guide to NERDm metadata properties, named types, and JSON "
             "structure.</p>",
             '        <dl class="nerdm-guide-hero__stats" aria-label="Guide summary">',
             f"          <div><dt>Groups</dt><dd>{guide_index['counts']['typeGroups']}</dd></div>",
