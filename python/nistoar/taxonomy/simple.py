@@ -87,15 +87,15 @@ class SimpleTaxonomy(Taxonomy):
             if not term.get('label'):
                 term['label'] = labelfor(term)
 
+            frag = label2idfrag(term['label'])
             if not term.get('id'):
-                frag = label2idfrag(term['label'])
                 term['id'] = self.id + frag
 
             if term.get('deprecatedSince'):
                 # this is a deprecated term
                 if incl_depr and term.get('lastSupported'):
                     # include it, but make sure we get the ID right
-                    term['id'] = f"{idsansver}/v{term['lastSupported']}{term.get['id']}"
+                    term['id'] = f"{idsansver}/v{term['lastSupported']}{term.get('id', '')}"
                 else:
                     # skipping deprecated terms
                     continue

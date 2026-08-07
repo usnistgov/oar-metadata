@@ -1,0 +1,210 @@
+<!-- Remove the sticky TOC modifier class to keep the contents panel at the top right without following scroll. -->
+<div id="top" class="nerdm-docs nerdm-docs--sticky-toc">
+<a class="nerdm-back-to-top" href="#top"><span class="element-invisible">Back to top</span></a>
+
+<aside class="nerdm-toc" aria-labelledby="nerdm-toc-title">
+  <h2 id="nerdm-toc-title">Contents</h2>
+  <nav aria-label="NERDm guide contents">
+    <ol class="nerdm-toc__list">
+      <li class="nerdm-toc__group">
+        <span class="nerdm-toc__label">Guide</span>
+        <ol>
+          <li><a href="#sec:intro">Introduction</a></li>
+          <li><a href="#nerdm-record-shape">Record shape</a></li>
+          <li><a href="#nerdm-record-contents">Record contents</a></li>
+        </ol>
+      </li>
+      <li class="nerdm-toc__group">
+        <span class="nerdm-toc__label">Reference</span>
+        <ol>
+          <li><a href="#sec:namedtypes">Named types</a></li>
+          <li><a href="#sec:Resource">Resource types</a></li>
+          <li><a href="#sec:Component">Component types</a></li>
+          <li><a href="#sec:Other">Other types</a></li>
+          <li><a href="#sec:glossary">Glossary</a></li>
+        </ol>
+      </li>
+    </ol>
+  </nav>
+</aside>
+
+<main class="nerdm-article" id="nerdm-main">
+<header class="nerdm-hero">
+  <p class="nerdm-kicker">NIST Metadata Guide</p>
+  <h1><span class="nerdm-term">NERDm</span>: <span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--n">N</span>IST</span> <span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--e">E</span>xtensible</span> <span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--r">R</span>esource</span> <span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--d">D</span>ata</span> <span class="nerdm-acronym-word"><span class="nerdm-acronym-letter nerdm-acronym-letter--m">m</span>odel</span>.</h1>
+  <p class="nerdm-dek">A reader's guide to NERDm metadata.</p>
+</header>
+
+<a name="sec:intro"></a>
+<div class="nerdm-section-heading nerdm-section-heading--guide">
+  <p>Guide</p>
+  <h2>Introduction</h2>
+</div>
+
+<p>
+
+The NERDm schema is used to encode metadata describing various kinds
+of <em>resources</em>--datasets, data collections, web portals,
+software, and tools--that are offered by NIST through its
+<a href="https://data.nist.gov/">data science portal</a>.  Resources
+are the main kind of "thing" that NERDm metadata is used to describe,
+and there are different resource types.  NERDm metadata is encoded in
+JSON format (specifically, <a href="https://json-ld.org">JSON-LD</a>),
+but this guide attempts to describe the metadata without relying on
+much knowledge of that format.  The purpose of this document is to
+guide readers that wish to inspect NERDm JSON records and understand
+what the metadata means.
+</p>
+
+<p>
+(Software developers that wish to read and process NERDm records may
+also find this document useful for browsing metadata definitions.
+However, they can also consult the
+<a href="https://json-schema.org/">JSON Schema</a> definition
+documents.  The NERDm schema has two parts: a
+<a href="/od/dm/nerdm-schema/">core schema</a>,
+and an <a href="/od/dm/nerdm-schema/pub/">
+extension schema for describing data publications</a>.)
+</p>
+
+<div class="nerdm-subsection-heading nerdm-subsection-heading--guide">
+  <h3 id="nerdm-record-shape">What a NERDm record looks like</h3>
+</div>
+
+<p>
+A NERDm record looks like JSON, because it is JSON(!).
+Below is an annotated example of NERDm metadata describing a hypothetical data
+resource.  The metadata is in the form of a set of <em>properties</em>.  A
+<a href="#def:property" title="definition: property">property</a> is a
+piece of metadata that has a <em>name</em> and a <em>value</em>.  The
+<a href="#def:type" title="definition: value type">value</a> can
+be a single value (e.g. text, a number, true/false), a list of values,
+or a complex value made up of sub-properties.
+</p>
+
+<details class="annotated-example" open>
+  <summary class="annotated-example__summary">JSON syntax example</summary>
+  <div class="annotated-example__body">
+  <div class="annotated-example__code" aria-label="Annotated JSON example">
+<pre class="json"><code>{
+  "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the resource">@id</a>": "ark:/88434/pdr01893t",
+  "<a href="#Resource.@type" title="The resource types this resource qualifies as">@type</a>": [ "nrdp:DataPublication", "nrdp:PublicDataResource" ],
+  "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>" <span class="code-marker" aria-hidden="true">1</span>: "Moby Dick: an analysis" <span class="code-marker" aria-hidden="true">2</span>,
+  "<a href="#Resource.description" title="Human-readable description of the resource">description</a>": [ <span class="code-marker" aria-hidden="true">3</span>
+    "Moby-Dick is about a man and a whale",
+    "It does not end well."
+  ],
+  "<a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a>": { <span class="code-marker" aria-hidden="true">4</span>
+    "<a href="#ContactInfo.hasEmail" title="The email address of the contact person/group for the resource">hasEmail</a>": "mailto:Herman.Melville@pequod.com",
+    "<a href="#ContactInfo.fn" title="full name of the contact person or organization">fn</a>": "Herman Melville",
+    "<a href="#ContactInfo.address" title="the contact postal address">address</a>": [
+      "Arrowhead",
+      "Pittsfield, Mass."
+    ]
+  }
+}</code></pre>
+  </div>
+
+  <ol class="annotation-list" aria-label="Annotation notes for JSON syntax example">
+    <li><span class="annotation-index">1</span><strong>Property names</strong> appear before a colon. In this guide, linked names point to their reference definitions below.</li>
+    <li><span class="annotation-index">2</span><strong>Simple values</strong> can be text, numbers, <span class="jc">true</span>, <span class="jc">false</span>, or <span class="jc">null</span>. Text values are surrounded by quotes.</li>
+    <li><span class="annotation-index">3</span><strong>List values</strong> are surrounded by square brackets and can hold multiple values.</li>
+    <li><span class="annotation-index">4</span><strong>Structured values</strong> group sub-properties inside curly brackets.</li>
+  </ol>
+  </div>
+</details>
+
+<aside class="nerdm-note nerdm-note--info" aria-label="JSON formatting note">
+  <div class="nerdm-note__icon" aria-hidden="true"></div>
+  <div class="nerdm-note__body">
+    <strong>JSON formatting note</strong>
+    <p>
+      Spaces outside of quoted text are optional in JSON syntax. You may
+      encounter JSON without the extra spaces that make it easier to read.
+    </p>
+  </div>
+</aside>
+
+<div class="nerdm-subsection-heading nerdm-subsection-heading--guide">
+  <h3 id="nerdm-record-contents">What kinds of information are in a NERDm record</h3>
+</div>
+
+<p>
+A NERDm record describes, in general, a <em>data resource</em>--that
+is, a source of data that can be used in research.  There are
+different kinds of resources, such as data files, databases, software,
+and even data web portals that include on-line tools.  All data
+resources are described with a <a href="#Resource">common set of
+metadata properties</a>; these properties are defined as part of the
+<a href="#Resource">generic
+<span class="Type reference">Resource</span> type</a>.
+Some types of resources can have additional, specialized metadata.
+For example, the
+<a href="#DataPublication"><span class="Type reference">DataPublication</span>
+Resource type</a> defines the
+<a href="#DataPublication.authors"><span class="Property Reference">authors</span>
+property</a> that lists the authors presenting the data.
+</p>
+
+<p>
+A data resource is often made up of one or more data files that can be
+downloaded.  If the resource is a database, it may instead provide a
+search page available through a web browser or an API to access the
+data through a program.  These various ways to access the data are
+represented as resource <em>components</em>.  As with the
+<span class="Type reference">Resource</span> type</a>, there is a
+<a href="#Component">common set of metadata for describing components</a>;
+these are captured as part of the <a href="#Component">generic
+<span class="Type reference">Component</span> type</a>.  The most
+common type of component is the
+<a href="#DataFile"><span class="Type reference">DataFile</span>
+type</a>, representing a downloadable data file; one of its special
+properties is the <a href="#DownloadableFile.downloadURL">
+<span class="property reference">downloadURL</span></a>, indicating
+the URL to use to download the file.
+</p>
+
+<details class="annotated-example annotated-example--wide" open>
+  <summary class="annotated-example__summary">NERDm resource example</summary>
+  <div class="annotated-example__body">
+  <div class="annotated-example__code" aria-label="Annotated NERDm resource example">
+<pre class="json"><code>{
+  "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the resource">@id</a>": "ark:/88434/pdr01893t" <span class="code-marker" aria-hidden="true">1</span>,
+  "<a href="#Resource.@type" title="The resource types this resource qualifies as">@type</a>": [ "nrdp:<a href="#DataPublication" title="A data collection presented by one or more authors as a citable publication">DataPublication</a>", "nrdp:PublicDataResource" ] <span class="code-marker" aria-hidden="true">2</span>,
+  "<a href="#Resource.title" title="Human-readable, descriptive name for the resource">title</a>": "Moby Dick: an analysis",
+  "<a href="#Resource.doi" title="Digital Object Identifier (DOI)">doi</a>": "doi:10.18434/T488S8" <span class="code-marker" aria-hidden="true">3</span>,
+  "<a href="#Resource.description" title="Human-readable description of the resource">description</a>": [ <span class="code-marker" aria-hidden="true">4</span>
+    "Moby-Dick is about a man and a whale",
+    "It does not end well.",
+    "We analyze the text for its suitability as a source for automated text analysis."
+  ],
+  "<a href="#Resource.contactPoint" title="Contact information for getting more information about this resource">contactPoint</a>": { <span class="json-muted">...</span> },
+  "<a href="#Resource.components" title="a listing of the various component files, subcollections, tools, and other ways to interact with this resource.">components</a>": [ <span class="code-marker" aria-hidden="true">5</span>
+    {
+      "<a href="#Component.@id" title="The NIST-assigned unique identifier for the component (relative to the resource ID)">@id</a>": "cmps/aggregates/wordfreq.csv",
+      "<a href="#Component.@type" title="The component types this resource qualifies as">@type</a>": [ "nrdp:<a href="#DataFile" title="a downloadable file">DataFile</a>", "dcat:Distribution" ],
+      "<a href="#DownloadableFile.filepath" title="a name for the data file reflecting its hierarchical location in the resource data collection">filepath</a>": "cmps/aggregates/wordfreq.csv",
+      "<a href="#DownloadableFile.downloadURL" title="URL providing direct access to the downloadable data file">downloadURL</a>": "https://data.nist.gov/od/id/pdr01893t/aggregates/wordfreq.csv",
+      "<a href="#Component.title" title="a descriptive title for the component">title</a>": "Word Frequency Data",
+      "<a href="#DownloadableFile.size" title="the size of the file in bytes">size</a>": "209531"
+    },
+    {
+      "<a href="#Resource.@id" title="The NIST-assigned unique identifier for the component (relative to the resource ID)">@id</a>": "cmps/aggregates",
+      "<a href="#Component.@type" title="The component types this resource qualifies as">@type</a>": [ "nrdp:<a href="#Subcollection" title="A collection of files and other collections within the resource">Subcollection</a>" ],
+      "<a href="#Subcollection.filepath" title="a name for the subcollection reflecting its hierarchical location in the resource data collection">filepath</a>": "cmps/aggregates",
+      "<a href="#Component.title" title="a descriptive title for the component">title</a>": "Aggregate data",
+      "<a href="#Component.description" title="a description of the nature and contents of the component, including the role it plays as part of the resource">description</a>": "This collection contains the computed aggregate data."
+    }
+  ]
+}</code></pre>
+  </div>
+
+  <ol class="annotation-list" aria-label="Annotation notes for NERDm resource example">
+    <li><span class="annotation-index">1</span><strong>NIST-internal persistent identifier</strong> starts with <code>ark:/88434/</code> for resources available through the NIST Science Data Portal.</li>
+    <li><span class="annotation-index">2</span><strong>Resource types</strong> identify what kind of resource this is. This example is both a <code>PublicDataResource</code> and a <a href="#DataPublication"><span class="type reference">DataPublication</span></a>.</li>
+    <li><span class="annotation-index">3</span><strong>Externally citable identifier</strong> can be assigned as a DOI when the resource should be cited from other publications.</li>
+    <li><span class="annotation-index">4</span><strong>Resource-level metadata</strong> describes the resource as a whole, including title, description, contact, access level, and similar fields.</li>
+    <li><span class="annotation-index">5</span><strong>Component metadata</strong> describes files, subcollections, tools, pages, APIs, and other ways to interact with the resource.</li>
+  </ol>
+  </div>
+</details>

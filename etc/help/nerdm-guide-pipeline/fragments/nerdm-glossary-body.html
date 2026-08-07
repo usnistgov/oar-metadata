@@ -1,0 +1,108 @@
+<section id="sec:glossary" class="nerdm-glossary">
+<a name="sec:glossary"></a>
+<div class="nerdm-section-heading">
+  <p>Reference</p>
+  <h2>Glossary</h2>
+</div>
+
+<div id="glossary" class="glossary-grid">
+
+  <article id="def:JSON" class="glossary-card">
+    <h3><a name="def:JSON"></a>JSON</h3>
+    <p class="glossary-card__definition">
+      A text-based, machine-readable data format whose abbreviated name
+      stands for <a href="http://json.org/">Javascript Object Notation</a>.
+    </p>
+    <p>
+      JSON is particularly well-suited for encoding metadata because its
+      central <a href="#def:type" title="definition: value type">data
+      type</a>, the <em>object</em>, collects data into name-value pairs
+      referred to as the object's
+      <a href="#def:property" title="definition: property">properties</a>.
+    </p>
+    <p class="glossary-card__example">
+      <span>Where you see it</span>
+      NERDm records and schema examples are JSON documents.
+    </p>
+  </article>
+
+  <article id="def:named_type" class="glossary-card">
+    <h3><a name="def:named_type"></a>named type</h3>
+    <p class="glossary-card__definition">
+      The schema defines the
+      <a href="#def:type" title="definition: value type">value type</a>
+      of each metadata <a href="#def:property">property</a>. The schema can
+      customize <a href="#def:type" title="definition: value type">restrictions
+      on what values the property can have</a>. The restrictions are often
+      defined as a custom type and given a name, making it a
+      <em>named type</em>.
+    </p>
+    <p>
+      For example, a property providing contact information is called
+      <strong>contactPoint</strong>. Its value is a set of sub-properties that
+      includes <strong>fn</strong> (full name), <strong>hasEmail</strong>
+      (an email address), <strong>phoneNumber</strong>, and related fields.
+      The set of sub-properties is a type called
+      <strong>ContactInfo</strong>.
+    </p>
+    <p class="glossary-card__example">
+      <span>Where you see it</span>
+      <strong>contactPoint</strong> uses the named type
+      <strong>ContactInfo</strong>.
+    </p>
+  </article>
+
+  <article id="def:property" class="glossary-card">
+    <h3><a name="def:property"></a>property</h3>
+    <p class="glossary-card__definition">
+      <strong>A property is a piece of metadata that has a
+      <em>name</em> and a <em>value</em>.</strong> A value can be simple
+      text, a number, true/false, a list of values, or a set of
+      sub-properties, each with its own name and value.
+    </p>
+    <p class="glossary-card__example">
+      <span>Where you see it</span>
+      <strong>title</strong>, <strong>description</strong>, and
+      <strong>contactPoint</strong> are properties.
+    </p>
+  </article>
+
+  <article id="def:type" class="glossary-card">
+    <h3><a name="def:type"></a>value type</h3>
+    <p class="glossary-card__definition">
+      The value type of a property restricts the kind of value it can have.
+      In general, a property can be defined to have one of these JSON values:
+    </p>
+    <ul class="glossary-chip-list" aria-label="JSON value types">
+      <li>text</li>
+      <li>number</li>
+      <li>boolean</li>
+      <li>object</li>
+      <li>array</li>
+    </ul>
+    <p>
+      Further restrictions can be put on values, such as:
+    </p>
+    <ul>
+      <li>text restricted to one of a list of allowed values,</li>
+      <li>text restricted to a particular format, such as a URL,</li>
+      <li>a number restricted to a particular range, or</li>
+      <li>an object with properties having specific names and value types.</li>
+    </ul>
+    <p>
+      A special restriction on a value type is usually specified in the schema
+      and given a name, making it a
+      <em><a href="#def:named_type">named type</a></em>.
+    </p>
+    <p class="glossary-card__example">
+      <span>Where you see it</span>
+      <strong>accessLevel</strong> is text, while
+      <strong>contactPoint</strong> is a <strong>ContactInfo</strong> object.
+    </p>
+  </article>
+
+</div>
+</section>
+
+</main>
+</div>

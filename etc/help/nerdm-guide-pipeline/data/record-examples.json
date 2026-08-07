@@ -1,0 +1,111 @@
+{
+  "version": "0.3",
+  "title": "NERDm record examples",
+  "description": "Curated examples from the live NIST records service that show how named types appear in real metadata records.",
+  "source": "https://data.nist.gov/rmm/records",
+  "examples": [
+    {
+      "id": "metis-collection",
+      "label": "Collection parent record",
+      "title": "CHIPS METIS Data Collection",
+      "summary": "Shows a collection parent record whose member data products point back to it through the isPartOf relationship.",
+      "types": [
+        "PublicDataResource",
+        "SearchPage",
+        "AccessPage"
+      ],
+      "recordUrl": "https://data.nist.gov/od/id/pdr0-0002?format=nerdm",
+      "landingPageUrl": "https://data.nist.gov/od/id/pdr0-0002",
+      "features": [
+        "PublicDataResource record used as the METIS collection parent",
+        "Member records reference it with isPartOf.@id=ark:/88434/pdr0-0002",
+        "SearchPage component exposes the member-record query",
+        "AccessPage components point to the METIS and CHIPS portals"
+      ]
+    },
+    {
+      "id": "taml-grouped-files",
+      "label": "Publication with grouped files",
+      "title": "Theory aware Machine Learning (TaML)",
+      "summary": "Shows a data publication with subcollections, data files, checksum files, an external access page, DOI metadata, and publication-level fields.",
+      "types": [
+        "DataPublication",
+        "PublicDataResource",
+        "Subcollection",
+        "DataFile",
+        "ChecksumFile",
+        "AccessPage"
+      ],
+      "recordUrl": "https://data.nist.gov/rmm/records?ediid=ark:/88434/mds2-2637",
+      "landingPageUrl": "https://data.nist.gov/od/id/mds2-2637",
+      "features": [
+        "DataPublication and PublicDataResource at the record level",
+        "Subcollection components for file grouping inside the publication",
+        "DataFile and ChecksumFile components with checksums",
+        "AccessPage component for the related code repository"
+      ]
+    },
+    {
+      "id": "restricted-registration",
+      "label": "Restricted data access",
+      "title": "NIST Fingerprint Image Quality (NFIQ) 2 Conformance Test Set",
+      "summary": "Shows a restricted public data publication where metadata is public, but data download requires a registration gateway.",
+      "types": [
+        "DataPublication",
+        "PublicDataResource",
+        "AccessPage",
+        "DataFile",
+        "DownloadableFile",
+        "BibliographicReference"
+      ],
+      "recordUrl": "https://data.nist.gov/od/id/mds2-2909?format=nerdm",
+      "landingPageUrl": "https://data.nist.gov/od/id/mds2-2909",
+      "features": [
+        "accessLevel is restricted public",
+        "rights explains that users must complete a registration form",
+        "AccessPage component points to the registered-data-access gateway",
+        "DataFile components describe public metadata files and the restricted image archive"
+      ]
+    },
+    {
+      "id": "trec-reference",
+      "label": "Dataset with references",
+      "title": "TREC 2022 Deep Learning test collection",
+      "summary": "Shows a public dataset record with external data-file links, a bibliographic reference, DOI metadata, and topical classification.",
+      "types": [
+        "PublicDataResource",
+        "DataFile",
+        "BibliographicReference",
+        "DCiteReference"
+      ],
+      "recordUrl": "https://data.nist.gov/rmm/records?ediid=ark:/88434/mds2-2974",
+      "landingPageUrl": "https://data.nist.gov/od/id/mds2-2974",
+      "features": [
+        "PublicDataResource at the record level",
+        "DataFile components pointing to hosted data access pages",
+        "Bibliographic reference data for related publication material",
+        "Topic and theme metadata for discovery"
+      ]
+    },
+    {
+      "id": "code-access",
+      "label": "Code and archive access",
+      "title": "Meta Learning Paper Supplemental Code",
+      "summary": "Shows a public data resource that combines an external access page with a downloadable archive component.",
+      "types": [
+        "PublicDataResource",
+        "AccessPage",
+        "DataFile",
+        "DownloadableFile"
+      ],
+      "recordUrl": "https://data.nist.gov/rmm/records?ediid=ark:/88434/mds2-3074",
+      "landingPageUrl": "https://data.nist.gov/od/id/mds2-3074",
+      "features": [
+        "PublicDataResource record for a code-oriented resource",
+        "AccessPage component linking to a GitHub repository",
+        "DataFile and DownloadableFile component for the archive",
+        "Keyword and topic metadata for search"
+      ]
+    }
+  ]
+}
