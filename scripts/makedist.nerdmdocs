@@ -93,12 +93,10 @@ if [ -n "$PYTHONPATH" ]; then
 else
     export PYTHONPATH=${pdrinst}:${pdrbld}
 fi
+echo '+' scripts/record_deps.py ${DISTNAME} $version \
+                        \> $DIST_DIR/${DISTNAME}-${vers4fn}_dep.json
 $execdir/record_deps.py ${DISTNAME} $version \
                         > $DIST_DIR/${DISTNAME}-${vers4fn}_dep.json
 
-# Bundle the distribution
-(cd $BUILD_DIR && tar czf $DIST_DIR/${DISTNAME}-${vers4fn}.tgz docs)
-
-# echo ${DISTNAME}-${vers4fn}.zip
 
 
