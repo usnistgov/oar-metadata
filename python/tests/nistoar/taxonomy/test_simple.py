@@ -207,6 +207,27 @@ class TaxonomyTest(test.TestCase):
         self.assertIsNotNone(tax.get(term['id']))
         
         
+    def test_parse_content_missing_id(self):
+        # A definition without @id should report the missing identifier, not
+        # fail with a NameError while building the message.
+        with self.assertRaises(ValueError):
+            simple.SimpleTaxonomy._parse_content({
+                "_schema": simple.SimpleTaxonomy.SCHEMA_URI,
+                "vocab": []
+            })
+
+    def test_summary_from_without_vocab(self):
+        # _summary_from strips the vocabulary; a definition that has none should
+        # summarise cleanly rather than raise KeyError. The constructor already
+        # guards the same delete.
+        summary = simple.SimpleTaxonomy._summary_from({
+            "@id": "https://example.gov/taxon/v2.0",
+            "_schema": simple.SimpleTaxonomy.SCHEMA_URI,
+            "title": "Test taxonomy"
+        })
+        self.assertEqual(summary['id'], "https://example.gov/taxon/v2.0")
+        self.assertNotIn('vocab', summary)
+
 
 if __name__ == '__main__':
     test.main()
