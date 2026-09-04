@@ -565,7 +565,8 @@ def podds2resource:
     if .references then .references = (.references | map(cvtref)) else del(.references) end |
     if .components then .components = (.components | map(dist2comp($doi)) | insert_subcoll_comps) else del(.components) end |
     if .doi then . else del(.doi) end |
-    if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
+# Omit landingPage if not in the input
+#    if .landingPage then . else .landingPage = (.ediid | pdrLandingPageURL) end | 
     if .theme then .theme = [.theme|.[]|gsub("->"; ":")] else del(.theme) end |
     if .topic then . else del(.topic) end |
     if .rights then . else del(.rights) end |
