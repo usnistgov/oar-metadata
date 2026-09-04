@@ -153,7 +153,7 @@ def affil2affil:
 # Output: list of NERDm affiliation object
 #
 def affils2affils:
-    map(affil2affil)
+    if . then map(affil2affil) else [] end
 ;
 
 # Converts an author list to a creator
@@ -179,7 +179,7 @@ def author2creator:
     if .givenName      then . else del(.givenName) end |
     if .familyName     then . else del(.familyName) end |
     if .nameIdentifers then . else del(.nameIdentifiers) end |
-    if .affiliation    then . else del(.affiliation) end |
+    if (.affiliation|not) or (.affiliation|length) == 0 then del(.affiliation) else . end |
     if .familyName and .givenName then
         (.name = .familyName + ", " + .givenName)
     else . end
