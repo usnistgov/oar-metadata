@@ -170,7 +170,7 @@ def configure_logging(config: Mapping, addstderr=False):
             logcfg = deepcopy(logcfg)
             if not os.path.exists(global_logdir):
                 os.makedirs(global_logdir)
-            for hdlr in logging.get('handlers', {}).values():
+            for hdlr in logcfg.get('handlers', {}).values():
                 if not isinstace(hdlr, Mapping):
                     continue
                 if hdlr.get('filename') and not os.path.isabs(hdlr['filename']):
