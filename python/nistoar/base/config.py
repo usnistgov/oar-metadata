@@ -176,7 +176,7 @@ def configure_logging(config: Mapping, addstderr=False):
                 if hdlr.get('filename') and not os.path.isabs(hdlr['filename']):
                     hdlr['filename'] = os.path.join(global_logdir, hdlr['filename'])
 
-        logging.dictConfig(ChainMap(logcfg, {"disable_existing_loggers": False}))
+        logging.config.dictConfig(ChainMap(logcfg, {"disable_existing_loggers": False}))
 
         ignored = [p for p in "logfile loglevel logformat loglevelsfor".split() if p in config]
         if ignored:
