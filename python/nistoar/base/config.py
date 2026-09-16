@@ -171,7 +171,7 @@ def configure_logging(config: Mapping, addstderr=False):
             if not os.path.exists(global_logdir):
                 os.makedirs(global_logdir)
             for hdlr in logcfg.get('handlers', {}).values():
-                if not isinstace(hdlr, Mapping):
+                if not isinstance(hdlr, Mapping):
                     continue
                 if hdlr.get('filename') and not os.path.isabs(hdlr['filename']):
                     hdlr['filename'] = os.path.join(global_logdir, hdlr['filename'])
